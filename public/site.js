@@ -221,12 +221,12 @@
         li.id = "result-" + i;
         var a = document.createElement("a");
         a.href = e.u;
-        var cls = { Ruby: "t-ruby", Rust: "t-rust", Rythme: "t-rythme", "Débuter": "t-debuter" }[e.p] || "";
+        var cls = { Ruby: "t-ruby", Rust: "t-rust", Rythme: "t-rythme", "Débuter": "t-debuter", Python: "t-python", Go: "t-go", JavaScript: "t-javascript", TypeScript: "t-typescript" }[e.p] || "";
         if (cls) li.className = cls;
         var kind = document.createElement("span");
         kind.className = "search__kind";
         kind.setAttribute("aria-hidden", "true");
-        kind.textContent = e.k === "page" ? ({ Ruby: "Rb", Rust: "Rs", Rythme: "Ry", "Débuter": "✦" }[e.p] || "⇄") : "#";
+        kind.textContent = e.k === "page" ? ({ Ruby: "Rb", Rust: "Rs", Rythme: "Ry", "Débuter": "✦", Python: "Py", Go: "Go", JavaScript: "Js", TypeScript: "Ts" }[e.p] || "⇄") : "#";
         var title = document.createElement("span");
         title.className = "search__title";
         mark(title, e.t, words);
@@ -320,7 +320,51 @@
     paint();
   }
 
+  // ----- Page Comparer : les langages affichés ------------------------------------
+  function setupPicker() {
+    var picker = document.querySelector(".picker");
+    var table = document.querySelector(".compare-page .compare");
+    if (!picker || !table) return;
+    picker.hidden = false;
+    var chips = picker.querySelectorAll("[data-pick]");
+    var shown;
+    try { shown = JSON.parse(localStorage.getItem("docs-comparer") || "null"); } catch (e) { shown = null; }
+    if (!Array.isArray(shown) || !shown.length) shown = picker.getAttribute("data-default").split(" ");
+    var apply = function () {
+      chips.forEach(function (c) {
+        var l = c.getAttribute("data-pick");
+        var on = shown.indexOf(l) >= 0;
+        c.setAttribute("aria-pressed", on ? "true" : "false");
+        table.classList.toggle("hide-" + l, !on);
+      });
+      try { localStorage.setItem("docs-comparer", JSON.stringify(shown)); } catch (e) {}
+    };
+    chips.forEach(function (c) {
+      c.addEventListener("click", function () {
+        var l = c.getAttribute("data-pick");
+        var at = shown.indexOf(l);
+        if (at >= 0) { if (shown.length > 1) shown.splice(at, 1); } else shown.push(l);
+        apply();
+      });
+    });
+    apply();
+  }
+
+  // ----- Menu des langages : se ferme avec Échap ou un clic ailleurs ---------------
+  function setupLangs() {
+    var menu = document.querySelector(".langs");
+    if (!menu) return;
+    document.addEventListener("click", function (e) {
+      if (menu.open && !menu.contains(e.target)) menu.open = false;
+    });
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "Escape" && menu.open) { menu.open = false; menu.querySelector("summary").focus(); }
+    });
+  }
+
   ready(function () {
+    setupPicker();
+    setupLangs();
     setupDone();
     setupTheme();
     setupCopy();

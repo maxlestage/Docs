@@ -1,6 +1,6 @@
 # Penser comme un programmeur
 
-Avant d'écrire du code, on réfléchit à la méthode : cette page montre comment découper un problème en petites étapes, l'écrire en français, puis le traduire en Ruby, en Rust et en Rythme.
+Avant d'écrire du code, on réfléchit à la méthode : cette page montre comment découper un problème en petites étapes, l'écrire en français, puis le traduire en Python, en JavaScript, en Ruby, en Rust et en Rythme.
 
 > **Objectifs :**
 >
@@ -8,7 +8,7 @@ Avant d'écrire du code, on réfléchit à la méthode : cette page montre comme
 > - découper un problème en petites étapes ;
 > - écrire une méthode en français, en pseudo-code ;
 > - utiliser des variables, des conditions et des répétitions ;
-> - traduire un pseudo-code dans les trois langages ;
+> - traduire un pseudo-code dans plusieurs langages ;
 > - vérifier un algorithme à la main, avec un tableau de valeurs.
 
 ## Qu'est-ce qu'un algorithme
@@ -197,6 +197,46 @@ afficher plus_grand
 
 Il y a une variable, une répétition et une condition. Rien de plus.
 
+### En Python
+
+```python
+nombres = [4, 17, 9, 12]
+plus_grand = nombres[0]
+for nombre in nombres:
+    if nombre > plus_grand:
+        plus_grand = nombre
+print(plus_grand)
+```
+
+```sortie
+17
+```
+
+Chaque ligne du pseudo-code est devenue une ligne de Python. Le décalage
+des lignes (l'indentation) montre ce qui est **dans** la boucle et **dans**
+la condition.
+
+### En JavaScript
+
+```javascript
+const nombres = [4, 17, 9, 12];
+let plusGrand = nombres[0];
+for (const nombre of nombres) {
+  if (nombre > plusGrand) {
+    plusGrand = nombre;
+  }
+}
+console.log(plusGrand);
+```
+
+```sortie
+17
+```
+
+`let` annonce une boîte dont le contenu va changer ; `const`, une boîte
+qui garde toujours la même valeur. Les accolades `{ }` remplacent
+l'indentation de Python.
+
 ### En Ruby
 
 ```ruby
@@ -214,7 +254,7 @@ puts plus_grand
 17
 ```
 
-Chaque ligne du pseudo-code est devenue une ligne de Ruby.
+La même forme, avec `each` et `end`.
 
 ### En Rust
 
@@ -260,7 +300,23 @@ même algorithme, dit autrement. Voir [penser fonctionnel](../rythme/fonctionnel
 
 ### Le raccourci
 
-Trouver le plus grand est si courant que les trois langages le font déjà :
+Trouver le plus grand est si courant que tous les langages le font déjà :
+
+```python
+print(max([4, 17, 9, 12]))
+```
+
+```sortie
+17
+```
+
+```javascript
+console.log(Math.max(...[4, 17, 9, 12]));
+```
+
+```sortie
+17
+```
 
 ```ruby
 puts [4, 17, 9, 12].max
@@ -288,7 +344,9 @@ print(max([4, 17, 9, 12]))
 ```
 
 Rust répond `Some(17)` : pour une liste vide, il répondrait `None`, car il
-n'y a pas de plus grand nombre. Utilisez les raccourcis dans vos vrais
+n'y a pas de plus grand nombre. Les autres langages réagissent chacun à
+leur façon à une liste vide : Python lève une erreur, JavaScript répond
+`-Infinity`. Utilisez les raccourcis dans vos vrais
 programmes ; écrivez l'algorithme vous-même pour apprendre.
 
 ## Tester à la main avec un tableau de valeurs
@@ -430,7 +488,7 @@ notre algorithme ?
 - Découpez un gros problème en petites étapes, puis écrivez-les en pseudo-code.
 - Une variable est une boîte avec une étiquette ; `=` range une valeur dedans.
 - Les conditions choisissent, les répétitions recommencent.
-- Le même algorithme s'écrit en Ruby, en Rust ou en Rythme : seuls les mots changent.
+- Le même algorithme s'écrit en Python, en JavaScript, en Ruby, en Rust ou en Rythme : seuls les mots changent.
 - Testez à la main avec un tableau de valeurs, sans oublier les cas difficiles.
 
 Suite : [le terminal en 10 minutes](terminal.md).

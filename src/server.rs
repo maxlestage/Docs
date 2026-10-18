@@ -163,9 +163,9 @@ pub fn app(site: Arc<Site>) -> App {
     }
     // Installable sur téléphone et ordinateur, lisible hors ligne.
     app.pwa(
-        Pwa::new("Docs : Ruby, Rust et Rythme")
+        Pwa::new("Docs : apprendre à programmer")
             .short_name("Docs")
-            .description("Des documentations simples pour Ruby, Rust et Rythme.")
+            .description("Des documentations simples pour Python, JavaScript, TypeScript, Go, Ruby, Rust et Rythme.")
             .lang("fr")
             .start_url("/")
             .theme_color("#0e0d12")

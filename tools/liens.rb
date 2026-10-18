@@ -18,7 +18,9 @@ ids = Hash.new { |h, file| h[file] = File.read(file).scan(/\sid="([^"]+)"/).flat
 failures = []
 checked = 0
 pages.each do |page|
-  html = File.read(page)
+  # Le code montré dans les pages (`<code>`, `<pre>`) peut contenir `href="…"` : ce
+  # n'est pas un lien.
+  html = File.read(page).gsub(%r{<pre\b.*?</pre>|<code\b.*?</code>}m, "")
   html.scan(/(?:href|src)="([^"]+)"/).flatten.uniq.each do |url|
     next if url.match?(%r{\A(https?:|mailto:|data:|//)})
 

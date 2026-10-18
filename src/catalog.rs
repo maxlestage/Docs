@@ -1,4 +1,4 @@
-//! Les parcours (Débuter, puis Ruby, Rust et Rythme) et leurs pages, dans l'ordre de
+//! Les parcours (Débuter, puis un par langage) et leurs pages, dans l'ordre de
 //! lecture.
 //! Le texte des pages est dans `content/{parcours}/{page}.md`, compilé dans le serveur :
 //! rien à copier pour le déployer.
@@ -40,7 +40,7 @@ macro_rules! pages {
     };
 }
 
-pub static TRACKS: [Track; 4] = [
+pub static TRACKS: [Track; 8] = [
     Track {
         slug: "debuter",
         name: "Débuter",
@@ -49,7 +49,7 @@ pub static TRACKS: [Track; 4] = [
         tagline: "Jamais programmé ? Tout commence ici.",
         description: "Pour celles et ceux qui n'ont jamais programmé : ce qu'est un programme, penser un algorithme, le terminal, un éditeur de code, corriger ses erreurs, Git, quel langage choisir, et un glossaire.",
         ext: "txt",
-        site: ("Les trois langages côte à côte", "/comparer/"),
+        site: ("Les langages côte à côte", "/comparer/"),
         pages: pages!("debuter":
             "programmer",
             "ordinateur",
@@ -64,6 +64,197 @@ pub static TRACKS: [Track; 4] = [
             "glossaire",
         ),
         parts: &[(0, "Comprendre"), (3, "Les outils"), (7, "Et après")],
+    },
+    Track {
+        slug: "python",
+        name: "Python",
+        title: "Apprendre Python",
+        language: true,
+        tagline: "Le langage le plus utilisé pour apprendre, et bien plus.",
+        description: "Apprenez Python pas à pas : variables, conditions, fonctions, texte, listes et dictionnaires, compréhensions, classes, annotations de type, générateurs, décorateurs, erreurs, modules, fichiers, JSON, regex, dates, asyncio, web, tests, projets guidés et exercices corrigés.",
+        ext: "py",
+        site: ("python.org", "https://www.python.org/"),
+        pages: pages!("python":
+            "introduction",
+            "premiers-pas",
+            "nombres",
+            "conditions-boucles",
+            "fonctions",
+            "texte",
+            "collections",
+            "dictionnaires",
+            "comprehensions",
+            "types",
+            "heritage",
+            "typage",
+            "iterateurs",
+            "decorateurs",
+            "erreurs",
+            "modules",
+            "fichiers",
+            "formats",
+            "regex",
+            "dates",
+            "ligne-de-commande",
+            "concurrence",
+            "async",
+            "web",
+            "tests",
+            "debogage",
+            "style",
+            "projet",
+            "projets",
+            "exercices",
+            "aide-memoire",
+        ),
+        parts: &[
+            (0, "Les bases"),
+            (9, "Aller plus loin"),
+            (16, "Le monde réel"),
+            (24, "Bien programmer"),
+        ],
+    },
+    Track {
+        slug: "javascript",
+        name: "JavaScript",
+        title: "Apprendre JavaScript",
+        language: true,
+        tagline: "Le langage du web, dans le navigateur et sur le serveur.",
+        description: "Apprenez JavaScript pas à pas : variables, conditions, fonctions, texte, tableaux, objets, classes, closures, itérateurs, erreurs, modules et npm, promesses et async/await, le DOM, fichiers avec Node, JSON, regex, dates, web, tests, projets guidés et exercices corrigés.",
+        ext: "js",
+        site: (
+            "developer.mozilla.org",
+            "https://developer.mozilla.org/fr/docs/Web/JavaScript",
+        ),
+        pages: pages!("javascript":
+            "introduction",
+            "premiers-pas",
+            "nombres",
+            "conditions-boucles",
+            "fonctions",
+            "texte",
+            "collections",
+            "objets",
+            "types",
+            "heritage",
+            "closures",
+            "iterateurs",
+            "erreurs",
+            "modules",
+            "asynchrone",
+            "dom",
+            "fichiers",
+            "formats",
+            "regex",
+            "dates",
+            "ligne-de-commande",
+            "web",
+            "tests",
+            "debogage",
+            "style",
+            "projet",
+            "projets",
+            "exercices",
+            "aide-memoire",
+        ),
+        parts: &[
+            (0, "Les bases"),
+            (8, "Aller plus loin"),
+            (15, "Le monde réel"),
+            (22, "Bien programmer"),
+        ],
+    },
+    Track {
+        slug: "typescript",
+        name: "TypeScript",
+        title: "Apprendre TypeScript",
+        language: true,
+        tagline: "JavaScript avec des types : les erreurs trouvées avant l'exécution.",
+        description: "Apprenez TypeScript pas à pas : types de base, fonctions, tableaux et tuples, interfaces, unions et rétrécissement, classes, génériques, types littéraux, types avancés, erreurs, modules, async, tsconfig, migration depuis JavaScript, web, tests, projets guidés et exercices corrigés.",
+        ext: "ts",
+        site: ("typescriptlang.org", "https://www.typescriptlang.org/"),
+        pages: pages!("typescript":
+            "introduction",
+            "premiers-pas",
+            "conditions-boucles",
+            "fonctions",
+            "texte",
+            "collections",
+            "objets",
+            "unions",
+            "types",
+            "generiques",
+            "litteraux",
+            "types-avances",
+            "erreurs",
+            "modules",
+            "asynchrone",
+            "configuration",
+            "migrer",
+            "fichiers",
+            "formats",
+            "web",
+            "tests",
+            "debogage",
+            "style",
+            "projet",
+            "projets",
+            "exercices",
+            "aide-memoire",
+        ),
+        parts: &[
+            (0, "Les bases"),
+            (7, "Les types en profondeur"),
+            (14, "Le monde réel"),
+            (20, "Bien programmer"),
+        ],
+    },
+    Track {
+        slug: "go",
+        name: "Go",
+        title: "Apprendre Go",
+        language: true,
+        tagline: "Simple, rapide, fait pour les serveurs et les outils.",
+        description: "Apprenez Go pas à pas : variables, conditions, fonctions, texte, slices et maps, structures et méthodes, interfaces, pointeurs, génériques, erreurs, packages, goroutines et canaux, fichiers, JSON, regex, dates, web avec net/http, tests, projets guidés et exercices corrigés.",
+        ext: "go",
+        site: ("go.dev", "https://go.dev/"),
+        pages: pages!("go":
+            "introduction",
+            "premiers-pas",
+            "nombres",
+            "conditions-boucles",
+            "fonctions",
+            "texte",
+            "collections",
+            "maps",
+            "types",
+            "interfaces",
+            "pointeurs",
+            "generiques",
+            "erreurs",
+            "modules",
+            "concurrence",
+            "canaux",
+            "fichiers",
+            "formats",
+            "regex",
+            "dates",
+            "ligne-de-commande",
+            "web",
+            "tests",
+            "debogage",
+            "style",
+            "projet",
+            "projets",
+            "exercices",
+            "aide-memoire",
+        ),
+        parts: &[
+            (0, "Les bases"),
+            (8, "Aller plus loin"),
+            (14, "Le monde réel"),
+            (22, "Bien programmer"),
+        ],
     },
     Track {
         slug: "ruby",
@@ -218,7 +409,7 @@ pub static TRACKS: [Track; 4] = [
     },
 ];
 
-/// Les trois langages, sans le parcours « Débuter ».
+/// Les langages, sans le parcours « Débuter ».
 pub fn languages() -> impl Iterator<Item = &'static Track> {
     TRACKS.iter().filter(|t| t.language)
 }
@@ -248,7 +439,7 @@ mod tests {
 
     #[test]
     fn every_track_has_its_pages() {
-        assert_eq!(languages().count(), 3);
+        assert_eq!(languages().count(), 7);
         for track in languages() {
             assert!(track.pages.len() >= 5, "{}", track.slug);
             assert_eq!(track.pages[0].slug, "introduction");
@@ -260,6 +451,7 @@ mod tests {
             assert_eq!(track.parts.first().map(|p| p.0), Some(0), "{}", track.slug);
             assert!(track.parts.iter().all(|(at, _)| *at < track.pages.len()));
         }
-        assert!(find("python", "introduction").is_none());
+        assert!(find("python", "introduction").is_some());
+        assert!(find("cobol", "introduction").is_none());
     }
 }

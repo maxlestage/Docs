@@ -4,7 +4,7 @@
 use paquets::prelude::*;
 
 use crate::catalog::{TRACKS, Track, languages};
-use crate::compare::{self, CHOOSE, LANGS, ROWS};
+use crate::compare::{self, CHOOSE, DEFAULT, LANGS, ROWS};
 use crate::highlight::highlight;
 use crate::library::{self, Doc};
 use crate::routes::{Route, doc_href, link};
@@ -151,7 +151,7 @@ fn site_header(ctx: &Ctx) -> Element {
                 nav()
                     .class("bar__nav")
                     .attr("aria-label", "Parcours")
-                    .children(TRACKS.iter().map(|t| {
+                    .children(TRACKS.iter().filter(|t| !t.language).map(|t| {
                         nav_link(
                             Route::Track(t).href(),
                             t.name,
@@ -159,6 +159,36 @@ fn site_header(ctx: &Ctx) -> Element {
                             current == Some(t.slug),
                         )
                     }))
+                    .child(
+                        details()
+                            .class("langs")
+                            .child(
+                                summary()
+                                    .class("bar__link langs__toggle")
+                                    .class(match current.and_then(crate::catalog::track) {
+                                        Some(t) if t.language => format!("t-{} is-current", t.slug),
+                                        _ => String::new(),
+                                    })
+                                    .text(match current.and_then(crate::catalog::track) {
+                                        Some(t) if t.language => t.name,
+                                        _ => "Langages",
+                                    }),
+                            )
+                            .child(ul().class("langs__menu").children(languages().map(|t| {
+                                let l = a()
+                                    .class("langs__item")
+                                    .class(format!("t-{}", t.slug))
+                                    .href(Route::Track(t).href())
+                                    .child(span().class("track__badge").attr("aria-hidden", "true").text(badge(t)))
+                                    .child(span().class("langs__name").text(t.name))
+                                    .child(span().class("langs__count").text(chapters(t.pages.len())));
+                                li().child(if current == Some(t.slug) {
+                                    l.attr("aria-current", "page")
+                                } else {
+                                    l
+                                })
+                            }))),
+                    )
                     .child(nav_link(
                         link("/comparer/"),
                         "Comparer",
@@ -206,7 +236,7 @@ fn site_footer() -> Element {
                 div()
                     .class("foot__brand")
                     .child(raw("brand__logo", LOGO))
-                    .child(p().text("Des documentations simples, en français, pour Ruby, Rust et Rythme. Chaque exemple est exécuté avant d'être publié.")),
+                    .child(p().text("Des documentations simples, en français, pour Python, JavaScript, TypeScript, Go, Ruby, Rust et Rythme. Chaque exemple est exécuté avant d'être publié.")),
             )
             .child(
                 nav().class("foot__cols").attr("aria-label", "Plan du site").child(
@@ -288,7 +318,7 @@ fn search_dialog() -> Element {
 /// La page autour de `content`.
 fn layout(ctx: &Ctx, title: &str, description: &str, class: &str, content: Element) -> Page {
     let mut seo = Seo::new()
-        .site_name("Docs : Ruby, Rust et Rythme")
+        .site_name("Docs : apprendre à programmer")
         .base_url(ctx.origin.clone())
         .og_type(if matches!(ctx.route, Route::Doc(..)) {
             "article"
@@ -347,16 +377,16 @@ fn layout(ctx: &Ctx, title: &str, description: &str, class: &str, content: Eleme
 /// Le premier programme de chaque langage, sur l'accueil.
 const HELLO: [(&str, &str); 3] = [
     (
-        "ruby",
-        "noms = [\"Ada\", \"Grace\"]\nnoms.each do |nom|\n  puts \"Bonjour, #{nom} !\"\nend",
+        "python",
+        "for nom in [\"Ada\", \"Grace\"]:\n    print(f\"Bonjour, {nom} !\")",
+    ),
+    (
+        "javascript",
+        "for (const nom of [\"Ada\", \"Grace\"]) {\n  console.log(`Bonjour, ${nom} !`);\n}",
     ),
     (
         "rust",
         "fn main() {\n    for nom in [\"Ada\", \"Grace\"] {\n        println!(\"Bonjour, {nom} !\");\n    }\n}",
-    ),
-    (
-        "rythme",
-        "[\"Ada\", \"Grace\"].each do |nom|\n  print(\"Bonjour, {nom} !\")\nend",
     ),
 ];
 
@@ -368,17 +398,13 @@ fn home(ctx: &Ctx) -> Page {
         .child(
             div()
                 .class("hero__text")
-                .child(p().class("eyebrow").text("Documentation en français"))
+                .child(p().class("eyebrow langs-line").children(languages().map(|t| span().class(format!("w-{}", t.slug)).text(t.name))))
                 .child(
                     h1().class("hero__title")
                         .id("hero-title")
-                        .child(span().class("w-ruby").text("Ruby"))
-                        .text(", ")
-                        .child(span().class("w-rust").text("Rust"))
-                        .text(" et ")
-                        .child(span().class("w-rythme").text("Rythme"))
-                        .child(br())
-                        .text("expliqués simplement."),
+                        .text("Apprendre à programmer, ")
+                        .child(span().class("w-grad").text("simplement."))
+                        .child(br()),
                 )
                 .child(p().class("hero__lead").text(
                     "Des chapitres courts, un exemple pour chaque idée, et du code qui marche vraiment : chaque exemple est exécuté avant d'être publié.",
@@ -387,7 +413,7 @@ fn home(ctx: &Ctx) -> Page {
                     div()
                         .class("hero__actions")
                         .child(a().class("btn btn--primary").href("#parcours").text("Choisir un parcours"))
-                        .child(a().class("btn btn--ghost").href(link("/comparer/")).text("Comparer les trois")),
+                        .child(a().class("btn btn--ghost").href(link("/comparer/")).text("Comparer les langages")),
                 )
                 .child(
                     button()
@@ -403,11 +429,11 @@ fn home(ctx: &Ctx) -> Page {
                     ul().class("stats")
                         .child(li().child(strong().text(total.to_string())).text(" chapitres"))
                         .child(li().child(strong().text(examples(None).to_string())).text(" exemples vérifiés"))
-                        .child(li().child(strong().text("3")).text(" langages")),
+                        .child(li().child(strong().text(languages().count().to_string())).text(" langages")),
                 ),
         )
         .child(
-            div().class("stack").attr("aria-label", "Le même programme dans les trois langages").children(HELLO.iter().map(|(lang, code)| {
+            div().class("stack").attr("aria-label", "Le même programme dans plusieurs langages").children(HELLO.iter().map(|(lang, code)| {
                 let track = crate::catalog::track(lang).expect("parcours");
                 figure()
                     .class("window")
@@ -429,7 +455,7 @@ fn home(ctx: &Ctx) -> Page {
         .child(
             header()
                 .class("section__head")
-                .child(h2().id("parcours-title").text("Trois langages, un parcours chacun"))
+                .child(h2().id("parcours-title").text("Sept langages, un parcours chacun"))
                 .child(p().text("Commencez par l'introduction, ou allez directement au chapitre qui vous intéresse.")),
         )
         .child(ul().class("tracks").children(languages().map(track_card)));
@@ -461,7 +487,7 @@ fn home(ctx: &Ctx) -> Page {
             header()
                 .class("section__head")
                 .child(h2().id("choisir-title").text("Lequel choisir ?"))
-                .child(p().text("Les trois sont de bons premiers langages. Ils ne visent pas la même chose.")),
+                .child(p().text("Tous sont de bons premiers langages. Ils ne visent pas la même chose.")),
         )
         .child(choose_cards());
 
@@ -471,9 +497,9 @@ fn home(ctx: &Ctx) -> Page {
         .child(header().class("section__head").child(h2().id("features-title").text("Pensé pour apprendre")))
         .child(ul().class("features").children(
             [
-                ("✓", "Des exemples vérifiés", "Chaque morceau de code est lancé avec Ruby, Rust ou Rythme, et sa sortie comparée à celle de la page."),
-                ("/", "Une recherche instantanée", "Touche / ou Ctrl+K, n'importe où : les chapitres et leurs sections, dans les trois langages."),
-                ("⇄", "Les trois côte à côte", "Chaque chapitre renvoie au même chapitre dans les autres langages, et une page les compare ligne à ligne."),
+                ("✓", "Des exemples vérifiés", "Chaque morceau de code est lancé avec le vrai Python, Node, TypeScript, Go, Ruby, Rust ou Rythme, et sa sortie comparée à celle de la page."),
+                ("/", "Une recherche instantanée", "Touche / ou Ctrl+K, n'importe où : les chapitres et leurs sections, dans tous les langages."),
+                ("⇄", "Les langages côte à côte", "Chaque chapitre renvoie au même chapitre dans les autres langages, et une page les compare ligne à ligne."),
                 ("☾", "Partout, même hors ligne", "Sur téléphone comme sur ordinateur, en clair ou en sombre ; installable, et lisible sans réseau."),
             ]
             .into_iter()
@@ -491,10 +517,13 @@ fn home(ctx: &Ctx) -> Page {
         .child(
             header()
                 .class("section__head")
-                .child(h2().id("teaser-title").text("La même idée, trois façons de l'écrire"))
+                .child(
+                    h2().id("teaser-title")
+                        .text("La même idée, plusieurs façons de l'écrire"),
+                )
                 .child(p().text("Un aperçu de la page Comparer.")),
         )
-        .child(compare_table(&ROWS[8..13]))
+        .child(compare_table(&ROWS[8..13], &DEFAULT))
         .child(
             p().class("center").child(
                 a().class("btn btn--ghost")
@@ -513,8 +542,8 @@ fn home(ctx: &Ctx) -> Page {
         .child(features);
     layout(
         ctx,
-        "Docs : Ruby, Rust et Rythme expliqués simplement",
-        "Des documentations simples et en français pour apprendre Ruby, Rust et Rythme : des chapitres courts, des exemples vérifiés, une recherche instantanée.",
+        "Docs : apprendre à programmer, simplement",
+        "Des documentations simples et en français pour apprendre Python, JavaScript, TypeScript, Go, Ruby, Rust et Rythme : des chapitres courts, des exemples vérifiés, une recherche instantanée.",
         "page-home",
         content,
     )
@@ -530,7 +559,7 @@ const STEPS: [(&str, &str, &str, &str); 3] = [
     ),
     (
         "2. Un langage",
-        "Choisissez Ruby, Rust ou Rythme, et lisez les chapitres dans l'ordre : objectifs, exemples à essayer, erreurs fréquentes, questions pour vous tester.",
+        "Choisissez Python, JavaScript, TypeScript, Go, Ruby, Rust ou Rythme, et lisez les chapitres dans l'ordre : objectifs, exemples à essayer, erreurs fréquentes, questions pour vous tester.",
         "/#parcours",
         "Choisir un langage →",
     ),
@@ -538,7 +567,7 @@ const STEPS: [(&str, &str, &str, &str); 3] = [
         "3. La pratique",
         "Chaque parcours finit par des tests, des projets guidés pas à pas, des exercices corrigés et un aide-mémoire.",
         "/comparer/",
-        "Comparer les trois →",
+        "Comparer les langages →",
     ),
 ];
 
@@ -637,42 +666,71 @@ fn choose_cards() -> Element {
 
 // ----- Comparer --------------------------------------------------------------------
 
-fn compare_table(rows: &[compare::Row]) -> Element {
+/// Le tableau de comparaison, avec les colonnes des langages `langs` (dans l'ordre de
+/// `LANGS`). Chaque cellule porte `data-col` : la page Comparer cache ou montre les
+/// colonnes que le lecteur choisit.
+fn compare_table(rows: &[compare::Row], langs: &[&str]) -> Element {
+    let cols: Vec<usize> = (0..LANGS.len()).filter(|&k| langs.contains(&LANGS[k])).collect();
     div().class("table-wrap compare-wrap").child(
         table()
             .class("compare")
+            .attr("data-cols", cols.len().to_string())
             .child(
                 thead().child(
                     tr().child(th().attr("scope", "col").text("Idée"))
-                        .children(LANGS.iter().map(|l| {
+                        .children(cols.iter().map(|&k| {
+                            let l = LANGS[k];
                             let track = crate::catalog::track(l).expect("parcours");
                             th().attr("scope", "col")
+                                .attr("data-col", l)
                                 .class(format!("t-{l}"))
                                 .child(a().href(Route::Track(track).href()).text(track.name))
                         })),
                 ),
             )
             .child(tbody().children(rows.iter().map(|row| {
-                tr().child(th().attr("scope", "row").text(row.idea)).children(
-                    LANGS
-                        .iter()
-                        .zip(row.code)
-                        .zip(row.chapter)
-                        .map(|((lang, code), chapter)| {
-                            let name = crate::catalog::track(lang).map_or("", |t| t.name);
-                            td().attr("data-label", name)
-                                .class(format!("t-{lang}"))
-                                .child(code_pre(lang, code))
-                                .child(
-                                    a().class("compare__more")
-                                        .href(doc_href(lang, chapter, None))
-                                        .attr("aria-label", format!("{} en {name}", row.idea))
-                                        .text("Le chapitre →"),
-                                )
-                        }),
-                )
+                tr().child(th().attr("scope", "row").text(row.idea))
+                    .children(cols.iter().map(|&k| {
+                        let (lang, code, chapter) = (LANGS[k], row.code[k], row.chapter[k]);
+                        let name = crate::catalog::track(lang).map_or("", |t| t.name);
+                        td().attr("data-label", name)
+                            .attr("data-col", lang)
+                            .class(format!("t-{lang}"))
+                            .child(code_pre(lang, code))
+                            .child(
+                                a().class("compare__more")
+                                    .href(doc_href(lang, chapter, None))
+                                    .attr("aria-label", format!("{} en {name}", row.idea))
+                                    .text("Le chapitre →"),
+                            )
+                    }))
             }))),
     )
+}
+
+/// Les boutons qui choisissent les colonnes de la page Comparer (montrés par `site.js`).
+fn compare_picker() -> Element {
+    div()
+        .class("picker")
+        .attr("hidden", "")
+        .attr("data-default", DEFAULT.join(" "))
+        .child(p().class("picker__label").text("Langages affichés :"))
+        .child(
+            div()
+                .class("picker__chips")
+                .attr("role", "group")
+                .attr("aria-label", "Langages affichés")
+                .children(LANGS.iter().map(|l| {
+                    let name = crate::catalog::track(l).map_or("", |t| t.name);
+                    button()
+                        .class("chip")
+                        .class(format!("t-{l}"))
+                        .attr("type", "button")
+                        .attr("data-pick", *l)
+                        .attr("aria-pressed", "true")
+                        .text(name)
+                })),
+        )
 }
 
 fn compare_page(ctx: &Ctx) -> Page {
@@ -681,13 +739,14 @@ fn compare_page(ctx: &Ctx) -> Page {
         .child(
             header()
                 .class("page-head")
-                .child(p().class("eyebrow").text("Ruby · Rust · Rythme"))
-                .child(h1().text("Comparer les trois langages"))
+                .child(p().class("eyebrow").text("Python · JavaScript · TypeScript · Go · Ruby · Rust · Rythme"))
+                .child(h1().text("Comparer les langages"))
                 .child(p().class("lead").text(
-                    "Les mêmes idées, écrites en Ruby, en Rust et en Rythme. Chaque case renvoie au chapitre qui l'explique.",
-                )),
+                    "Les mêmes idées, écrites dans les sept langages du site. Choisissez ceux que vous voulez voir côte à côte ; chaque case renvoie au chapitre qui l'explique.",
+                ))
+                .child(compare_picker()),
         )
-        .child(compare_table(ROWS))
+        .child(compare_table(ROWS, &LANGS))
         .child(
             section()
                 .class("section")
@@ -697,8 +756,8 @@ fn compare_page(ctx: &Ctx) -> Page {
         );
     layout(
         ctx,
-        "Comparer Ruby, Rust et Rythme",
-        "Afficher, nommer, choisir, répéter, fonctions, listes, types, erreurs, tests : les mêmes idées en Ruby, en Rust et en Rythme, côte à côte.",
+        "Comparer les langages",
+        "Afficher, nommer, choisir, répéter, fonctions, listes, types, erreurs, tests : les mêmes idées en Python, JavaScript, TypeScript, Go, Ruby, Rust et Rythme, côte à côte.",
         "page-compare",
         content,
     )
@@ -906,7 +965,7 @@ fn pager(doc: &Doc) -> Element {
         nav = nav.child(card(next, "next", "Suivant →"));
     } else {
         let (href, title) = if track.language {
-            (link("/comparer/"), "Comparer les trois langages")
+            (link("/comparer/"), "Comparer les langages")
         } else {
             (link("/#parcours"), "Choisir un langage")
         };

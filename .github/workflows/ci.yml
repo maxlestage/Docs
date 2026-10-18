@@ -46,8 +46,12 @@ jobs:
       - run: cargo test --locked
 
   examples:
-    name: Exemples (Ruby, Rust, Rythme)
+    name: Exemples (${{ matrix.track }})
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        track: [debuter, python, javascript, typescript, go, ruby, rust, rythme]
     steps:
       - uses: actions/checkout@v4
       - uses: dtolnay/rust-toolchain@stable
@@ -55,7 +59,23 @@ jobs:
       - uses: ruby/setup-ruby@v1
         with:
           ruby-version: "3.3"
+      - uses: actions/setup-python@v5
+        if: matrix.track == 'python' || matrix.track == 'debuter'
+        with:
+          python-version: "3.13"
+      - uses: actions/setup-go@v5
+        if: matrix.track == 'go' || matrix.track == 'debuter'
+        with:
+          go-version: "1.24"
+          cache: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: TypeScript et les types de Node
+        if: matrix.track == 'typescript' || matrix.track == 'debuter'
+        run: npm ci --prefix tools/ts
       - name: Accès au dépôt de Rythme
+        if: matrix.track == 'rythme' || matrix.track == 'debuter'
         env:
           REPOS_TOKEN: ${{ secrets.REPOS_TOKEN }}
         run: |
@@ -65,11 +85,13 @@ jobs:
               '!f() { test "$1" = get && echo username=x-access-token && echo "password=$REPOS_TOKEN"; }; f'
           fi
       - name: Installer Rythme
+        if: matrix.track == 'rythme' || matrix.track == 'debuter'
         run: cargo install --git https://github.com/maxlestage/Rythme --locked rythme
       - name: Les liens « Suite » suivent l'ordre des chapitres
+        if: matrix.track == 'debuter'
         run: ruby tools/suite.rb --check
       - name: Exécuter chaque exemple
-        run: ruby tools/verifier.rb
+        run: ruby tools/verifier.rb content/${{ matrix.track }}/*.md
 
   export:
     name: Export statique et navigateur

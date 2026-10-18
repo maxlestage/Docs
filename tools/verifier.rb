@@ -11,7 +11,11 @@
 # A ```sortie block right after it gives the exact expected output.
 # Each block runs in its own empty folder: it may write files.
 # A block inside a quote (`> ```ruby`, a solution) is run too.
-# Tools: `ruby`, `rustc` and `rythme` (or the paths in $RUBY, $RUSTC, $RYTHME).
+# Tools: `ruby`, `rustc`, `rythme`, `python3`, `go`, `node`, and TypeScript in tools/ts
+# (`npm ci --prefix tools/ts`), or the paths in $RUBY, $RUSTC, $RYTHME, $PYTHON, $GO,
+# $NODE, $TSC. Go blocks are whole programs (`package main`); JavaScript and TypeScript
+# blocks are ES modules (top-level `await` works). TypeScript is type-checked with
+# `--strict` before it runs: a type error is a failure.
 
 Encoding.default_external = Encoding::UTF_8
 Encoding.default_internal = Encoding::UTF_8
@@ -22,7 +26,13 @@ require "tmpdir"
 RUBY = ENV.fetch("RUBY", "ruby")
 RUSTC = ENV.fetch("RUSTC", "rustc")
 RYTHME = ENV.fetch("RYTHME", "rythme")
-RUNNABLE = %w[ruby rust rythme].freeze
+PYTHON = ENV.fetch("PYTHON", "python3")
+GO = ENV.fetch("GO", "go")
+NODE = ENV.fetch("NODE", "node")
+# TypeScript et les types de Node : `npm ci --prefix tools/ts`.
+TS_DIR = File.expand_path("ts/node_modules", __dir__)
+TSC = ENV.fetch("TSC", File.join(TS_DIR, ".bin/tsc"))
+RUNNABLE = %w[ruby rust rythme python go javascript typescript].freeze
 
 Block = Struct.new(:file, :line, :lang, :flags, :code, :expected)
 
@@ -73,6 +83,29 @@ def run(block, dir)
     path = File.join(dir, "main.ry")
     File.write(path, block.code + "\n")
     Open3.capture3({ "RYTHME_LANG" => "fr" }, RYTHME, "run", path, chdir: dir)
+  when "python"
+    path = File.join(dir, "main.py")
+    File.write(path, block.code + "\n")
+    Open3.capture3({ "PYTHONIOENCODING" => "utf-8", "PYTHONHASHSEED" => "0" }, PYTHON, path, chdir: dir)
+  when "go"
+    path = File.join(dir, "main.go")
+    File.write(path, block.code + "\n")
+    Open3.capture3({ "GO111MODULE" => "off", "GOFLAGS" => "" }, GO, "run", path, chdir: dir)
+  when "javascript"
+    path = File.join(dir, "main.mjs")
+    File.write(path, block.code + "\n")
+    Open3.capture3(NODE, path, chdir: dir)
+  when "typescript"
+    path = File.join(dir, "main.mts")
+    File.write(path, block.code + "\n")
+    out, err, status = Open3.capture3(
+      TSC, "--strict", "--target", "es2022", "--module", "nodenext", "--moduleResolution", "nodenext",
+      "--types", "node", "--typeRoots", File.join(TS_DIR, "@types"), "--outDir", File.join(dir, "out"), path,
+      chdir: dir
+    )
+    return [out + err, out + err, status] unless status.success?
+
+    Open3.capture3(NODE, File.join(dir, "out", "main.mjs"), chdir: dir)
   when "rust"
     code = block.code
     code = "fn main() {\n#{code}\n}" unless code.match?(/^\s*(pub\s+)?(async\s+)?fn main\s*\(/)
@@ -86,24 +119,39 @@ def run(block, dir)
 end
 
 files = ARGV.empty? ? Dir["content/**/*.md"].sort : ARGV
-failures = 0
-count = 0
-files.each do |file|
-  blocks(file).each do |block|
-    next unless RUNNABLE.include?(block.lang)
-    next if block.flags.include?("norun")
+jobs = files.flat_map { |file| blocks(file) }
+            .select { |block| RUNNABLE.include?(block.lang) && !block.flags.include?("norun") }
 
-    count += 1
-    out, err, status = Dir.mktmpdir { |dir| run(block, dir) }
-    where = "#{block.file}:#{block.line} (#{block.lang})"
-    if !status.success?
-      failures += 1
-      puts "✗ #{where}: failed\n#{err.lines.first(25).join}"
-    elsif block.expected && out.rstrip != block.expected.rstrip
-      failures += 1
-      puts "✗ #{where}: wrong output\n--- expected\n#{block.expected}\n--- got\n#{out}"
+# Les blocs tournent en parallèle (un par processeur, ou $JOBS), chacun dans son dossier.
+require "etc"
+queue = Queue.new
+jobs.each_with_index { |block, k| queue << [block, k] }
+results = Array.new(jobs.size)
+workers = Integer(ENV.fetch("JOBS", Etc.nprocessors)).clamp(1, 32).times.map do
+  Thread.new do
+    loop do
+      block, k = begin
+        queue.pop(true)
+      rescue ThreadError
+        break
+      end
+      results[k] = Dir.mktmpdir { |dir| run(block, dir) }
     end
   end
 end
-puts "#{count} blocks run, #{failures} failure(s)"
+workers.each(&:join)
+
+failures = 0
+jobs.each_with_index do |block, k|
+  out, err, status = results[k]
+  where = "#{block.file}:#{block.line} (#{block.lang})"
+  if !status.success?
+    failures += 1
+    puts "✗ #{where}: failed\n#{err.lines.first(25).join}"
+  elsif block.expected && out.rstrip != block.expected.rstrip
+    failures += 1
+    puts "✗ #{where}: wrong output\n--- expected\n#{block.expected}\n--- got\n#{out}"
+  end
+end
+puts "#{jobs.size} blocks run, #{failures} failure(s)"
 exit(failures.zero? ? 0 : 1)
