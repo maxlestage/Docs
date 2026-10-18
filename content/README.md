@@ -31,7 +31,39 @@ Une citation qui commence par un de ces mots devient un encadré coloré :
 > **À retenir :** …
 > **Attention :** …
 > **Note :** …
+> **Indice :** …
 ```
+
+## Exercices
+
+Un exercice est une section `### Exercice 1 : Le titre`, avec son énoncé, un indice
+facultatif et sa solution. La solution est une citation qui commence par
+`**Solution**` : sur le site, elle est repliée sous un bouton « Voir la solution ».
+Son code est exécuté comme les autres.
+
+```text
+### Exercice 1 : Doubler
+
+Écrivez une fonction `double` qui renvoie le double d'un nombre.
+
+> **Indice :** multipliez par 2.
+
+> **Solution**
+>
+> ```ruby
+> def double(x) = x * 2
+> puts double(21)
+> ```
+>
+> ```sortie
+> 42
+> ```
+```
+
+## Fin de chapitre
+
+Chaque chapitre finit par une section `## En résumé` : une liste de 3 à 6 points, ce
+qu'il faut retenir.
 
 ## Liens
 

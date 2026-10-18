@@ -176,7 +176,13 @@ Total : 15
 
 Les blocs sont expliqués en détail dans [la page sur les blocs](blocs.md#les-blocs).
 
-## Et ensuite ?
+## En résumé
 
-Découvrez [les tableaux et les hashs](collections.md). Comparez avec
+- Une méthode commence par `def` et finit par `end`.
+- Elle renvoie la valeur de sa dernière ligne ; `return` sert à sortir plus tôt.
+- Un paramètre peut avoir une valeur par défaut, ou être nommé (`produit:`).
+- Un nom en `?` répond vrai ou faux ; un nom en `!` modifie l'objet.
+- `yield` exécute le bloc donné à la méthode.
+
+Suite : apprenez à [travailler avec du texte](texte.md). Comparez avec
 [les fonctions en Rust](../rust/fonctions.md).

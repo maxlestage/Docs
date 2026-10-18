@@ -236,11 +236,10 @@ suffit de savoir que cela existe.
 
 ## En résumé
 
-| Écriture | Sens |
-|----------|------|
-| `let b = a;` | `a` est déplacé dans `b` (sauf types simples, copiés) |
-| `a.clone()` | une copie indépendante |
-| `&a` | emprunt en lecture |
-| `&mut a` | emprunt en écriture (un seul à la fois) |
+- Chaque valeur a un seul propriétaire, libérée à la fin de son bloc.
+- `let b = a;` déplace `a` dans `b` (les types simples sont copiés).
+- `a.clone()` fait une copie indépendante.
+- `&a` emprunte en lecture ; plusieurs lecteurs sont permis.
+- `&mut a` emprunte en écriture ; un seul à la fois.
 
 Suite : [Structures, énumérations et traits](types.md).

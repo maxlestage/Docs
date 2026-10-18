@@ -197,8 +197,13 @@ fn main() {
 On les retrouve partout avec les itérateurs : voir
 [Collections](collections.md#les-iterateurs).
 
-> **À retenir :** `fn nom(param: Type) -> Retour { … }` pour une fonction,
-> `|param| expression` pour une closure.
+## En résumé
+
+- `fn nom(param: Type) -> Retour { … }` déclare une fonction.
+- Le type de chaque paramètre est obligatoire.
+- La dernière expression, sans `;`, est la valeur renvoyée.
+- Un tuple `(a, b)` renvoie plusieurs valeurs.
+- `|x| x * 2` est une closure : une petite fonction sans nom.
 
 Comparez avec [les fonctions en Ruby](../ruby/fonctions.md) et
-[en Rythme](../rythme/fonctions.md).
+[en Rythme](../rythme/fonctions.md). Suite : [Travailler avec du texte](texte.md).

@@ -190,7 +190,13 @@ Les Misérables
 #<struct Livre titre="Les Misérables", auteur="V. Hugo">
 ```
 
-## Et ensuite ?
+## En résumé
 
-Apprenez à [gérer les erreurs](erreurs.md). Comparez avec
+- Une classe est un modèle ; `new` crée un objet et appelle `initialize`.
+- Les variables en `@` appartiennent à l'objet.
+- `attr_reader`, `attr_writer` et `attr_accessor` les rendent lisibles ou modifiables.
+- `class Chat < Animal` hérite des méthodes de `Animal`.
+- Un module partage des méthodes avec `include` ; `Struct` crée vite une petite classe.
+
+Suite : apprenez à [gérer les erreurs](erreurs.md). Comparez avec
 [les types en Rust](../rust/types.md).

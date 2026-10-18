@@ -221,12 +221,12 @@
         li.id = "result-" + i;
         var a = document.createElement("a");
         a.href = e.u;
-        var cls = e.p === "Ruby" ? "t-ruby" : e.p === "Rust" ? "t-rust" : e.p === "Rythme" ? "t-rythme" : "";
+        var cls = { Ruby: "t-ruby", Rust: "t-rust", Rythme: "t-rythme", "Débuter": "t-debuter" }[e.p] || "";
         if (cls) li.className = cls;
         var kind = document.createElement("span");
         kind.className = "search__kind";
         kind.setAttribute("aria-hidden", "true");
-        kind.textContent = e.k === "page" ? ({ Ruby: "Rb", Rust: "Rs", Rythme: "Ry" }[e.p] || "D") : "#";
+        kind.textContent = e.k === "page" ? ({ Ruby: "Rb", Rust: "Rs", Rythme: "Ry", "Débuter": "✦" }[e.p] || "⇄") : "#";
         var title = document.createElement("span");
         title.className = "search__title";
         mark(title, e.t, words);
@@ -280,7 +280,48 @@
     });
   }
 
+  // ----- Chapitres lus ---------------------------------------------------------
+  // Retenus dans ce navigateur seulement (localStorage), jamais envoyés.
+  function setupDone() {
+    var KEY = "docs-lus";
+    var read = function () {
+      try { return JSON.parse(localStorage.getItem(KEY) || "[]"); } catch (e) { return []; }
+    };
+    var save = function (list) {
+      try { localStorage.setItem(KEY, JSON.stringify(list)); } catch (e) {}
+    };
+    var paint = function () {
+      var done = read();
+      document.querySelectorAll("[data-key]").forEach(function (a) {
+        a.classList.toggle("is-done", done.indexOf(a.getAttribute("data-key")) >= 0);
+      });
+      document.querySelectorAll("[data-done-track]").forEach(function (el) {
+        var prefix = el.getAttribute("data-done-track") + "/";
+        var n = done.filter(function (k) { return k.indexOf(prefix) === 0; }).length;
+        el.textContent = n ? n + "/" + el.getAttribute("data-done-total") + " lus" : "";
+      });
+      document.querySelectorAll("[data-done]").forEach(function (b) {
+        var on = done.indexOf(b.getAttribute("data-done")) >= 0;
+        b.setAttribute("aria-pressed", on ? "true" : "false");
+        b.querySelector(".done__text").textContent = on ? "Chapitre lu" : "Marquer ce chapitre comme lu";
+      });
+    };
+    document.querySelectorAll("[data-done]").forEach(function (b) {
+      b.hidden = false;
+      b.addEventListener("click", function () {
+        var key = b.getAttribute("data-done");
+        var done = read();
+        var at = done.indexOf(key);
+        if (at >= 0) done.splice(at, 1); else done.push(key);
+        save(done);
+        paint();
+      });
+    });
+    paint();
+  }
+
   ready(function () {
+    setupDone();
     setupTheme();
     setupCopy();
     setupReading();

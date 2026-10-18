@@ -59,8 +59,11 @@ pub fn slug(text: &str) -> String {
 }
 
 /// Les encadrés : le mot qui commence la citation, et la classe de l'encadré.
-const CALLOUTS: [(&str, &str); 5] = [
+const CALLOUTS: [(&str, &str); 7] = [
     ("Astuce", "tip"),
+    ("Indice", "hint"),
+    // La solution d'un exercice : repliée sous « Voir la solution ».
+    ("Solution", "solution"),
     ("À retenir", "key"),
     ("Attention", "warn"),
     ("Note", "note"),
@@ -135,6 +138,8 @@ pub fn render(source: &str, track: &str) -> Rendered {
     // Les citations ouvertes : (position de la balise ouvrante, encadré, décidé ?).
     let mut quotes: Vec<(usize, Option<&str>, bool)> = Vec::new();
     let mut strong = false;
+    // Le paragraphe « **Solution** » est remplacé par le bouton qui la déplie.
+    let mut skipping = false;
     // Les liens ouverts : externe ou non.
     let mut open_links: Vec<bool> = Vec::new();
 
@@ -166,6 +171,10 @@ pub fn render(source: &str, track: &str) -> Rendered {
                     if strong {
                         let word = t.trim_end_matches([' ', ':', '\u{a0}']);
                         quote.1 = CALLOUTS.iter().find(|(w, _)| *w == word).map(|(_, class)| *class);
+                        if quote.1 == Some("solution") {
+                            events.truncate(quote.0 + 1);
+                            skipping = true;
+                        }
                     }
                 }
             }
@@ -176,6 +185,13 @@ pub fn render(source: &str, track: &str) -> Rendered {
                 }
             }
             _ => {}
+        }
+        if skipping {
+            if matches!(event, Event::End(TagEnd::Paragraph)) {
+                skipping = false;
+                strong = false;
+            }
+            continue;
         }
         match event {
             Event::Start(Tag::Heading { level, .. }) => {
@@ -243,6 +259,10 @@ pub fn render(source: &str, track: &str) -> Rendered {
                     continue;
                 };
                 let (open, close) = match callout {
+                    Some("solution") => (
+                        r#"<details class="solution"><summary>Voir la solution</summary>"#.to_owned(),
+                        "</details>",
+                    ),
                     Some(class) => (format!(r#"<aside class="callout callout--{class}">"#), "</aside>"),
                     None => ("<blockquote>".to_owned(), "</blockquote>"),
                 };
@@ -384,6 +404,28 @@ mod tests {
             ]
         );
         assert!(r.text.contains("une astuce"));
+    }
+
+    #[test]
+    fn solutions_fold_and_hints_are_callouts() {
+        let r = render(
+            "# E\n\nUn exercice.\n\n> **Indice :** pensez-y.\n\n> **Solution**\n>\n> ```ruby\n> puts 1\n> ```\n",
+            "ruby",
+        );
+        assert!(
+            r.html.contains(r#"<aside class="callout callout--hint">"#),
+            "{}",
+            r.html
+        );
+        assert!(
+            r.html
+                .contains(r#"<details class="solution"><summary>Voir la solution</summary>"#),
+            "{}",
+            r.html
+        );
+        assert!(!r.html.contains("<strong>Solution</strong>"), "{}", r.html);
+        assert!(r.html.contains(r#"<div class="code" data-lang="ruby">"#));
+        assert!(r.html.trim_end().ends_with("</details>"), "{}", r.html);
     }
 
     #[test]

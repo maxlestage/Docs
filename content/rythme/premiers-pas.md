@@ -134,7 +134,8 @@ Bonjour, Grace !
 > `"âge : " + 36` est une erreur. Écrivez `"âge : {36}"`, ou convertissez
 > avec `text(36)`.
 
-Quelques fonctions utiles sur les textes :
+Quelques fonctions utiles sur les textes (la page
+[travailler avec du texte](texte.md) en montre bien d'autres) :
 
 ```rythme
 print(upper("salut"), len("été"), trim("  ok  "), "a,b,c" |> split(","))
@@ -165,26 +166,19 @@ deux valeurs : 2
 
 `#` commence un commentaire, jusqu'à la fin de la ligne. Rythme l'ignore.
 
-`##` est un **commentaire de documentation** : il décrit la fonction écrite
-juste en dessous. `rythme doc` et l'aide de votre éditeur l'utilisent.
-
 ```rythme
 # Un commentaire ordinaire.
 prix = 12  # un commentaire après du code
-
-## Le prix avec la TVA à 20 %.
-fn avec_tva(p) = p * 1.2
-
-print(avec_tva(prix))
+print(prix * 2)
 ```
 
 ```sortie
-14.399999999999999
+24
 ```
 
-> **Note :** ce résultat n'est pas une erreur de Rythme : les nombres à
-> virgule sont approchés dans tous les langages. `round(x, 2)` arrondit
-> à deux décimales.
+Vous croiserez aussi `##`, deux dièses : c'est un commentaire qui décrit la
+fonction écrite juste en dessous (voir
+[documenter avec rythme doc](projet.md#documenter-avec-rythme-doc)).
 
 ## Des accents dans les noms
 
@@ -203,8 +197,14 @@ print("{prénom} a {âge} ans.")
 Un nom qui commence par une majuscule est réservé aux types et à leurs
 variantes (voir [vos propres types](types.md)).
 
-## Et ensuite
+## En résumé
 
-Vous savez nommer et afficher des valeurs. Passez aux
-[conditions et à la répétition](conditions-boucles.md). Les mêmes bases en
+- `nom = valeur` donne un nom à une valeur, pour toujours : une nouvelle
+  valeur reçoit un nouveau nom.
+- Les sortes de valeurs simples sont `Int`, `Float`, `Text` et `Bool`.
+- `/` donne toujours un nombre à virgule, `//` la division entière.
+- `"Bonjour {nom}"` insère une valeur dans un texte.
+- `print` (ou `puts`) affiche, et `#` commence un commentaire.
+
+Suite : [conditions et répétition](conditions-boucles.md). Les mêmes bases en
 [Ruby](../ruby/premiers-pas.md) et en [Rust](../rust/premiers-pas.md).

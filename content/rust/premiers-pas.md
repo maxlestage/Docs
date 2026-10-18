@@ -110,7 +110,7 @@ Bonjour, le monde!
 18
 ```
 
-La différence entre les deux est expliquée dans [Possession et emprunt](possession.md).
+Le texte a sa propre page : [Travailler avec du texte](texte.md).
 
 ## Afficher avec println! et format!
 
@@ -185,5 +185,13 @@ fn main() {
 28
 ```
 
-> **Astuce :** le même chapitre existe pour [Ruby](../ruby/premiers-pas.md) et
-> [Rythme](../rythme/premiers-pas.md). Suite : [Conditions et boucles](conditions-boucles.md).
+## En résumé
+
+- `let` crée une variable non modifiable ; `let mut` la rend modifiable.
+- Les types simples : `i32`, `u32`, `f64`, `bool`, `char`.
+- `&str` et `String` contiennent du texte.
+- `println!("{x}")` affiche, `format!` fabrique une `String`.
+- `const` crée une constante, en MAJUSCULES, avec son type.
+
+Le même chapitre existe pour [Ruby](../ruby/premiers-pas.md) et
+[Rythme](../rythme/premiers-pas.md). Suite : [Conditions et boucles](conditions-boucles.md).

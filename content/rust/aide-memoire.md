@@ -91,6 +91,33 @@ fn main() {
 
 Détails : [Les fonctions](fonctions.md).
 
+## Texte
+
+| Écriture | Sens |
+|----------|------|
+| `String::from("a")` / `"a".to_string()` | crée une `String` |
+| `s.push_str("…")` / `s.push('c')` | ajoute du texte / un caractère |
+| `s.chars().count()` | nombre de caractères (`len()` : octets) |
+| `s.trim()` / `s.to_uppercase()` | nettoie / met en majuscules |
+| `s.contains("x")` / `s.starts_with("x")` | cherche |
+| `s.replace("a", "b")` | remplace |
+| `s.split(',').collect::<Vec<_>>()` | découpe |
+| `s.parse::<i32>()` | texte → nombre (`Result`) |
+
+```rust
+let s = String::from(" Été, hiver ");
+let mots: Vec<&str> = s.trim().split(", ").collect();
+println!("{:?} {}", mots, s.trim().chars().count());
+println!("{}", "21".parse::<i32>().unwrap() * 2);
+```
+
+```sortie
+["Été", "hiver"] 10
+42
+```
+
+Détails : [Travailler avec du texte](texte.md).
+
 ## Collections
 
 | Écriture | Sens |
@@ -196,6 +223,35 @@ stop
 
 Détails : [Structures, énumérations et traits](types.md).
 
+## Génériques et traits
+
+| Écriture | Sens |
+|----------|------|
+| `fn f<T: Display>(x: T)` | fonction générique avec contrainte |
+| `fn f(x: impl Display)` | même chose, en plus court |
+| `trait T { fn m(&self); }` | définit un trait |
+| `impl T for Type { … }` | implémente un trait |
+| `Vec<Box<dyn T>>` | liste d'objets de types différents |
+| `#[derive(Debug, Clone, PartialEq, Default)]` | traits écrits pour vous |
+
+```rust
+use std::fmt::Display;
+
+fn encadrer(x: impl Display) -> String {
+    format!("[{x}]")
+}
+
+fn main() {
+    println!("{} {}", encadrer(7), encadrer("ok"));
+}
+```
+
+```sortie
+[7] [ok]
+```
+
+Détails : [Génériques et traits](generiques.md).
+
 ## Option et Result
 
 | Écriture | Sens |
@@ -229,6 +285,36 @@ a
 ```
 
 Détails : [Gérer les erreurs](erreurs.md).
+
+## Clavier et fichiers
+
+| Écriture | Sens |
+|----------|------|
+| `io::stdin().read_line(&mut s)` | lit une ligne au clavier |
+| `env::args().collect::<Vec<String>>()` | arguments de la commande |
+| `fs::write("f.txt", texte)?` | écrit (écrase) un fichier |
+| `fs::read_to_string("f.txt")?` | lit tout un fichier |
+| `OpenOptions::new().append(true).open(…)?` | ajoute à la fin |
+| `BufReader::new(fichier).lines()` | lit ligne par ligne |
+
+```rust
+use std::fs;
+
+fn main() -> std::io::Result<()> {
+    fs::write("a.txt", "un\ndeux\n")?;
+    for ligne in fs::read_to_string("a.txt")?.lines() {
+        println!("- {ligne}");
+    }
+    Ok(())
+}
+```
+
+```sortie
+- un
+- deux
+```
+
+Détails : [Lire et écrire : clavier et fichiers](fichiers.md).
 
 ## Modules et tests
 

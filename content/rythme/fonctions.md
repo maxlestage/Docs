@@ -178,25 +178,16 @@ print([1, 2, 3] |> map(fn(x) = x + 10))
 [11, 12, 13]
 ```
 
-## Les fermetures
-
-Une fonction anonyme se souvient des noms visibles là où elle est écrite.
-On appelle cela une **fermeture**. Une fonction peut donc fabriquer
-d'autres fonctions :
+Une fonction anonyme peut utiliser les noms écrits avant elle :
 
 ```rythme
-fn ajouteur(n) = fn(x) = x + n
-
-plus10 = ajouteur(10)
-plus100 = ajouteur(100)
-print(plus10(5), plus100(5))
+taux = 3
+print([1, 2, 3] |> map(fn(x) = x * taux))
 ```
 
 ```sortie
-15 105
+[3, 6, 9]
 ```
-
-Comme les valeurs ne changent jamais, `plus10` garde toujours `n = 10`.
 
 ## Les fonctions sont des valeurs
 
@@ -214,12 +205,15 @@ print(appliquer_deux_fois(carre, 3), map([1, 2, 3], carre))
 81 [1, 4, 9]
 ```
 
-> **À retenir :** `fn nom(x) = ...` sur une ligne, `fn nom(x) ... end` en
-> bloc, la dernière ligne est le résultat, et plusieurs définitions par cas
-> sont essayées dans l'ordre.
+## En résumé
 
-## Et ensuite
+- `fn nom(x) = ...` écrit une fonction sur une ligne ; `fn nom(x) ... end`
+  en bloc, où la dernière ligne est le résultat.
+- Il n'y a pas de `return`.
+- Plusieurs définitions par cas sont essayées dans l'ordre ; une garde
+  `if` ajoute une condition.
+- `valeur.f(args)` est une autre façon d'écrire `f(valeur, args)`.
+- `fn(x) = ...` est une fonction sans nom, qu'on peut donner à `map`.
 
-Rangez vos valeurs dans des [listes et enregistrements](collections.md).
-Comparez avec les fonctions de [Ruby](../ruby/fonctions.md) et de
-[Rust](../rust/fonctions.md).
+Suite : [travailler avec du texte](texte.md). Comparez avec les fonctions de
+[Ruby](../ruby/fonctions.md) et de [Rust](../rust/fonctions.md).

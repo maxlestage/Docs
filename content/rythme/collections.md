@@ -187,12 +187,10 @@ Un **ensemble** (`set`) garde chaque valeur une seule fois :
 ```rythme
 vus = set([3, 1, 3, 2, 1])
 print(vus, len(vus), contains(vus, 2))
-print(union(vus, set([5])), intersection(vus, set([1, 9])))
 ```
 
 ```sortie
 set(1, 2, 3) 3 true
-set(1, 2, 3, 5) set(1)
 ```
 
 ## Quelle collection choisir
@@ -205,12 +203,16 @@ set(1, 2, 3, 5) set(1)
 | retrouver une valeur par sa clé | dictionnaire | `dict([["Ada", 36]])` |
 | des valeurs sans doublons | ensemble | `set([1, 2])` |
 
-> **À retenir :** aucune collection ne change. `push`, `put` et
-> `{..r, champ: valeur}` fabriquent une nouvelle valeur ; l'ancienne reste
-> la même.
+## En résumé
 
-## Et ensuite
+- Une liste s'écrit `[1, 2, 3]` ; `xs[0]` est le premier élément.
+- `get` et `first` donnent une `Option`, sans risque d'arrêter le programme.
+- Un enregistrement `{nom: "Ada", age: 36}` regroupe des champs, lus avec
+  un point : `ada.nom`.
+- Un dictionnaire retrouve une valeur par sa clé ; un ensemble garde chaque
+  valeur une seule fois.
+- Aucune collection ne change : `push`, `put` et `{..r, champ: valeur}`
+  fabriquent une nouvelle valeur.
 
-Apprenez à [penser fonctionnel](fonctionnel.md) pour travailler sur ces
-collections. Comparez avec les collections de [Ruby](../ruby/collections.md)
-et de [Rust](../rust/collections.md).
+Suite : [penser fonctionnel](fonctionnel.md). Comparez avec les collections
+de [Ruby](../ruby/collections.md) et de [Rust](../rust/collections.md).

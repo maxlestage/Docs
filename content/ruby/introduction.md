@@ -17,8 +17,8 @@ Bonjour
 Bonjour
 ```
 
-Ruby est un langage **interprété** : vous n'avez pas besoin de compiler. Vous écrivez un
-fichier, puis vous le lancez.
+Ruby est un langage **interprété** : vous écrivez un fichier, puis vous le lancez
+directement. Il n'y a pas d'étape de préparation (de « compilation ») avant.
 
 ## Pourquoi apprendre Ruby ?
 
@@ -71,7 +71,8 @@ Gardez les options proposées par défaut.
 
 ## Vérifier l'installation
 
-Ouvrez un terminal et tapez :
+Ouvrez un terminal et tapez la commande suivante. Si le terminal est nouveau pour vous,
+lisez d'abord [le terminal](../debuter/terminal.md).
 
 ```sh
 ruby -v
@@ -110,7 +111,8 @@ Bonjour, le monde !
 
 ## Lancer un programme
 
-Dans le terminal, placez-vous dans le dossier du fichier, puis tapez :
+Dans le terminal, placez-vous dans le dossier du fichier (avec la commande `cd`), puis
+tapez :
 
 ```sh
 ruby hello.rb
@@ -121,7 +123,16 @@ Le programme s'exécute et affiche `Bonjour, le monde !`.
 > **À retenir :** un programme Ruby est un fichier `.rb`. Vous le lancez avec
 > `ruby nom_du_fichier.rb`.
 
-## Et ensuite ?
+Le guide [le terminal](../debuter/terminal.md) explique comment ouvrir un terminal et
+changer de dossier.
 
-Passez aux [premiers pas](premiers-pas.md) pour découvrir les variables, les nombres et
+## En résumé
+
+- Ruby est un langage simple et lisible, où tout est un objet.
+- Installez-le avec votre gestionnaire de paquets, rbenv ou RubyInstaller.
+- `ruby -v` vérifie l'installation, `irb` permet d'essayer du code tout de suite.
+- Un programme est un fichier `.rb`, lancé avec `ruby nom_du_fichier.rb`.
+- `puts` affiche un texte et passe à la ligne.
+
+Suite : passez aux [premiers pas](premiers-pas.md) pour découvrir les variables, les nombres et
 les textes.

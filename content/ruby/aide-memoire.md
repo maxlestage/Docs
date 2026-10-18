@@ -19,7 +19,8 @@ Cette page résume en un coup d'œil la syntaxe Ruby vue dans toute la documenta
 nom = "Alice"
 puts "Bonjour #{nom}"
 p :ok
-p 7 / 2, 7.0 / 2
+p 7 / 2
+p 7.0 / 2
 ```
 
 ```sortie
@@ -86,6 +87,39 @@ Salut Bob, enchanté.
 
 Détails : [les méthodes](fonctions.md).
 
+## Texte
+
+| Besoin | Exemple |
+| --- | --- |
+| Insérer une valeur | `"Bonjour #{nom}"` |
+| Longueur | `t.length` |
+| Majuscules, minuscules | `t.upcase`, `t.downcase`, `t.capitalize` |
+| Enlever les espaces autour | `t.strip` |
+| Chercher | `t.include?("a")`, `t.start_with?("B")` |
+| Découper, recoller | `t.split(",")`, `tableau.join(" ")` |
+| Remplacer | `t.sub("a", "b")` (une fois), `t.gsub("a", "b")` (partout) |
+| Une partie | `t[0]`, `t[0..2]`, `t[-1]` |
+| Arrondir, formater | `x.round(2)`, `format("%.2f", x)` |
+
+```ruby
+t = "  bonjour ruby  ".strip
+puts t.capitalize
+puts t[0..6]
+p t.split(" ")
+puts t.gsub("o", "0")
+puts format("%.2f", 3.14159)
+```
+
+```sortie
+Bonjour ruby
+bonjour
+["bonjour", "ruby"]
+b0nj0ur ruby
+3.14
+```
+
+Détails : [travailler avec du texte](texte.md).
+
 ## Tableaux et hashs
 
 | Action | Tableau | Hash |
@@ -101,7 +135,8 @@ Détails : [les méthodes](fonctions.md).
 t = [3, 1, 2]
 h = { a: 1 }
 h[:b] = 2
-p t.sort, h
+p t.sort
+p h
 ```
 
 ```sortie
@@ -146,7 +181,9 @@ Détails : [les blocs](blocs.md).
 
 ```ruby
 module Affichable
-  def afficher = puts(to_s)
+  def afficher
+    puts to_s
+  end
 end
 
 class Animal
@@ -157,11 +194,15 @@ class Animal
     @nom = nom
   end
 
-  def to_s = "Animal #{nom}"
+  def to_s
+    "Animal #{nom}"
+  end
 end
 
 class Chat < Animal
-  def to_s = "Chat #{nom}"
+  def to_s
+    "Chat #{nom}"
+  end
 end
 
 Chat.new("Félix").afficher
@@ -188,7 +229,8 @@ Détails : [classes et objets](types.md).
 | `&.` | appel sûr si `nil` |
 
 ```ruby
-class MonErreur < StandardError; end
+class MonErreur < StandardError
+end
 
 begin
   raise MonErreur, "aïe"
@@ -208,6 +250,34 @@ nil
 
 Détails : [gérer les erreurs](erreurs.md).
 
+## Clavier et fichiers
+
+| Besoin | Syntaxe |
+| --- | --- |
+| Lire une ligne au clavier | `gets.chomp` |
+| Arguments du programme | `ARGV[0]` |
+| Écrire (remplace tout) | `File.write("f.txt", texte)` |
+| Lire tout | `File.read("f.txt")` |
+| Lire les lignes | `File.readlines("f.txt", chomp: true)` |
+| Ligne par ligne | `File.foreach("f.txt")` avec un bloc |
+| Le fichier existe ? | `File.exist?("f.txt")` |
+| Ajouter à la fin | `File.open("f.txt", "a")` avec un bloc, puis `f.puts` |
+| JSON | `require "json"`, `JSON.generate(h)`, `JSON.parse(t)` |
+
+```ruby
+File.write("f.txt", "un\n")
+File.open("f.txt", "a") { |f| f.puts "deux" }
+p File.readlines("f.txt", chomp: true)
+puts File.exist?("f.txt")
+```
+
+```sortie
+["un", "deux"]
+true
+```
+
+Détails : [clavier et fichiers](fichiers.md).
+
 ## Projet et outils
 
 | Commande | Rôle |
@@ -219,5 +289,6 @@ Détails : [gérer les erreurs](erreurs.md).
 | `bundle exec …` | lancer avec les gems du projet |
 | `rubocop` | vérifier le style |
 
-Détails : [projets, gems et tests](projet.md). Comparez avec
+Détails : [projets, gems et tests](projet.md). Pour pratiquer :
+[les exercices corrigés](exercices.md). Comparez avec
 [l'aide-mémoire Rust](../rust/aide-memoire.md) et [l'aide-mémoire Rythme](../rythme/aide-memoire.md).

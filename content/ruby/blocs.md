@@ -92,13 +92,14 @@ p nombres.find { |n| n > 4 }
 nombres = [1, 2, 3, 4]
 total = nombres.reduce(0) { |somme, n| somme + n }
 puts total
-puts nombres.reduce(:*)
 ```
 
 ```sortie
 10
-24
 ```
+
+À chaque tour, `somme` contient le total déjà calculé, et `n` l'élément suivant. Le
+`0` est la valeur de départ.
 
 ### each_with_index
 
@@ -121,8 +122,8 @@ end
 
 ```ruby
 mots = ["kiwi", "ananas", "framboise", "pomme"]
-p mots.sort_by(&:length)
-p mots.sort_by { |m| -m.length }.first
+p mots.sort_by { |m| m.length }
+p mots.sort_by { |m| m.length }.last
 ```
 
 ```sortie
@@ -162,20 +163,20 @@ puts resultat
 ## Les procs et les lambdas
 
 Un bloc ne peut pas être rangé dans une variable. Pour cela, Ruby propose les **procs**
-et les **lambdas**.
+et les **lambdas**. Pour débuter, il suffit de savoir les reconnaître.
 
 ```ruby
 doubler = ->(x) { x * 2 }
 puts doubler.call(5)
-puts doubler.(7)
-p [1, 2, 3].map(&doubler)
+puts doubler.call(7)
 ```
 
 ```sortie
 10
 14
-[2, 4, 6]
 ```
+
+`call` exécute la lambda avec la valeur donnée.
 
 Une proc s'écrit avec `proc { ... }` :
 
@@ -191,7 +192,13 @@ Salut Alice
 > **Attention :** une lambda vérifie le nombre d'arguments, une proc non. En cas de doute,
 > préférez la lambda.
 
-## Et ensuite ?
+## En résumé
 
-Créez vos propres objets avec [les classes](types.md). Pour le style fonctionnel, voyez
+- Un bloc est du code donné à une méthode, entre `{ }` ou entre `do` et `end`.
+- `map` transforme, `select` et `reject` filtrent, `find` cherche le premier.
+- `reduce` combine tous les éléments en une seule valeur.
+- `sort_by` trie et `group_by` regroupe selon le résultat du bloc.
+- Une lambda (`->(x) { ... }`) est un bloc rangé dans une variable.
+
+Suite : créez vos propres objets avec [les classes](types.md). Pour le style fonctionnel, voyez
 aussi [la page fonctionnelle de Rythme](../rythme/fonctionnel.md).

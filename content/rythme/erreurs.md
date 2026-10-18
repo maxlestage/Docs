@@ -126,18 +126,16 @@ normal se lit d'un trait, et l'erreur remonte toute seule.
 |----------|-----------------|
 | `is_some(x)`, `is_none(x)` | l'Option contient-elle une valeur ? |
 | `is_ok(x)`, `is_err(x)` | le Result est-il un succès ? |
-| `map(x, f)` | applique `f` à la valeur dans `Some` ou `Ok` |
-| `ok_or(option, erreur)` | transforme une Option en Result |
 | `fail(message)` | arrête le programme avec un message |
 
 ```rythme
-print(map(Some(2), fn(x) = x * 10), map(None, fn(x) = x * 10))
-print(ok_or(None, "absent"), is_err(parse_int("x")))
+print(is_some(first([1, 2])), is_none(first([])))
+print(is_ok(parse_int("7")), is_err(parse_int("x")))
 ```
 
 ```sortie
-Some(20) None
-Err("absent") true
+true true
+true true
 ```
 
 ## Des messages d'erreur qui aident
@@ -204,12 +202,15 @@ Voici les codes les plus fréquents au début :
 | E011 | nom déjà défini (une valeur ne change pas) |
 | E019 | `if` sans `else` |
 
-> **À retenir :** une valeur qui peut manquer est une `Option`, un échec est
-> un `Result`. On les traite avec `match`, `unwrap_or` ou `?`. Et
-> `rythme explain CODE` explique chaque erreur.
+## En résumé
 
-## Et ensuite
+- Une valeur qui peut manquer est une `Option` : `Some(x)` ou `None`.
+- Une opération qui peut échouer donne un `Result` : `Ok(x)` ou `Err(e)`.
+- On les traite avec `match`, ou avec `unwrap_or` pour une valeur par
+  défaut.
+- Dans une fonction, `?` continue avec la valeur, ou renvoie l'erreur.
+- Chaque message d'erreur dit où, pourquoi et comment corriger ;
+  `rythme explain CODE` en dit plus.
 
-Organisez votre code en [projets, modules et tests](projet.md). Comparez
-avec les erreurs en [Ruby](../ruby/erreurs.md) et en
-[Rust](../rust/erreurs.md).
+Suite : [lire et écrire des fichiers](fichiers.md). Comparez avec les erreurs
+en [Ruby](../ruby/erreurs.md) et en [Rust](../rust/erreurs.md).

@@ -143,13 +143,9 @@ Bonjour, le monde !
 name = "bonjour"
 version = "0.1.0"
 entry = "src/main.ry"
-
-[dependencies]
-outils = { path = "../outils" }
 ```
 
-Les dépendances viennent d'un dossier (`path`) ou de git (`git` avec un
-`tag` ou un `commit`). `rythme install` les télécharge.
+`entry` est le fichier lancé par `rythme run`.
 
 ## Mettre en forme avec rythme fmt
 
@@ -189,16 +185,16 @@ Les noms privés (`_secret`) sont laissés de côté.
 
 ## Votre éditeur
 
-`rythme lsp` est un **serveur de langage**. Vous ne le lancez pas vous-même :
-votre éditeur le fait. Il apporte les erreurs pendant la frappe, l'aide au
-survol, la complétion, « aller à la définition » et le renommage.
+Un bon éditeur souligne les erreurs pendant que vous tapez, et affiche
+l'aide d'une fonction quand vous passez la souris dessus. Pour cela, il
+utilise `rythme lsp` : vous ne le lancez pas vous-même, l'éditeur le fait.
 
 - **VS Code** : une extension existe, dans le dossier `editors/vscode` du
   dépôt de Rythme.
-- **Neovim, Helix, Zed, Emacs, Sublime Text...** : tout éditeur qui parle le
-  Language Server Protocol peut lancer `rythme lsp`.
+- **Les autres éditeurs** (Neovim, Helix, Zed...) : `rythme help editors`
+  explique comment faire.
 
-`rythme help editors` donne la configuration de chacun.
+Pour choisir un éditeur, voir [l'éditeur de code](../debuter/editeur.md).
 
 ## Apprendre avec learn et exercise
 
@@ -214,14 +210,19 @@ rythme exercise check 01-valeurs.ry        # vérifie votre solution
 
 Chaque exercice contient un énoncé, des indices et des tests. Vous
 remplacez les `0` ou les `fail("à faire")` par votre code, puis vous
-vérifiez.
+vérifiez. Pour commencer en douceur, essayez d'abord les
+[exercices corrigés](exercices.md) de ce site.
 
-> **À retenir :** `test "..." = ...` et `rythme test` pour tester, `use`
-> pour partager du code entre fichiers, `rythme new` pour un projet,
-> `rythme fmt` pour la mise en forme, et `rythme exercise` pour
-> s'entraîner.
+## En résumé
 
-## Et ensuite
+- `test "..." = ...` écrit un test à côté du code, `rythme test` les lance.
+- `use geometrie` utilise le fichier `geometrie.ry` ; ses noms s'écrivent
+  `geometrie.nom`.
+- `rythme new nom` crée un projet prêt à l'emploi.
+- `rythme fmt` met le code en forme, et votre éditeur vous aide grâce à
+  `rythme lsp`.
+- `rythme learn` et `rythme exercise` permettent de s'entraîner.
 
-Gardez [l'aide-mémoire](aide-memoire.md) sous la main. Comparez avec les
-projets en [Ruby](../ruby/projet.md) et en [Rust](../rust/projet.md).
+Suite : [les exercices corrigés](exercices.md), puis
+[l'aide-mémoire](aide-memoire.md). Comparez avec les projets en
+[Ruby](../ruby/projet.md) et en [Rust](../rust/projet.md).

@@ -83,6 +83,32 @@ print(double(4), presenter("Ada"), fact(5), signe(-2), triple(2))
 
 Voir [les fonctions](fonctions.md).
 
+## Texte
+
+| Fonction | Exemple | Résultat |
+|----------|---------|----------|
+| `len`, `upper`, `lower` | `upper("été")` | `"ÉTÉ"` |
+| `capitalize`, `trim` | `trim("  ok ")` | `"ok"` |
+| `split`, `join` | `split("a,b", ",")` | `["a", "b"]` |
+| `contains`, `starts_with` | `contains("bonjour", "jour")` | `true` |
+| `replace` | `replace("a-b", "-", "+")` | `"a+b"` |
+| `chars`, `lines` | `chars("ab")` | `["a", "b"]` |
+| `repeat`, `pad_left` | `pad_left("7", 3, "0")` | `"007"` |
+| `parse_int`, `parse_float` | `parse_int("42")` | `Ok(42)` |
+| `format_number` | `format_number(1234.5, 1, "fr")` | `"1 234,5"` |
+| `matches`, `find_all`, `replace_all` | `find_all("a1b22", "\\d+")` | `["1", "22"]` |
+
+```rythme
+mots = "le chat dort" |> split |> map(capitalize)
+print(join(mots, " "), len(mots), parse_int("x") |> unwrap_or(0))
+```
+
+```sortie
+Le Chat Dort 3 0
+```
+
+Voir [travailler avec du texte](texte.md).
+
 ## Collections
 
 | Écrire | Donne |
@@ -188,6 +214,31 @@ Ok(5) true
 
 Voir [gérer les erreurs](erreurs.md).
 
+## Clavier et fichiers
+
+| Écrire | Donne |
+|--------|-------|
+| `input("Nom ? ")` | la ligne tapée au clavier (un texte) |
+| `args()` | les mots après le nom du fichier |
+| `write_file(chemin, texte)` | `Ok(())` : remplace le contenu |
+| `append_file(chemin, texte)` | `Ok(())` : ajoute à la fin |
+| `read_file(chemin)` | `Ok(texte)` ou `Err(message)` |
+| `file_exists(chemin)` | `true` ou `false` |
+| `to_json(valeur)`, `parse_json(texte)` | du JSON, et le retour (un Result) |
+
+```rythme
+write_file("courses.txt", "pain\nlait")
+append_file("courses.txt", "\nœufs")
+texte = read_file("courses.txt") |> unwrap_or("")
+print(lines(texte), file_exists("courses.txt"))
+```
+
+```sortie
+["pain", "lait", "œufs"] true
+```
+
+Voir [lire et écrire : clavier et fichiers](fichiers.md).
+
 ## Tests et modules
 
 ```rythme
@@ -243,6 +294,9 @@ Voir [projets, modules et tests](projet.md).
 | `xs.map { \|x\| x * 2 }` | pareil |
 | `puts "Salut #{nom}"` | pareil |
 | `xs.select(&:even?)` | `xs.select(even?)` |
+| `gets` | `input("question ")` |
+| `File.read("f.txt")` | `read_file("f.txt")` (un Result) |
+| `"42".to_i` | `parse_int("42")` (un Result : le texte peut ne pas être un nombre) |
 
 `rythme help ruby` détaille ce qui est pareil et ce qui change. Voir aussi
 [l'aide-mémoire de Ruby](../ruby/aide-memoire.md) et
