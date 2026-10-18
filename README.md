@@ -11,13 +11,14 @@ installable qui marche hors ligne.
 
 | Parcours | Chapitres |
 |---|---|
-| [Débuter](content/debuter) | qu'est-ce que programmer, le terminal, un éditeur de code, quel langage choisir, glossaire |
-| [Ruby](content/ruby) | introduction, premiers pas, conditions et boucles, méthodes, texte, tableaux et hashs, blocs et Enumerable, classes et objets, erreurs, clavier et fichiers, gems et tests, exercices corrigés, aide-mémoire |
-| [Rust](content/rust) | introduction, premiers pas, conditions et boucles, fonctions, texte, collections, possession et emprunt, structures et énumérations, génériques et traits, erreurs, clavier et fichiers, Cargo et tests, exercices corrigés, aide-mémoire |
-| [Rythme](content/rythme) | introduction, premiers pas, conditions et répétition, fonctions, texte, listes et enregistrements, penser fonctionnel, types et `match`, erreurs, clavier et fichiers, modules et tests, exercices corrigés, aide-mémoire |
+| [Débuter](content/debuter) (8) | qu'est-ce que programmer, penser un algorithme, le terminal, un éditeur, trouver ses erreurs, Git, quel langage choisir, glossaire |
+| [Ruby](content/ruby) (16) | **Les bases** : introduction, premiers pas, conditions et boucles, méthodes, texte, tableaux et hashs · **Aller plus loin** : blocs, classes, modules, erreurs, fichiers · **La pratique** : tests, organiser un projet, projets pas à pas, exercices, aide-mémoire |
+| [Rust](content/rust) (20) | **Les bases** : introduction, premiers pas, conditions et boucles, fonctions, texte, collections · **Le cœur de Rust** : possession, structures et énumérations, génériques et traits, erreurs, itérateurs · **Aller plus loin** : modules, fichiers, Box/Rc/RefCell, threads · **La pratique** : tests, Cargo, projets pas à pas, exercices, aide-mémoire |
+| [Rythme](content/rythme) (16) | **Les bases** : introduction, premiers pas, conditions et répétition, fonctions, texte, listes et enregistrements · **Aller plus loin** : penser fonctionnel, types et `match`, erreurs, modules, fichiers · **La pratique** : tests, organiser un projet, projets pas à pas, exercices, aide-mémoire |
 
-Chaque chapitre finit par un résumé ; chaque langage a 12 exercices corrigés (solutions
-repliées) et un aide-mémoire.
+Chaque chapitre suit le même plan : objectifs, sections avec un exemple chacune, erreurs
+fréquentes (avec les vrais messages d'erreur), « Testez-vous » (réponses repliées) et
+résumé. Chaque langage a 3 projets guidés, 12 exercices corrigés et un aide-mémoire.
 
 ## Ce que fait le site
 
