@@ -1,8 +1,13 @@
-# Publie le site statique sur GitHub Pages (Settings → Pages → Source : GitHub Actions),
-# à la main : Actions → Pages → Run workflow.
+# Publie le site sur GitHub Pages à chaque fusion dans master (et à la main : Actions →
+# Pages → Run workflow). Le site est exporté par le serveur lui-même
+# (`cargo run -- export`), ses liens vérifiés, puis déployé.
+# Une seule fois : Settings → Pages → Source : « GitHub Actions ».
+
 name: Pages
 
 on:
+  push:
+    branches: [master]
   workflow_dispatch:
 
 permissions:
@@ -10,16 +15,18 @@ permissions:
   pages: write
   id-token: write
 
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
 jobs:
-  deploy:
+  build:
+    name: Exporter le site
     runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - uses: actions/checkout@v4
       - uses: dtolnay/rust-toolchain@stable
-      - name: Accès aux dépendances git de Paquets
+      - name: Accès aux dépendances git
         env:
           REPOS_TOKEN: ${{ secrets.REPOS_TOKEN }}
         run: |
@@ -28,13 +35,29 @@ jobs:
             git config --global credential.https://github.com.helper \
               '!f() { test "$1" = get && echo username=x-access-token && echo "password=$REPOS_TOKEN"; }; f'
           fi
-      - name: Export
-        run: |
-          owner="${GITHUB_REPOSITORY_OWNER,,}"
-          BASE_PATH="/${GITHUB_REPOSITORY#*/}" SITE_URL="https://$owner.github.io/${GITHUB_REPOSITORY#*/}" \
-            cargo run --release -- export dist
+      - uses: Swatinem/rust-cache@v2
+      - id: pages
+        uses: actions/configure-pages@v5
+        with:
+          enablement: true
+      - name: Exporter
+        env:
+          BASE_PATH: ${{ steps.pages.outputs.base_path }}
+          SITE_URL: ${{ steps.pages.outputs.base_url }}
+        run: cargo run --release --locked -- export dist
+      - name: Vérifier chaque lien
+        run: ruby tools/liens.rb dist "${{ steps.pages.outputs.base_path }}"
       - uses: actions/upload-pages-artifact@v3
         with:
           path: dist
+
+  deploy:
+    name: Déployer
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
       - id: deployment
         uses: actions/deploy-pages@v4

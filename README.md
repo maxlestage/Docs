@@ -62,12 +62,25 @@ Le vérificateur a besoin de `ruby` (3.3), `rustc` et `rythme`
   `git push heroku master` ([`RustConfig`](RustConfig), [`heroku-build.sh`](heroku-build.sh),
   [`Procfile`](Procfile), [`app.json`](app.json)).
 - **Docker** : `docker build -t docs . && docker run --rm -p 8080:8080 docs`.
-- **Fichiers statiques** (GitHub Pages, Netlify…) : `BASE_PATH=/Docs cargo run --release -- export dist`
-  écrit tout le site dans `dist/`, rendu par le serveur lui-même. Le workflow
-  [`pages.yml`](.github/workflows/pages.yml) le publie sur GitHub Pages, à la main.
+- **GitHub Pages** : chaque fusion dans `master` est publiée par
+  [`pages.yml`](.github/workflows/pages.yml) (une seule fois : *Settings → Pages →
+  Source : GitHub Actions*). Le site est exporté par le serveur lui-même
+  (`BASE_PATH=/Docs cargo run --release -- export dist`), puis ses liens sont vérifiés.
 
 Si des dépôts dont dépend Paquets sont privés, donnez un jeton GitHub qui peut les lire
 dans le secret (ou la variable Heroku) `REPOS_TOKEN`.
+
+## Intégration continue
+
+[`ci.yml`](.github/workflows/ci.yml), à chaque envoi et chaque pull request :
+
+| Tâche | Ce qu'elle vérifie |
+|---|---|
+| Rust | `cargo fmt`, `clippy`, `cargo test` : chaque page, chaque lien, chaque ancre |
+| Exemples | chaque morceau de code, exécuté avec Ruby 3.3, Rust et Rythme, et sa sortie |
+| Export statique et navigateur | l'export comme sur GitHub Pages, chacun de ses liens (`tools/liens.rb`), puis chaque page dans Chromium, sur téléphone et sur ordinateur, en clair et en sombre, avec la recherche, le thème, le menu et « Copier » (`tests/navigateur.js`) |
+| Serveur | construit comme sur Heroku, démarré, interrogé |
+| Docker | l'image, construite, démarrée, interrogée |
 
 ## Organisation
 
@@ -84,3 +97,5 @@ dans le secret (ou la variable Heroku) `REPOS_TOKEN`.
 | `public/` | `site.css`, `site.js`, le logo |
 | `tools/verifier.rb` | exécute chaque exemple de la documentation |
 | `tests/site.rs` | le site entier, par le client de test de Paquets |
+| `tests/navigateur.js` | le site dans Chromium |
+| `tools/liens.rb` | chaque lien de l'export statique |
