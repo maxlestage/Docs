@@ -1,0 +1,57 @@
+# À chaque envoi : le code du site (format, clippy, tests), chaque exemple de la
+# documentation exécuté avec Ruby, Rust et Rythme, et l'export statique.
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  site:
+    name: Site (format, clippy, tests, export)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          components: clippy, rustfmt
+      - name: Accès aux dépendances git de Paquets
+        # Facultatif : un secret REPOS_TOKEN si certaines sont privées.
+        env:
+          REPOS_TOKEN: ${{ secrets.REPOS_TOKEN }}
+        run: |
+          if [ -n "$REPOS_TOKEN" ]; then
+            echo "CARGO_NET_GIT_FETCH_WITH_CLI=true" >> "$GITHUB_ENV"
+            git config --global credential.https://github.com.helper \
+              '!f() { test "$1" = get && echo username=x-access-token && echo "password=$REPOS_TOKEN"; }; f'
+          fi
+      - uses: Swatinem/rust-cache@v2
+      - run: cargo fmt --check
+      - run: cargo clippy --all-targets -- -D warnings
+      - run: cargo test
+      - name: Export statique
+        run: BASE_PATH=/Docs cargo run --release -- export dist && test -f dist/rust/possession/index.html
+
+  examples:
+    name: Exemples (Ruby, Rust, Rythme)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      # Les sorties des exemples sont celles de Ruby 3.3.
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: "3.3"
+      - name: Accès au dépôt de Rythme
+        env:
+          REPOS_TOKEN: ${{ secrets.REPOS_TOKEN }}
+        run: |
+          if [ -n "$REPOS_TOKEN" ]; then
+            echo "CARGO_NET_GIT_FETCH_WITH_CLI=true" >> "$GITHUB_ENV"
+            git config --global credential.https://github.com.helper \
+              '!f() { test "$1" = get && echo username=x-access-token && echo "password=$REPOS_TOKEN"; }; f'
+          fi
+      - name: Installer Rythme
+        run: cargo install --git https://github.com/maxlestage/Rythme --locked rythme
+      - name: Exécuter chaque exemple
+        run: ruby tools/verifier.rb

@@ -1,0 +1,40 @@
+# Publie le site statique sur GitHub Pages (Settings → Pages → Source : GitHub Actions),
+# à la main : Actions → Pages → Run workflow.
+name: Pages
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - name: Accès aux dépendances git de Paquets
+        env:
+          REPOS_TOKEN: ${{ secrets.REPOS_TOKEN }}
+        run: |
+          if [ -n "$REPOS_TOKEN" ]; then
+            echo "CARGO_NET_GIT_FETCH_WITH_CLI=true" >> "$GITHUB_ENV"
+            git config --global credential.https://github.com.helper \
+              '!f() { test "$1" = get && echo username=x-access-token && echo "password=$REPOS_TOKEN"; }; f'
+          fi
+      - name: Export
+        run: |
+          owner="${GITHUB_REPOSITORY_OWNER,,}"
+          BASE_PATH="/${GITHUB_REPOSITORY#*/}" SITE_URL="https://$owner.github.io/${GITHUB_REPOSITORY#*/}" \
+            cargo run --release -- export dist
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+      - id: deployment
+        uses: actions/deploy-pages@v4

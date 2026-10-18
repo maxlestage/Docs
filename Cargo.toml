@@ -1,0 +1,21 @@
+[package]
+name = "docs"
+version = "0.1.0"
+edition = "2024"
+rust-version = "1.88"
+publish = false
+description = "Des documentations simples pour Ruby, Rust et Rythme, en français : un site écrit avec Paquets."
+
+[dependencies]
+# Le serveur, les pages (active), la sécurité (securite) : une seule dépendance.
+paquets = { git = "https://github.com/maxlestage/Paquets", default-features = false }
+pulldown-cmark = { version = "0.13", default-features = false, features = ["html"] }
+tokio = { version = "1", features = ["rt-multi-thread"] }
+
+[dev-dependencies]
+tokio = { version = "1", features = ["macros", "rt-multi-thread"] }
+
+[profile.release]
+lto = "thin"
+codegen-units = 1
+strip = true
