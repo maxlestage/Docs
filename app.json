@@ -1,0 +1,15 @@
+{
+  "name": "Docs : Ruby, Rust et Rythme",
+  "description": "Des documentations simples, en français, pour Ruby, Rust et Rythme : un site écrit avec Paquets.",
+  "repository": "https://github.com/maxlestage/Docs",
+  "keywords": ["ruby", "rust", "rythme", "documentation", "paquets"],
+  "stack": "heroku-26",
+  "buildpacks": [{ "url": "emk/rust" }],
+  "env": {
+    "REPOS_TOKEN": {
+      "description": "Facultatif : un jeton GitHub qui peut lire les dépôts privés dont dépend Paquets.",
+      "required": false
+    }
+  },
+  "success_url": "/"
+}
