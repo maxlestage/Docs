@@ -44,9 +44,10 @@ const check = (ok, what) => { if (!ok) failures.push(what); };
   await page.waitForSelector(".search__results [role=option]");
   const first = await page.locator(".search__results [role=option] .search__title").first().textContent();
   check(/closure/i.test(first), `recherche « closure » : ${first}`);
+  const href = await page.locator(".search__results [role=option] a").first().getAttribute("href");
   await page.keyboard.press("Enter");
-  await page.waitForURL(/fonctions/);
-  check(/\/fonctions\//.test(page.url()), `Entrée ouvre le résultat : ${page.url()}`);
+  await page.waitForURL((url) => url.href.endsWith(href));
+  check(page.url().endsWith(href), `Entrée ouvre le résultat : ${page.url()}`);
   // Le thème.
   await page.click("#theme-toggle");
   const theme = await page.evaluate(() => document.documentElement.getAttribute("data-theme"));

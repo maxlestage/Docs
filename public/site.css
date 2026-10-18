@@ -714,3 +714,5 @@ html:not(.js) .code__copy { display: none; }
 .solution > :not(summary) { margin-left: 16px; margin-right: 16px; }
 .solution > :nth-child(2) { margin-top: 14px; }
 .solution > :last-child { margin-bottom: 16px; }
+
+.stats + .hero__actions { margin-top: 22px; }
