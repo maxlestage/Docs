@@ -1,107 +1,24 @@
-# Projets, modules et tests
+# Organiser un projet : rythme new, fmt, doc et éditeurs
 
-Cette page montre comment tester votre code, le répartir en plusieurs fichiers, créer un projet, et profiter des outils de Rythme : mise en forme, documentation, éditeurs et exercices.
+Cette page montre comment créer un vrai projet Rythme avec `rythme new`, puis profiter des outils du langage : mise en forme, documentation, éditeur et exercices.
 
-## Écrire des tests
+> **Objectifs :**
+>
+> - créer un projet avec `rythme new`, et savoir ce que contient chaque fichier ;
+> - lancer et tester un projet sans donner de nom de fichier ;
+> - mettre le code en forme avec `rythme fmt` et le documenter avec `rythme doc` ;
+> - configurer son éditeur, et s'entraîner avec `rythme learn` et `rythme exercise`.
 
-En Rythme, les tests vivent **à côté du code**, dans le même fichier. Un test
-a un nom et une vérification :
+## Avant de commencer : modules et tests
 
-```rythme
-fn double(x) = x * 2
+Un projet rassemble deux choses que vous connaissez déjà :
 
-test "le double de 21 est 42" = assert_eq(double(21), 42)
+- **plusieurs fichiers**, reliés par `use` : chaque fichier est un module.
+  Tout est expliqué dans [les modules](modules.md).
+- **des tests**, écrits avec `test "nom" = ...` et lancés par
+  `rythme test`. Tout est expliqué dans [tester son code](tests.md).
 
-test "le double garde le signe"
-  assert(double(-3) < 0, "doit rester négatif")
-  assert_eq(double(0), 0)
-end
-
-print(double(5))
-```
-
-```sortie
-10
-```
-
-Quand on lance le programme avec `rythme run`, les tests sont ignorés : seul
-le `print` s'exécute.
-
-- `assert_eq(obtenu, attendu)` vérifie que deux valeurs sont égales ;
-- `assert(condition, message)` vérifie qu'une condition est vraie.
-
-## Lancer les tests
-
-`rythme test` lance les tests, et saute les autres lignes du premier
-niveau. Ajoutons un test faux, pour voir :
-
-```rythme norun
-test "une erreur volontaire" = assert_eq(double(3), 7)
-```
-
-```sh
-rythme test calculs.ry
-```
-
-```text
-Exécution de 3 test(s)
-  ✓ le double de 21 est 42
-  ✓ le double garde le signe
-  ✗ une erreur volontaire
-erreur[E015]: assertion échouée : les valeurs sont différentes
-  --> calculs.ry:10:32
-   |
-10 | test "une erreur volontaire" = assert_eq(double(3), 7)
-   |                                ^^^^^^^^^^^^^^^^^^^^^^^
-   |
-   = note: obtenu :  6
-       attendu : 7
-   = en savoir plus : `rythme explain E015`
-
-3 test(s) : 2 réussi(s), 1 échoué(s) (0 ms)
-```
-
-Quelques options utiles :
-
-```sh
-rythme test .                      # tous les fichiers .ry du dossier
-rythme test calculs.ry --filter signe   # seulement les tests dont le nom contient « signe »
-rythme test calculs.ry --watch     # relancer à chaque modification
-```
-
-## Utiliser plusieurs fichiers avec use
-
-Un programme peut utiliser un autre fichier. Voici `geometrie.ry` :
-
-```rythme norun
-## L'aire d'un rectangle.
-fn aire_rectangle(l, h) = l * h
-
-fn aire_carre(cote) = aire_rectangle(cote, cote)
-
-fn _secret() = 42
-```
-
-Et `principal.ry`, dans le même dossier :
-
-```rythme norun
-use geometrie
-
-print(geometrie.aire_rectangle(2, 3))
-print(geometrie.aire_carre(4))
-```
-
-```text
-6
-16
-```
-
-- `use geometrie` charge `geometrie.ry` (sans guillemets, sans `.ry`).
-- On écrit ensuite `geometrie.nom` : chaque nom dit d'où il vient.
-- Un nom qui commence par `_`, comme `_secret`, reste **privé** à son
-  fichier.
-- `use formes/cercle` charge `formes/cercle.ry`, utilisé comme `cercle`.
-- `use geometrie as geo` donne un nom plus court.
+Cette page montre comment les ranger ensemble dans un dossier bien organisé.
 
 ## Créer un projet
 
@@ -122,9 +39,55 @@ Projet `bonjour` créé :
 Ensuite : `cd bonjour`, puis `rythme run` pour le lancer et `rythme test` pour le tester (voir `rythme help projects`)
 ```
 
+Le nom d'un projet s'écrit en minuscules, avec des lettres, des chiffres et
+`_` : `mon_jeu`, pas `mon-jeu`.
+
+## Ce que contient le projet
+
+```text
+bonjour/
+├── rythme.toml                 la carte d'identité du projet
+├── README.md                   une présentation, pour les humains
+├── .gitignore                  les fichiers que git ne garde pas
+├── src/
+│   ├── main.ry                 le programme
+│   └── salutation.ry           un module
+└── tests/
+    └── salutation_test.ry      les tests du module
+```
+
+Le code va dans `src/`, les tests dans `tests/`. Voici `src/salutation.ry`,
+un module avec une seule fonction :
+
+```rythme norun
+## Une salutation pour `nom`.
+fn bonjour(nom) = "Bonjour, {nom} !"
+```
+
+Le programme, `src/main.ry`, l'utilise avec `use` :
+
+```rythme norun
+# Le programme : `rythme run` dans le dossier du projet.
+use salutation
+
+print(salutation.bonjour("le monde"))
+```
+
+Et le test, `tests/salutation_test.ry`, l'utilise aussi. Depuis `tests/`, on
+écrit le nom du projet devant le module : `use bonjour/salutation` désigne
+le fichier `src/salutation.ry` du projet `bonjour`.
+
+```rythme norun
+# Les tests : `rythme test` dans le dossier du projet.
+use bonjour/salutation
+
+test "bonjour" = assert_eq(salutation.bonjour("Ada"), "Bonjour, Ada !")
+```
+
+## Lancer et tester le projet
+
 Dans le dossier du projet, les commandes n'ont plus besoin de nom de
-fichier : `rythme run` lance `src/main.ry`, et `rythme test` lance les
-tests de `src/` et de `tests/`.
+fichier :
 
 ```sh
 cd bonjour
@@ -134,6 +97,24 @@ rythme run
 ```text
 Bonjour, le monde !
 ```
+
+```sh
+rythme test
+```
+
+```text
+Exécution de 1 test(s)
+  ✓ bonjour
+1 test(s) : 1 réussi(s), 0 échoué(s) (1 ms)
+```
+
+| Commande | Ce qu'elle fait dans un projet |
+|----------|--------------------------------|
+| `rythme run` | lance le programme, `src/main.ry` |
+| `rythme test` | lance les tests de `src/` et de `tests/` |
+| `rythme check` | vérifie tous les fichiers, sans rien lancer |
+| `rythme fmt` | met en forme `src/` et `tests/` |
+| `rythme doc` | écrit la documentation de `src/` |
 
 ## Le fichier rythme.toml
 
@@ -145,7 +126,13 @@ version = "0.1.0"
 entry = "src/main.ry"
 ```
 
-`entry` est le fichier lancé par `rythme run`.
+- `name` : le nom du projet, celui qu'on écrit dans `use bonjour/...` ;
+- `version` : trois nombres, que vous augmentez à chaque nouvelle version ;
+- `entry` : le fichier lancé par `rythme run`.
+
+Le fichier créé par `rythme new` contient aussi une section
+`[dependencies]`, en commentaire : elle sert à utiliser le code d'autres
+projets. `rythme help projects` explique comment faire.
 
 ## Mettre en forme avec rythme fmt
 
@@ -174,14 +161,39 @@ changer.
 ## Documenter avec rythme doc
 
 `rythme doc` écrit la documentation d'un fichier, en Markdown, à partir de
-ses commentaires `##` :
+ses commentaires `##`. Avec le fichier `points.ry` de
+[la page sur les modules](modules.md) :
 
 ```sh
-rythme doc geometrie.ry            # du Markdown
-rythme doc --html geometrie.ry     # une page web
+rythme doc points.ry            # du Markdown
+rythme doc --html points.ry     # une page web
 ```
 
-Les noms privés (`_secret`) sont laissés de côté.
+```text
+# points.ry
+
+## Fonctions
+
+### distance
+
+~~~rythme
+fn distance(a, b)
+~~~
+
+La distance entre deux points {x, y}.
+
+## Valeurs
+
+### origine
+
+~~~rythme
+origine = {x: 0, y: 0}
+~~~
+
+Le point de départ, au centre.
+```
+
+Les noms privés (comme `_carre`) sont laissés de côté.
 
 ## Votre éditeur
 
@@ -213,16 +225,83 @@ remplacez les `0` ou les `fail("à faire")` par votre code, puis vous
 vérifiez. Pour commencer en douceur, essayez d'abord les
 [exercices corrigés](exercices.md) de ce site.
 
+## Erreurs fréquentes
+
+### Un tiret dans le nom du projet
+
+```sh
+rythme new mon-app
+```
+
+```text
+erreur[E025]: `mon-app` ne peut pas être le nom d'un paquet : il sert dans `use mon-app/fichier`, donc ce doit être un nom Rythme en minuscules (lettres, chiffres, `_`)
+  = aide: essayez `rythme new mon_app`
+  = en savoir plus : `rythme explain E025`
+```
+
+Correction : `rythme new mon_app`, avec `_` à la place du tiret.
+
+### Un dossier qui existe déjà
+
+```sh
+rythme new bonjour
+```
+
+```text
+erreur[E025]: `bonjour` existe déjà
+  = aide: choisissez un autre nom, ou un autre dossier
+  = en savoir plus : `rythme explain E025`
+```
+
+Rythme ne touche jamais un dossier qui existe déjà : vos fichiers sont en
+sécurité. Choisissez un autre nom.
+
+### rythme run en dehors d'un projet
+
+Dans un dossier qui n'a pas de `rythme.toml`, `rythme run` ne sait pas quoi
+lancer :
+
+```text
+quel fichier ? Exemple : rythme run bonjour.ry
+```
+
+Correction : donnez le nom du fichier (`rythme run jeu.ry`), ou placez-vous
+d'abord dans le dossier du projet (`cd bonjour`).
+
+## Testez-vous
+
+1. Dans un projet, où va le code, et où vont les tests ?
+
+> **Réponse**
+>
+> Le code va dans `src/` (le programme est `src/main.ry`), les tests dans
+> `tests/`.
+
+2. Que fait `rythme fmt` à ce que fait le programme ?
+
+> **Réponse**
+>
+> Rien : il change seulement la présentation (espaces, retraits, lignes
+> vides). Le programme fait exactement la même chose après.
+
+3. Quels commentaires `rythme doc` utilise-t-il ?
+
+> **Réponse**
+>
+> Les commentaires de documentation, qui commencent par `##`, juste au-dessus
+> d'une fonction, d'une valeur ou d'un type. Les noms privés (`_nom`) sont
+> laissés de côté.
+
 ## En résumé
 
-- `test "..." = ...` écrit un test à côté du code, `rythme test` les lance.
-- `use geometrie` utilise le fichier `geometrie.ry` ; ses noms s'écrivent
-  `geometrie.nom`.
-- `rythme new nom` crée un projet prêt à l'emploi.
-- `rythme fmt` met le code en forme, et votre éditeur vous aide grâce à
-  `rythme lsp`.
+- `rythme new nom` crée un projet : `rythme.toml`, le code dans `src/`, les
+  tests dans `tests/`.
+- Dans le dossier du projet, `rythme run`, `rythme test` et `rythme check`
+  marchent sans nom de fichier.
+- `rythme fmt` met le code en forme, `rythme doc` écrit sa documentation à
+  partir des commentaires `##`.
+- Votre éditeur vous aide grâce à `rythme lsp`.
 - `rythme learn` et `rythme exercise` permettent de s'entraîner.
 
-Suite : [les exercices corrigés](exercices.md), puis
-[l'aide-mémoire](aide-memoire.md). Comparez avec les projets en
+Suite : [projets pas à pas](projets.md). Comparez avec les projets en
 [Ruby](../ruby/projet.md) et en [Rust](../rust/projet.md).

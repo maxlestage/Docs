@@ -2,6 +2,15 @@
 
 Un éditeur de code est le logiciel dans lequel vous écrivez vos programmes : cette page vous aide à installer VS Code, à créer votre premier fichier et à ajouter les bonnes extensions.
 
+> **Objectifs :**
+>
+> - comprendre la différence entre un éditeur de code et un traitement de
+>   texte ;
+> - installer VS Code et ouvrir un dossier ;
+> - créer, nommer et enregistrer un fichier de code ;
+> - lancer un programme depuis le terminal intégré ;
+> - ajouter les extensions utiles pour Ruby, Rust et Rythme.
+
 ## Un éditeur, pas un traitement de texte
 
 Word ou LibreOffice servent à écrire des lettres. Ils ajoutent des polices,
@@ -140,6 +149,76 @@ VS Code n'est pas le seul choix. En voici trois autres :
 Pour débuter, restez sur VS Code : vous changerez plus tard si vous le
 souhaitez.
 
+## Erreurs fréquentes
+
+### Des guillemets transformés
+
+Un code copié depuis Word, un e-mail ou certains sites contient des
+guillemets « typographiques » (`“ ”`) au lieu des guillemets droits (`"`) :
+
+```ruby norun
+puts “Bonjour”
+```
+
+```text
+guil.rb:1:in `<main>': undefined local variable or method `“Bonjour”' for main (NameError)
+```
+
+Ruby ne reconnaît pas `“` comme un guillemet. Retapez les guillemets dans
+l'éditeur de code : `puts "Bonjour"`.
+
+### Oublier d'enregistrer
+
+Vous changez `"Bonjour !"` en `"Salut !"`, vous relancez… et le terminal
+affiche encore :
+
+```text
+Bonjour !
+```
+
+Il n'y a pas d'erreur : le terminal lit le fichier **enregistré**, pas ce
+qui est à l'écran. Regardez le point blanc sur l'onglet, enregistrez avec
+Ctrl + S (Cmd + S), puis relancez. Ou activez *Auto Save*.
+
+### Une extension cachée
+
+Sous Windows ou macOS, un fichier créé ailleurs que dans l'éditeur peut
+s'appeler en réalité `bonjour.rb.txt`. Le terminal ne le trouve pas :
+
+```sh
+ruby bonjour.rb
+```
+
+```text
+ruby: No such file or directory -- bonjour.rb (LoadError)
+```
+
+Créez vos fichiers depuis l'explorateur de VS Code, qui affiche le nom
+complet, et vérifiez avec `ls` dans le terminal.
+
+## Testez-vous
+
+**1.** Pourquoi ne pas écrire son code dans Word ?
+
+> **Réponse**
+>
+> Word n'écrit pas du texte brut : il ajoute de la mise en forme et
+> transforme les guillemets et les espaces. Le programme ne marche plus.
+
+**2.** Quelle extension de fichier utilise-t-on pour un programme Rythme ?
+Et pour Ruby ?
+
+> **Réponse**
+>
+> `.ry` pour Rythme, `.rb` pour Ruby (et `.rs` pour Rust).
+
+**3.** Pourquoi ouvrir un dossier plutôt qu'un fichier seul dans VS Code ?
+
+> **Réponse**
+>
+> L'éditeur comprend mieux le projet entier, l'explorateur montre tous ses
+> fichiers, et le terminal intégré démarre directement au bon endroit.
+
 ## En résumé
 
 - Un éditeur de code écrit du texte brut et vous aide à le lire et à le corriger.
@@ -147,3 +226,5 @@ souhaitez.
 - L'extension du fichier donne le langage : `.rb`, `.rs` ou `.ry`.
 - Enregistrez avec Ctrl + S (Cmd + S sur macOS), ou activez *Auto Save*.
 - Ajoutez les extensions Ruby LSP, rust-analyzer et Rythme.
+
+Suite : [trouver et corriger ses erreurs](deboguer.md).

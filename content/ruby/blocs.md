@@ -2,10 +2,21 @@
 
 Cette page explique les blocs, les itérateurs comme `map` et `select`, et présente rapidement les procs et les lambdas.
 
+> **Objectifs :**
+>
+> - vous saurez écrire un bloc avec `{ }` ou `do ... end` ;
+> - vous saurez transformer, filtrer et combiner une collection avec `map`, `select` et `reduce` ;
+> - vous saurez poser des questions à une collection (`any?`, `count`, `max_by`…) ;
+> - vous saurez qu'un bloc voit les variables qui l'entourent ;
+> - vous saurez ranger du code dans une variable avec une lambda.
+
 ## Les blocs
 
-Un bloc est un morceau de code que vous donnez à une méthode. La méthode décide quand
-l'exécuter.
+Un [bloc](../debuter/glossaire.md#bloc) est un morceau de code que vous donnez à une
+méthode. La méthode décide quand l'exécuter, et combien de fois. C'est comme donner
+une consigne à un serveur : « pour chaque assiette, ajoute du sel ». Le serveur
+(la méthode) passe d'assiette en assiette ; vous avez juste écrit la consigne
+(le bloc).
 
 ```ruby
 [1, 2, 3].each { |n| puts n * 2 }
@@ -17,7 +28,13 @@ l'exécuter.
 6
 ```
 
-Entre les barres `|n|`, vous nommez la valeur que le bloc reçoit.
+Entre les barres `|n|`, vous nommez la valeur que le bloc reçoit. Ce nom est un
+**paramètre du bloc** : il change à chaque passage (chaque
+[itération](../debuter/glossaire.md#iteration)). Choisissez un nom parlant : `|fruit|`,
+`|note|`…
+
+Une méthode qui parcourt une collection en appelant un bloc s'appelle un
+**itérateur**. `each`, `times` et `map` sont des itérateurs.
 
 ## do...end ou accolades
 
@@ -48,7 +65,11 @@ end
 ## Les méthodes de Enumerable
 
 Les tableaux, les hashs et les intervalles partagent les mêmes méthodes, venues du module
-`Enumerable`.
+`Enumerable` (« énumérable » : qu'on peut parcourir un par un). Un module est une boîte
+de méthodes partagées : voir [les modules](modules.md).
+
+> **À retenir :** ces méthodes **renvoient** un nouveau résultat. Elles ne modifient pas
+> la collection de départ.
 
 ### map : transformer
 
@@ -65,7 +86,8 @@ p ["a", "b"].map(&:upcase)
 ["A", "B"]
 ```
 
-> **Astuce :** `map(&:upcase)` est un raccourci pour `map { |s| s.upcase }`.
+> **Astuce :** `map(&:upcase)` est un raccourci pour `map { |s| s.upcase }`. Il marche
+> quand le bloc appelle juste une méthode sans argument sur chaque élément.
 
 ### select et reject : filtrer
 
@@ -84,6 +106,8 @@ p nombres.find { |n| n > 4 }
 5
 ```
 
+`find` renvoie le **premier** élément pour lequel le bloc est vrai (ou `nil`).
+
 ### reduce : combiner
 
 `reduce` combine tous les éléments en une seule valeur.
@@ -100,6 +124,36 @@ puts total
 
 À chaque tour, `somme` contient le total déjà calculé, et `n` l'élément suivant. Le
 `0` est la valeur de départ.
+
+### Poser des questions à une collection
+
+- `any?` : au moins un élément vérifie-t-il le bloc ?
+- `all?` : tous les éléments le vérifient-ils ?
+- `count` : combien d'éléments le vérifient ?
+- `min_by` et `max_by` : quel élément donne la plus petite ou la plus grande valeur ?
+- `sum` : la somme, éventuellement de ce que renvoie le bloc.
+- `tally` : combien de fois chaque valeur apparaît.
+
+```ruby
+notes = [12, 7, 15, 9]
+puts notes.any? { |n| n < 8 }
+puts notes.all? { |n| n >= 10 }
+puts notes.count { |n| n >= 10 }
+
+mots = ["kiwi", "ananas", "pomme"]
+puts mots.max_by { |m| m.length }
+puts mots.sum { |m| m.length }
+p ["a", "b", "a"].tally
+```
+
+```sortie
+true
+false
+2
+ananas
+15
+{"a"=>2, "b"=>1}
+```
 
 ### each_with_index
 
@@ -160,6 +214,48 @@ puts resultat
 165
 ```
 
+## Un bloc voit les variables autour de lui
+
+Une méthode ne voit pas les variables du dehors (voir
+[la portée](fonctions.md#la-portee-des-variables)). Un bloc, lui, les voit et peut les
+modifier. On dit que le bloc est une [closure](../debuter/glossaire.md#closure)
+(« fermeture ») : il emporte avec lui son entourage.
+
+```ruby
+total = 0
+[5, 10, 20].each { |prix| total += prix }
+puts total
+```
+
+```sortie
+35
+```
+
+En revanche, une variable créée **dans** le bloc disparaît à la fin du bloc.
+
+### Écrire une méthode qui prend un bloc
+
+`yield` exécute le bloc donné (voir [les méthodes](fonctions.md#passer-un-bloc-avec-yield)).
+`block_given?` répond `true` si un bloc a été donné.
+
+```ruby
+def annoncer(texte)
+  if block_given?
+    puts yield(texte)
+  else
+    puts texte
+  end
+end
+
+annoncer("bonjour")
+annoncer("bonjour") { |t| t.upcase + " !" }
+```
+
+```sortie
+bonjour
+BONJOUR !
+```
+
 ## Les procs et les lambdas
 
 Un bloc ne peut pas être rangé dans une variable. Pour cela, Ruby propose les **procs**
@@ -192,13 +288,110 @@ Salut Alice
 > **Attention :** une lambda vérifie le nombre d'arguments, une proc non. En cas de doute,
 > préférez la lambda.
 
+## Erreurs fréquentes
+
+### Oublier de nommer le paramètre du bloc
+
+```ruby norun
+[1, 2, 3].each { puts n * 2 }
+```
+
+```text
+main.rb:1:in `block in <main>': undefined local variable or method `n' for main (NameError)
+
+[1, 2, 3].each { puts n * 2 }
+                      ^
+	from main.rb:1:in `each'
+	from main.rb:1:in `<main>'
+```
+
+Le bloc ne sait pas ce qu'est `n`. Déclarez-le entre barres : `{ |n| puts n * 2 }`.
+
+### do ... end après p ou puts
+
+```ruby norun
+p [1, 2].map do |x|
+  x * 2
+end
+```
+
+```text
+#<Enumerator: [1, 2]:map>
+```
+
+Pas d'erreur, mais pas le bon résultat ! Avec `do ... end`, le bloc est donné à `p`, pas
+à `map`. `map` sans bloc renvoie un objet « en attente » (un `Enumerator`). Rangez
+d'abord le résultat dans une variable, ou utilisez des accolades :
+
+```ruby
+p [1, 2].map { |x| x * 2 }
+```
+
+```sortie
+[2, 4]
+```
+
+### Appeler une lambda avec le mauvais nombre d'arguments
+
+```ruby norun
+additionner = ->(a, b) { a + b }
+puts additionner.call(1)
+```
+
+```text
+main.rb:1:in `block in <main>': wrong number of arguments (given 1, expected 2) (ArgumentError)
+	from main.rb:2:in `<main>'
+```
+
+Une lambda vérifie ses arguments, comme une méthode. Donnez-les tous :
+`additionner.call(1, 2)`.
+
+## Testez-vous
+
+**Question 1 :** quelle est la différence entre `each` et `map` ?
+
+> **Réponse**
+>
+> `each` exécute le bloc pour chaque élément et renvoie la collection de départ.
+> `map` renvoie un **nouveau** tableau rempli des résultats du bloc.
+>
+> ```ruby
+> p [1, 2].each { |x| x * 10 }
+> p [1, 2].map { |x| x * 10 }
+> ```
+>
+> ```sortie
+> [1, 2]
+> [10, 20]
+> ```
+
+**Question 2 :** comment garder seulement les mots de plus de 4 lettres de
+`["chat", "cheval", "pie", "girafe"]` ?
+
+> **Réponse**
+>
+> ```ruby
+> p ["chat", "cheval", "pie", "girafe"].select { |m| m.length > 4 }
+> ```
+>
+> ```sortie
+> ["cheval", "girafe"]
+> ```
+
+**Question 3 :** que vaut `[1, 2, 3].reduce(10) { |acc, n| acc + n }` ?
+
+> **Réponse**
+>
+> `16` : on part de 10, puis on ajoute 1, 2 et 3.
+
 ## En résumé
 
 - Un bloc est du code donné à une méthode, entre `{ }` ou entre `do` et `end`.
 - `map` transforme, `select` et `reject` filtrent, `find` cherche le premier.
 - `reduce` combine tous les éléments en une seule valeur.
 - `sort_by` trie et `group_by` regroupe selon le résultat du bloc.
-- Une lambda (`->(x) { ... }`) est un bloc rangé dans une variable.
+- Un bloc voit les variables qui l'entourent ; une lambda (`->(x) { ... }`) est un bloc
+  rangé dans une variable.
 
-Suite : créez vos propres objets avec [les classes](types.md). Pour le style fonctionnel, voyez
+Suite : [les classes et objets](types.md). Pour le style fonctionnel, voyez
 aussi [la page fonctionnelle de Rythme](../rythme/fonctionnel.md).

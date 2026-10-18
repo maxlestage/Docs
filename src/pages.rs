@@ -70,6 +70,19 @@ fn code_el(lang: &str, code: &str) -> Element {
         .html(highlight(lang, code))
 }
 
+/// Les parties d'un parcours, avec les positions de leurs chapitres.
+fn parts(track: &Track) -> Vec<(&'static str, std::ops::Range<usize>)> {
+    track
+        .parts
+        .iter()
+        .enumerate()
+        .map(|(k, (start, name))| {
+            let end = track.parts.get(k + 1).map_or(track.pages.len(), |p| p.0);
+            (*name, *start..end)
+        })
+        .collect()
+}
+
 /// Les deux lettres d'un parcours : l'extension de ses fichiers (`Rb`, `Rs`, `Ry`).
 fn badge(track: &Track) -> String {
     if !track.language {
@@ -511,19 +524,19 @@ fn home(ctx: &Ctx) -> Page {
 const STEPS: [(&str, &str, &str, &str); 3] = [
     (
         "1. Les bases",
-        "Jamais programmé ? Le parcours Débuter explique ce qu'est un programme, le terminal et l'éditeur, en cinq pages.",
+        "Jamais programmé ? Le parcours Débuter explique ce qu'est un programme, comment penser un algorithme, le terminal, l'éditeur, le débogage et Git.",
         "/debuter/",
         "Débuter →",
     ),
     (
         "2. Un langage",
-        "Choisissez Ruby, Rust ou Rythme, et lisez les chapitres dans l'ordre. Chaque idée a son exemple, à copier et à essayer.",
+        "Choisissez Ruby, Rust ou Rythme, et lisez les chapitres dans l'ordre : objectifs, exemples à essayer, erreurs fréquentes, questions pour vous tester.",
         "/#parcours",
         "Choisir un langage →",
     ),
     (
         "3. La pratique",
-        "Chaque parcours finit par des exercices corrigés, du plus facile au plus dur, et un aide-mémoire à garder sous la main.",
+        "Chaque parcours finit par des tests, des projets guidés pas à pas, des exercices corrigés et un aide-mémoire.",
         "/comparer/",
         "Comparer les trois →",
     ),
@@ -542,7 +555,7 @@ fn debuter_banner() -> Element {
                 .class("banner__text")
                 .child(strong().text("Jamais programmé ? Commencez ici."))
                 .child(span().text(format!(
-                    " {} pages pour comprendre ce qu'est un programme, le terminal, l'éditeur, et choisir votre langage.",
+                    " {} pages pour comprendre ce qu'est un programme, utiliser le terminal, un éditeur et Git, corriger ses erreurs et choisir son langage.",
                     track.pages.len()
                 ))),
         )
@@ -749,21 +762,30 @@ fn track_page(ctx: &Ctx, track: &'static Track) -> Page {
                         }),
                 ),
         )
-        .child(ol().class("chapters").children(docs.iter().map(|d| {
-            li().class("chapter").child(
-                a().class("chapter__link")
-                    .href(doc_href(track.slug, d.slug, None))
-                    .attr("data-key", format!("{}/{}", track.slug, d.slug))
-                    .child(span().class("chapter__num").text(format!("{:02}", d.index + 1)))
-                    .child(
-                        span()
-                            .class("chapter__body")
-                            .child(span().class("chapter__title").text(d.title.clone()))
-                            .child(span().class("chapter__desc").text(d.description.clone())),
-                    )
-                    .child(span().class("chapter__time").text(minutes(d.minutes))),
-            )
-        })))
+        .children(parts(track).into_iter().map(|(name, range)| {
+            section()
+                .class("part")
+                .child(h2().class("part__title").text(name))
+                .child(
+                    ol().class("chapters")
+                        .attr("start", (range.start + 1).to_string())
+                        .children(docs[range].iter().map(|d| {
+                            li().class("chapter").child(
+                                a().class("chapter__link")
+                                    .href(doc_href(track.slug, d.slug, None))
+                                    .attr("data-key", format!("{}/{}", track.slug, d.slug))
+                                    .child(span().class("chapter__num").text(format!("{:02}", d.index + 1)))
+                                    .child(
+                                        span()
+                                            .class("chapter__body")
+                                            .child(span().class("chapter__title").text(d.title.clone()))
+                                            .child(span().class("chapter__desc").text(d.description.clone())),
+                                    )
+                                    .child(span().class("chapter__time").text(minutes(d.minutes))),
+                            )
+                        })),
+                )
+        }))
         .child(
             section()
                 .class("section others")
@@ -813,17 +835,21 @@ fn sidebar(doc: &Doc) -> Element {
                                 .style(format!("width:{}%", (doc.index + 1) * 100 / track.pages.len())),
                         ),
                 )
-                .child(ol().class("sidebar__list").children(library::of(track).map(|d| {
+                .child(ol().class("sidebar__list").children(library::of(track).flat_map(|d| {
+                    let part = track
+                        .part_at(d.index)
+                        .map(|name| li().class("sidebar__part").attr("role", "presentation").text(name));
                     let l = a()
                         .href(doc_href(track.slug, d.slug, None))
                         .attr("data-key", format!("{}/{}", track.slug, d.slug))
                         .child(span().class("sidebar__num").text(format!("{}", d.index + 1)))
                         .child(span().text(d.title.clone()));
-                    li().child(if d.slug == doc.slug {
+                    let item = li().child(if d.slug == doc.slug {
                         l.class("is-current").attr("aria-current", "page")
                     } else {
                         l
-                    })
+                    });
+                    part.into_iter().chain(std::iter::once(item))
                 })))
                 .child(
                     div()

@@ -27,6 +27,8 @@ pub struct Track {
     /// Le nom du site officiel et son adresse.
     pub site: (&'static str, &'static str),
     pub pages: &'static [Source],
+    /// Les parties du parcours : (position de leur premier chapitre, nom).
+    pub parts: &'static [(usize, &'static str)],
 }
 
 macro_rules! pages {
@@ -45,10 +47,20 @@ pub static TRACKS: [Track; 4] = [
         title: "Débuter en programmation",
         language: false,
         tagline: "Jamais programmé ? Tout commence ici.",
-        description: "Pour celles et ceux qui n'ont jamais programmé : ce qu'est un programme, le terminal, un éditeur de code, quel langage choisir, et un glossaire des mots du métier.",
+        description: "Pour celles et ceux qui n'ont jamais programmé : ce qu'est un programme, penser un algorithme, le terminal, un éditeur de code, corriger ses erreurs, Git, quel langage choisir, et un glossaire.",
         ext: "txt",
         site: ("Les trois langages côte à côte", "/comparer/"),
-        pages: pages!("debuter": "programmer", "terminal", "editeur", "choisir", "glossaire"),
+        pages: pages!("debuter":
+            "programmer",
+            "algorithmes",
+            "terminal",
+            "editeur",
+            "deboguer",
+            "git",
+            "choisir",
+            "glossaire",
+        ),
+        parts: &[(0, "Comprendre"), (2, "Les outils"), (6, "Et après")],
     },
     Track {
         slug: "ruby",
@@ -56,7 +68,7 @@ pub static TRACKS: [Track; 4] = [
         title: "Apprendre Ruby",
         language: true,
         tagline: "Le langage pensé pour le bonheur des développeurs.",
-        description: "Apprenez Ruby pas à pas : variables, conditions, méthodes, tableaux, blocs, classes, erreurs et gems, avec des exemples vérifiés.",
+        description: "Apprenez Ruby pas à pas : variables, conditions, méthodes, texte, tableaux et hashs, blocs, classes, modules, erreurs, fichiers, tests, gems, projets guidés et exercices corrigés.",
         ext: "rb",
         site: ("ruby-lang.org", "https://www.ruby-lang.org/fr/"),
         pages: pages!("ruby":
@@ -68,12 +80,16 @@ pub static TRACKS: [Track; 4] = [
             "collections",
             "blocs",
             "types",
+            "modules",
             "erreurs",
             "fichiers",
+            "tests",
             "projet",
+            "projets",
             "exercices",
             "aide-memoire",
         ),
+        parts: &[(0, "Les bases"), (6, "Aller plus loin"), (11, "La pratique")],
     },
     Track {
         slug: "rust",
@@ -81,7 +97,7 @@ pub static TRACKS: [Track; 4] = [
         title: "Apprendre Rust",
         language: true,
         tagline: "Rapide, fiable, et un compilateur qui vous aide.",
-        description: "Apprenez Rust pas à pas : variables, fonctions, collections, possession et emprunt, structures, traits, erreurs et Cargo, avec des exemples vérifiés.",
+        description: "Apprenez Rust pas à pas : variables, fonctions, texte, collections, possession et emprunt, structures, traits, erreurs, itérateurs, modules, fichiers, Box et Rc, threads, tests, Cargo, projets guidés et exercices corrigés.",
         ext: "rs",
         site: ("rust-lang.org", "https://www.rust-lang.org/fr"),
         pages: pages!("rust":
@@ -95,11 +111,23 @@ pub static TRACKS: [Track; 4] = [
             "types",
             "generiques",
             "erreurs",
+            "iterateurs",
+            "modules",
             "fichiers",
+            "pointeurs",
+            "concurrence",
+            "tests",
             "projet",
+            "projets",
             "exercices",
             "aide-memoire",
         ),
+        parts: &[
+            (0, "Les bases"),
+            (6, "Le cœur de Rust"),
+            (11, "Aller plus loin"),
+            (15, "La pratique"),
+        ],
     },
     Track {
         slug: "rythme",
@@ -107,7 +135,7 @@ pub static TRACKS: [Track; 4] = [
         title: "Apprendre Rythme",
         language: true,
         tagline: "Plus simple que Python, aussi agréable que Ruby, sûr comme Rust.",
-        description: "Apprenez Rythme pas à pas : valeurs, fonctions, listes et enregistrements, style fonctionnel, types, match, erreurs et tests, avec des exemples vérifiés.",
+        description: "Apprenez Rythme pas à pas : valeurs, fonctions, texte, listes et enregistrements, style fonctionnel, types et match, erreurs, modules, fichiers, tests, projets guidés et exercices corrigés.",
         ext: "ry",
         site: ("Rythme sur GitHub", "https://github.com/maxlestage/Rythme"),
         pages: pages!("rythme":
@@ -120,17 +148,28 @@ pub static TRACKS: [Track; 4] = [
             "fonctionnel",
             "types",
             "erreurs",
+            "modules",
             "fichiers",
+            "tests",
             "projet",
+            "projets",
             "exercices",
             "aide-memoire",
         ),
+        parts: &[(0, "Les bases"), (6, "Aller plus loin"), (11, "La pratique")],
     },
 ];
 
 /// Les trois langages, sans le parcours « Débuter ».
 pub fn languages() -> impl Iterator<Item = &'static Track> {
     TRACKS.iter().filter(|t| t.language)
+}
+
+impl Track {
+    /// Le nom de la partie qui commence au chapitre `index`, s'il en commence une.
+    pub fn part_at(&self, index: usize) -> Option<&'static str> {
+        self.parts.iter().find(|(at, _)| *at == index).map(|(_, name)| *name)
+    }
 }
 
 /// Le parcours `slug`.
@@ -159,6 +198,10 @@ mod tests {
         }
         assert_eq!(find("rust", "possession").map(|(t, i)| (t.name, i)), Some(("Rust", 6)));
         assert!(find("rust", "blocs").is_none());
+        for track in &TRACKS {
+            assert_eq!(track.parts.first().map(|p| p.0), Some(0), "{}", track.slug);
+            assert!(track.parts.iter().all(|(at, _)| *at < track.pages.len()));
+        }
         assert!(find("python", "introduction").is_none());
     }
 }

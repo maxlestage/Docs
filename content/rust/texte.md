@@ -2,12 +2,24 @@
 
 Cette page montre comment créer, transformer, découper et parcourir du texte en Rust, avec les deux types `String` et `&str`.
 
+> **Objectifs :**
+>
+> - choisir entre `String` et `&str` ;
+> - construire un texte avec `push_str`, `format!` et `join` ;
+> - chercher, remplacer et découper un texte ;
+> - convertir un texte en nombre, et l'inverse ;
+> - parcourir les caractères sans couper une lettre accentuée.
+
 ## Deux types de texte : String et &str
 
-Rust a deux types de texte. Pour débuter, retenez ceci :
+Un texte, ou [chaîne de caractères](../debuter/glossaire.md#chaine-de-caracteres), est
+une suite de lettres. Rust a deux types de texte. Pour débuter, retenez ceci :
 
 - `&str` : un texte que vous **regardez**. Les textes entre guillemets sont des `&str`.
 - `String` : un texte que vous **possédez** et que vous pouvez modifier.
+
+Pensez à un livre : `&str`, c'est le livre de la bibliothèque, que vous lisez sans
+écrire dedans ; `String`, c'est votre propre cahier, où vous pouvez ajouter des pages.
 
 ```rust
 let regarde: &str = "bonjour";
@@ -20,7 +32,8 @@ println!("{regarde} {possede} {autre}");
 bonjour bonjour salut
 ```
 
-Pour passer d'une `String` à un `&str`, ajoutez `&` devant :
+`String::from("…")` et `.to_string()` fabriquent une `String` à partir d'un `&str`.
+Dans l'autre sens, pour passer d'une `String` à un `&str`, ajoutez `&` devant :
 
 ```rust
 fn afficher(t: &str) {
@@ -58,6 +71,18 @@ println!("{phrase}");
 Bonjour tout le monde!
 ```
 
+L'opérateur `+` colle aussi deux textes, mais à gauche il faut une `String` :
+
+```rust
+let debut = String::from("Bon");
+let mot = debut + "jour";
+println!("{mot}");
+```
+
+```sortie
+Bonjour
+```
+
 ## Assembler avec format!
 
 `format!` fonctionne comme `println!`, mais il **renvoie** une `String` au lieu de
@@ -79,7 +104,8 @@ Alice (30 ans)
 
 ## La longueur d'un texte
 
-`len()` compte les **octets**, pas les lettres. Une lettre accentuée prend deux octets.
+`len()` compte les **octets**, pas les lettres. Un octet est la plus petite case de la
+mémoire. Une lettre simple prend un octet, une lettre accentuée en prend deux.
 Pour compter les caractères, utilisez `chars().count()` :
 
 ```rust
@@ -224,7 +250,7 @@ println!("{}", texte.len());
 
 ## Parcourir les caractères
 
-`chars()` donne les caractères un par un :
+`chars()` donne les caractères un par un (des valeurs de type `char`) :
 
 ```rust
 let mot = "Noël";
@@ -308,6 +334,129 @@ Il a dit "bonjour"
 > **Note :** dans un texte normal, `\n` est un retour à la ligne. Dans un texte brut,
 > c'est juste une barre et un `n`.
 
+## Erreurs fréquentes
+
+### Mettre un &str dans une String
+
+```rust norun
+fn main() {
+    let nom: String = "Léa";
+    println!("{nom}");
+}
+```
+
+```text
+error[E0308]: mismatched types
+ --> src/main.rs:2:23
+  |
+2 |     let nom: String = "Léa";
+  |              ------   ^^^^^ expected `String`, found `&str`
+  |              |
+  |              expected due to this
+help: try using a conversion method
+```
+
+Un texte entre guillemets est un `&str`. Convertissez-le : `"Léa".to_string()` ou
+`String::from("Léa")`.
+
+### Lire une lettre avec [0]
+
+```rust norun
+fn main() {
+    let mot = "bonjour";
+    let premiere = mot[0];
+    println!("{premiere}");
+}
+```
+
+```text
+error[E0277]: the type `str` cannot be indexed by `{integer}`
+ --> src/main.rs:3:24
+  |
+3 |     let premiere = mot[0];
+  |                        ^ string indices are ranges of `usize`
+  |
+  = note: you can use `.chars().nth()` or `.bytes().nth()`
+```
+
+Une lettre peut occuper plusieurs octets : Rust refuse de deviner. Écrivez
+`mot.chars().next()` pour la première lettre, ou `mot.chars().nth(2)` pour la
+troisième. Les deux renvoient une `Option` (voir
+[le type Option](types.md#le-type-option)).
+
+### Additionner deux &str
+
+```rust norun
+fn main() {
+    let phrase = "Bon" + "jour";
+    println!("{phrase}");
+}
+```
+
+```text
+error[E0369]: cannot add `&str` to `&str`
+ --> src/main.rs:2:24
+  |
+2 |     let phrase = "Bon" + "jour";
+  |                  ----- ^ ------ &str
+  |                  |     |
+  |                  |     `+` cannot be used to concatenate two `&str` strings
+  |                  &str
+  |
+  = note: string concatenation requires an owned `String` on the left
+```
+
+À gauche du `+`, il faut une `String` : `String::from("Bon") + "jour"`. Plus simple :
+`format!("{}{}", "Bon", "jour")`.
+
+### Agrandir une String sans mut
+
+```rust norun
+fn main() {
+    let phrase = String::from("Bonjour");
+    phrase.push_str(" !");
+    println!("{phrase}");
+}
+```
+
+```text
+error[E0596]: cannot borrow `phrase` as mutable, as it is not declared as mutable
+ --> src/main.rs:3:5
+  |
+3 |     phrase.push_str(" !");
+  |     ^^^^^^ cannot borrow as mutable
+```
+
+Correction : `let mut phrase = String::from("Bonjour");`.
+
+## Testez-vous
+
+**1.** Que valent `"noël".len()` et `"noël".chars().count()` ?
+
+> **Réponse**
+>
+> `5` et `4` : le `ë` occupe deux octets, mais c'est un seul caractère.
+
+**2.** Comment obtenir `["a", "b", "c"]` à partir de `"a;b;c"` ?
+
+> **Réponse**
+>
+> ```rust
+> let morceaux: Vec<&str> = "a;b;c".split(';').collect();
+> println!("{:?}", morceaux);
+> ```
+>
+> ```sortie
+> ["a", "b", "c"]
+> ```
+
+**3.** Pourquoi écrire `.trim()` avant `.parse()` sur une saisie au clavier ?
+
+> **Réponse**
+>
+> La saisie se termine par un retour à la ligne. `parse` échoue sur ce caractère ;
+> `trim()` l'enlève.
+
 ## En résumé
 
 - `&str` pour regarder un texte, `String` pour le posséder et le modifier.
@@ -317,4 +466,5 @@ Il a dit "bonjour"
 - `parse::<i32>()` lit un nombre et renvoie un `Result`.
 
 Comparez avec [le texte en Ruby](../ruby/texte.md) et [en Rythme](../rythme/texte.md).
+
 Suite : [Collections](collections.md).

@@ -2,6 +2,13 @@
 
 Ruby, Rust et Rythme ont chacun leurs forces : cette page les compare simplement et vous propose un parcours selon ce que vous voulez faire.
 
+> **Objectifs :**
+>
+> - connaître les forces et les limites de Rythme, de Ruby et de Rust ;
+> - comparer les trois langages sur un même exemple ;
+> - choisir un parcours selon ce que vous voulez faire ;
+> - savoir par quelle page commencer.
+
 ## Il n'y a pas de mauvais choix
 
 Votre premier langage n'est pas un engagement pour la vie. Les idées de base
@@ -130,6 +137,101 @@ installer le langage et lancer un premier programme :
 Avant de vous lancer, assurez-vous de savoir utiliser
 [le terminal](terminal.md) et [un éditeur de code](editeur.md).
 
+## Erreurs fréquentes
+
+Quand on passe d'un langage à l'autre, on mélange vite les mots. Chaque
+langage le signale à sa façon.
+
+### Écrire du Rust en Ruby
+
+```ruby norun
+println!("Bonjour")
+```
+
+```text
+c.rb:1:in `<main>': undefined method `println!' for main (NoMethodError)
+
+println!("Bonjour")
+^^^^^^^^
+Did you mean?  print
+```
+
+En Ruby, on écrit `puts "Bonjour"`.
+
+### Écrire du Ruby en Rust
+
+```rust norun
+fn main() {
+    puts "Bonjour";
+}
+```
+
+```text
+error: expected one of `!`, `.`, `::`, `;`, `?`, `{`, `}`, or an operator, found `"Bonjour"`
+ --> c.rs:2:10
+  |
+2 |     puts "Bonjour";
+  |          ^^^^^^^^^ expected one of 8 possible tokens
+
+error: aborting due to 1 previous error
+```
+
+En Rust, on écrit `println!("Bonjour");`.
+
+### Écrire une boucle for en Rythme
+
+```rythme norun
+nombres = [1, 2, 3]
+for n in nombres
+  print(n)
+end
+```
+
+```text
+erreur[E001]: `for` n'est pas utilisé en Rythme
+ --> boucle.ry:2:1
+  |
+2 | for n in nombres
+  | ^^^ vient d'un autre langage
+  |
+  = aide: Rythme n'a pas de boucles. Travaillez sur toute la liste à la place :
+        1..5 |> each(fn(i) = print(i))
+        [1, 2, 3] |> map(fn(x) = x * 2)
+      ou écrivez une fonction récursive. Voir `rythme help functional`.
+  = en savoir plus : `rythme explain E001`
+```
+
+En Rythme, on écrit `nombres |> each(print)`. Voir
+[conditions et répétition](../rythme/conditions-boucles.md).
+
+> **Astuce :** apprenez un langage à la fois. Quand vous en passez un
+> deuxième, gardez son [aide-mémoire](../rust/aide-memoire.md) ouvert à côté.
+
+## Testez-vous
+
+**1.** Vous voulez surtout comprendre les idées de la programmation, sans
+vous perdre dans les détails. Quel langage choisir ?
+
+> **Réponse**
+>
+> Rythme : il a peu de règles et des messages d'erreur en français qui
+> expliquent comment corriger.
+
+**2.** Lequel des trois langages est compilé ?
+
+> **Réponse**
+>
+> Rust. Ruby et Rythme sont interprétés.
+
+**3.** Avez-vous fait un « mauvais » choix si vous changez de langage plus
+tard ?
+
+> **Réponse**
+>
+> Non. Les idées de base (variables, conditions, boucles, fonctions,
+> listes) se retrouvent partout, et le deuxième langage s'apprend bien
+> plus vite.
+
 ## En résumé
 
 - Le premier langage n'est pas un choix définitif : les idées de base se retrouvent partout.
@@ -137,3 +239,5 @@ Avant de vous lancer, assurez-vous de savoir utiliser
 - Ruby est agréable et très utilisé pour les sites web.
 - Rust est rapide et sûr, mais plus difficile au début.
 - Pour débuter : Rythme puis Ruby ; pour le web : Ruby ; pour la vitesse : Rust.
+
+Suite : [le glossaire](glossaire.md), à garder sous la main.

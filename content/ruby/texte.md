@@ -2,10 +2,20 @@
 
 Cette page montre comment créer, assembler, découper et transformer du texte en Ruby.
 
+> **Objectifs :**
+>
+> - vous saurez écrire un texte et y insérer des valeurs ;
+> - vous saurez transformer un texte (majuscules, espaces, remplacements) ;
+> - vous saurez chercher, découper et extraire une partie d'un texte ;
+> - vous saurez passer d'un texte à un nombre, et l'inverse ;
+> - vous saurez afficher un nombre proprement avec `format`.
+
 ## Créer un texte
 
-Un texte s'appelle une **chaîne** (`String`). Vous l'écrivez entre guillemets doubles
-`"..."` ou simples `'...'`.
+Un texte s'appelle une **chaîne** (`String`), ou
+[chaîne de caractères](../debuter/glossaire.md#chaine-de-caracteres) : une suite de
+caractères (lettres, chiffres, espaces, signes) enfilés comme des perles. Vous l'écrivez
+entre guillemets doubles `"..."` ou simples `'...'`.
 
 ```ruby
 salut = "Bonjour"
@@ -21,6 +31,29 @@ Alice
 
 > **Astuce :** prenez l'habitude des guillemets doubles. Ils permettent l'interpolation,
 > expliquée juste après.
+
+### Les caractères spéciaux
+
+Entre guillemets doubles, la barre `\` annonce un caractère spécial. On parle de
+**séquence d'échappement** :
+
+- `\n` passe à la ligne ;
+- `\t` insère une tabulation (un grand espace) ;
+- `\"` écrit un guillemet sans fermer le texte ;
+- `\\` écrit une barre `\`.
+
+```ruby
+puts "Ligne 1\nLigne 2"
+puts "Nom\tÂge"
+puts "Il a dit : \"Bonjour\""
+```
+
+```sortie
+Ligne 1
+Ligne 2
+Nom	Âge
+Il a dit : "Bonjour"
+```
 
 ## Assembler des textes
 
@@ -68,6 +101,20 @@ L'an prochain : 31 ans.
 > **Attention :** avec des guillemets simples, `'#{age}'` reste tel quel. Ruby ne
 > remplace rien.
 
+### Répéter un texte
+
+`*` répète un texte plusieurs fois.
+
+```ruby
+puts "ha" * 3
+puts "-" * 10
+```
+
+```sortie
+hahaha
+----------
+```
+
 ## La longueur d'un texte
 
 `length` donne le nombre de caractères. Les espaces comptent aussi.
@@ -108,6 +155,22 @@ Bonjour
 > **Note :** ces méthodes renvoient un **nouveau** texte. La variable `mot` ne change
 > pas.
 
+Pour modifier le texte lui-même, ajoutez un `!` : `mot.upcase!`. C'est la convention
+vue dans [les méthodes](fonctions.md#les-noms-en-et-en).
+
+```ruby
+mot = "bonjour"
+mot.upcase
+puts mot
+mot.upcase!
+puts mot
+```
+
+```sortie
+bonjour
+BONJOUR
+```
+
 ## Enlever les espaces autour
 
 `strip` retire les espaces (et les retours à la ligne) au début et à la fin.
@@ -147,6 +210,29 @@ false
 
 > **Attention :** la recherche tient compte des majuscules. `"Chat".include?("chat")`
 > vaut `false`. Passez par `downcase` pour comparer sans les majuscules.
+
+### Comparer, compter et trouver une position
+
+- `==` compare deux textes, lettre par lettre ;
+- `casecmp?` compare sans tenir compte des majuscules ;
+- `count` compte des caractères ;
+- `index` donne la position d'un morceau (ou `nil` s'il est absent).
+
+```ruby
+puts "Chat" == "chat"
+puts "Chat".casecmp?("chat")
+puts "ananas".count("a")
+p "ananas".index("n")
+p "ananas".index("z")
+```
+
+```sortie
+false
+true
+3
+1
+nil
+```
 
 ## Découper et recoller
 
@@ -191,7 +277,9 @@ le chat, le chien
 
 ## Prendre une partie du texte
 
-Comme dans un tableau, chaque caractère a une position. La première est `0`.
+Comme dans un tableau, chaque caractère a une position, appelée
+[indice](../debuter/glossaire.md#indice). La première est `0`, pas `1` : l'indice
+compte combien de pas il faut faire depuis le début.
 
 ```ruby
 mot = "bonjour"
@@ -212,6 +300,16 @@ jour
 - `mot[-1]` : le dernier.
 - `mot[0..2]` : de la position 0 à la position 2, incluse.
 - `mot[3..]` : de la position 3 jusqu'à la fin.
+
+Une position qui n'existe pas donne `nil` (aucune valeur) :
+
+```ruby
+p "chat"[10]
+```
+
+```sortie
+nil
+```
 
 ## Les caractères un par un
 
@@ -276,6 +374,27 @@ puts 10.to_s + "0"
 100
 ```
 
+### Aligner du texte
+
+`ljust` complète à droite avec des espaces, `rjust` à gauche, `center` des deux côtés.
+Pratique pour faire des colonnes.
+
+```ruby
+puts "pain".ljust(8, ".") + "1,20 €"
+puts "confiture".ljust(8, ".") + "3,50 €"
+puts "42".rjust(5, "0")
+puts "titre".center(11, "*")
+```
+
+```sortie
+pain....1,20 €
+confiture3,50 €
+00042
+***titre***
+```
+
+Le texte n'est jamais coupé : `"confiture"` fait déjà plus de 8 caractères.
+
 ### Arrondir et formater
 
 `round(2)` arrondit à 2 chiffres après la virgule. `format` construit un texte avec un
@@ -300,7 +419,8 @@ Ticket n°007
 
 ## Les textes gelés
 
-Un texte **gelé** (`freeze`) ne peut plus être modifié. Pour le changer, faites-en une
+Un texte **gelé** (`freeze`) ne peut plus être modifié : il devient
+[immuable](../debuter/glossaire.md#immuable). Pour le changer, faites-en une
 copie avec `dup`.
 
 ```ruby
@@ -323,6 +443,87 @@ salut !
 > fichier. Elle gèle tous les textes écrits dans ce fichier. Les méthodes comme `upcase`
 > marchent toujours : elles créent un nouveau texte.
 
+## Erreurs fréquentes
+
+### Oublier de convertir un texte en nombre
+
+```ruby norun
+age = "30"
+puts age + 1
+```
+
+```text
+main.rb:2:in `+': no implicit conversion of Integer into String (TypeError)
+
+puts age + 1
+           ^
+	from main.rb:2:in `<main>'
+```
+
+`"30"` est un texte, pas un nombre. Convertissez-le d'abord : `age.to_i + 1`.
+
+### Utiliser une position qui n'existe pas
+
+```ruby norun
+mot = "chat"
+puts mot[10].upcase
+```
+
+```text
+main.rb:2:in `<main>': undefined method `upcase' for nil (NoMethodError)
+
+puts mot[10].upcase
+            ^^^^^^^
+```
+
+`mot[10]` vaut `nil`, et `nil` ne sait pas faire `upcase`. Vérifiez la longueur
+(`mot.length`), ou utilisez `&.` : `mot[10]&.upcase` donne `nil` sans planter.
+
+### Modifier un texte gelé
+
+```ruby norun
+mot = "salut".freeze
+mot << " !"
+```
+
+```text
+main.rb:2:in `<main>': can't modify frozen String: "salut" (FrozenError)
+```
+
+Un texte gelé ne change plus. Créez un nouveau texte (`mot + " !"`), ou modifiez une
+copie (`mot.dup << " !"`).
+
+## Testez-vous
+
+**Question 1 :** qu'affiche `puts "Ruby".downcase.reverse` ?
+
+> **Réponse**
+>
+> `ybur`. `downcase` donne `"ruby"`, puis `reverse` le retourne. Les méthodes
+> s'enchaînent de gauche à droite.
+
+**Question 2 :** comment obtenir `"Bonjour Alice"` à partir de `"  bonjour alice "` ?
+
+> **Réponse**
+>
+> ```ruby
+> texte = "  bonjour alice "
+> puts texte.strip.split(" ").map(&:capitalize).join(" ")
+> ```
+>
+> ```sortie
+> Bonjour Alice
+> ```
+>
+> `strip` enlève les espaces, `split` découpe en mots, `map(&:capitalize)` met une
+> majuscule à chaque mot (voir [les blocs](blocs.md)), `join` recolle.
+
+**Question 3 :** que vaut `"12" + "3"` ? Et `"12".to_i + "3".to_i` ?
+
+> **Réponse**
+>
+> `"123"` (deux textes collés), puis `15` (deux nombres additionnés).
+
 ## En résumé
 
 - Un texte s'écrit entre guillemets doubles ; `#{...}` y insère une valeur.
@@ -330,7 +531,7 @@ salut !
 - `include?`, `start_with?` et `end_with?` cherchent un morceau.
 - `split` découpe en tableau, `join` recolle ; `sub` et `gsub` remplacent.
 - `mot[0..2]` prend une partie du texte, `chars` donne les caractères un par un.
-- `round` et `format` affichent proprement les nombres.
+- `round` et `format` affichent proprement les nombres ; `to_i` et `to_s` convertissent.
 
 Suite : [les tableaux et les hashs](collections.md). Comparez avec
 [le texte en Rust](../rust/texte.md).

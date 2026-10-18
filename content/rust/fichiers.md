@@ -2,10 +2,25 @@
 
 Cette page montre comment lire ce que tape l'utilisateur, récupérer les arguments de la ligne de commande, et lire ou écrire des fichiers.
 
+> **Objectifs :**
+>
+> - lire une ligne tapée au clavier et la convertir en nombre ;
+> - récupérer les arguments de la ligne de commande ;
+> - écrire, lire et compléter un fichier texte ;
+> - gérer l'absence d'un fichier avec `Result` et `?` ;
+> - lire un gros fichier ligne par ligne avec `BufReader`.
+
+Les outils d'entrée et de sortie sont rangés dans des
+[modules](../debuter/glossaire.md#module) de la bibliothèque standard : `std::io` pour
+le clavier, `std::fs` pour les fichiers (*file system*), `std::env` pour
+l'environnement. La ligne `use std::fs;` permet ensuite d'écrire `fs::write` au lieu de
+`std::fs::write`.
+
 ## Lire au clavier
 
-`std::io::stdin().read_line` attend que l'utilisateur tape une ligne et appuie sur
-Entrée. Le texte est ajouté dans une `String` :
+`stdin()` désigne l'**entrée standard** : en général, le clavier. Sa méthode
+`read_line` attend que l'utilisateur tape une ligne et appuie sur Entrée. Le texte est
+ajouté à la fin d'une `String`, qu'il faut prêter en écriture avec `&mut` :
 
 ```rust norun
 use std::io;
@@ -38,8 +53,9 @@ println!("Dans dix ans, vous aurez {} ans.", age + 10);
 
 ## Les arguments de la ligne de commande
 
-`std::env::args()` donne les mots tapés après le nom du programme. Le premier est
-toujours le nom du programme lui-même :
+Un programme lancé dans un [terminal](../debuter/glossaire.md#terminal) peut recevoir
+des mots après son nom : ce sont ses **arguments**. `std::env::args()` les donne. Le
+premier est toujours le nom du programme lui-même :
 
 ```rust
 use std::env;
@@ -72,7 +88,8 @@ Bonjour, Alice !
 
 ## Écrire un fichier
 
-`fs::write` crée le fichier (ou l'écrase s'il existe) et y écrit le texte :
+`fs::write` crée le fichier (ou l'écrase s'il existe) et y écrit le texte. Le nom
+`note.txt` désigne un fichier du dossier où le programme est lancé :
 
 ```rust
 use std::fs;
@@ -201,7 +218,9 @@ début
 ## Les gros fichiers avec BufReader
 
 `read_to_string` charge tout le fichier en mémoire. Pour un très gros fichier, lisez-le
-morceau par morceau avec `BufReader` :
+morceau par morceau avec `BufReader`, un lecteur avec **tampon** : il charge un bloc du
+fichier, vous le donne ligne par ligne, puis charge le bloc suivant. Comme un seau qu'on
+remplit plusieurs fois au lieu de vider la piscine d'un coup :
 
 ```rust
 use std::fs::{self, File};
@@ -227,6 +246,112 @@ Total : 42
 
 > **Astuce :** pour de petits fichiers, `read_to_string` suffit largement.
 
+## Erreurs fréquentes
+
+### Lire au clavier dans une String non mut
+
+```rust norun
+use std::io;
+
+fn main() {
+    let reponse = String::new();
+    io::stdin().read_line(&mut reponse).expect("lecture impossible");
+}
+```
+
+```text
+error[E0596]: cannot borrow `reponse` as mutable, as it is not declared as mutable
+ --> src/main.rs:5:27
+  |
+5 |     io::stdin().read_line(&mut reponse).expect("lecture impossible");
+  |                           ^^^^^^^^^^^^ cannot borrow as mutable
+```
+
+`read_line` écrit dans la `String` : déclarez-la avec `let mut reponse`.
+
+### Oublier use std::fs
+
+```rust norun
+fn main() {
+    let texte = fs::read_to_string("note.txt").unwrap();
+    println!("{texte}");
+}
+```
+
+```text
+error[E0433]: cannot find module or crate `fs` in this scope
+ --> src/main.rs:2:17
+  |
+2 |     let texte = fs::read_to_string("note.txt").unwrap();
+  |                 ^^ use of unresolved module or unlinked crate `fs`
+help: consider importing this module
+  |
+1 + use std::fs;
+```
+
+Ajoutez `use std::fs;` en haut du fichier.
+
+### writeln! sans importer Write
+
+```rust norun
+use std::fs::OpenOptions;
+
+fn main() {
+    let mut fichier = OpenOptions::new().append(true).open("journal.txt").unwrap();
+    writeln!(fichier, "étape 1").unwrap();
+}
+```
+
+```text
+error[E0599]: cannot write into `File`
+ --> src/main.rs:5:14
+  |
+5 |     writeln!(fichier, "étape 1").unwrap();
+  |              ^^^^^^^
+  = help: items from traits can only be used if the trait is in scope
+help: trait `Write` which provides `write_fmt` is implemented but not in scope; perhaps you want to import it
+  |
+1 + use std::io::Write;
+```
+
+`writeln!` a besoin du trait `Write`. Ajoutez `use std::io::Write;`.
+
+## Testez-vous
+
+**1.** Quelle différence entre `fs::write` et `OpenOptions::new().append(true)` ?
+
+> **Réponse**
+>
+> `fs::write` remplace tout le contenu du fichier. `append(true)` ajoute à la fin, sans
+> effacer ce qui existe.
+
+**2.** Pourquoi `args.len() - 1` pour compter les arguments ?
+
+> **Réponse**
+>
+> Le premier élément de `env::args()` est le nom du programme lui-même.
+
+**3.** Écrivez un fichier `a.txt` contenant `un` puis `deux` sur deux lignes, et
+comptez ses lignes.
+
+> **Réponse**
+>
+> ```rust
+> use std::fs;
+> use std::io;
+>
+> fn main() -> io::Result<()> {
+>     fs::write("a.txt", "un\ndeux\n")?;
+>     let texte = fs::read_to_string("a.txt")?;
+>     println!("{}", texte.lines().count());
+>     Ok(())
+> }
+> ```
+>
+> ```sortie
+> 2
+> ```
+
 ## En résumé
 
 - `stdin().read_line(&mut s)` lit une ligne au clavier ; pensez à `trim()`.
@@ -236,4 +361,7 @@ Total : 42
 - `main` peut renvoyer `io::Result<()>` pour utiliser `?`.
 
 Comparez avec [les fichiers en Ruby](../ruby/fichiers.md) et
-[en Rythme](../rythme/fichiers.md). Suite : [Projets, crates et tests](projet.md).
+[en Rythme](../rythme/fichiers.md). Les projets à plusieurs fichiers et les tests sont
+dans [Projets, crates et tests](projet.md).
+
+Suite : [Box, Rc et RefCell](pointeurs.md).

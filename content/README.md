@@ -32,6 +32,7 @@ Une citation qui commence par un de ces mots devient un encadré coloré :
 > **Attention :** …
 > **Note :** …
 > **Indice :** …
+> **Objectifs :** …
 ```
 
 ## Exercices
@@ -60,10 +61,30 @@ Son code est exécuté comme les autres.
 > ```
 ```
 
-## Fin de chapitre
+## Plan d'un chapitre
 
-Chaque chapitre finit par une section `## En résumé` : une liste de 3 à 6 points, ce
-qu'il faut retenir.
+Tous les chapitres suivent le même plan, pour que le lecteur s'y retrouve :
+
+1. `# Titre`, puis **une phrase** qui résume le chapitre.
+2. Les objectifs, juste après, dans un encadré :
+
+   ```text
+   > **Objectifs :**
+   >
+   > - écrire une fonction et l'appeler ;
+   > - donner des paramètres à une fonction.
+   ```
+
+3. Les sections `##`, du plus simple au plus difficile, chacune avec un exemple.
+4. `## Erreurs fréquentes` : les 2 à 4 erreurs que font les débutants, chacune avec
+   le code fautif (`norun`), le message d'erreur réel (bloc `text`) et la correction.
+5. `## Testez-vous` : 3 questions courtes ; chaque réponse est une citation qui
+   commence par `**Réponse**`, repliée sous « Voir la réponse ».
+6. `## En résumé` : 3 à 6 points, ce qu'il faut retenir, puis une ligne
+   « Suite : [le chapitre suivant](….md) ».
+
+Les pages « Exercices corrigés », « Aide-mémoire » et « Glossaire » n'ont ni objectifs,
+ni erreurs fréquentes, ni « Testez-vous ».
 
 ## Liens
 

@@ -217,6 +217,48 @@ Chat Félix
 
 Détails : [classes et objets](types.md).
 
+## Modules et mixins
+
+| Besoin | Syntaxe |
+| --- | --- |
+| Fonction de module | `module Outils` puis `def self.nom` ; appel `Outils.nom` |
+| Constante | `module Config; VERSION = "1.0"; end` ; `Config::VERSION` |
+| Classe rangée dans un module | `Zoo::Animal.new` |
+| Partager des méthodes | `include NomDuModule` dans la classe |
+| Comparer, trier | `include Comparable` + `def <=>(autre)` |
+| `map`, `select`… | `include Enumerable` + `def each` avec `yield` |
+| Charger un fichier | `require_relative "lib/calcul"` |
+
+```ruby
+module Calcul
+  TAUX = 0.2
+
+  def self.ttc(prix) = prix * (1 + TAUX)
+end
+
+class Note
+  include Comparable
+  attr_reader :valeur
+
+  def initialize(valeur) = @valeur = valeur
+  def <=>(autre) = valeur <=> autre.valeur
+end
+
+puts Calcul.ttc(10)
+puts Calcul::TAUX
+puts Note.new(12) < Note.new(15)
+p [Note.new(15), Note.new(9)].min.valeur
+```
+
+```sortie
+12.0
+0.2
+true
+9
+```
+
+Détails : [modules et mixins](modules.md).
+
 ## Erreurs
 
 | Mot-clé | Rôle |
@@ -278,6 +320,39 @@ true
 
 Détails : [clavier et fichiers](fichiers.md).
 
+## Tests avec Minitest
+
+| Élément | Syntaxe |
+| --- | --- |
+| Charger Minitest | `require "minitest/autorun"` |
+| Classe de test | `class TestCalcul < Minitest::Test` |
+| Un test | une méthode `def test_…` |
+| Avant chaque test | `def setup` |
+| Égalité | `assert_equal attendu, obtenu` |
+| Vrai, faux, nil | `assert x`, `refute x`, `assert_nil x` |
+| Nombres à virgule | `assert_in_delta 0.3, x, 0.001` |
+| Une erreur est levée | `assert_raises(ArgumentError) { … }` |
+| Lancer | `ruby test/test_calcul.rb` |
+| Résultat | `.` réussi, `F` échec, `E` erreur |
+
+```ruby
+require "minitest/autorun"
+
+def double(x) = x * 2
+
+class TestDouble < Minitest::Test
+  def test_double
+    assert_equal 8, double(4)
+  end
+
+  def test_erreur
+    assert_raises(ZeroDivisionError) { 1 / 0 }
+  end
+end
+```
+
+Détails : [tester son code](tests.md).
+
 ## Projet et outils
 
 | Commande | Rôle |
@@ -289,6 +364,6 @@ Détails : [clavier et fichiers](fichiers.md).
 | `bundle exec …` | lancer avec les gems du projet |
 | `rubocop` | vérifier le style |
 
-Détails : [projets, gems et tests](projet.md). Pour pratiquer :
-[les exercices corrigés](exercices.md). Comparez avec
+Détails : [organiser un projet](projet.md). Pour pratiquer :
+[les projets pas à pas](projets.md) et [les exercices corrigés](exercices.md). Comparez avec
 [l'aide-mémoire Rust](../rust/aide-memoire.md) et [l'aide-mémoire Rythme](../rythme/aide-memoire.md).

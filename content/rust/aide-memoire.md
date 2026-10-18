@@ -14,7 +14,7 @@ Cette page résume en tableaux et en courts exemples tout ce qu'il faut retenir 
 | `cargo add crate` | ajoute une dépendance |
 | `cargo fmt` / `cargo clippy` | met en forme / conseille |
 
-Détails : [introduction](introduction.md) et [projets](projet.md#les-commandes-cargo).
+Détails : [introduction](introduction.md) et [Organiser un projet avec Cargo](projet.md#les-commandes-cargo).
 
 ## Variables et types
 
@@ -286,6 +286,77 @@ a
 
 Détails : [Gérer les erreurs](erreurs.md).
 
+## Itérateurs
+
+| Écriture | Sens |
+|----------|------|
+| `v.iter()` / `v.iter_mut()` / `v.into_iter()` | lire / modifier / consommer |
+| `map(f)` / `filter(f)` | transforme / garde si vrai |
+| `enumerate()` / `zip(autre)` | `(position, x)` / paires |
+| `rev()` / `take(n)` / `skip(n)` / `chain(autre)` | envers / début / fin / à la suite |
+| `sum()` / `count()` / `min()` / `max()` | résume |
+| `any(f)` / `all(f)` / `find(f)` / `position(f)` | pose une question |
+| `collect::<Vec<_>>()` | rassemble (aussi `String`, `HashMap`) |
+| `fold(depart, \|acc, x\| …)` | accumule |
+| `impl Iterator for T { type Item = …; fn next(&mut self) … }` | votre itérateur |
+
+```rust
+let v = vec![3, 1, 4, 1, 5];
+let grands: Vec<i32> = v.iter().filter(|x| **x > 2).map(|x| x * 10).collect();
+let total: i32 = v.iter().sum();
+let produit = v.iter().fold(1, |acc, x| acc * x);
+println!("{:?} {total} {produit}", grands);
+println!("{:?} {}", v.iter().position(|x| *x == 4), v.iter().any(|x| *x > 4));
+```
+
+```sortie
+[30, 40, 50] 14 60
+Some(2) true
+```
+
+> **Attention :** les itérateurs sont paresseux : `map` seul ne fait rien sans
+> `collect`, `sum`, `for`…
+
+Détails : [Les itérateurs](iterateurs.md).
+
+## Modules et crates
+
+| Écriture | Sens |
+|----------|------|
+| `mod nom { … }` | module dans le même fichier |
+| `mod nom;` | module dans `nom.rs` |
+| `pub fn` / `pub struct` / `pub champ` | rend public (privé par défaut) |
+| `use a::b;` / `use a::{b, c};` | raccourci |
+| `crate::…` / `super::…` | depuis la racine / le parent |
+| `src/main.rs` / `src/lib.rs` | programme / bibliothèque |
+| `cargo add nom` | ajoute une crate de crates.io |
+
+```rust
+mod outils {
+    pub fn double(n: i32) -> i32 {
+        n * 2
+    }
+
+    pub mod texte {
+        pub fn crier(s: &str) -> String {
+            format!("{}!", s.to_uppercase())
+        }
+    }
+}
+
+use outils::{double, texte};
+
+fn main() {
+    println!("{} {}", double(4), texte::crier("ok"));
+}
+```
+
+```sortie
+8 OK!
+```
+
+Détails : [Modules et crates](modules.md).
+
 ## Clavier et fichiers
 
 | Écriture | Sens |
@@ -316,16 +387,94 @@ fn main() -> std::io::Result<()> {
 
 Détails : [Lire et écrire : clavier et fichiers](fichiers.md).
 
-## Modules et tests
+## Box, Rc et RefCell
+
+| Écriture | Sens |
+|----------|------|
+| `Box::new(x)` | valeur sur le tas, un propriétaire (types récursifs) |
+| `Rc::new(x)` / `Rc::clone(&r)` | plusieurs propriétaires, lecture seule |
+| `RefCell::new(x)` | `.borrow()` / `.borrow_mut()` vérifiés à l'exécution |
+| `Rc<RefCell<T>>` | partagé et modifiable (un seul thread) |
 
 ```rust
-mod outils {
-    pub fn double(n: i32) -> i32 {
-        n * 2
+use std::cell::RefCell;
+use std::rc::Rc;
+
+fn main() {
+    let boite = Box::new(5);
+    let partage = Rc::new(RefCell::new(vec![1]));
+    let autre = Rc::clone(&partage);
+    autre.borrow_mut().push(2);
+    println!("{} {:?} {}", *boite + 1, partage.borrow(), Rc::strong_count(&partage));
+}
+```
+
+```sortie
+6 [1, 2] 2
+```
+
+Détails : [Box, Rc et RefCell](pointeurs.md).
+
+## Threads
+
+| Écriture | Sens |
+|----------|------|
+| `thread::spawn(move \|\| …)` | lance un thread |
+| `poignee.join().unwrap()` | attend sa fin, récupère son résultat |
+| `let (tx, rx) = mpsc::channel();` | canal : `tx.send(x)`, `rx.recv()` |
+| `Arc<Mutex<T>>` | valeur partagée entre threads : `*m.lock().unwrap() += 1` |
+| `thread::scope(\|s\| { s.spawn(…); })` | threads qui empruntent |
+
+```rust
+use std::sync::{Arc, Mutex};
+use std::thread;
+
+fn main() {
+    let compteur = Arc::new(Mutex::new(0));
+    let poignees: Vec<_> = (0..4)
+        .map(|_| {
+            let c = Arc::clone(&compteur);
+            thread::spawn(move || *c.lock().unwrap() += 1)
+        })
+        .collect();
+    for p in poignees {
+        p.join().unwrap();
     }
+    println!("{}", *compteur.lock().unwrap());
+}
+```
+
+```sortie
+4
+```
+
+Détails : [Faire plusieurs choses à la fois](concurrence.md).
+
+## Tests
+
+| Écriture | Sens |
+|----------|------|
+| `assert!(cond)` / `assert_eq!(a, b)` / `assert_ne!(a, b)` | vérifie, sinon `panic!` |
+| `#[test]` | marque une fonction de test |
+| `#[cfg(test)] mod tests { use super::*; … }` | module de tests |
+| `#[should_panic]` | le test doit provoquer un `panic!` |
+| `cargo test` / `cargo test nom` | lance tous les tests / certains |
+| `tests/*.rs` | tests d'intégration |
+
+```rust
+fn double(n: i32) -> i32 {
+    n * 2
 }
 
-use outils::double;
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn double_quatre() {
+        assert_eq!(double(4), 8);
+    }
+}
 
 fn main() {
     assert_eq!(double(4), 8);
@@ -337,7 +486,7 @@ fn main() {
 ok
 ```
 
-Détails : [Projets, crates et tests](projet.md#les-tests).
+Détails : [Tester son code](tests.md).
 
 > **Astuce :** les aide-mémoire des autres langages : [Ruby](../ruby/aide-memoire.md) et
 > [Rythme](../rythme/aide-memoire.md).

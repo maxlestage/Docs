@@ -2,6 +2,14 @@
 
 Programmer, c'est écrire des instructions qu'un ordinateur suit à la lettre : cette page explique ce qu'est un programme, un langage, un bug, et comment on apprend.
 
+> **Objectifs :**
+>
+> - savoir ce qu'est un programme et un langage de programmation ;
+> - reconnaître le code source et ses extensions de fichier ;
+> - lire un même petit programme en Ruby, en Rust et en Rythme ;
+> - distinguer un langage interprété d'un langage compilé ;
+> - savoir ce qu'est un bug, et comment on apprend à programmer.
+
 ## Un programme, c'est une liste d'instructions
 
 Un ordinateur ne devine rien. Il fait exactement ce qu'on lui dit, dans
@@ -158,9 +166,95 @@ Un message d'erreur n'est pas un reproche. C'est un indice. Il dit souvent
 
 ## Et ensuite
 
-Pour lancer un programme, il faut savoir ouvrir un terminal : c'est
-l'objet du [terminal en 10 minutes](terminal.md). Les mots nouveaux sont
-expliqués dans le [glossaire](glossaire.md).
+Avant d'écrire du code, il faut apprendre à découper un problème en
+étapes : c'est l'objet de [penser comme un programmeur](algorithmes.md).
+Pour lancer un programme, il faudra ensuite ouvrir un terminal : voyez
+[le terminal en 10 minutes](terminal.md). Les mots nouveaux sont expliqués
+dans le [glossaire](glossaire.md).
+
+## Erreurs fréquentes
+
+### Écrire les instructions en français
+
+L'ordinateur ne connaît que les mots de son langage. `afficher` n'existe pas
+en Ruby :
+
+```ruby norun
+afficher "Bonjour"
+```
+
+```text
+fr.rb:1:in `<main>': undefined method `afficher' for main (NoMethodError)
+
+afficher "Bonjour"
+^^^^^^^^
+```
+
+En Ruby, « afficher » se dit `puts` : `puts "Bonjour"`.
+
+### Oublier les guillemets autour d'un texte
+
+Sans guillemets, le langage croit que `Bonjour` est un nom qu'il devrait
+connaître :
+
+```ruby norun
+puts Bonjour
+```
+
+```text
+q.rb:1:in `<main>': uninitialized constant Bonjour (NameError)
+
+puts Bonjour
+     ^^^^^^^
+```
+
+Un texte s'écrit toujours entre guillemets : `puts "Bonjour"`.
+
+### Changer une majuscule
+
+Pour l'ordinateur, `prenom` et `Prenom` sont deux noms différents :
+
+```ruby norun
+prenom = "Ada"
+puts "Bonjour, " + Prenom
+```
+
+```text
+pm.rb:2:in `<main>': uninitialized constant Prenom (NameError)
+
+puts "Bonjour, " + Prenom
+                   ^^^^^^
+```
+
+Écrivez le nom exactement comme vous l'avez créé : `prenom`.
+
+## Testez-vous
+
+**1.** Quel est le point commun entre un programme et une recette de
+cuisine ?
+
+> **Réponse**
+>
+> Les deux sont des listes d'instructions dans un ordre précis, avec des
+> données (les ingrédients), des choix et des répétitions. Mais le
+> programme doit être bien plus précis : l'ordinateur ne devine rien.
+
+**2.** Quelle est la différence entre un langage interprété et un langage
+compilé ? Donnez un exemple de chaque.
+
+> **Réponse**
+>
+> Un interpréteur lit et exécute le code tout de suite (Ruby, Rythme). Un
+> compilateur traduit d'abord tout le code, puis on lance le résultat
+> (Rust).
+
+**3.** Votre programme se lance mais affiche un mauvais résultat. Est-ce un
+bug ?
+
+> **Réponse**
+>
+> Oui. Un bug n'est pas seulement un programme qui plante : c'est aussi un
+> programme qui ne fait pas ce que vous vouliez.
 
 ## En résumé
 
@@ -169,3 +263,5 @@ expliqués dans le [glossaire](glossaire.md).
 - Ruby et Rythme sont interprétés ; Rust est compilé avant d'être lancé.
 - Un bug est une erreur dans le programme, et tout le monde en fait.
 - On apprend en essayant, en se trompant et en lisant les messages d'erreur.
+
+Suite : [penser comme un programmeur](algorithmes.md).
