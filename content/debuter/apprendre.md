@@ -137,6 +137,8 @@ finissez-le, puis passez au suivant.
 | Avancé        | un petit jeu en terminal (pendu, morpion) ; un outil en ligne de commande ; un petit site ou une API |
 
 Les pages de projets de chaque langage vous guident pas à pas :
+[Python](../python/projets.md), [JavaScript](../javascript/projets.md),
+[TypeScript](../typescript/projets.md), [Go](../go/projets.md),
 [Ruby](../ruby/projets.md), [Rust](../rust/projets.md) et
 [Rythme](../rythme/projets.md).
 
@@ -145,6 +147,16 @@ Les pages de projets de chaque langage vous guident pas à pas :
 La documentation officielle est la source la plus juste. Elle fait un peu
 peur au début ; prenez l'habitude d'y aller tôt.
 
+- **Python** : [docs.python.org/fr](https://docs.python.org/fr/3/) existe
+  en français. La commande `python3 -m pydoc str` l'affiche dans le
+  terminal.
+- **JavaScript** : [MDN](https://developer.mozilla.org/fr/) décrit tout le
+  langage, en français, avec des exemples à essayer.
+- **TypeScript** : [typescriptlang.org/docs](https://www.typescriptlang.org/docs/)
+  contient le manuel officiel et un *playground* dans le navigateur.
+- **Go** : [go.dev/doc](https://go.dev/doc/) et
+  [pkg.go.dev/std](https://pkg.go.dev/std) décrivent le langage et sa
+  bibliothèque standard. `go doc strings.ToUpper` l'affiche dans le terminal.
 - **Ruby** : [ruby-doc.org](https://ruby-doc.org/) décrit chaque classe.
   Cherchez par exemple `String` pour voir toutes les méthodes des textes.
 - **Rust** : [doc.rust-lang.org/std](https://doc.rust-lang.org/std/)
@@ -201,7 +213,10 @@ Vous n'êtes pas seul. Des personnes aident gratuitement, en français :
 
 - **Zeste de Savoir** (zestedesavoir.com) : des tutoriels et un forum
   bienveillant pour les débutants ;
-- **les forums de Developpez** (developpez.net) : des sections Ruby et Rust ;
+- **les forums de Developpez** (developpez.net) : une section pour chaque
+  langage ;
+- **l'AFPy** (afpy.org) : l'association francophone Python, avec un forum
+  et des rencontres ;
 - **les rencontres locales** (*meetups*) : Paris.rb pour Ruby, des groupes
   Rust dans plusieurs grandes villes, souvent annoncés sur meetup.com ;
 - **Rythme** : les questions et les bugs se posent sur la page GitHub du
@@ -243,6 +258,44 @@ l'utilisez pas.**
 Choisissez **un** langage (voyez [Quel langage choisir ?](choisir.md)) et
 suivez son plan. Comptez quatre à cinq séances par semaine. À la fin de
 chaque semaine, faites un des [petits projets](#des-petits-projets-par-niveau).
+
+### En Python
+
+| Semaine | Chapitres                                                                                                   | À la fin, vous savez…                   |
+|---------|-------------------------------------------------------------------------------------------------------------|-----------------------------------------|
+| 1       | [Introduction](../python/introduction.md), [Premiers pas](../python/premiers-pas.md), [Nombres](../python/nombres.md), [Conditions et boucles](../python/conditions-boucles.md) | calculer, choisir, répéter |
+| 2       | [Fonctions](../python/fonctions.md), [Texte](../python/texte.md), [Collections](../python/collections.md), [Dictionnaires](../python/dictionnaires.md) | ranger des données et les transformer |
+| 3       | [Compréhensions](../python/comprehensions.md), [Erreurs](../python/erreurs.md), [Fichiers](../python/fichiers.md), [Exercices](../python/exercices.md) | lire un fichier et gérer les erreurs |
+| 4       | [Classes et types](../python/types.md), [Modules](../python/modules.md), [Tests](../python/tests.md), [Projet guidé](../python/projet.md) | finir un vrai petit programme |
+
+### En JavaScript
+
+| Semaine | Chapitres                                                                                                   | À la fin, vous savez…                   |
+|---------|-------------------------------------------------------------------------------------------------------------|-----------------------------------------|
+| 1       | [Introduction](../javascript/introduction.md), [Premiers pas](../javascript/premiers-pas.md), [Nombres](../javascript/nombres.md), [Conditions et boucles](../javascript/conditions-boucles.md) | calculer, choisir, répéter |
+| 2       | [Fonctions](../javascript/fonctions.md), [Texte](../javascript/texte.md), [Tableaux](../javascript/collections.md), [Objets](../javascript/objets.md) | ranger des données et les transformer |
+| 3       | [Erreurs](../javascript/erreurs.md), [Asynchrone](../javascript/asynchrone.md), [Le DOM](../javascript/dom.md), [Exercices](../javascript/exercices.md) | attendre une réponse et animer une page |
+| 4       | [Modules](../javascript/modules.md), [Fichiers](../javascript/fichiers.md), [Tests](../javascript/tests.md), [Projet guidé](../javascript/projet.md) | finir un vrai petit programme |
+
+### En TypeScript
+
+Commencez TypeScript après les deux premières semaines de JavaScript.
+
+| Semaine | Chapitres                                                                                                   | À la fin, vous savez…                   |
+|---------|-------------------------------------------------------------------------------------------------------------|-----------------------------------------|
+| 1       | [Introduction](../typescript/introduction.md), [Premiers pas](../typescript/premiers-pas.md), [Conditions et boucles](../typescript/conditions-boucles.md), [Fonctions](../typescript/fonctions.md) | typer des variables et des fonctions |
+| 2       | [Texte](../typescript/texte.md), [Collections](../typescript/collections.md), [Objets](../typescript/objets.md), [Unions](../typescript/unions.md) | décrire la forme de vos données |
+| 3       | [Types](../typescript/types.md), [Génériques](../typescript/generiques.md), [Erreurs](../typescript/erreurs.md), [Asynchrone](../typescript/asynchrone.md) | écrire du code réutilisable et sûr |
+| 4       | [Modules](../typescript/modules.md), [Configuration](../typescript/configuration.md), [Tests](../typescript/tests.md), [Projet guidé](../typescript/projet.md) | finir un vrai petit programme |
+
+### En Go
+
+| Semaine | Chapitres                                                                                                   | À la fin, vous savez…                   |
+|---------|-------------------------------------------------------------------------------------------------------------|-----------------------------------------|
+| 1       | [Introduction](../go/introduction.md), [Premiers pas](../go/premiers-pas.md), [Nombres](../go/nombres.md), [Conditions et boucles](../go/conditions-boucles.md) | compiler, calculer, choisir, répéter |
+| 2       | [Fonctions](../go/fonctions.md), [Texte](../go/texte.md), [Slices](../go/collections.md), [Maps](../go/maps.md) | ranger des données et les transformer |
+| 3       | [Types](../go/types.md), [Interfaces](../go/interfaces.md), [Pointeurs](../go/pointeurs.md), [Erreurs](../go/erreurs.md) | modéliser des données et gérer les erreurs |
+| 4       | [Modules](../go/modules.md), [Fichiers](../go/fichiers.md), [Tests](../go/tests.md), [Projet guidé](../go/projet.md) | finir un vrai petit programme |
 
 ### En Ruby
 
@@ -352,6 +405,8 @@ help: use `!` to invoke the macro
 ```
 
 Apprenez un langage à la fois, et gardez son aide-mémoire sous la main :
+[Python](../python/aide-memoire.md), [JavaScript](../javascript/aide-memoire.md),
+[TypeScript](../typescript/aide-memoire.md), [Go](../go/aide-memoire.md),
 [Ruby](../ruby/aide-memoire.md), [Rust](../rust/aide-memoire.md),
 [Rythme](../rythme/aide-memoire.md).
 
@@ -386,7 +441,7 @@ comprenez pas deux lignes. Que faites-vous ?
 - On apprend en pratiquant : lire, taper, modifier, casser.
 - Un peu chaque jour, avec des révisions espacées, vaut mieux qu'une longue séance.
 - De petits projets finis motivent plus que de grands projets abandonnés.
-- La documentation officielle (ruby-doc.org, doc.rust-lang.org/std, `rythme help`) est votre meilleure amie.
+- La documentation officielle (docs.python.org, MDN, go.dev, ruby-doc.org, doc.rust-lang.org/std, `rythme help`…) est votre meilleure amie.
 - Une bonne question contient le but, le code court, l'erreur complète et vos essais.
 - L'IA aide à comprendre ; elle ne doit pas faire le travail à votre place.
 

@@ -1,0 +1,9 @@
+{
+  "name": "docs-verifier-typescript",
+  "private": true,
+  "description": "TypeScript et les types de Node, pour que tools/verifier.rb vérifie et exécute les exemples TypeScript.",
+  "devDependencies": {
+    "@types/node": "22.15.3",
+    "typescript": "5.8.3"
+  }
+}

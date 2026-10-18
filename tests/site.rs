@@ -80,7 +80,7 @@ fn every_link_leads_to_a_page_and_an_anchor() {
 }
 
 #[test]
-fn the_three_tracks_share_their_chapters() {
+fn the_languages_share_their_core_chapters() {
     for slug in [
         "introduction",
         "premiers-pas",
@@ -90,8 +90,12 @@ fn the_three_tracks_share_their_chapters() {
         "collections",
         "types",
         "erreurs",
+        "modules",
         "fichiers",
+        "formats",
+        "tests",
         "projet",
+        "projets",
         "exercices",
         "aide-memoire",
     ] {

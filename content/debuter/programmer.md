@@ -6,7 +6,7 @@ Programmer, c'est écrire des instructions qu'un ordinateur suit à la lettre : 
 >
 > - savoir ce qu'est un programme et un langage de programmation ;
 > - reconnaître le code source et ses extensions de fichier ;
-> - lire un même petit programme en Ruby, en Rust et en Rythme ;
+> - lire un même petit programme dans plusieurs langages ;
 > - distinguer un langage interprété d'un langage compilé ;
 > - savoir ce qu'est un bug, et comment on apprend à programmer.
 
@@ -48,7 +48,9 @@ Les instructions s'écrivent dans un **fichier texte**, comme une note. Ce
 texte s'appelle le **code source**, ou simplement le **code**.
 
 Le nom du fichier finit par une **extension** qui dit dans quel langage il
-est écrit : `.rb` pour Ruby, `.rs` pour Rust, `.ry` pour Rythme.
+est écrit : `.py` pour Python, `.js` pour JavaScript, `.ts` pour
+TypeScript, `.go` pour Go, `.rb` pour Ruby, `.rs` pour Rust, `.ry` pour
+Rythme.
 
 Pour écrire ce texte, on utilise un **éditeur de code** : voyez
 [Installer un éditeur de code](editeur.md).
@@ -59,9 +61,10 @@ L'ordinateur ne comprend pas le français. Il comprend un **langage de
 programmation** : un vocabulaire réduit, avec des règles strictes. Ces règles
 s'appellent la **syntaxe**.
 
-Il existe des centaines de langages. Cette documentation en présente trois :
-Ruby, Rust et Rythme. Ils disent souvent la même chose avec des mots
-différents.
+Il existe des centaines de langages. Cette documentation en présente sept :
+Python, JavaScript, TypeScript, Go, Ruby, Rust et Rythme. Ils disent souvent
+la même chose avec des mots différents. Pour savoir par lequel commencer,
+voyez [Quel langage choisir ?](choisir.md).
 
 ## Un même programme dans trois langages
 
@@ -107,8 +110,36 @@ Bonjour, Ada !
 5
 ```
 
-Les trois font la même chose. Seuls les mots changent : `puts`, `println!`
-ou `print` veulent tous dire « affiche ».
+### Et en Python ou en JavaScript
+
+En Python :
+
+```python
+prenom = "Ada"
+print(f"Bonjour, {prenom} !")
+print(2 + 3)
+```
+
+```sortie
+Bonjour, Ada !
+5
+```
+
+En JavaScript :
+
+```javascript
+const prenom = "Ada";
+console.log(`Bonjour, ${prenom} !`);
+console.log(2 + 3);
+```
+
+```sortie
+Bonjour, Ada !
+5
+```
+
+Tous font la même chose. Seuls les mots changent : `puts`, `println!`,
+`print` ou `console.log` veulent tous dire « affiche ».
 
 ## Interprété ou compilé
 
@@ -116,11 +147,14 @@ L'ordinateur doit transformer votre texte en actions. Il y a deux façons de
 faire.
 
 - **Interprété** : un programme, l'**interpréteur**, lit votre code et
-  l'exécute tout de suite, ligne après ligne. C'est le cas de **Ruby** et de
-  **Rythme**.
+  l'exécute tout de suite, ligne après ligne. C'est le cas de **Python**,
+  de **JavaScript**, de **Ruby** et de **Rythme**.
 - **Compilé** : un programme, le **compilateur**, traduit d'abord tout votre
   code en langage machine. Ensuite seulement, on lance le résultat. C'est le
-  cas de **Rust**.
+  cas de **Go** et de **Rust**.
+
+TypeScript est un cas à part : il est d'abord vérifié et traduit en
+JavaScript, qui est ensuite interprété.
 
 Pensez à un livre étranger. L'interprète vous le lit à voix haute, en
 traduisant au fur et à mesure. Le traducteur, lui, écrit d'abord tout le
@@ -244,9 +278,9 @@ compilé ? Donnez un exemple de chaque.
 
 > **Réponse**
 >
-> Un interpréteur lit et exécute le code tout de suite (Ruby, Rythme). Un
-> compilateur traduit d'abord tout le code, puis on lance le résultat
-> (Rust).
+> Un interpréteur lit et exécute le code tout de suite (Python, Ruby,
+> Rythme). Un compilateur traduit d'abord tout le code, puis on lance le
+> résultat (Go, Rust).
 
 **3.** Votre programme se lance mais affiche un mauvais résultat. Est-ce un
 bug ?
@@ -260,7 +294,7 @@ bug ?
 
 - Un programme est une liste d'instructions précises, comme une recette.
 - Le code source est un fichier texte écrit dans un langage de programmation.
-- Ruby et Rythme sont interprétés ; Rust est compilé avant d'être lancé.
+- Python, JavaScript, Ruby et Rythme sont interprétés ; Go et Rust sont compilés avant d'être lancés.
 - Un bug est une erreur dans le programme, et tout le monde en fait.
 - On apprend en essayant, en se trompant et en lisant les messages d'erreur.
 

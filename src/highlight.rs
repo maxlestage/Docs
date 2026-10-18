@@ -26,6 +26,10 @@ struct Syntax {
     interpolation: Interpolation,
     /// Le premier mot d'une ligne est une commande (shell).
     commands: bool,
+    /// `` `texte` `` : un gabarit (JavaScript, TypeScript : `${…}`) ou un texte brut (Go).
+    backticks: bool,
+    /// `"""texte"""` sur plusieurs lignes, et `@décorateur` (Python).
+    python: bool,
 }
 
 #[derive(PartialEq)]
@@ -33,6 +37,8 @@ enum Interpolation {
     None,
     Hash,
     Braces,
+    /// `${…}`, dans les gabarits `` `…` `` seulement.
+    Dollar,
 }
 
 const RUBY: Syntax = Syntax {
@@ -95,6 +101,8 @@ const RUBY: Syntax = Syntax {
     instance_vars: true,
     interpolation: Interpolation::Hash,
     commands: false,
+    backticks: false,
+    python: false,
 };
 
 const RUST: Syntax = Syntax {
@@ -113,6 +121,8 @@ const RUST: Syntax = Syntax {
     instance_vars: false,
     interpolation: Interpolation::Braces,
     commands: false,
+    backticks: false,
+    python: false,
 };
 
 const RYTHME: Syntax = Syntax {
@@ -129,6 +139,8 @@ const RYTHME: Syntax = Syntax {
     instance_vars: false,
     interpolation: Interpolation::Braces,
     commands: false,
+    backticks: false,
+    python: false,
 };
 
 const SHELL: Syntax = Syntax {
@@ -143,6 +155,8 @@ const SHELL: Syntax = Syntax {
     instance_vars: false,
     interpolation: Interpolation::None,
     commands: true,
+    backticks: false,
+    python: false,
 };
 
 const TOML: Syntax = Syntax {
@@ -157,6 +171,214 @@ const TOML: Syntax = Syntax {
     instance_vars: false,
     interpolation: Interpolation::None,
     commands: false,
+    backticks: false,
+    python: false,
+};
+
+const PYTHON: Syntax = Syntax {
+    keywords: &[
+        "and", "as", "assert", "async", "await", "break", "class", "continue", "def", "del", "elif", "else", "except",
+        "finally", "for", "from", "global", "if", "import", "in", "is", "lambda", "match", "case", "nonlocal", "not",
+        "or", "pass", "raise", "return", "try", "while", "with", "yield", "self",
+    ],
+    constants: &["True", "False", "None"],
+    line_comment: "#",
+    block_comments: false,
+    single_quotes: true,
+    symbols: false,
+    macros: false,
+    attributes: false,
+    instance_vars: false,
+    interpolation: Interpolation::Braces,
+    commands: false,
+    backticks: false,
+    python: true,
+};
+
+const GO: Syntax = Syntax {
+    keywords: &[
+        "break",
+        "case",
+        "chan",
+        "const",
+        "continue",
+        "default",
+        "defer",
+        "else",
+        "fallthrough",
+        "for",
+        "func",
+        "go",
+        "goto",
+        "if",
+        "import",
+        "interface",
+        "map",
+        "package",
+        "range",
+        "return",
+        "select",
+        "struct",
+        "switch",
+        "type",
+        "var",
+    ],
+    constants: &["true", "false", "nil", "iota"],
+    line_comment: "//",
+    block_comments: true,
+    single_quotes: true,
+    symbols: false,
+    macros: false,
+    attributes: false,
+    instance_vars: false,
+    interpolation: Interpolation::None,
+    commands: false,
+    backticks: true,
+    python: false,
+};
+
+const JAVASCRIPT: Syntax = Syntax {
+    keywords: &[
+        "async",
+        "await",
+        "break",
+        "case",
+        "catch",
+        "class",
+        "const",
+        "continue",
+        "default",
+        "delete",
+        "do",
+        "else",
+        "export",
+        "extends",
+        "finally",
+        "for",
+        "from",
+        "function",
+        "if",
+        "import",
+        "in",
+        "instanceof",
+        "let",
+        "new",
+        "of",
+        "return",
+        "static",
+        "super",
+        "switch",
+        "this",
+        "throw",
+        "try",
+        "typeof",
+        "var",
+        "void",
+        "while",
+        "yield",
+        "get",
+        "set",
+    ],
+    constants: &["true", "false", "null", "undefined", "NaN", "Infinity"],
+    line_comment: "//",
+    block_comments: true,
+    single_quotes: true,
+    symbols: false,
+    macros: false,
+    attributes: false,
+    instance_vars: false,
+    interpolation: Interpolation::Dollar,
+    commands: false,
+    backticks: true,
+    python: false,
+};
+
+const TYPESCRIPT: Syntax = Syntax {
+    keywords: &[
+        "abstract",
+        "as",
+        "async",
+        "await",
+        "break",
+        "case",
+        "catch",
+        "class",
+        "const",
+        "continue",
+        "declare",
+        "default",
+        "delete",
+        "do",
+        "else",
+        "enum",
+        "export",
+        "extends",
+        "finally",
+        "for",
+        "from",
+        "function",
+        "if",
+        "implements",
+        "import",
+        "in",
+        "infer",
+        "instanceof",
+        "interface",
+        "is",
+        "keyof",
+        "let",
+        "namespace",
+        "new",
+        "of",
+        "private",
+        "protected",
+        "public",
+        "readonly",
+        "return",
+        "satisfies",
+        "static",
+        "super",
+        "switch",
+        "this",
+        "throw",
+        "try",
+        "type",
+        "typeof",
+        "var",
+        "void",
+        "while",
+        "yield",
+        "get",
+        "set",
+    ],
+    constants: &[
+        "true",
+        "false",
+        "null",
+        "undefined",
+        "NaN",
+        "Infinity",
+        "number",
+        "string",
+        "boolean",
+        "any",
+        "unknown",
+        "never",
+        "object",
+        "bigint",
+        "symbol",
+    ],
+    line_comment: "//",
+    block_comments: true,
+    single_quotes: true,
+    symbols: false,
+    macros: false,
+    attributes: false,
+    instance_vars: false,
+    interpolation: Interpolation::Dollar,
+    commands: false,
+    backticks: true,
+    python: false,
 };
 
 /// Le nom affiché d'un langage de bloc de code (`rust` → `Rust`), et s'il est coloré.
@@ -165,6 +387,12 @@ pub fn label(lang: &str) -> &'static str {
         "ruby" | "rb" => "Ruby",
         "rust" | "rs" => "Rust",
         "rythme" | "ry" => "Rythme",
+        "python" | "py" => "Python",
+        "go" | "golang" => "Go",
+        "javascript" | "js" => "JavaScript",
+        "typescript" | "ts" => "TypeScript",
+        "html" => "HTML",
+        "css" => "CSS",
         "sh" | "bash" | "shell" | "console" => "Terminal",
         "powershell" | "ps1" => "PowerShell",
         "toml" => "TOML",
@@ -179,6 +407,10 @@ fn syntax(lang: &str) -> Option<&'static Syntax> {
         "ruby" | "rb" => Some(&RUBY),
         "rust" | "rs" => Some(&RUST),
         "rythme" | "ry" => Some(&RYTHME),
+        "python" | "py" => Some(&PYTHON),
+        "go" | "golang" => Some(&GO),
+        "javascript" | "js" => Some(&JAVASCRIPT),
+        "typescript" | "ts" => Some(&TYPESCRIPT),
         "sh" | "bash" | "shell" | "console" | "powershell" | "ps1" => Some(&SHELL),
         "toml" => Some(&TOML),
         _ => None,
@@ -265,8 +497,26 @@ pub fn highlight(lang: &str, code: &str) -> String {
             i = end;
             continue;
         }
+        // Python : `"""texte"""` sur plusieurs lignes, et `@décorateur`.
+        if syntax.python && (starts(i, "\"\"\"") || starts(i, "\'\'\'")) {
+            let close: String = chars[i..i + 3].iter().collect();
+            let end = (i + 3..chars.len())
+                .find(|&j| starts(j, &close))
+                .map_or(chars.len(), |j| j + 3);
+            span(&mut out, "s", &text(i, end));
+            i = end;
+            continue;
+        }
+        if syntax.python && c == '@' && was_line_start {
+            let end = (i + 1..chars.len())
+                .find(|&j| !(is_word(chars[j]) || chars[j] == '.'))
+                .unwrap_or(chars.len());
+            span(&mut out, "a", &text(i, end));
+            i = end;
+            continue;
+        }
         // Textes.
-        if c == '"' || (c == '\'' && syntax.single_quotes) {
+        if c == '"' || (c == '\'' && syntax.single_quotes) || (c == '`' && syntax.backticks) {
             i = string(&chars, i, c, syntax, &mut out);
             continue;
         }
@@ -393,7 +643,11 @@ fn string(chars: &[char], start: usize, quote: char, syntax: &Syntax, out: &mut 
     let mut i = start + 1;
     let mut piece = String::from(quote);
     out.push_str("<span class=\"s\">");
-    let interpolates = quote == '"' && syntax.interpolation != Interpolation::None;
+    let interpolates = match syntax.interpolation {
+        Interpolation::None => false,
+        Interpolation::Dollar => quote == '`',
+        Interpolation::Hash | Interpolation::Braces => quote == '"' || (syntax.python && quote == '\''),
+    };
     while i < chars.len() {
         let c = chars[i];
         if c == '\\' && i + 1 < chars.len() {
@@ -414,10 +668,11 @@ fn string(chars: &[char], start: usize, quote: char, syntax: &Syntax, out: &mut 
                 (c == '{' && chars.get(i + 1) != Some(&'{'))
                     || (syntax.symbols && c == '#' && chars.get(i + 1) == Some(&'{'))
             }
+            Interpolation::Dollar => c == '$' && chars.get(i + 1) == Some(&'{'),
             Interpolation::None => false,
         };
         if interpolates && opens {
-            let open = if c == '#' { i + 1 } else { i };
+            let open = if c == '#' || c == '$' { i + 1 } else { i };
             let mut depth = 0;
             let mut end = None;
             for (j, &d) in chars.iter().enumerate().skip(open) {
@@ -430,7 +685,7 @@ fn string(chars: &[char], start: usize, quote: char, syntax: &Syntax, out: &mut 
                             break;
                         }
                     }
-                    '\n' if quote == '"' && !syntax.symbols => break,
+                    '\n' if quote != '`' && !syntax.symbols => break,
                     _ => {}
                 }
             }
@@ -496,6 +751,32 @@ mod tests {
         assert!(html.contains(r##"<span class="i">#{y}</span>"##));
         assert!(!html.contains("<b>"));
         assert_eq!(highlight("text", "<a>"), "&lt;a&gt;");
+    }
+
+    #[test]
+    fn colors_python_go_javascript_typescript() {
+        let py = highlight(
+            "python",
+            "@dataclass\ndef f(x):\n    \"\"\"Doc.\"\"\"\n    return f\"{x} ok\" if x else None",
+        );
+        assert!(py.contains(r#"<span class="a">@dataclass</span>"#), "{py}");
+        assert!(py.contains(r#"<span class="k">def</span>"#));
+        assert!(
+            py.contains(r#"<span class="s">&quot;&quot;&quot;Doc.&quot;&quot;&quot;</span>"#),
+            "{py}"
+        );
+        assert!(py.contains(r#"<span class="i">{x}</span>"#));
+        assert!(py.contains(r#"<span class="o">None</span>"#));
+        let go = highlight("go", "func main() {\n\tfmt.Println(`brut {x}`, nil) // fin\n}");
+        assert!(go.contains(r#"<span class="k">func</span>"#));
+        assert!(go.contains(r#"<span class="s">`brut {x}`</span>"#), "{go}");
+        assert!(go.contains(r#"<span class="o">nil</span>"#));
+        let js = highlight("javascript", "const x = `a ${b} c`; // fin");
+        assert!(js.contains(r#"<span class="k">const</span>"#));
+        assert!(js.contains(r#"<span class="i">${b}</span>"#), "{js}");
+        let ts = highlight("typescript", "interface P { x: number }");
+        assert!(ts.contains(r#"<span class="k">interface</span>"#));
+        assert!(ts.contains(r#"<span class="o">number</span>"#));
     }
 
     #[test]

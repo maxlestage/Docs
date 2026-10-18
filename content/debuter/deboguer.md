@@ -146,6 +146,61 @@ For more information about this error, try `rustc --explain E0308`.
 
 Correction : `let age: i32 = 36;`, sans guillemets.
 
+### En Python
+
+```python norun
+prix = [12, 5, 8]
+total = sum(prix)
+print("Total : " + total)
+```
+
+```text
+Traceback (most recent call last):
+  File "prix.py", line 3, in <module>
+    print("Total : " + total)
+          ~~~~~~~~~~~^~~~~~~
+TypeError: can only concatenate str (not "int") to str
+```
+
+Contrairement à Ruby et à Rust, Python met l'essentiel **en bas** : lisez
+d'abord la dernière ligne.
+
+1. `Traceback` : le chemin suivi par le programme, de haut en bas ;
+2. `File "prix.py", line 3` : **où** — le fichier et la ligne ;
+3. la ligne de code, avec `^` sous l'opération fautive ;
+4. `TypeError: can only concatenate str (not "int") to str` : **quoi** —
+   on ne peut coller (*concatenate*) qu'un texte (`str`) à un texte, pas
+   un nombre (`int`).
+
+Correction : `print(f"Total : {total}")`.
+
+### En JavaScript
+
+```javascript norun
+const eleve = { nom: "Ada", notes: [12, 15] };
+console.log(eleve.note.length);
+```
+
+```text
+file:///home/ada/notes.mjs:2
+console.log(eleve.note.length);
+                       ^
+
+TypeError: Cannot read properties of undefined (reading 'length')
+    at file:///home/ada/notes.mjs:2:24
+```
+
+1. `notes.mjs:2` : **où** — le fichier et la ligne ;
+2. la ligne de code, avec `^` sous l'endroit du problème ;
+3. `TypeError: Cannot read properties of undefined (reading 'length')` :
+   **quoi** — on demande `length` à quelque chose qui vaut `undefined`
+   (« rien ») ;
+4. `at …` : le chemin suivi par le programme.
+
+`eleve.note` n'existe pas : la propriété s'appelle `notes`. JavaScript ne
+le signale pas tout de suite, il donne `undefined`, et l'erreur arrive une
+étape plus loin.
+
 ### En Rythme
 
 ```rythme norun
@@ -261,8 +316,44 @@ Dans le terminal :
 Moyenne : 8.333333333333334
 ```
 
-> **Attention :** une fois le bug trouvé, retirez vos `p`, `dbg!` et
-> `debug`. Ils ne doivent pas rester dans le programme final.
+### En Python : print et le signe =
+
+Dans un texte `f"…"`, écrire `{total=}` affiche le **nom** de la variable
+et sa valeur. `repr` montre une valeur telle qu'elle est dans le code, avec
+les guillemets d'un texte :
+
+```python
+prix = [12, 5, 8]
+total = sum(prix)
+print(f"{prix=} {total=}")
+print("42", repr("42"))
+```
+
+```sortie
+prix=[12, 5, 8] total=25
+42 '42'
+```
+
+### En JavaScript : console.log
+
+Mettez les variables entre accolades : `console.log` affiche alors chaque
+nom avec sa valeur. `JSON.stringify` montre les guillemets d'un texte :
+
+```javascript
+const prix = [12, 5, 8];
+const total = prix.reduce((somme, p) => somme + p, 0);
+console.log({ prix, total });
+console.log("42", JSON.stringify("42"));
+```
+
+```sortie
+{ prix: [ 12, 5, 8 ], total: 25 }
+42 "42"
+```
+
+> **Attention :** une fois le bug trouvé, retirez vos `p`, `dbg!`,
+> `debug`, `print` et `console.log` de débogage. Ils ne doivent pas rester
+> dans le programme final.
 
 ## Le canard en plastique
 
@@ -305,7 +396,8 @@ Copiez-le dans un moteur de recherche :
   String` ;
 - retirez ce qui est propre à **votre** programme : noms de fichiers,
   numéros de ligne, noms de variables ;
-- ajoutez le **nom du langage** : `ruby`, `rust` ou `rythme`.
+- ajoutez le **nom du langage** : `python`, `javascript`, `go`, `ruby`,
+  `rust`…
 
 Les codes d'erreur se cherchent très bien : `rust E0308`. Et ils
 s'expliquent sans Internet :
@@ -419,8 +511,9 @@ sorte d'erreur est-ce ?
 > **Réponse**
 >
 > Une erreur de logique : le programme marche, mais le résultat est faux.
-> Affichez les valeurs intermédiaires avec `p`, `dbg!` ou `debug` pour
-> trouver l'étape qui se trompe.
+> Affichez les valeurs intermédiaires (`print` en Python, `console.log` en
+> JavaScript, `p` en Ruby, `dbg!` en Rust, `debug` en Rythme) pour trouver
+> l'étape qui se trompe.
 
 **2.** Dans le message `--> age.rs:2:20`, que veulent dire `2` et `20` ?
 
@@ -440,8 +533,8 @@ sorte d'erreur est-ce ?
 ## En résumé
 
 - Trois sortes d'erreurs : de syntaxe (ne démarre pas), d'exécution (s'arrête en route), de logique (résultat faux).
-- Un message d'erreur dit quoi, où (fichier, ligne, colonne) et souvent comment corriger : lisez-le depuis le haut.
-- Affichez les valeurs avec `p` en Ruby, `dbg!` en Rust, `debug` en Rythme.
+- Un message d'erreur dit quoi, où (fichier, ligne, colonne) et souvent comment corriger : lisez-le en entier.
+- Affichez les valeurs : `print(f"{x=}")` en Python, `console.log({ x })` en JavaScript, `p` en Ruby, `dbg!` en Rust, `debug` en Rythme.
 - Expliquez votre code au canard, et réduisez le problème à quelques lignes.
 - Cherchez la partie générale du message en ligne ; pour demander de l'aide, donnez un exemple minimal.
 

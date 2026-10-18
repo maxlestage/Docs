@@ -111,7 +111,7 @@ pub fn search_index() -> String {
         }
     }
     entries.push(format!(
-        r#"{{"t":"Comparer Ruby, Rust et Rythme","d":"Les mêmes idées dans les trois langages, côte à côte.","p":"Docs","u":{},"k":"page"}}"#,
+        r#"{{"t":"Comparer les langages","d":"Les mêmes idées dans les sept langages, côte à côte.","p":"Docs","u":{},"k":"page"}}"#,
         json_string(&link("/comparer/"))
     ));
     format!("[{}]", entries.join(",\n"))

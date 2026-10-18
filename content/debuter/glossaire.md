@@ -10,6 +10,12 @@ Une suite d'étapes précises pour résoudre un problème, comme une recette.
 Un programme est un algorithme écrit dans un langage de programmation. Voir
 [Penser comme un programmeur](algorithmes.md) et [pseudo-code](#pseudo-code).
 
+### Any
+
+En TypeScript, le type « n'importe quoi » : il **éteint** la vérification
+des types. Une valeur `any` accepte tout, même les erreurs. Préférez
+[unknown](#unknown), qui oblige à vérifier avant de s'en servir.
+
 ### API
 
 Une liste de services qu'un programme offre à d'autres programmes. Sur le
@@ -42,7 +48,8 @@ a
 
 Du code **asynchrone** : pendant qu'une tâche attend (une réponse du
 réseau, un fichier), le programme s'occupe d'autre chose au lieu de rester
-bloqué. En Rust, on l'écrit avec `async` et `.await`. Voir
+bloqué. En Python et en JavaScript, on l'écrit avec `async` et `await` ;
+en Rust, avec `async` et `.await`. Voir aussi [promesse](#promesse) et
 [l'asynchrone en Rust](../rust/async.md).
 
 ## B
@@ -115,6 +122,27 @@ vouliez. Le mot veut dire « insecte » en anglais.
 
 ## C
 
+### Canal
+
+En Go, un tuyau par lequel des [goroutines](#goroutine) s'envoient des
+valeurs. On envoie avec `canal <- valeur` et on reçoit avec `<-canal`.
+
+```go
+package main
+
+import "fmt"
+
+func main() {
+	canal := make(chan string)
+	go func() { canal <- "Bonjour depuis une goroutine" }()
+	fmt.Println(<-canal)
+}
+```
+
+```sortie
+Bonjour depuis une goroutine
+```
+
 ### Cargo
 
 L'outil de Rust qui crée un projet (`cargo new`), le compile et le lance
@@ -180,7 +208,7 @@ qui dit ce qui a changé. Voir
 ### Compilateur
 
 Un programme qui traduit tout votre code en langage machine **avant** de le
-lancer. Rust utilise un compilateur. Voir aussi
+lancer. Go et Rust utilisent un compilateur. Voir aussi
 [interpréteur](#interpreteur).
 
 ### Compilation
@@ -188,6 +216,20 @@ lancer. Rust utilise un compilateur. Voir aussi
 Le travail du [compilateur](#compilateur) : traduire tout le code en
 langage machine avant de le lancer. En Rust, `cargo build` compile ;
 `cargo run` compile puis lance.
+
+### Compréhension
+
+En Python, une façon courte de construire une [liste](#liste) à partir
+d'une autre, en une seule ligne : « le carré de chaque `n` de 1 à 4 ».
+
+```python
+carres = [n * n for n in range(1, 5)]
+print(carres)
+```
+
+```sortie
+[1, 4, 9, 16]
+```
 
 ### Concurrence
 
@@ -231,6 +273,31 @@ Chercher et corriger un [bug](#bug). On lit les messages d'erreur, on
 affiche des valeurs, on teste petit à petit. En anglais : *debugging*. Voir
 [Trouver et corriger ses erreurs](deboguer.md).
 
+### Décorateur
+
+En Python, une fonction qui **enveloppe** une autre fonction pour lui
+ajouter quelque chose, sans toucher à son code. On le place au-dessus avec
+`@`.
+
+```python
+def annonce(fonction):
+    def enveloppe():
+        print("Début")
+        fonction()
+    return enveloppe
+
+@annonce
+def bonjour():
+    print("Bonjour")
+
+bonjour()
+```
+
+```sortie
+Début
+Bonjour
+```
+
 ### Dépôt
 
 Un dossier suivi par [Git](#git), avec tout son historique. En anglais :
@@ -239,7 +306,8 @@ Un dossier suivi par [Git](#git), avec tout son historique. En anglais :
 ### Dictionnaire
 
 Une collection qui associe une **valeur** à une **clé**, comme un vrai
-dictionnaire associe une définition à un mot. En Ruby, on dit *hash* ; en
+dictionnaire associe une définition à un mot. En Python, on dit *dict* ;
+en JavaScript, *objet* ou *Map* ; en Go, *map* ; en Ruby, *hash* ; en
 Rust, *HashMap*.
 
 ```ruby
@@ -249,6 +317,16 @@ puts ages["Ada"]
 
 ```sortie
 36
+```
+
+### DOM
+
+La page web telle que le navigateur la garde en mémoire : un arbre
+d'éléments (titres, paragraphes, boutons) que JavaScript peut lire et
+modifier. Le nom vient de l'anglais *Document Object Model*.
+
+```javascript norun
+document.querySelector("h1").textContent = "Bonjour !";
 ```
 
 ### Durée de vie
@@ -325,6 +403,12 @@ Un [type](#type) qui ne peut prendre qu'une valeur parmi une liste fixée :
 un feu est `Rouge`, `Orange` ou `Vert`. En Rust, on l'écrit avec `enum` ;
 en Rythme, avec `type`.
 
+### Environnement virtuel
+
+En Python, un dossier qui contient les [paquets](#paquet) d'**un seul**
+projet, à l'écart des autres. On le crée avec `python3 -m venv .venv`,
+puis on l'active avant d'utiliser [pip](#pip).
+
 ### Erreur
 
 Un message qui dit que quelque chose s'est mal passé. Il indique souvent le
@@ -389,17 +473,46 @@ print(double(21))
 Un [paquet](#paquet) Ruby. On l'installe avec `gem install nom`, ou on le
 liste dans le fichier `Gemfile` d'un projet.
 
+### Générateur
+
+Une fonction qui donne ses valeurs **une à une**, au fur et à mesure qu'on
+les demande, au lieu de tout calculer d'un coup. En Python et en
+JavaScript, elle utilise `yield`.
+
+```python
+def compte_a_rebours(n):
+    while n > 0:
+        yield n
+        n -= 1
+
+for n in compte_a_rebours(3):
+    print(n)
+```
+
+```sortie
+3
+2
+1
+```
+
 ### Générique
 
 Du code écrit une fois pour plusieurs [types](#type). En Rust, `Vec<T>`
 est une liste d'éléments de n'importe quel type `T` : `Vec<i32>`,
-`Vec<String>`...
+`Vec<String>`... TypeScript (`Array<T>`) et Go (`[T any]`) ont la même
+idée.
 
 ### Git
 
 Un logiciel qui garde l'historique de votre code : chaque version est un
 [commit](#commit), rangé dans un [dépôt](#depot). Voir
 [Sauvegarder son travail avec Git](git.md).
+
+### Goroutine
+
+En Go, une fonction qui tourne **en même temps** que le reste du
+programme. On la lance en écrivant `go` devant l'appel. Elles communiquent
+souvent par des [canaux](#canal). Voir aussi [concurrence](#concurrence).
 
 ## H
 
@@ -445,6 +558,13 @@ Qui ne peut pas changer. Une valeur immuable reste la même du début à la
 fin. En Rythme, toutes les valeurs sont immuables ; en Rust, les variables
 le sont par défaut. Voir aussi [mutable](#mutable).
 
+### Indentation
+
+Le décalage d'une ligne vers la droite, avec des espaces. Il montre ce qui
+est **à l'intérieur** d'une boucle ou d'une fonction. En Python,
+l'indentation fait partie de la syntaxe : une ligne mal décalée est une
+erreur.
+
 ### Indice
 
 La position d'un élément dans une [liste](#liste). On compte à partir de
@@ -461,10 +581,31 @@ pomme
 kiwi
 ```
 
+### Interface
+
+Une liste de ce qu'une valeur doit **savoir faire** ou **contenir**, sans
+dire comment. En Go, un type qui a les bonnes méthodes respecte
+l'interface tout seul ; en TypeScript, une interface décrit la forme d'un
+objet.
+
+```typescript
+interface Animal {
+  nom: string;
+  cri(): string;
+}
+
+const chat: Animal = { nom: "Félix", cri: () => "Miaou" };
+console.log(`${chat.nom} dit ${chat.cri()}`);
+```
+
+```sortie
+Félix dit Miaou
+```
+
 ### Interpréteur
 
 Un programme qui lit votre code et l'exécute tout de suite, ligne après
-ligne. Ruby et Rythme utilisent un interpréteur. Voir aussi
+ligne. Python, JavaScript, Ruby et Rythme utilisent un interpréteur. Voir aussi
 [compilateur](#compilateur).
 
 ### Intervalle
@@ -609,10 +750,22 @@ println!("{compteur}");
 
 ## N
 
+### Node.js
+
+Un programme qui lance du JavaScript **en dehors du navigateur** : dans le
+terminal, ou sur un serveur. On l'utilise avec `node main.mjs`.
+
+### npm
+
+Le gestionnaire de [paquets](#paquet) de JavaScript, livré avec
+[Node.js](#node-js). `npm install nom` télécharge un paquet ; la liste des
+paquets d'un projet est dans le fichier `package.json`.
+
 ### Null
 
-Une valeur spéciale qui veut dire « rien » ou « absent ». Ruby l'appelle
-`nil`. Rust et Rythme n'ont pas de `null` : ils utilisent `None`, qui oblige
+Une valeur spéciale qui veut dire « rien » ou « absent ». Python
+l'appelle `None` ; JavaScript a `null` et `undefined` ; Go et Ruby
+l'appellent `nil`. Rust et Rythme n'ont pas de `null` : ils utilisent `None`, qui oblige
 à prévoir le cas où la valeur manque.
 
 ## O
@@ -657,8 +810,9 @@ commence par `panicked at`.
 
 ### Paquet
 
-Une [bibliothèque](#bibliotheque) prête à installer. En Ruby, on dit *gem* ;
-en Rust, *crate*.
+Une [bibliothèque](#bibliotheque) prête à installer. En Python, on
+l'installe avec [pip](#pip) ; en JavaScript, avec [npm](#npm) ; en Go, avec
+`go get`. En Ruby, on dit *gem* ; en Rust, *crate*.
 
 ### Paramètre
 
@@ -672,6 +826,12 @@ Les deux endroits où un programme range ses données en mémoire. La
 petites valeurs de taille connue. Le **tas** est plus grand et plus libre :
 on y met les données dont la taille change, comme une liste qui grandit.
 Rust vous fait penser à cette différence.
+
+### pip
+
+Le gestionnaire de [paquets](#paquet) de Python. `pip install nom`
+télécharge un paquet depuis PyPI, le catalogue officiel. Utilisez-le dans
+un [environnement virtuel](#environnement-virtuel).
 
 ### Pointeur
 
@@ -704,6 +864,30 @@ deux fois donne deux processus, chacun avec sa mémoire.
 
 Une liste d'instructions qu'un ordinateur exécute. Voir
 [Qu'est-ce que programmer ?](programmer.md).
+
+### Promesse
+
+En JavaScript, une valeur qui **arrivera plus tard** (*Promise* en
+anglais), par exemple la réponse d'un serveur. `await` attend qu'elle soit
+prête. Voir aussi [async](#async).
+
+```javascript
+const promesse = new Promise((resoudre) => {
+  setTimeout(() => resoudre("prêt"), 10);
+});
+console.log(await promesse);
+```
+
+```sortie
+prêt
+```
+
+### Prototype
+
+En JavaScript, l'objet modèle dont un autre objet **hérite** ses
+méthodes. Quand une propriété manque, JavaScript la cherche dans le
+prototype. Les classes de JavaScript reposent sur ce mécanisme. Voir aussi
+[héritage](#heritage).
 
 ### Pseudo-code
 
@@ -769,6 +953,27 @@ print(parse_int("42"), parse_int("abc") |> is_err)
 Ok(42) true
 ```
 
+### Rétrécissement
+
+En TypeScript, quand une vérification **précise** le type d'une valeur :
+après `typeof x === "string"`, TypeScript sait que `x` est un texte. On dit
+aussi *narrowing*.
+
+```typescript
+function longueur(x: string | number): number {
+  if (typeof x === "string") {
+    return x.length;
+  }
+  return x;
+}
+
+console.log(longueur("Ada"), longueur(7));
+```
+
+```sortie
+3 7
+```
+
 ## S
 
 ### Sérialisation
@@ -783,6 +988,26 @@ sérialisation.
 Un programme (et, par extension, l'ordinateur qui le fait tourner) qui
 attend des demandes et y **répond**. Un serveur web envoie des pages aux
 [clients](#client).
+
+### Slice
+
+En Go, une liste qui peut grandir. `append` lui ajoute des éléments.
+
+```go
+package main
+
+import "fmt"
+
+func main() {
+	notes := []int{12, 15}
+	notes = append(notes, 9)
+	fmt.Println(notes, len(notes))
+}
+```
+
+```sortie
+[12 15 9] 3
+```
 
 ### Structure
 
@@ -861,6 +1086,12 @@ println!("x = {}, y = {}", point.0, point.1);
 x = 3, y = 7
 ```
 
+### Typage
+
+La façon dont un langage vérifie les [types](#type). **Statique** : avant
+de lancer le programme (Go, Rust, TypeScript). **Dynamique** : pendant
+qu'il tourne (Python, JavaScript, Ruby, Rythme).
+
 ### Type
 
 La sorte d'une valeur : un [entier](#entier), un texte, un
@@ -877,6 +1108,21 @@ Integer
 String
 ```
 
+### Type littéral
+
+En TypeScript, un type qui n'accepte qu'**une seule valeur** précise, comme
+`"rouge"`. Avec une [union](#union-de-types), on liste les valeurs permises.
+
+```typescript
+type Feu = "rouge" | "orange" | "vert";
+const feu: Feu = "vert";
+console.log(feu);
+```
+
+```sortie
+vert
+```
+
 ## U
 
 ### Unicode
@@ -891,6 +1137,29 @@ print(char_code("é"), char(8364))
 
 ```sortie
 233 €
+```
+
+### Union de types
+
+En TypeScript, un type qui accepte **plusieurs** types, séparés par `|` :
+`string | number` est « un texte ou un nombre ». Avant de s'en servir, on
+fait un [rétrécissement](#retrecissement).
+
+### Unknown
+
+En TypeScript, le type d'une valeur **inconnue** : TypeScript interdit de
+s'en servir tant qu'on n'a pas vérifié ce qu'elle est. C'est la version
+sûre de [any](#any).
+
+```typescript
+const valeur: unknown = JSON.parse("42");
+if (typeof valeur === "number") {
+  console.log(valeur + 1);
+}
+```
+
+```sortie
+43
 ```
 
 ### URL

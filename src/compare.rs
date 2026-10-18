@@ -5,33 +5,96 @@
 pub struct Row {
     pub idea: &'static str,
     /// Le chapitre qui en parle (le même nom dans les trois parcours, sauf exception).
-    pub chapter: [&'static str; 3],
-    pub code: [&'static str; 3],
+    pub chapter: [&'static str; 7],
+    pub code: [&'static str; 7],
 }
 
-/// Ruby, Rust, Rythme : l'ordre des colonnes.
-pub const LANGS: [&str; 3] = ["ruby", "rust", "rythme"];
+/// L'ordre des colonnes.
+pub const LANGS: [&str; 7] = ["python", "javascript", "typescript", "go", "ruby", "rust", "rythme"];
+
+/// Les colonnes montrées au départ (les autres se choisissent sur la page).
+pub const DEFAULT: [&str; 3] = ["python", "javascript", "rust"];
 
 pub const ROWS: &[Row] = &[
     Row {
         idea: "Afficher du texte",
-        chapter: ["premiers-pas"; 3],
-        code: ["puts \"Bonjour !\"", "println!(\"Bonjour !\");", "print(\"Bonjour !\")"],
+        chapter: [
+            "premiers-pas",
+            "premiers-pas",
+            "premiers-pas",
+            "premiers-pas",
+            "premiers-pas",
+            "premiers-pas",
+            "premiers-pas",
+        ],
+        code: [
+            "print(\"Bonjour !\")",
+            "console.log(\"Bonjour !\");",
+            "console.log(\"Bonjour !\");",
+            "fmt.Println(\"Bonjour !\")",
+            "puts \"Bonjour !\"",
+            "println!(\"Bonjour !\");",
+            "print(\"Bonjour !\")",
+        ],
     },
     Row {
         idea: "Un commentaire",
-        chapter: ["premiers-pas"; 3],
-        code: ["# une remarque", "// une remarque", "# une remarque"],
+        chapter: [
+            "premiers-pas",
+            "premiers-pas",
+            "premiers-pas",
+            "premiers-pas",
+            "premiers-pas",
+            "premiers-pas",
+            "premiers-pas",
+        ],
+        code: [
+            "# une remarque",
+            "// une remarque",
+            "// une remarque",
+            "// une remarque",
+            "# une remarque",
+            "// une remarque",
+            "# une remarque",
+        ],
     },
     Row {
         idea: "Nommer une valeur",
-        chapter: ["premiers-pas"; 3],
-        code: ["age = 36", "let age = 36;", "age = 36"],
+        chapter: [
+            "premiers-pas",
+            "premiers-pas",
+            "premiers-pas",
+            "premiers-pas",
+            "premiers-pas",
+            "premiers-pas",
+            "premiers-pas",
+        ],
+        code: [
+            "age = 36",
+            "const age = 36;",
+            "const age: number = 36;",
+            "age := 36",
+            "age = 36",
+            "let age = 36;",
+            "age = 36",
+        ],
     },
     Row {
         idea: "Changer une valeur",
-        chapter: ["premiers-pas"; 3],
+        chapter: [
+            "premiers-pas",
+            "premiers-pas",
+            "premiers-pas",
+            "premiers-pas",
+            "premiers-pas",
+            "premiers-pas",
+            "premiers-pas",
+        ],
         code: [
+            "age += 1",
+            "let age = 36;\nage += 1;",
+            "let age = 36;\nage += 1;",
+            "age := 36\nage++",
             "age += 1",
             "let mut age = 36;\nage += 1;",
             "# rien ne change jamais :\nplus_vieux = age + 1",
@@ -39,8 +102,20 @@ pub const ROWS: &[Row] = &[
     },
     Row {
         idea: "Insérer une valeur dans un texte",
-        chapter: ["premiers-pas"; 3],
+        chapter: [
+            "texte",
+            "texte",
+            "texte",
+            "texte",
+            "premiers-pas",
+            "premiers-pas",
+            "premiers-pas",
+        ],
         code: [
+            "f\"J'ai {age} ans\"",
+            "`J'ai ${age} ans`",
+            "`J'ai ${age} ans`",
+            "fmt.Sprintf(\"J'ai %d ans\", age)",
             "\"J'ai #{age} ans\"",
             "format!(\"J'ai {age} ans\")",
             "\"J'ai {age} ans\"",
@@ -48,8 +123,20 @@ pub const ROWS: &[Row] = &[
     },
     Row {
         idea: "Une condition",
-        chapter: ["conditions-boucles"; 3],
+        chapter: [
+            "conditions-boucles",
+            "conditions-boucles",
+            "conditions-boucles",
+            "conditions-boucles",
+            "conditions-boucles",
+            "conditions-boucles",
+            "conditions-boucles",
+        ],
         code: [
+            "\"majeur\" if age >= 18 else \"mineur\"",
+            "age >= 18 ? \"majeur\" : \"mineur\"",
+            "age >= 18 ? \"majeur\" : \"mineur\"",
+            "if age >= 18 {\n    fmt.Println(\"majeur\")\n} else {\n    fmt.Println(\"mineur\")\n}",
             "age >= 18 ? \"majeur\" : \"mineur\"",
             "if age >= 18 { \"majeur\" } else { \"mineur\" }",
             "if age >= 18 then \"majeur\" else \"mineur\"",
@@ -57,8 +144,20 @@ pub const ROWS: &[Row] = &[
     },
     Row {
         idea: "Choisir selon une valeur",
-        chapter: ["conditions-boucles", "conditions-boucles", "types"],
+        chapter: [
+            "conditions-boucles",
+            "conditions-boucles",
+            "conditions-boucles",
+            "conditions-boucles",
+            "conditions-boucles",
+            "conditions-boucles",
+            "types",
+        ],
         code: [
+            "match n:\n    case 0:\n        print(\"zéro\")\n    case _:\n        print(\"autre\")",
+            "switch (n) {\n  case 0:\n    console.log(\"zéro\");\n    break;\n  default:\n    console.log(\"autre\");\n}",
+            "switch (n) {\n  case 0:\n    console.log(\"zéro\");\n    break;\n  default:\n    console.log(\"autre\");\n}",
+            "switch n {\ncase 0:\n    fmt.Println(\"zéro\")\ndefault:\n    fmt.Println(\"autre\")\n}",
             "case n\nwhen 0 then \"zéro\"\nelse \"autre\"\nend",
             "match n {\n    0 => \"zéro\",\n    _ => \"autre\",\n}",
             "match n\n  0 -> \"zéro\"\n  _ -> \"autre\"\nend",
@@ -66,8 +165,20 @@ pub const ROWS: &[Row] = &[
     },
     Row {
         idea: "Répéter",
-        chapter: ["conditions-boucles"; 3],
+        chapter: [
+            "conditions-boucles",
+            "conditions-boucles",
+            "conditions-boucles",
+            "conditions-boucles",
+            "conditions-boucles",
+            "conditions-boucles",
+            "conditions-boucles",
+        ],
         code: [
+            "for i in range(3):\n    print(i)",
+            "for (let i = 0; i < 3; i++) {\n  console.log(i);\n}",
+            "for (let i = 0; i < 3; i++) {\n  console.log(i);\n}",
+            "for i := 0; i < 3; i++ {\n    fmt.Println(i)\n}",
             "3.times { |i| puts i }",
             "for i in 0..3 {\n    println!(\"{i}\");\n}",
             "(0..2).each { |i| print(i) }",
@@ -75,8 +186,20 @@ pub const ROWS: &[Row] = &[
     },
     Row {
         idea: "Une fonction",
-        chapter: ["fonctions"; 3],
+        chapter: [
+            "fonctions",
+            "fonctions",
+            "fonctions",
+            "fonctions",
+            "fonctions",
+            "fonctions",
+            "fonctions",
+        ],
         code: [
+            "def double(x):\n    return x * 2",
+            "function double(x) {\n  return x * 2;\n}",
+            "function double(x: number): number {\n  return x * 2;\n}",
+            "func double(x int) int {\n    return x * 2\n}",
             "def double(x)\n  x * 2\nend",
             "fn double(x: i32) -> i32 {\n    x * 2\n}",
             "fn double(x) = x * 2",
@@ -84,8 +207,20 @@ pub const ROWS: &[Row] = &[
     },
     Row {
         idea: "Une fonction anonyme",
-        chapter: ["blocs", "fonctions", "fonctions"],
+        chapter: [
+            "fonctions",
+            "fonctions",
+            "fonctions",
+            "fonctions",
+            "blocs",
+            "fonctions",
+            "fonctions",
+        ],
         code: [
+            "triple = lambda x: x * 3",
+            "const triple = (x) => x * 3;",
+            "const triple = (x: number) => x * 3;",
+            "triple := func(x int) int { return x * 3 }",
             "triple = ->(x) { x * 3 }",
             "let triple = |x| x * 3;",
             "triple = fn(x) = x * 3",
@@ -93,8 +228,20 @@ pub const ROWS: &[Row] = &[
     },
     Row {
         idea: "Une liste",
-        chapter: ["collections"; 3],
+        chapter: [
+            "collections",
+            "collections",
+            "collections",
+            "collections",
+            "collections",
+            "collections",
+            "collections",
+        ],
         code: [
+            "nombres = [1, 2, 3]",
+            "const nombres = [1, 2, 3];",
+            "const nombres: number[] = [1, 2, 3];",
+            "nombres := []int{1, 2, 3}",
             "nombres = [1, 2, 3]",
             "let nombres = vec![1, 2, 3];",
             "nombres = [1, 2, 3]",
@@ -102,8 +249,20 @@ pub const ROWS: &[Row] = &[
     },
     Row {
         idea: "Transformer chaque élément",
-        chapter: ["blocs", "collections", "fonctionnel"],
+        chapter: [
+            "comprehensions",
+            "collections",
+            "collections",
+            "collections",
+            "blocs",
+            "collections",
+            "fonctionnel",
+        ],
         code: [
+            "[x * 2 for x in nombres]",
+            "nombres.map((x) => x * 2)",
+            "nombres.map((x) => x * 2)",
+            "for i, x := range nombres {\n    nombres[i] = x * 2\n}",
             "nombres.map { |x| x * 2 }",
             "nombres.iter().map(|x| x * 2).collect::<Vec<_>>()",
             "nombres.map { |x| x * 2 }",
@@ -111,8 +270,20 @@ pub const ROWS: &[Row] = &[
     },
     Row {
         idea: "Filtrer puis additionner",
-        chapter: ["blocs", "collections", "fonctionnel"],
+        chapter: [
+            "comprehensions",
+            "collections",
+            "collections",
+            "collections",
+            "blocs",
+            "collections",
+            "fonctionnel",
+        ],
         code: [
+            "sum(x for x in range(1, 11) if x % 2 == 0)",
+            "[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]\n  .filter((x) => x % 2 === 0)\n  .reduce((a, b) => a + b, 0)",
+            "[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]\n  .filter((x) => x % 2 === 0)\n  .reduce((a, b) => a + b, 0)",
+            "somme := 0\nfor x := 1; x <= 10; x++ {\n    if x%2 == 0 {\n        somme += x\n    }\n}",
             "(1..10).select(&:even?).sum",
             "(1..=10).filter(|x| x % 2 == 0).sum::<i32>()",
             "1..10 |> filter(is_even) |> sum",
@@ -120,8 +291,20 @@ pub const ROWS: &[Row] = &[
     },
     Row {
         idea: "Un dictionnaire",
-        chapter: ["collections"; 3],
+        chapter: [
+            "dictionnaires",
+            "objets",
+            "collections",
+            "maps",
+            "collections",
+            "collections",
+            "collections",
+        ],
         code: [
+            "ages = {\"Ada\": 36}",
+            "const ages = new Map([[\"Ada\", 36]]);",
+            "const ages = new Map<string, number>([[\"Ada\", 36]]);",
+            "ages := map[string]int{\"Ada\": 36}",
             "ages = { \"Ada\" => 36 }",
             "let ages = HashMap::from([(\"Ada\", 36)]);",
             "ages = dict([[\"Ada\", 36]])",
@@ -129,8 +312,12 @@ pub const ROWS: &[Row] = &[
     },
     Row {
         idea: "Regrouper des données",
-        chapter: ["types", "types", "collections"],
+        chapter: ["typage", "objets", "objets", "types", "types", "types", "collections"],
         code: [
+            "@dataclass\nclass Point:\n    x: int\n    y: int",
+            "const p = { x: 1, y: 2 };",
+            "interface Point { x: number; y: number }\nconst p: Point = { x: 1, y: 2 };",
+            "type Point struct{ X, Y int }\np := Point{X: 1, Y: 2}",
             "Point = Struct.new(:x, :y)\np = Point.new(1, 2)",
             "struct Point { x: i32, y: i32 }\nlet p = Point { x: 1, y: 2 };",
             "p = {x: 1, y: 2}",
@@ -138,8 +325,12 @@ pub const ROWS: &[Row] = &[
     },
     Row {
         idea: "Votre propre type",
-        chapter: ["types"; 3],
+        chapter: ["types", "types", "unions", "interfaces", "types", "types", "types"],
         code: [
+            "class Cercle:\n    def __init__(self, r):\n        self.r = r",
+            "class Cercle {\n  constructor(r) {\n    this.r = r;\n  }\n}",
+            "type Forme =\n  | { kind: \"cercle\"; r: number }\n  | { kind: \"carre\"; c: number };",
+            "type Forme interface {\n    Aire() float64\n}",
             "class Cercle\n  def initialize(r) = @r = r\n  def aire = 3.14 * @r ** 2\nend",
             "enum Forme {\n    Cercle(f64),\n    Carre(f64),\n}",
             "type Forme = Cercle(r) | Carre(c)",
@@ -147,18 +338,50 @@ pub const ROWS: &[Row] = &[
     },
     Row {
         idea: "Une valeur qui peut manquer",
-        chapter: ["erreurs"; 3],
-        code: ["nil", "Option<T> : Some(x) ou None", "Some(x) ou None"],
+        chapter: [
+            "premiers-pas",
+            "premiers-pas",
+            "unions",
+            "pointeurs",
+            "erreurs",
+            "erreurs",
+            "erreurs",
+        ],
+        code: [
+            "None",
+            "null ou undefined",
+            "string | undefined",
+            "nil (pointeurs, maps, erreurs)",
+            "nil",
+            "Option<T> : Some(x) ou None",
+            "Some(x) ou None",
+        ],
     },
     Row {
         idea: "Signaler une erreur",
-        chapter: ["erreurs"; 3],
-        code: ["raise \"oups\"", "return Err(\"oups\".to_string());", "Err(\"oups\")"],
+        chapter: [
+            "erreurs", "erreurs", "erreurs", "erreurs", "erreurs", "erreurs", "erreurs",
+        ],
+        code: [
+            "raise ValueError(\"oups\")",
+            "throw new Error(\"oups\");",
+            "throw new Error(\"oups\");",
+            "return errors.New(\"oups\")",
+            "raise \"oups\"",
+            "return Err(\"oups\".to_string());",
+            "Err(\"oups\")",
+        ],
     },
     Row {
         idea: "Transmettre une erreur",
-        chapter: ["erreurs"; 3],
+        chapter: [
+            "erreurs", "erreurs", "erreurs", "erreurs", "erreurs", "erreurs", "erreurs",
+        ],
         code: [
+            "try:\n    risque()\nexcept ValueError as e:\n    print(e)",
+            "try {\n  risque();\n} catch (e) {\n  console.log(e.message);\n}",
+            "try {\n  risque();\n} catch (e) {\n  if (e instanceof Error) console.log(e.message);\n}",
+            "if err != nil {\n    return err\n}",
             "begin\n  risque\nrescue => e\n  puts e.message\nend",
             "let n: i32 = texte.parse()?;",
             "n = parse_int(texte)?",
@@ -166,8 +389,20 @@ pub const ROWS: &[Row] = &[
     },
     Row {
         idea: "Arrondir un nombre",
-        chapter: ["nombres"; 3],
+        chapter: [
+            "nombres",
+            "nombres",
+            "premiers-pas",
+            "nombres",
+            "nombres",
+            "nombres",
+            "nombres",
+        ],
         code: [
+            "round(3.14159, 2)",
+            "Math.round(3.14159 * 100) / 100",
+            "Math.round(3.14159 * 100) / 100",
+            "math.Round(3.14159*100) / 100",
             "3.14159.round(2)",
             "(3.14159_f64 * 100.0).round() / 100.0",
             "round(3.14159, 2)",
@@ -175,8 +410,20 @@ pub const ROWS: &[Row] = &[
     },
     Row {
         idea: "Filtrer par motif",
-        chapter: ["pattern-matching"; 3],
+        chapter: [
+            "conditions-boucles",
+            "collections",
+            "unions",
+            "interfaces",
+            "pattern-matching",
+            "pattern-matching",
+            "pattern-matching",
+        ],
         code: [
+            "match [1, 2]:\n    case [a, b]:\n        print(a + b)",
+            "const [a, b] = [1, 2];",
+            "switch (forme.kind) {\n  case \"cercle\":\n    return Math.PI * forme.r ** 2;\n  case \"carre\":\n    return forme.c ** 2;\n}",
+            "switch x := v.(type) {\ncase int:\n    fmt.Println(x + 1)\n}",
             "case [1, 2]\nin [a, b] then a + b\nend",
             "match (1, 2) {\n    (a, b) => a + b,\n}",
             "match [1, 2]\n  [a, b] -> a + b\n  _ -> 0\nend",
@@ -184,18 +431,40 @@ pub const ROWS: &[Row] = &[
     },
     Row {
         idea: "La longueur d'un texte",
-        chapter: ["texte"; 3],
-        code: ["\"Bonjour\".length", "\"Bonjour\".chars().count()", "len(\"Bonjour\")"],
+        chapter: ["texte", "texte", "texte", "texte", "texte", "texte", "texte"],
+        code: [
+            "len(\"Bonjour\")",
+            "\"Bonjour\".length",
+            "\"Bonjour\".length",
+            "utf8.RuneCountInString(\"Bonjour\")",
+            "\"Bonjour\".length",
+            "\"Bonjour\".chars().count()",
+            "len(\"Bonjour\")",
+        ],
     },
     Row {
         idea: "Mettre en majuscules",
-        chapter: ["texte"; 3],
-        code: ["\"ok\".upcase", "\"ok\".to_uppercase()", "upper(\"ok\")"],
+        chapter: ["texte", "texte", "texte", "texte", "texte", "texte", "texte"],
+        code: [
+            "\"ok\".upper()",
+            "\"ok\".toUpperCase()",
+            "\"ok\".toUpperCase()",
+            "strings.ToUpper(\"ok\")",
+            "\"ok\".upcase",
+            "\"ok\".to_uppercase()",
+            "upper(\"ok\")",
+        ],
     },
     Row {
         idea: "Écrire un fichier",
-        chapter: ["fichiers"; 3],
+        chapter: [
+            "fichiers", "fichiers", "fichiers", "fichiers", "fichiers", "fichiers", "fichiers",
+        ],
         code: [
+            "Path(\"notes.txt\").write_text(\"salut\")",
+            "await writeFile(\"notes.txt\", \"salut\");",
+            "await writeFile(\"notes.txt\", \"salut\");",
+            "os.WriteFile(\"notes.txt\", []byte(\"salut\"), 0644)",
             "File.write(\"notes.txt\", \"salut\")",
             "fs::write(\"notes.txt\", \"salut\")?;",
             "write_file(\"notes.txt\", \"salut\")?",
@@ -203,8 +472,14 @@ pub const ROWS: &[Row] = &[
     },
     Row {
         idea: "Lire un fichier",
-        chapter: ["fichiers"; 3],
+        chapter: [
+            "fichiers", "fichiers", "fichiers", "fichiers", "fichiers", "fichiers", "fichiers",
+        ],
         code: [
+            "texte = Path(\"notes.txt\").read_text()",
+            "const texte = await readFile(\"notes.txt\", \"utf8\");",
+            "const texte = await readFile(\"notes.txt\", \"utf8\");",
+            "data, err := os.ReadFile(\"notes.txt\")",
             "texte = File.read(\"notes.txt\")",
             "let texte = fs::read_to_string(\"notes.txt\")?;",
             "texte = read_file(\"notes.txt\")?",
@@ -212,8 +487,14 @@ pub const ROWS: &[Row] = &[
     },
     Row {
         idea: "Lire du JSON",
-        chapter: ["formats"; 3],
+        chapter: [
+            "formats", "formats", "formats", "formats", "formats", "formats", "formats",
+        ],
         code: [
+            "donnees = json.loads(texte)",
+            "const donnees = JSON.parse(texte);",
+            "const donnees: unknown = JSON.parse(texte);",
+            "err := json.Unmarshal(data, &v)",
             "donnees = JSON.parse(texte)",
             "let donnees: Valeur = serde_json::from_str(&texte)?;",
             "donnees = parse_json(texte)?",
@@ -221,13 +502,33 @@ pub const ROWS: &[Row] = &[
     },
     Row {
         idea: "Les arguments du programme",
-        chapter: ["ligne-de-commande"; 3],
-        code: ["ARGV", "std::env::args().collect::<Vec<_>>()", "args()"],
+        chapter: [
+            "ligne-de-commande",
+            "ligne-de-commande",
+            "fichiers",
+            "ligne-de-commande",
+            "ligne-de-commande",
+            "ligne-de-commande",
+            "ligne-de-commande",
+        ],
+        code: [
+            "sys.argv",
+            "process.argv",
+            "process.argv",
+            "os.Args",
+            "ARGV",
+            "std::env::args().collect::<Vec<_>>()",
+            "args()",
+        ],
     },
     Row {
         idea: "Un test",
-        chapter: ["projet"; 3],
+        chapter: ["tests", "tests", "tests", "tests", "tests", "tests", "tests"],
         code: [
+            "assert double(2) == 4",
+            "assert.strictEqual(double(2), 4);",
+            "assert.strictEqual(double(2), 4);",
+            "func TestDouble(t *testing.T) {\n    if double(2) != 4 {\n        t.Error(\"raté\")\n    }\n}",
             "assert_equal 4, 2 + 2",
             "#[test]\nfn addition() {\n    assert_eq!(2 + 2, 4);\n}",
             "test \"addition\" = assert_eq(2 + 2, 4)",
@@ -235,13 +536,49 @@ pub const ROWS: &[Row] = &[
     },
     Row {
         idea: "Lancer un programme",
-        chapter: ["introduction"; 3],
-        code: ["ruby main.rb", "cargo run", "rythme main.ry"],
+        chapter: [
+            "introduction",
+            "introduction",
+            "introduction",
+            "introduction",
+            "introduction",
+            "introduction",
+            "introduction",
+        ],
+        code: [
+            "python3 main.py",
+            "node main.js",
+            "npx tsx main.ts",
+            "go run main.go",
+            "ruby main.rb",
+            "cargo run",
+            "rythme main.ry",
+        ],
     },
 ];
 
 /// Les cartes « Quel langage choisir ? » : (parcours, pour qui, pourquoi).
-pub const CHOOSE: [(&str, &str, &str); 3] = [
+pub const CHOOSE: [(&str, &str, &str); 7] = [
+    (
+        "python",
+        "Pour commencer",
+        "Le plus utilisé pour apprendre : une syntaxe claire, et partout ailleurs aussi : données, scripts, intelligence artificielle, sites web.",
+    ),
+    (
+        "javascript",
+        "Pour le web",
+        "Le langage des navigateurs : rendre une page vivante, et avec Node.js, écrire aussi le serveur. Indispensable pour faire des sites.",
+    ),
+    (
+        "typescript",
+        "Pour le web, en sûr",
+        "JavaScript avec des types : l'éditeur et le compilateur trouvent les erreurs avant vous. Le choix des grands projets web.",
+    ),
+    (
+        "go",
+        "Pour les serveurs",
+        "Simple, rapide et fait pour les serveurs et les outils : peu de règles, une compilation éclair, la concurrence intégrée.",
+    ),
     (
         "ruby",
         "Pour aller vite",
@@ -254,8 +591,8 @@ pub const CHOOSE: [(&str, &str, &str); 3] = [
     ),
     (
         "rythme",
-        "Pour apprendre",
-        "Le plus simple des trois : pas de boucles, pas de null, des valeurs qui ne changent jamais, et des messages d'erreur qui expliquent quoi faire.",
+        "Pour comprendre",
+        "Le plus simple : pas de boucles, pas de null, des valeurs qui ne changent jamais, et des messages d'erreur qui expliquent quoi faire.",
     ),
 ];
 
