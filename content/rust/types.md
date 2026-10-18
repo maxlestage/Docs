@@ -1,6 +1,6 @@
 # Structures, énumérations et traits
 
-Cette page montre comment créer vos propres types avec `struct` et `enum`, leur ajouter des méthodes avec `impl`, et partager des comportements avec les traits.
+Cette page montre comment créer vos propres types avec `struct` et `enum`, leur ajouter des méthodes avec `impl`, et utiliser `Option` pour une valeur qui peut manquer.
 
 ## Les structures
 
@@ -92,7 +92,6 @@ fn main() {
 |-------------------|------|
 | `&self` | la méthode lit l'objet |
 | `&mut self` | la méthode modifie l'objet |
-| `self` | la méthode consomme l'objet |
 | aucun | fonction associée, appelée avec `Type::nom()` |
 
 ## Les énumérations
@@ -181,31 +180,29 @@ Rust n'a pas de valeur `null`. Une valeur qui peut manquer a le type `Option<T>`
 - `None` : il n'y a rien.
 
 ```rust
-fn chercher(noms: &[&str], cible: &str) -> Option<usize> {
-    for (i, nom) in noms.iter().enumerate() {
-        if *nom == cible {
-            return Some(i);
-        }
+fn diviser(a: i32, b: i32) -> Option<i32> {
+    if b == 0 {
+        None
+    } else {
+        Some(a / b)
     }
-    None
 }
 
 fn main() {
-    let noms = ["Ana", "Bo", "Cy"];
-    match chercher(&noms, "Bo") {
-        Some(i) => println!("Trouvé à la position {i}"),
-        None => println!("Absent"),
+    match diviser(10, 2) {
+        Some(n) => println!("Résultat : {n}"),
+        None => println!("Division impossible"),
     }
-    if let Some(i) = chercher(&noms, "Cy") {
-        println!("Cy est en {i}");
+    if let Some(n) = diviser(9, 3) {
+        println!("9 / 3 = {n}");
     }
-    println!("{:?}", chercher(&noms, "Dan"));
+    println!("{:?}", diviser(1, 0));
 }
 ```
 
 ```sortie
-Trouvé à la position 1
-Cy est en 2
+Résultat : 5
+9 / 3 = 3
 None
 ```
 
@@ -215,50 +212,7 @@ None
 ## Les traits
 
 Un **trait** décrit un comportement : une liste de méthodes qu'un type promet
-d'avoir.
-
-```rust
-trait Animal {
-    fn nom(&self) -> String;
-    fn cri(&self) -> String;
-
-    // Une méthode avec un comportement par défaut.
-    fn presenter(&self) -> String {
-        format!("{} fait {}", self.nom(), self.cri())
-    }
-}
-
-struct Chien;
-struct Chat;
-
-impl Animal for Chien {
-    fn nom(&self) -> String { String::from("Le chien") }
-    fn cri(&self) -> String { String::from("ouaf") }
-}
-
-impl Animal for Chat {
-    fn nom(&self) -> String { String::from("Le chat") }
-    fn cri(&self) -> String { String::from("miaou") }
-}
-
-fn faire_parler(a: &impl Animal) {
-    println!("{}", a.presenter());
-}
-
-fn main() {
-    faire_parler(&Chien);
-    faire_parler(&Chat);
-}
-```
-
-```sortie
-Le chien fait ouaf
-Le chat fait miaou
-```
-
-### Les traits automatiques avec derive
-
-`#[derive(...)]` demande au compilateur d'écrire certains traits pour vous :
+d'avoir. Le plus simple est de les obtenir avec `#[derive(...)]` :
 
 | Trait | Ce qu'il permet |
 |-------|-----------------|
@@ -286,35 +240,15 @@ Point { x: 1, y: 2 }
 true
 ```
 
-### Un affichage personnalisé avec Display
+Écrire vos propres traits est expliqué dans [Génériques et traits](generiques.md).
 
-Pour afficher un type avec `{}`, implémentez le trait `Display` :
+## En résumé
 
-```rust
-use std::fmt;
-
-struct Temperature {
-    degres: f64,
-}
-
-impl fmt::Display for Temperature {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{:.1} °C", self.degres)
-    }
-}
-
-fn main() {
-    let t = Temperature { degres: 21.456 };
-    println!("Il fait {t}");
-    let texte = t.to_string();
-    println!("{}", texte.len());
-}
-```
-
-```sortie
-Il fait 21.5 °C
-8
-```
+- `struct` regroupe des champs nommés ; `impl` lui ajoute des méthodes.
+- `&self` lit l'objet, `&mut self` le modifie.
+- `enum` vaut une valeur parmi une liste de variantes.
+- `match` traite chaque variante et oblige à n'en oublier aucune.
+- `Option` vaut `Some(valeur)` ou `None` : Rust n'a pas de `null`.
 
 Comparez avec [les types en Ruby](../ruby/types.md) et [en Rythme](../rythme/types.md).
-Suite : [Gérer les erreurs](erreurs.md).
+Suite : [Génériques et traits](generiques.md).

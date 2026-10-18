@@ -36,7 +36,8 @@ L'outil officiel s'appelle `rustup`. Il installe le compilateur `rustc` et l'out
 
 ### Sous Linux et macOS
 
-Ouvrez un terminal et tapez :
+Ouvrez un terminal et tapez la commande ci-dessous. Si le terminal vous est inconnu,
+lisez d'abord [Utiliser le terminal](../debuter/terminal.md).
 
 ```sh
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
@@ -126,8 +127,14 @@ rustc main.rs
 Dans un vrai projet, préférez toujours `cargo`. Il est présenté en détail dans
 [Projets, crates et tests](projet.md).
 
-## Et ensuite ?
+## En résumé
 
-- Découvrez les variables et les types dans [Premiers pas](premiers-pas.md).
-- Comparez avec [l'introduction à Ruby](../ruby/introduction.md) ou
-  [l'introduction à Rythme](../rythme/introduction.md).
+- Rust est un langage compilé, rapide et sûr.
+- `rustup` installe Rust ; `rustup update` le met à jour.
+- `cargo new nom` crée un projet, `cargo run` le compile et le lance.
+- Un programme commence toujours par `fn main()`.
+- `println!` affiche une ligne de texte.
+
+Suite : [Premiers pas](premiers-pas.md). Comparez aussi avec
+[l'introduction à Ruby](../ruby/introduction.md) ou
+[l'introduction à Rythme](../rythme/introduction.md).

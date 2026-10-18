@@ -200,5 +200,13 @@ println!();
 1 3 5 7 
 ```
 
-> **Note :** comparez avec [Ruby](../ruby/conditions-boucles.md) et
-> [Rythme](../rythme/conditions-boucles.md). Suite : [Les fonctions](fonctions.md).
+## En résumé
+
+- `if … else` choisit un chemin, et peut renvoyer une valeur.
+- `match` compare une valeur à des motifs ; `_` attrape le reste.
+- `loop` répète jusqu'à `break`, `while` tant qu'une condition est vraie.
+- `for x in 1..=5` ou `for x in liste` : la boucle la plus courante.
+- `continue` passe au tour suivant, `break` arrête la boucle.
+
+Comparez avec [Ruby](../ruby/conditions-boucles.md) et
+[Rythme](../rythme/conditions-boucles.md). Suite : [Les fonctions](fonctions.md).

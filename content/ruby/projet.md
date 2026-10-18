@@ -144,7 +144,14 @@ rubocop                 # analyse le projet
 rubocop -a              # corrige automatiquement ce qui peut l'être
 ```
 
-## Et ensuite ?
+## En résumé
 
-Gardez [l'aide-mémoire](aide-memoire.md) sous la main. Comparez avec
+- `require_relative` charge un fichier de votre projet, `require` une bibliothèque.
+- Une gem est une bibliothèque ; `gem install` l'installe.
+- Le `Gemfile` liste les gems du projet ; `bundle install` les installe.
+- Minitest écrit des tests : chaque méthode `test_...` en est un.
+- RuboCop vérifie le style du code.
+
+Suite : entraînez-vous avec [les exercices corrigés](exercices.md), et gardez
+[l'aide-mémoire](aide-memoire.md) sous la main. Comparez avec
 [les projets en Rust](../rust/projet.md).

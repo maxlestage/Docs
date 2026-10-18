@@ -234,13 +234,17 @@ Décollage !
 Ici, la fonction a deux définitions : une pour `0`, une pour les autres
 nombres. Voir [les fonctions](fonctions.md#definir-par-cas).
 
-> **À retenir :** pour afficher chaque élément, `each` ; pour transformer,
-> `map` ; pour garder certains éléments, `filter` ; pour additionner,
-> `sum` ou `fold` ; pour « tant que », une fonction récursive. La page
-> [penser fonctionnel](fonctionnel.md) va plus loin.
+## En résumé
 
-## Et ensuite
+- `if condition then a else b` donne une valeur, et le `else` est
+  obligatoire.
+- `match` compare une valeur à des motifs, dans l'ordre ; `_` attrape tout
+  le reste.
+- Il n'y a pas de boucles : `each` fait quelque chose pour chaque élément,
+  `map` transforme chaque élément.
+- Pour « tant que », on écrit une fonction qui s'appelle elle-même, avec un
+  cas où elle s'arrête.
 
-Découvrez [les fonctions](fonctions.md). Comparez avec les conditions et
+Suite : [les fonctions](fonctions.md). Comparez avec les conditions et
 boucles de [Ruby](../ruby/conditions-boucles.md) et de
 [Rust](../rust/conditions-boucles.md).

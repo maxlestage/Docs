@@ -208,7 +208,13 @@ end
 7
 ```
 
-## Et ensuite ?
+## En résumé
 
-Apprenez à regrouper du code dans [les méthodes](fonctions.md). Comparez avec
+- `if`, `elsif` et `else` choisissent quoi faire ; `unless` est le contraire de `if`.
+- `case` et `when` comparent une valeur à plusieurs possibilités.
+- `1..5` inclut 5, `1...5` l'exclut.
+- `while` et `until` répètent selon une condition ; `times` et `each` sont plus courants.
+- `break` arrête la boucle, `next` passe au tour suivant.
+
+Suite : apprenez à regrouper du code dans [les méthodes](fonctions.md). Comparez avec
 [les conditions et boucles en Rythme](../rythme/conditions-boucles.md).

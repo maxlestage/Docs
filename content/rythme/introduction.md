@@ -50,8 +50,10 @@ mots-clés, et une seule façon de faire chaque chose.
 
 ## Installer Rythme
 
-Sous **Linux et macOS**, ce script télécharge le programme, vérifie sa somme
-SHA-256 et le place dans `~/.local/bin` :
+On installe Rythme en tapant une commande dans un **terminal**. Si vous
+n'en avez jamais utilisé, lisez d'abord [le terminal](../debuter/terminal.md).
+
+Sous **Linux et macOS**, cette commande télécharge Rythme et l'installe :
 
 ```sh
 curl -fsSL https://raw.githubusercontent.com/maxlestage/Rythme/master/install.sh | sh
@@ -61,13 +63,6 @@ Sous **Windows**, dans PowerShell :
 
 ```text
 irm https://raw.githubusercontent.com/maxlestage/Rythme/master/install.ps1 | iex
-```
-
-Si vous avez déjà [Rust](https://rustup.rs), vous pouvez aussi construire
-la version la plus récente :
-
-```sh
-cargo install --git https://github.com/maxlestage/Rythme
 ```
 
 Vérifiez ensuite que tout marche :
@@ -88,7 +83,7 @@ le vrai interpréteur, qui tourne dans le navigateur.
 
 ## Le mode interactif
 
-Tapez `rythme` sans rien d'autre : c'est le mode interactif (le REPL). Vous
+Tapez `rythme` sans rien d'autre : c'est le mode interactif. Vous
 tapez une ligne, Rythme affiche le résultat.
 
 ```text
@@ -117,7 +112,8 @@ print("Bonjour, le monde !")
 Bonjour, le monde !
 ```
 
-Puis lancez-le dans un terminal :
+Puis lancez-le dans un terminal, depuis le dossier du fichier (voir
+[le terminal](../debuter/terminal.md)) :
 
 ```sh
 rythme run bonjour.ry
@@ -155,12 +151,15 @@ rythme learn           # une visite guidée du langage
 Pour choisir la langue des messages, ajoutez `--lang fr` avant la commande,
 ou définissez la variable `RYTHME_LANG=fr`.
 
-> **À retenir :** `rythme` ouvre le mode interactif, `rythme run fichier.ry`
-> lance un programme, `rythme check fichier.ry` le vérifie, et
-> `rythme help` répond à vos questions.
+## En résumé
 
-## Et ensuite
+- Rythme est un petit langage purement fonctionnel : les valeurs ne
+  changent jamais, et il n'y a pas de boucles.
+- Les programmes sont des fichiers `.ry`, lancés avec `rythme run fichier.ry`.
+- `rythme` tout seul ouvre le mode interactif ; `rythme check fichier.ry`
+  vérifie un programme sans le lancer.
+- `rythme help` répond à vos questions, en français.
 
-Continuez avec les [premiers pas](premiers-pas.md). Si vous connaissez déjà
-Ruby ou Rust, comparez avec [l'introduction à Ruby](../ruby/introduction.md)
-et [l'introduction à Rust](../rust/introduction.md).
+Suite : [les premiers pas](premiers-pas.md). Si vous connaissez déjà Ruby ou
+Rust, comparez avec [l'introduction à Ruby](../ruby/introduction.md) et
+[l'introduction à Rust](../rust/introduction.md).

@@ -170,7 +170,10 @@ pub fn app(site: Arc<Site>) -> App {
             .start_url("/")
             .theme_color("#0e0d12")
             .background_color("#fbfaf7")
-            .categories(["education", "developer"]),
+            .categories(["education", "developer"])
+            .icon("/icons/icon-192.png", "192x192", "image/png")
+            .icon("/icons/icon-512.png", "512x512", "image/png")
+            .maskable_icon("/icons/icon-maskable-512.png", "512x512", "image/png"),
     );
     let fallback = site.clone();
     app.fallback(move |req: Request| {

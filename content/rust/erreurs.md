@@ -151,50 +151,29 @@ let vide: Option<i32> = None;
 println!("{}", vide.unwrap_or(0));
 println!("{:?}", Some(5).map(|n| n * 2));
 println!("{}", "abc".parse::<i32>().unwrap_or(-1));
-let nom: Option<&str> = Some("Léo");
-println!("{}", nom.map(|n| n.len()).unwrap_or(0));
-let resultat = vide.ok_or("rien trouvé");
-println!("{:?}", resultat);
 ```
 
 ```sortie
 0
 Some(10)
 -1
-4
-Err("rien trouvé")
 ```
 
 | Méthode | Effet |
 |---------|-------|
 | `unwrap_or(v)` | la valeur, ou `v` si absente |
 | `map(f)` | transforme la valeur si elle existe |
-| `ok_or(e)` | transforme une `Option` en `Result` |
 | `is_some()` / `is_ok()` | teste la présence ou la réussite |
 
 ## Votre propre type d'erreur
 
 Pour un programme plus grand, créez une [énumération](types.md#les-enumerations) qui
-liste les erreurs possibles :
+liste les erreurs possibles. `match` permet ensuite de réagir à chacune :
 
 ```rust
-use std::fmt;
-
-#[derive(Debug)]
 enum ErreurCompte {
-    SoldeInsuffisant { manque: u32 },
+    SoldeInsuffisant,
     MontantNul,
-}
-
-impl fmt::Display for ErreurCompte {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        match self {
-            ErreurCompte::SoldeInsuffisant { manque } => {
-                write!(f, "solde insuffisant, il manque {manque} €")
-            }
-            ErreurCompte::MontantNul => write!(f, "le montant doit être positif"),
-        }
-    }
 }
 
 fn retirer(solde: u32, montant: u32) -> Result<u32, ErreurCompte> {
@@ -202,7 +181,7 @@ fn retirer(solde: u32, montant: u32) -> Result<u32, ErreurCompte> {
         return Err(ErreurCompte::MontantNul);
     }
     if montant > solde {
-        return Err(ErreurCompte::SoldeInsuffisant { manque: montant - solde });
+        return Err(ErreurCompte::SoldeInsuffisant);
     }
     Ok(solde - montant)
 }
@@ -211,7 +190,8 @@ fn main() {
     for montant in [30, 0, 80] {
         match retirer(50, montant) {
             Ok(reste) => println!("Retrait OK, reste {reste} €"),
-            Err(e) => println!("Erreur : {e}"),
+            Err(ErreurCompte::MontantNul) => println!("Erreur : le montant doit être positif"),
+            Err(ErreurCompte::SoldeInsuffisant) => println!("Erreur : solde insuffisant"),
         }
     }
 }
@@ -220,8 +200,16 @@ fn main() {
 ```sortie
 Retrait OK, reste 20 €
 Erreur : le montant doit être positif
-Erreur : solde insuffisant, il manque 30 €
+Erreur : solde insuffisant
 ```
 
+## En résumé
+
+- `panic!` arrête le programme : réservez-le aux vrais bugs.
+- `Result` vaut `Ok(valeur)` ou `Err(erreur)`.
+- `match` traite les deux cas ; `unwrap_or` donne une valeur par défaut.
+- `?` renvoie l'erreur à l'appelant, dans une fonction qui renvoie un `Result`.
+- `unwrap` et `expect` sont pratiques pour les essais, risqués ailleurs.
+
 Comparez avec [les erreurs en Ruby](../ruby/erreurs.md) et
-[en Rythme](../rythme/erreurs.md). Suite : [Projets, crates et tests](projet.md).
+[en Rythme](../rythme/erreurs.md). Suite : [Lire et écrire : clavier et fichiers](fichiers.md).

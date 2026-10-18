@@ -94,7 +94,7 @@ rouge
 :rouge
 ```
 
-Vous les retrouverez comme clés de hash dans [les collections](collections.md).
+Vous les retrouverez comme clés de hash dans [les tableaux et hashs](collections.md).
 
 ## Les booléens et nil
 
@@ -172,7 +172,13 @@ puts prix_ttc
 > **Astuce :** suivez ces conventions : tout le monde les utilise, et votre code sera
 > plus facile à lire.
 
-## Et ensuite ?
+## En résumé
 
-Découvrez [les conditions et les boucles](conditions-boucles.md). Comparez aussi avec
+- Une variable se crée avec `=` ; Ruby devine le type tout seul.
+- `7 / 2` vaut `3` entre entiers ; écrivez `7.0 / 2` pour obtenir `3.5`.
+- Un texte s'écrit entre guillemets ; `#{...}` y insère une valeur.
+- Seuls `false` et `nil` sont faux ; tout le reste est vrai.
+- `puts` affiche, `print` affiche sans retour à la ligne, `p` montre la valeur exacte.
+
+Suite : découvrez [les conditions et les boucles](conditions-boucles.md). Comparez aussi avec
 [les premiers pas en Rust](../rust/premiers-pas.md).

@@ -185,7 +185,13 @@ the : 3 €
 > **Astuce :** pour transformer ou filtrer une collection, utilisez `map` et `select`.
 > Ils sont expliqués dans [la page sur les blocs](blocs.md#les-methodes-de-enumerable).
 
-## Et ensuite ?
+## En résumé
 
-Lisez [les blocs et itérateurs](blocs.md). Comparez avec
+- Un tableau est une liste ordonnée : `[1, 2, 3]`. Les indices commencent à `0`.
+- `<<` ajoute à la fin, `pop` retire le dernier, `delete` retire une valeur.
+- Un hash associe des clés à des valeurs : `{ nom: "Alice" }`.
+- Une clé absente donne `nil` ; `fetch` permet une valeur de secours.
+- `each` parcourt un tableau ou un hash.
+
+Suite : lisez [les blocs et itérateurs](blocs.md). Comparez avec
 [les collections en Rust](../rust/collections.md).

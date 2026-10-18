@@ -165,6 +165,34 @@ pub const ROWS: &[Row] = &[
         ],
     },
     Row {
+        idea: "La longueur d'un texte",
+        chapter: ["texte"; 3],
+        code: ["\"Bonjour\".length", "\"Bonjour\".chars().count()", "len(\"Bonjour\")"],
+    },
+    Row {
+        idea: "Mettre en majuscules",
+        chapter: ["texte"; 3],
+        code: ["\"ok\".upcase", "\"ok\".to_uppercase()", "upper(\"ok\")"],
+    },
+    Row {
+        idea: "Écrire un fichier",
+        chapter: ["fichiers"; 3],
+        code: [
+            "File.write(\"notes.txt\", \"salut\")",
+            "fs::write(\"notes.txt\", \"salut\")?;",
+            "write_file(\"notes.txt\", \"salut\")?",
+        ],
+    },
+    Row {
+        idea: "Lire un fichier",
+        chapter: ["fichiers"; 3],
+        code: [
+            "texte = File.read(\"notes.txt\")",
+            "let texte = fs::read_to_string(\"notes.txt\")?;",
+            "texte = read_file(\"notes.txt\")?",
+        ],
+    },
+    Row {
         idea: "Un test",
         chapter: ["projet"; 3],
         code: [

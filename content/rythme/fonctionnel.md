@@ -125,16 +125,6 @@ print(total, plus_long)
 10 banane
 ```
 
-`scan` donne tous les accumulateurs intermédiaires, comme un total cumulé :
-
-```rythme
-print(scan([5, 10, 20], 0, fn(acc, x) = acc + x))
-```
-
-```sortie
-[5, 15, 35]
-```
-
 ## Remplacer les boucles
 
 | En Python ou en Ruby | En Rythme |
@@ -158,14 +148,12 @@ Some(15) true true
 [4, 8]
 ```
 
-## La récursion terminale
+## Répéter avec un accumulateur
 
-Une fonction peut s'appeler elle-même. Quand cet appel est **la toute
-dernière chose** que fait la fonction, on parle d'**appel terminal**. Rythme
-le fait sans utiliser de mémoire en plus : il peut se répéter des millions
-de fois.
-
-L'astuce : on passe le résultat partiel dans un paramètre, l'accumulateur.
+Une fonction peut s'appeler elle-même. Pour qu'elle puisse se répéter
+**des millions de fois**, l'appel à elle-même doit être la toute dernière
+chose qu'elle fait. L'astuce : on garde le résultat partiel dans un
+paramètre en plus, l'**accumulateur**.
 
 ```rythme
 fn somme([], acc) = acc
@@ -178,10 +166,8 @@ print(somme(1..1000000, 0))
 500000500000
 ```
 
-Sans accumulateur, `x + somme(reste)` n'est pas un appel terminal : le `+`
-vient après. Avec une très longue liste, le programme s'arrête avec
-l'erreur E014 (trop d'appels imbriqués), et le message propose justement
-la version avec accumulateur.
+Ici, `somme` reçoit la liste et le total déjà calculé. Quand la liste est
+vide, le total est la réponse.
 
 > **Astuce :** quand une fonction de liste existe (`sum`, `fold`, `map`),
 > préférez-la : elle n'a pas de limite et elle se lit mieux.
@@ -204,11 +190,15 @@ print(collatz(27, 0))
 111
 ```
 
-> **À retenir :** pas de modification, pas de boucle. On enchaîne des
-> fonctions (`|>` ou `.`), on donne des blocs, et on répète avec `map`,
-> `fold` ou une fonction récursive terminale.
+## En résumé
 
-## Et ensuite
+- Une fonction ne modifie jamais ce qu'elle reçoit : elle donne une
+  nouvelle valeur.
+- `x |> f(a)` veut dire `f(x, a)` : on lit le calcul dans l'ordre.
+- Un bloc `{ |x| ... }` ou `do |x| ... end` est une fonction sans nom.
+- `map`, `filter`, `reject` et `fold` remplacent les boucles.
+- Pour répéter « tant que », une fonction récursive, si possible avec un
+  accumulateur.
 
-Créez [vos propres types](types.md). En Ruby, les blocs ont
+Suite : [vos propres types](types.md). En Ruby, les blocs ont
 [leur propre page](../ruby/blocs.md).

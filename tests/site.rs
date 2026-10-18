@@ -3,7 +3,7 @@
 
 use std::sync::Arc;
 
-use docs::catalog::TRACKS;
+use docs::catalog::languages;
 use docs::library;
 use docs::routes::Route;
 use docs::server::{Site, app};
@@ -57,7 +57,9 @@ fn every_page_has_a_title_a_summary_and_sections() {
         assert!(!doc.title.is_empty() && doc.title != doc.slug, "{at}: no # title");
         assert!(doc.description.len() > 30, "{at}: no summary paragraph");
         assert!(doc.toc.len() >= 3, "{at}: fewer than 3 sections");
-        assert!(doc.html.contains(r#"<div class="code""#), "{at}: no code");
+        if doc.track.language {
+            assert!(doc.html.contains(r#"<div class="code""#), "{at}: no code");
+        }
     }
 }
 
@@ -84,13 +86,16 @@ fn the_three_tracks_share_their_chapters() {
         "premiers-pas",
         "conditions-boucles",
         "fonctions",
+        "texte",
         "collections",
         "types",
         "erreurs",
+        "fichiers",
         "projet",
+        "exercices",
         "aide-memoire",
     ] {
-        for track in &TRACKS {
+        for track in languages() {
             assert!(library::get(track.slug, slug).is_some(), "{}/{slug}", track.slug);
         }
     }
@@ -115,4 +120,24 @@ async fn search_index_and_sitemap() {
             .text()
             .contains("Sitemap: https://docs.example/sitemap.xml")
     );
+}
+
+#[test]
+fn every_chapter_ends_with_a_summary() {
+    for doc in library::all() {
+        if ["aide-memoire", "exercices", "glossaire"].contains(&doc.slug) {
+            continue;
+        }
+        let last = doc.toc.iter().rfind(|h| h.level == 2).map(|h| h.text.as_str());
+        assert_eq!(last, Some("En résumé"), "{}/{}", doc.track.slug, doc.slug);
+    }
+}
+
+#[test]
+fn exercises_have_folded_solutions() {
+    for track in languages() {
+        let doc = library::get(track.slug, "exercices").expect("exercices");
+        let solutions = doc.html.matches(r#"<details class="solution">"#).count();
+        assert!(solutions >= 10, "{}: {solutions} solutions", track.slug);
+    }
 }

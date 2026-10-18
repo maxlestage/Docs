@@ -118,13 +118,10 @@ Créez une classe qui hérite de `StandardError`. Le nom finit souvent par `Erro
 
 ```ruby
 class SoldeInsuffisantError < StandardError
-  def initialize(msg = "solde insuffisant")
-    super
-  end
 end
 
 begin
-  raise SoldeInsuffisantError
+  raise SoldeInsuffisantError, "solde insuffisant"
 rescue SoldeInsuffisantError => e
   puts "Refusé : #{e.message}"
 end
@@ -188,7 +185,13 @@ Inconnue
 > **Astuce :** sur un hash, `fetch` avec une valeur par défaut évite aussi les `nil`
 > (voir [les hashs](collections.md#les-hashs)).
 
-## Et ensuite ?
+## En résumé
 
-Organisez votre code en [projet, avec des gems et des tests](projet.md). Comparez avec
+- Une erreur non traitée arrête le programme.
+- `begin` et `rescue` attrapent une erreur ; `=> e` donne son message.
+- `ensure` s'exécute toujours, avec ou sans erreur.
+- `raise` lève une erreur ; vos propres erreurs héritent de `StandardError`.
+- `&.` évite l'erreur quand une valeur vaut `nil`.
+
+Suite : apprenez à [lire et écrire des fichiers](fichiers.md). Comparez avec
 [les erreurs en Rust](../rust/erreurs.md).

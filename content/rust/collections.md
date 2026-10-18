@@ -236,7 +236,13 @@ fn main() {
 5
 ```
 
-> **À retenir :** `Vec` pour une liste, `HashMap` pour des paires clé-valeur, `&[T]`
-> pour lire une partie d'une liste.
+## En résumé
+
+- `Vec` est une liste qui grandit : `vec![…]`, `push`, `pop`, `get`.
+- `HashMap` associe des clés à des valeurs ; son ordre est aléatoire.
+- `BTreeMap` garde les clés triées.
+- `iter()`, `map`, `filter` et `collect` transforment une collection.
+- `&v[1..3]` est une tranche : une vue sur une partie d'une liste.
 
 Comparez avec [Ruby](../ruby/collections.md) et [Rythme](../rythme/collections.md).
+Suite : [Possession et emprunt](possession.md).

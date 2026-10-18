@@ -9,6 +9,8 @@
 # A block ```ruby, ```rust or ```rythme is run (Rust blocks without `fn main` are
 # wrapped in one). Add `norun` after the language to skip it (```rust norun).
 # A ```sortie block right after it gives the exact expected output.
+# Each block runs in its own empty folder: it may write files.
+# A block inside a quote (`> ```ruby`, a solution) is run too.
 # Tools: `ruby`, `rustc` and `rythme` (or the paths in $RUBY, $RUSTC, $RYTHME).
 
 Encoding.default_external = Encoding::UTF_8
@@ -26,17 +28,21 @@ Block = Struct.new(:file, :line, :lang, :flags, :code, :expected)
 
 def blocks(file)
   found = []
+  # Le code peut être dans une citation (une solution d'exercice : `> ```ruby`) :
+  # le `>` du début des lignes n'est alors pas du code.
   lines = File.readlines(file, chomp: true)
   i = 0
   while i < lines.size
-    if (m = lines[i].match(/\A```(\w+)\s*(.*)\z/))
+    if (m = lines[i].match(/\A(>\s?)?```(\w+)\s*(.*)\z/))
+      quote = m[1] ? />\s?/ : nil
+      unquote = ->(l) { quote ? l.sub(/\A>\s?/, "") : l }
       start = i + 1
-      lang = m[1]
-      flags = m[2].split
+      lang = m[2]
+      flags = m[3].split
       body = []
       i += 1
-      while i < lines.size && lines[i] != "```"
-        body << lines[i]
+      while i < lines.size && unquote.(lines[i]) != "```"
+        body << unquote.(lines[i])
         i += 1
       end
       raise "#{file}:#{start}: block never closed" if i >= lines.size
@@ -62,11 +68,11 @@ def run(block, dir)
   when "ruby"
     path = File.join(dir, "main.rb")
     File.write(path, block.code + "\n")
-    Open3.capture3({ "LANG" => "C.UTF-8", "LC_ALL" => "C.UTF-8" }, RUBY, path)
+    Open3.capture3({ "LANG" => "C.UTF-8", "LC_ALL" => "C.UTF-8" }, RUBY, path, chdir: dir)
   when "rythme"
     path = File.join(dir, "main.ry")
     File.write(path, block.code + "\n")
-    Open3.capture3({ "RYTHME_LANG" => "fr" }, RYTHME, "run", path)
+    Open3.capture3({ "RYTHME_LANG" => "fr" }, RYTHME, "run", path, chdir: dir)
   when "rust"
     code = block.code
     code = "fn main() {\n#{code}\n}" unless code.match?(/^\s*(pub\s+)?(async\s+)?fn main\s*\(/)
@@ -75,7 +81,7 @@ def run(block, dir)
     out, err, status = Open3.capture3(RUSTC, "--edition", "2024", "-o", File.join(dir, "main"), path)
     return [out, err, status] unless status.success?
 
-    Open3.capture3(File.join(dir, "main"))
+    Open3.capture3(File.join(dir, "main"), chdir: dir)
   end
 end
 

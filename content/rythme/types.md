@@ -194,31 +194,15 @@ print(commande.etat, etiquette(commande.etat), etiquette(:perdu))
 > `false`. Pour un ensemble fixe de cas, un `type` est plus sûr, car le
 > vérificateur repère les cas oubliés.
 
-## Un type qui se contient lui-même
+## En résumé
 
-Un type peut contenir des valeurs de son propre type. C'est ainsi qu'on
-décrit un arbre :
+- `type` crée un type avec ses variantes : `type Feu = Rouge | Orange | Vert`.
+- Une variante peut porter des champs : `Cercle(rayon)`.
+- `match` traite chaque variante, dans l'ordre, et nomme ses champs.
+- Les motifs reconnaissent aussi les listes (`[premier, ..reste]`) et les
+  enregistrements (`{nom}`).
+- `rythme check` signale les cas oubliés dans un `match`.
 
-```rythme
-type Arbre = Feuille | Noeud(gauche, valeur, droite)
-
-fn total(Feuille) = 0
-fn total(Noeud(g, v, d)) = total(g) + v + total(d)
-
-arbre = Noeud(Noeud(Feuille, 1, Feuille), 2, Noeud(Feuille, 3, Feuille))
-print(total(arbre))
-```
-
-```sortie
-6
-```
-
-> **À retenir :** `type` décrit toutes les formes possibles d'une valeur ;
-> `match` les traite une par une, dans l'ordre ; et `rythme check` signale
-> celles que vous avez oubliées.
-
-## Et ensuite
-
-Découvrez deux types déjà prêts, `Option` et `Result`, dans
+Suite : deux types déjà prêts, `Option` et `Result`, dans
 [gérer les erreurs](erreurs.md). Comparez avec les types de
 [Ruby](../ruby/types.md) et de [Rust](../rust/types.md).

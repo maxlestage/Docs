@@ -3,7 +3,7 @@
 
 use paquets::prelude::*;
 
-use crate::catalog::{TRACKS, Track};
+use crate::catalog::{TRACKS, Track, languages};
 use crate::compare::{self, CHOOSE, LANGS, ROWS};
 use crate::highlight::highlight;
 use crate::library::{self, Doc};
@@ -291,12 +291,14 @@ fn layout(ctx: &Ctx, title: &str, description: &str, class: &str, content: Eleme
             r##"<meta name="theme-color" content="#fbfaf7" media="(prefers-color-scheme: light)"/>"##,
             r##"<meta name="theme-color" content="#0e0d12" media="(prefers-color-scheme: dark)"/>"##,
             r#"<link rel="icon" href="{icon}" type="image/svg+xml"/>"#,
+            r#"<link rel="apple-touch-icon" href="{apple}"/>"#,
             r#"<link rel="preconnect" href="https://fonts.googleapis.com"/>"#,
             r#"<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin=""/>"#,
             r#"<script>{script}</script>"#,
             r#"<script src="{js}" defer=""></script>"#,
         ),
         icon = link("/assets/logo.svg"),
+        apple = link("/icons/apple-touch-icon.png"),
         script = HEAD_SCRIPT,
         js = ctx.asset("/site.js"),
     );
@@ -411,10 +413,30 @@ fn home(ctx: &Ctx) -> Page {
         .child(
             header()
                 .class("section__head")
-                .child(h2().id("parcours-title").text("Trois parcours, dix chapitres chacun"))
+                .child(h2().id("parcours-title").text("Trois langages, un parcours chacun"))
                 .child(p().text("Commencez par l'introduction, ou allez directement au chapitre qui vous intéresse.")),
         )
-        .child(ul().class("tracks").children(TRACKS.iter().map(track_card)));
+        .child(ul().class("tracks").children(languages().map(track_card)));
+
+    let start = section()
+        .class("section")
+        .attr("aria-labelledby", "start-title")
+        .child(
+            header()
+                .class("section__head")
+                .child(h2().id("start-title").text("Comment apprendre ici"))
+                .child(p().text("Trois étapes, à votre rythme. Le site retient les chapitres que vous avez lus.")),
+        )
+        .child(
+            ol().class("steps")
+                .children(STEPS.iter().map(|(title, text, href, cta)| {
+                    li().class("step")
+                        .child(h3().text(*title))
+                        .child(p().text(*text))
+                        .child(a().class("more").href(link(href)).text(*cta))
+                })),
+        )
+        .child(debuter_banner());
 
     let choose = section()
         .class("section")
@@ -468,6 +490,7 @@ fn home(ctx: &Ctx) -> Page {
     let content = main()
         .class("home")
         .child(hero)
+        .child(start)
         .child(tracks)
         .child(choose)
         .child(teaser)
@@ -479,6 +502,48 @@ fn home(ctx: &Ctx) -> Page {
         "page-home",
         content,
     )
+}
+
+/// Les trois étapes de l'accueil : (titre, texte, lien, bouton).
+const STEPS: [(&str, &str, &str, &str); 3] = [
+    (
+        "1. Les bases",
+        "Jamais programmé ? Le parcours Débuter explique ce qu'est un programme, le terminal et l'éditeur, en cinq pages.",
+        "/debuter/",
+        "Débuter →",
+    ),
+    (
+        "2. Un langage",
+        "Choisissez Ruby, Rust ou Rythme, et lisez les chapitres dans l'ordre. Chaque idée a son exemple, à copier et à essayer.",
+        "/#parcours",
+        "Choisir un langage →",
+    ),
+    (
+        "3. La pratique",
+        "Chaque parcours finit par des exercices corrigés, du plus facile au plus dur, et un aide-mémoire à garder sous la main.",
+        "/comparer/",
+        "Comparer les trois →",
+    ),
+];
+
+/// Le bandeau du parcours « Débuter ».
+fn debuter_banner() -> Element {
+    let Some(track) = crate::catalog::track("debuter") else {
+        return div();
+    };
+    a().class("banner t-debuter")
+        .href(Route::Track(track).href())
+        .child(span().class("track__badge").attr("aria-hidden", "true").text("✦"))
+        .child(
+            span()
+                .class("banner__text")
+                .child(strong().text("Jamais programmé ? Commencez ici."))
+                .child(span().text(format!(
+                    " {} pages pour comprendre ce qu'est un programme, le terminal, l'éditeur, et choisir votre langage.",
+                    track.pages.len()
+                ))),
+        )
+        .child(span().class("banner__go").attr("aria-hidden", "true").text("→"))
 }
 
 fn track_card(track: &'static Track) -> Element {
@@ -514,11 +579,21 @@ fn track_card(track: &'static Track) -> Element {
             .child(
                 footer()
                     .class("track__foot")
-                    .child(span().class("muted").text(format!(
-                        "{} · {}",
-                        chapters(docs.len()),
-                        minutes(library::minutes(track))
-                    )))
+                    .child(
+                        span()
+                            .class("muted")
+                            .text(format!(
+                                "{} · {}",
+                                chapters(docs.len()),
+                                minutes(library::minutes(track))
+                            ))
+                            .child(
+                                span()
+                                    .class("done-count")
+                                    .attr("data-done-track", track.slug)
+                                    .attr("data-done-total", docs.len().to_string()),
+                            ),
+                    )
                     .child(
                         a().class("btn btn--track")
                             .href(doc_href(track.slug, track.pages[0].slug, None))
@@ -636,7 +711,7 @@ fn track_page(ctx: &Ctx, track: &'static Track) -> Page {
                         .attr("aria-hidden", "true")
                         .text(badge(track)),
                 )
-                .child(h1().text(format!("Apprendre {}", track.name)))
+                .child(h1().text(track.title))
                 .child(p().class("lead").text(track.description))
                 .child(
                     ul().class("stats")
@@ -658,19 +733,24 @@ fn track_page(ctx: &Ctx, track: &'static Track) -> Page {
                                 .href(doc_href(track.slug, track.pages[0].slug, None))
                                 .text("Commencer le parcours →"),
                         )
-                        .child(
+                        .child(if track.site.1.starts_with('/') {
+                            a().class("btn btn--ghost")
+                                .href(link(track.site.1))
+                                .text(format!("{} →", track.site.0))
+                        } else {
                             a().class("btn btn--ghost")
                                 .href(track.site.1)
                                 .attr("target", "_blank")
                                 .attr("rel", "noopener")
-                                .text(format!("{} ↗", track.site.0)),
-                        ),
+                                .text(format!("{} ↗", track.site.0))
+                        }),
                 ),
         )
         .child(ol().class("chapters").children(docs.iter().map(|d| {
             li().class("chapter").child(
                 a().class("chapter__link")
                     .href(doc_href(track.slug, d.slug, None))
+                    .attr("data-key", format!("{}/{}", track.slug, d.slug))
                     .child(span().class("chapter__num").text(format!("{:02}", d.index + 1)))
                     .child(
                         span()
@@ -691,13 +771,7 @@ fn track_page(ctx: &Ctx, track: &'static Track) -> Page {
                         .children(TRACKS.iter().filter(|t| t.slug != track.slug).map(track_card)),
                 ),
         );
-    layout(
-        ctx,
-        &format!("Apprendre {}", track.name),
-        track.description,
-        "page-track",
-        content,
-    )
+    layout(ctx, track.title, track.description, "page-track", content)
 }
 
 // ----- Un chapitre -----------------------------------------------------------------
@@ -739,6 +813,7 @@ fn sidebar(doc: &Doc) -> Element {
                 .child(ol().class("sidebar__list").children(library::of(track).map(|d| {
                     let l = a()
                         .href(doc_href(track.slug, d.slug, None))
+                        .attr("data-key", format!("{}/{}", track.slug, d.slug))
                         .child(span().class("sidebar__num").text(format!("{}", d.index + 1)))
                         .child(span().text(d.title.clone()));
                     li().child(if d.slug == doc.slug {
@@ -750,8 +825,12 @@ fn sidebar(doc: &Doc) -> Element {
                 .child(
                     div()
                         .class("sidebar__switch")
-                        .child(p().class("sidebar__label").text("Autres langages"))
-                        .children(TRACKS.iter().filter(|t| t.slug != track.slug).map(|t| {
+                        .child(p().class("sidebar__label").text(if track.language {
+                            "Autres langages"
+                        } else {
+                            "Les langages"
+                        }))
+                        .children(languages().filter(|t| t.slug != track.slug).map(|t| {
                             let href = match library::get(t.slug, doc.slug) {
                                 Some(d) => doc_href(t.slug, d.slug, None),
                                 None => Route::Track(t).href(),
@@ -797,11 +876,16 @@ fn pager(doc: &Doc) -> Element {
     if let Some(next) = docs.get(doc.index + 1) {
         nav = nav.child(card(next, "next", "Suivant →"));
     } else {
+        let (href, title) = if track.language {
+            (link("/comparer/"), "Comparer les trois langages")
+        } else {
+            (link("/#parcours"), "Choisir un langage")
+        };
         nav = nav.child(
             a().class("pager__card pager__card--next")
-                .href(link("/comparer/"))
+                .href(href)
                 .child(span().class("pager__label").text("Et ensuite ? →"))
-                .child(span().class("pager__title").text("Comparer les trois langages")),
+                .child(span().class("pager__title").text(title)),
         );
     }
     nav
@@ -810,9 +894,8 @@ fn pager(doc: &Doc) -> Element {
 fn doc_page(ctx: &Ctx, track: &'static Track, index: usize) -> Page {
     let slug = track.pages[index].slug;
     let doc = library::get(track.slug, slug).expect("chaque page du catalogue est rendue");
-    let others: Vec<Element> = TRACKS
-        .iter()
-        .filter(|t| t.slug != track.slug)
+    let others: Vec<Element> = languages()
+        .filter(|t| track.language && t.slug != track.slug)
         .filter_map(|t| library::get(t.slug, slug).map(|d| (t, d)))
         .map(|(t, d)| {
             a().class("chip")
@@ -856,10 +939,24 @@ fn doc_page(ctx: &Ctx, track: &'static Track, index: usize) -> Page {
                 .child(div().class("also__links").children(others)),
         );
     }
-    article = article.child(pager(doc)).child(p().class("edit").child(external(
-        &format!("{REPO}/edit/master/content/{}/{}.md", track.slug, slug),
-        "Une erreur, une idée ? Modifier cette page sur GitHub",
-    )));
+    article = article
+        .child(
+            div().class("done").child(
+                button()
+                    .class("done__btn")
+                    .attr("type", "button")
+                    .attr("data-done", format!("{}/{}", track.slug, slug))
+                    .attr("aria-pressed", "false")
+                    .attr("hidden", "")
+                    .child(span().class("done__icon").attr("aria-hidden", "true").text("✓"))
+                    .child(span().class("done__text").text("Marquer ce chapitre comme lu")),
+            ),
+        )
+        .child(pager(doc))
+        .child(p().class("edit").child(external(
+            &format!("{REPO}/edit/master/content/{}/{}.md", track.slug, slug),
+            "Une erreur, une idée ? Modifier cette page sur GitHub",
+        )));
     let content = main()
         .class("doc-layout")
         .class(format!("t-{}", track.slug))

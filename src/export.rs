@@ -70,14 +70,6 @@ pub async fn export(out: &Path, base_path: &str, site_url: Option<String>) -> io
         let body = String::from_utf8_lossy(&get(file.to_owned(), 200).await?).into_owned();
         write(file, with_base_everywhere(&body, base).as_bytes())?;
     }
-    for icon in [
-        "/paquets/icon-192.png",
-        "/paquets/icon-512.png",
-        "/paquets/icon-maskable-512.png",
-        "/paquets/apple-touch-icon.png",
-    ] {
-        write(icon, &get(icon.to_owned(), 200).await?)?;
-    }
     let public = dir.join("public");
     for file in files(&public) {
         let relative = file.strip_prefix(&public).map_err(io::Error::other)?;

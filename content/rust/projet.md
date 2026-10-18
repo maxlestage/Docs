@@ -228,5 +228,14 @@ fn main() {
 > **À retenir :** prenez l'habitude de lancer `cargo fmt` et `cargo clippy` avant de
 > partager votre code.
 
+## En résumé
+
+- `Cargo.toml` décrit le projet et ses dépendances.
+- `cargo add nom` ajoute une bibliothèque (une crate).
+- `mod` range le code ; `pub` le rend visible ailleurs.
+- `#[test]` et `assert_eq!` écrivent des tests, lancés par `cargo test`.
+- `cargo fmt` et `cargo clippy` améliorent votre code.
+
 Comparez avec [les projets en Ruby](../ruby/projet.md) et
-[en Rythme](../rythme/projet.md). Tout le résumé est dans l'[aide-mémoire](aide-memoire.md).
+[en Rythme](../rythme/projet.md). Suite : [Exercices corrigés](exercices.md). Tout le
+résumé est dans l'[aide-mémoire](aide-memoire.md).
