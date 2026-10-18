@@ -2,6 +2,14 @@
 
 Cette page montre comment un programme Rythme reçoit des informations (le clavier, la ligne de commande) et comment il garde ses résultats dans des fichiers : texte, lignes, CSV et JSON.
 
+> **Objectifs :**
+>
+> - vous saurez lire une ligne tapée au clavier, et la transformer en nombre ;
+> - vous saurez lire les mots donnés sur la ligne de commande ;
+> - vous saurez écrire, compléter et lire un fichier texte, en traitant les échecs ;
+> - vous saurez traiter un fichier ligne par ligne, et lire un petit fichier CSV ;
+> - vous saurez garder des données en JSON.
+
 ## Lire au clavier avec input
 
 `input(question)` affiche la question, attend que l'utilisateur tape une
@@ -74,6 +82,11 @@ Bonjour, Alan !
 
 ## Écrire un fichier avec write_file
 
+Un **fichier** est un texte rangé sur le disque de l'ordinateur : il reste
+là quand le programme s'arrête. Le programme le retrouve par son
+**chemin**, son nom et, si besoin, les dossiers où il se trouve
+(`notes.txt`, `donnees/notes.txt`).
+
 `write_file(chemin, texte)` crée le fichier, ou remplace tout son contenu.
 Écrire peut échouer (un dossier qui n'existe pas, pas le droit d'écrire...),
 donc la réponse est un `Result` : `Ok(())` si tout va bien.
@@ -89,6 +102,9 @@ Ok(())
 
 Le fichier `courses.txt` est créé dans le dossier où vous lancez le
 programme. `\n` passe à la ligne : le fichier a trois lignes.
+
+> **Attention :** `write_file` remplace **tout** le contenu, sans demander.
+> C'est comme réécrire une page au propre : l'ancienne version est perdue.
 
 ## Lire un fichier avec read_file
 
@@ -286,6 +302,102 @@ true
 > **Astuce :** `to_json(valeur, 2)` écrit un élément par ligne, décalé de
 > 2 espaces : le fichier est plus facile à lire pour un humain.
 
+## Erreurs fréquentes
+
+### Calculer avec ce que tape l'utilisateur
+
+```rythme norun
+age = input("Votre âge ? ")
+print("Dans dix ans : {age + 10}")
+```
+
+```text
+erreur[E005]: impossible d'utiliser `+` avec Text et Int
+ --> main.ry:2:28
+  |
+2 | print("Dans dix ans : {age + 10}")
+  |                            ^ Text + Int 10
+  |
+  = aide: pour construire un texte contenant une valeur, utilisez des accolades : "total : {x}"
+      ou convertissez d'abord la valeur : text(x)
+  = en savoir plus : `rythme explain E005`
+```
+
+`input` donne toujours un texte, même si l'on tape `30`. Lisez-le d'abord
+avec `parse_int`, comme dans [lire au clavier](#lire-au-clavier-avec-input).
+L'erreur est trouvée avant même de poser la question.
+
+### Oublier que read_file donne un Result
+
+```rythme norun
+write_file("courses.txt", "pain\nlait")
+texte = read_file("courses.txt")
+print(lines(texte))
+```
+
+```text
+erreur[E005]: `lines` attend un texte comme argument 1, mais a reçu une valeur de type Result
+ --> main.ry:3:13
+  |
+3 | print(lines(texte))
+  |             ^^^^^ mauvaise sorte de valeur
+  |
+  = aide: utilisation : `lines(text)`
+  = en savoir plus : `rythme explain E005`
+```
+
+`texte` est `Ok("pain\nlait")`, pas le texte lui-même : la lecture aurait
+pu échouer. Ouvrez le `Result` avec `match`, `unwrap_or("")`, ou `?` dans
+une fonction.
+
+### Se tromper de séparateur
+
+```rythme norun
+ligne = "Ada;17"
+[nom, note] = split(ligne, ",")
+print(nom, note)
+```
+
+```text
+erreur[E006]: la valeur List ["Ada;17"] ne correspond pas à ce motif
+ --> main.ry:2:1
+  |
+2 | [nom, note] = split(ligne, ",")
+  | ^^^^^^^^^^^
+  |
+  = aide: utilisez `match` pour traiter les différentes formes possibles d'une valeur
+  = en savoir plus : `rythme explain E006`
+```
+
+La ligne est séparée par des `;`, pas des `,` : `split` donne un seul
+morceau, et `[nom, note]` en attend deux. Regardez votre fichier et
+écrivez `split(ligne, ";")`.
+
+## Testez-vous
+
+**Question 1 :** quelle est la différence entre `write_file` et
+`append_file` ?
+
+> **Réponse**
+>
+> `write_file` remplace tout le contenu du fichier ; `append_file` ajoute
+> à la fin, sans effacer ce qui y est déjà.
+
+**Question 2 :** que donne `read_file("absent.txt")` si le fichier n'existe
+pas ?
+
+> **Réponse**
+>
+> `Err("fichier introuvable : absent.txt")`. Le programme ne s'arrête pas :
+> c'est à vous de traiter ce cas.
+
+**Question 3 :** le programme `notes.ry` est lancé avec
+`rythme run notes.ry maths 2024`. Que vaut `args()` ?
+
+> **Réponse**
+>
+> `["maths", "2024"]` : une liste de textes, sans le nom du fichier.
+
 ## En résumé
 
 - `input("question ")` lit une ligne au clavier, toujours sous forme de
@@ -298,5 +410,5 @@ true
   colonnes d'un CSV.
 - `to_json` et `parse_json` écrivent et relisent des données en JSON.
 
-Suite : [projets, modules et tests](projet.md). Comparez avec les fichiers en
+Suite : [tester son code](tests.md). Comparez avec les fichiers en
 [Ruby](../ruby/fichiers.md) et en [Rust](../rust/fichiers.md).

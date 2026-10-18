@@ -2,6 +2,15 @@
 
 Le terminal est une fenêtre où l'on parle à l'ordinateur en tapant du texte : cette page vous apprend à l'ouvrir, à vous y déplacer et à y lancer vos programmes.
 
+> **Objectifs :**
+>
+> - ouvrir le terminal sous Windows, macOS ou Linux ;
+> - savoir où vous êtes et vous déplacer entre les dossiers ;
+> - créer un dossier pour vos essais ;
+> - gagner du temps avec la flèche du haut, Tab et Ctrl + C ;
+> - lancer un programme Ruby, Rust ou Rythme ;
+> - lire un message d'erreur du terminal.
+
 ## Qu'est-ce que le terminal
 
 D'habitude, vous utilisez l'ordinateur avec la souris : vous cliquez sur
@@ -183,6 +192,74 @@ Sous Windows, un chemin s'écrit avec des barres obliques inversées :
 cd C:\Users\Alice\Documents\code
 ```
 
+## Erreurs fréquentes
+
+### Un nom de dossier avec une espace
+
+Le terminal sépare les mots par des espaces. Ici, il croit recevoir deux
+dossiers, `Mes` et `Documents` :
+
+```sh
+cd Mes Documents
+```
+
+```text
+bash: cd: too many arguments
+```
+
+Mettez le nom entre guillemets : `cd "Mes Documents"`. Ou tapez `cd Mes`
+puis Tab : le terminal complète le nom correctement. Pour vos propres
+dossiers, évitez les espaces : `mes_documents`.
+
+### Une faute de frappe dans un nom
+
+```sh
+cd Documentz
+```
+
+```text
+bash: cd: Documentz: No such file or directory
+```
+
+Le dossier n'existe pas sous ce nom. Tapez `ls` pour voir les noms exacts,
+et utilisez Tab pour ne plus faire de fautes.
+
+### Une commande inconnue
+
+```sh
+rubyy bonjour.rb
+```
+
+```text
+bash: rubyy: command not found
+```
+
+Soit le nom de la commande est mal écrit (ici, `rubyy` au lieu de `ruby`),
+soit le langage n'est pas installé. Vérifiez avec `ruby --version`.
+
+## Testez-vous
+
+**1.** Vous ne savez plus dans quel dossier vous êtes. Quelle commande
+tapez-vous ?
+
+> **Réponse**
+>
+> `pwd`, qui affiche le dossier courant. Puis `ls` (ou `dir`) pour voir ce
+> qu'il contient.
+
+**2.** Comment remonter dans le dossier parent ?
+
+> **Réponse**
+>
+> Avec `cd ..` : les deux points désignent le dossier parent.
+
+**3.** Votre programme tourne sans fin. Comment l'arrêter ?
+
+> **Réponse**
+>
+> Avec **Ctrl + C** dans le terminal. Attention : dans le terminal, ce
+> raccourci arrête, il ne copie pas.
+
 ## En résumé
 
 - Le terminal permet de parler à l'ordinateur en tapant des commandes.
@@ -190,3 +267,5 @@ cd C:\Users\Alice\Documents\code
 - La flèche du haut rappelle une commande, Tab complète, Ctrl + C arrête.
 - On lance un programme avec `ruby fichier.rb`, `rythme fichier.ry` ou `cargo run`.
 - Un message d'erreur se lit calmement : il dit presque toujours quoi corriger.
+
+Suite : [installer un éditeur de code](editeur.md).

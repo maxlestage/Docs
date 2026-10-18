@@ -59,11 +59,13 @@ pub fn slug(text: &str) -> String {
 }
 
 /// Les encadrés : le mot qui commence la citation, et la classe de l'encadré.
-const CALLOUTS: [(&str, &str); 7] = [
+const CALLOUTS: [(&str, &str); 9] = [
     ("Astuce", "tip"),
     ("Indice", "hint"),
-    // La solution d'un exercice : repliée sous « Voir la solution ».
+    ("Objectifs", "goals"),
+    // La solution d'un exercice, la réponse d'une question : repliées.
     ("Solution", "solution"),
+    ("Réponse", "answer"),
     ("À retenir", "key"),
     ("Attention", "warn"),
     ("Note", "note"),
@@ -171,7 +173,7 @@ pub fn render(source: &str, track: &str) -> Rendered {
                     if strong {
                         let word = t.trim_end_matches([' ', ':', '\u{a0}']);
                         quote.1 = CALLOUTS.iter().find(|(w, _)| *w == word).map(|(_, class)| *class);
-                        if quote.1 == Some("solution") {
+                        if matches!(quote.1, Some("solution" | "answer")) {
                             events.truncate(quote.0 + 1);
                             skipping = true;
                         }
@@ -261,6 +263,10 @@ pub fn render(source: &str, track: &str) -> Rendered {
                 let (open, close) = match callout {
                     Some("solution") => (
                         r#"<details class="solution"><summary>Voir la solution</summary>"#.to_owned(),
+                        "</details>",
+                    ),
+                    Some("answer") => (
+                        r#"<details class="solution solution--answer"><summary>Voir la réponse</summary>"#.to_owned(),
                         "</details>",
                     ),
                     Some(class) => (format!(r#"<aside class="callout callout--{class}">"#), "</aside>"),

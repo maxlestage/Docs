@@ -141,3 +141,34 @@ fn exercises_have_folded_solutions() {
         assert!(solutions >= 10, "{}: {solutions} solutions", track.slug);
     }
 }
+
+/// Le plan commun des chapitres (voir `content/README.md`).
+#[test]
+fn every_chapter_follows_the_plan() {
+    let mut problems = Vec::new();
+    for doc in library::all() {
+        if ["aide-memoire", "exercices", "glossaire"].contains(&doc.slug) {
+            continue;
+        }
+        let at = format!("{}/{}", doc.track.slug, doc.slug);
+        if !doc.html.contains(r#"<aside class="callout callout--goals">"#) {
+            problems.push(format!("{at}: no « Objectifs » callout"));
+        }
+        let h2: Vec<&str> = doc
+            .toc
+            .iter()
+            .filter(|h| h.level == 2)
+            .map(|h| h.text.as_str())
+            .collect();
+        for section in ["Erreurs fréquentes", "Testez-vous", "En résumé"] {
+            if !h2.contains(&section) {
+                problems.push(format!("{at}: no « {section} » section"));
+            }
+        }
+        let answers = doc.html.matches("solution--answer").count();
+        if answers < 3 {
+            problems.push(format!("{at}: {answers} answers in « Testez-vous »"));
+        }
+    }
+    assert!(problems.is_empty(), "\n{}", problems.join("\n"));
+}

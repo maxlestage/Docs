@@ -2,10 +2,23 @@
 
 Rust est un langage rapide et sûr : cette page explique ce qu'il apporte, comment l'installer et comment lancer votre premier programme.
 
+> **Objectifs :**
+>
+> - savoir ce qu'est un langage compilé et ce que Rust apporte ;
+> - installer Rust avec `rustup` ;
+> - créer et lancer un projet avec `cargo` ;
+> - lire un petit programme Rust et le modifier ;
+> - comprendre un premier message d'erreur du compilateur.
+
 ## Qu'est-ce que Rust ?
 
-Rust est un langage de programmation **compilé**. Le compilateur transforme votre code en
-un programme exécutable, très rapide.
+Rust est un langage de programmation **compilé**. Un
+[compilateur](../debuter/glossaire.md#compilateur) est un programme qui traduit votre
+code en un fichier exécutable, que l'ordinateur lance directement. La traduction a lieu
+une seule fois, avant l'exécution : le programme obtenu est très rapide.
+
+Pensez à un livre traduit à l'avance : le lecteur étranger le lit d'une traite, sans
+attendre un interprète phrase par phrase.
 
 Rust a trois grandes qualités :
 
@@ -31,8 +44,10 @@ Bonjour, Rust !
 
 ## Installer Rust
 
-L'outil officiel s'appelle `rustup`. Il installe le compilateur `rustc` et l'outil
-`cargo`.
+L'outil officiel s'appelle `rustup`. Il installe deux programmes :
+
+- `rustc`, le compilateur ;
+- `cargo`, l'outil qui gère vos projets (il appelle `rustc` pour vous).
 
 ### Sous Linux et macOS
 
@@ -76,7 +91,7 @@ Le dossier contient deux choses :
 
 ```text
 bonjour/
-├── Cargo.toml      la description du projet
+├── Cargo.toml      la description du projet (nom, version…)
 └── src/
     └── main.rs     le code du programme
 ```
@@ -107,17 +122,22 @@ fn main() {
 Je m'appelle Alice et j'ai 30 ans.
 ```
 
-Quelques remarques :
+Lisons-le ligne par ligne :
 
-- `fn main()` est le point de départ de tout programme Rust.
-- `let` crée une variable.
+- `fn main()` déclare la [fonction](../debuter/glossaire.md#fonction) `main`. C'est le
+  point de départ de tout programme Rust : il commence toujours là.
+- Les accolades `{ … }` entourent le **corps** de la fonction : les instructions à
+  exécuter, dans l'ordre.
+- `let` crée une [variable](../debuter/glossaire.md#variable) : un nom posé sur une
+  [valeur](../debuter/glossaire.md#valeur).
 - `println!` affiche une ligne. Le `!` indique une **macro**, une sorte de fonction
-  spéciale.
+  spéciale. `{prenom}` est remplacé par la valeur de `prenom`.
 - Chaque instruction se termine par un point-virgule `;`.
 
 ## Compiler sans cargo
 
-Pour un seul fichier, vous pouvez aussi utiliser `rustc` directement :
+Pour un seul fichier, vous pouvez aussi utiliser `rustc` directement. Il crée un
+exécutable, que vous lancez ensuite :
 
 ```sh
 rustc main.rs
@@ -127,14 +147,127 @@ rustc main.rs
 Dans un vrai projet, préférez toujours `cargo`. Il est présenté en détail dans
 [Projets, crates et tests](projet.md).
 
+## Erreurs fréquentes
+
+### Oublier le ! de println!
+
+```rust norun
+fn main() {
+    println("Bonjour !");
+}
+```
+
+```text
+error[E0423]: expected function, found macro `println`
+ --> src/main.rs:2:5
+  |
+2 |     println("Bonjour !");
+  |     ^^^^^^^ not a function
+help: use `!` to invoke the macro
+```
+
+`println!` est une macro : le `!` est obligatoire. Écrivez `println!("Bonjour !");`.
+
+### Oublier un point-virgule
+
+```rust norun
+fn main() {
+    let prenom = "Alice"
+    println!("Bonjour, {prenom} !");
+}
+```
+
+```text
+error: expected `;`, found `println`
+ --> src/main.rs:2:25
+  |
+2 |     let prenom = "Alice"
+  |                         ^ help: add `;` here
+3 |     println!("Bonjour, {prenom} !");
+  |     ------- unexpected token
+```
+
+Le compilateur montre où ajouter le `;` : à la fin de la ligne 2.
+
+### Mettre le texte entre apostrophes
+
+```rust norun
+fn main() {
+    println!('Bonjour !');
+}
+```
+
+```text
+error[E0762]: unterminated character literal
+ --> src/main.rs:2:24
+  |
+2 |     println!('Bonjour !');
+  |                        ^^^
+help: if you meant to write a string literal, use double quotes
+```
+
+En Rust, un texte s'écrit entre guillemets doubles : `"Bonjour !"`. Les apostrophes
+`'a'` sont réservées à un seul caractère.
+
+### Mal écrire main
+
+```rust norun
+fn Main() {
+    println!("Bonjour !");
+}
+```
+
+```text
+error[E0601]: `main` function not found in crate `main`
+ --> src/main.rs:3:2
+  |
+3 | }
+  |  ^ consider adding a `main` function to `src/main.rs`
+```
+
+Rust distingue les majuscules des minuscules : la fonction de départ s'appelle `main`,
+en minuscules.
+
+## Testez-vous
+
+**1.** Quelle commande crée un projet nommé `essai` ? Et laquelle le lance ?
+
+> **Réponse**
+>
+> `cargo new essai` crée le projet. Ensuite, dans le dossier `essai`, `cargo run` le
+> compile et le lance.
+
+**2.** Que signifie le `!` dans `println!` ?
+
+> **Réponse**
+>
+> Il indique une **macro**, une sorte de fonction spéciale. Sans le `!`, le programme
+> ne compile pas.
+
+**3.** Qu'affiche ce programme ?
+
+```rust norun
+fn main() {
+    let ville = "Nantes";
+    println!("J'habite à {ville}.");
+}
+```
+
+> **Réponse**
+>
+> ```sortie
+> J'habite à Nantes.
+> ```
+
 ## En résumé
 
 - Rust est un langage compilé, rapide et sûr.
 - `rustup` installe Rust ; `rustup update` le met à jour.
 - `cargo new nom` crée un projet, `cargo run` le compile et le lance.
 - Un programme commence toujours par `fn main()`.
-- `println!` affiche une ligne de texte.
+- `println!` affiche une ligne de texte ; chaque instruction finit par `;`.
 
-Suite : [Premiers pas](premiers-pas.md). Comparez aussi avec
-[l'introduction à Ruby](../ruby/introduction.md) ou
+Comparez avec [l'introduction à Ruby](../ruby/introduction.md) ou
 [l'introduction à Rythme](../rythme/introduction.md).
+
+Suite : [Premiers pas](premiers-pas.md).

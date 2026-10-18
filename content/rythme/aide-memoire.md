@@ -239,12 +239,45 @@ print(lines(texte), file_exists("courses.txt"))
 
 Voir [lire et écrire : clavier et fichiers](fichiers.md).
 
-## Tests et modules
+## Modules
+
+| Écrire | Pour |
+|--------|------|
+| `use geometrie` | utiliser le fichier `geometrie.ry` (sans `.ry`) |
+| `geometrie.aire_carre(4)` | un nom du module, précédé du nom du module |
+| `use formes/cercle` | le fichier `formes/cercle.ry`, utilisé comme `cercle` |
+| `use formes/cercle as rond` | le même, sous le nom `rond` |
+| `use ../outils/calculs` | `..` remonte d'un dossier |
+| `fn _aide(x) = ...` | un nom privé : invisible depuis les autres fichiers |
+
+```rythme norun
+use geometrie              # en haut du fichier, hors de toute fonction
+print(geometrie.aire_carre(4))
+```
+
+Voir [les modules](modules.md).
+
+## Tests
+
+| Écrire | Pour |
+|--------|------|
+| `test "nom" = assert_eq(obtenu, attendu)` | un test sur une ligne |
+| `test "nom"` ... `end` | un test de plusieurs lignes |
+| `assert(condition, message)` | vérifier qu'une condition est vraie |
+| `rythme test f.ry` | lancer les tests (`rythme run` les ignore) |
+| `rythme test f.ry --filter mot` | seulement les tests dont le nom contient `mot` |
+| `rythme test f.ry --watch` | relancer à chaque modification |
+| `rythme test .` | les tests de tous les fichiers du dossier |
 
 ```rythme
 fn carre(x) = x * x
 
 test "carré de 3" = assert_eq(carre(3), 9)
+
+test "plusieurs vérifications"
+  assert(carre(-2) > 0, "un carré est positif")
+  assert_eq(parse_int("12")?, 12)
+end
 
 print(carre(12))
 ```
@@ -253,12 +286,9 @@ print(carre(12))
 144
 ```
 
-```rythme norun
-use geometrie              # le fichier geometrie.ry
-print(geometrie.aire_carre(4))
-```
-
-Voir [projets, modules et tests](projet.md).
+Un test échoue s'il s'arrête sur une erreur, ou s'il finit par `false`,
+`Err(...)` ou `None`. Voir [tester son code](tests.md), puis
+[organiser un projet](projet.md).
 
 ## Commandes
 

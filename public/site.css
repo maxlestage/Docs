@@ -716,3 +716,22 @@ html:not(.js) .code__copy { display: none; }
 .solution > :last-child { margin-bottom: 16px; }
 
 .stats + .hero__actions { margin-top: 22px; }
+
+/* ----- Parties, objectifs, réponses ------------------------------------------------- */
+
+.part { max-width: 1200px; margin: 36px auto 0; padding: 0 20px; }
+.part .chapters { margin-top: 14px; padding: 0; }
+.part__title { margin: 0; font-size: 1.35rem; display: flex; align-items: center; gap: 12px; }
+.part__title::after { content: ""; flex: 1; height: 1px; background: var(--line); }
+.sidebar__part {
+  margin: 14px 0 4px; padding: 0 10px; font: 600 11.5px var(--font); text-transform: uppercase;
+  letter-spacing: .08em; color: var(--muted);
+}
+.sidebar__part:first-child { margin-top: 0; }
+
+.callout--goals { --c: var(--accent); }
+.callout--goals::before { content: "◎"; font-size: 14px; }
+.callout--goals ul { margin: 6px 0 0; padding-left: 20px; }
+.callout--goals li { margin: 2px 0; }
+.solution--answer > summary { color: var(--ink); }
+.solution--answer > summary::before { color: var(--accent); }

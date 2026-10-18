@@ -2,6 +2,14 @@
 
 Cette page montre comment écrire une seule fonction pour plusieurs types grâce aux génériques, et comment décrire un comportement commun avec les traits.
 
+> **Objectifs :**
+>
+> - écrire une fonction et une structure génériques avec `<T>` ;
+> - limiter un type générique avec une contrainte (`T: Display`) ;
+> - définir un trait et l'implémenter pour plusieurs types ;
+> - ranger des objets de types différents avec `Box<dyn Trait>` ;
+> - utiliser les traits courants : `Debug`, `Clone`, `Display`, `From`.
+
 ## Le problème : du code en double
 
 Imaginez deux fonctions qui font la même chose, pour deux types différents :
@@ -30,7 +38,9 @@ Le code est identique, seul le type change. Les **génériques** évitent cette 
 
 ## Une fonction générique
 
-On remplace le type par une lettre, souvent `T`, écrite entre `<` et `>` après le nom :
+Une fonction générique est comme un moule à gâteau : la forme est la même, mais vous
+choisissez la pâte à chaque fois. On remplace le type par une lettre, souvent `T`
+(pour *type*), écrite entre `<` et `>` après le nom :
 
 ```rust
 fn plus_grand<T: PartialOrd>(a: T, b: T) -> T {
@@ -57,8 +67,10 @@ Lisez `<T: PartialOrd>` ainsi : « pour tout type `T` qui sait se comparer ».
 
 ## Plusieurs contraintes
 
-Une contrainte est un **trait** : une capacité que le type doit avoir. Pour en demander
-plusieurs, reliez-les avec `+` :
+Une contrainte est un **trait** : une capacité que le type doit avoir. Une offre
+d'emploi fonctionne pareil : « tout candidat qui sait conduire **et** parle anglais ».
+Pour demander plusieurs traits, reliez-les avec `+`. Ici, `Display` permet l'affichage
+avec `{}` :
 
 ```rust
 use std::fmt::Display;
@@ -106,10 +118,44 @@ fn main() {
 
 > **Astuce :** pour débuter, `impl Trait` est souvent l'écriture la plus lisible.
 
+## Une structure générique
+
+Une structure peut aussi avoir un type générique. `Vec<T>` et `Option<T>` sont faits
+ainsi. Voici une boîte qui contient une valeur de n'importe quel type :
+
+```rust
+#[derive(Debug)]
+struct Boite<T> {
+    contenu: T,
+}
+
+impl<T> Boite<T> {
+    fn ouvrir(self) -> T {
+        self.contenu
+    }
+}
+
+fn main() {
+    let a = Boite { contenu: 42 };
+    let b = Boite { contenu: "secret" };
+    println!("{:?}", a);
+    println!("{}", b.ouvrir());
+}
+```
+
+```sortie
+Boite { contenu: 42 }
+secret
+```
+
+`impl<T> Boite<T>` se lit : « pour tout type `T`, voici les méthodes de `Boite<T>` ».
+
 ## Définir son propre trait
 
-Un trait décrit un comportement : une liste de méthodes qu'un type promet d'avoir. Une
-méthode peut aussi avoir un comportement **par défaut** :
+Un trait décrit un comportement : une liste de méthodes qu'un type promet d'avoir.
+C'est un contrat : « tout animal sait dire son nom et pousser son cri ». On l'écrit avec
+`trait`, puis chaque type le signe avec `impl Trait for Type`. Une méthode peut aussi
+avoir un comportement **par défaut** :
 
 ```rust
 trait Animal {
@@ -142,6 +188,9 @@ fn main() {
 ```sortie
 Le chien fait ouaf
 ```
+
+`struct Chien;` est une structure sans champ : elle ne contient rien, mais elle peut
+avoir des méthodes.
 
 ## Implémenter un trait pour deux structures
 
@@ -339,9 +388,162 @@ Euros(12.5) Euros(3.0)
 > **Astuce :** vous utilisez `From` depuis le début sans le savoir :
 > `String::from("texte")`.
 
+## Erreurs fréquentes
+
+### Oublier la contrainte
+
+```rust norun
+fn plus_grand<T>(a: T, b: T) -> T {
+    if a > b { a } else { b }
+}
+
+fn main() {
+    println!("{}", plus_grand(3, 8));
+}
+```
+
+```text
+error[E0369]: binary operation `>` cannot be applied to type `T`
+ --> src/main.rs:2:10
+  |
+2 |     if a > b { a } else { b }
+  |        - ^ - T
+  |        |
+  |        T
+help: consider restricting type parameter `T` with trait `PartialOrd`
+```
+
+Rust ne sait pas si n'importe quel `T` se compare. Écrivez `<T: PartialOrd>`.
+
+### Oublier une méthode du trait
+
+```rust norun
+trait Animal {
+    fn nom(&self) -> String;
+    fn cri(&self) -> String;
+}
+
+struct Chien;
+
+impl Animal for Chien {
+    fn nom(&self) -> String {
+        String::from("Rex")
+    }
+}
+
+fn main() {}
+```
+
+```text
+error[E0046]: not all trait items implemented, missing: `cri`
+ --> src/main.rs:8:1
+  |
+3 |     fn cri(&self) -> String;
+  |     ------------------------ `cri` from trait
+...
+8 | impl Animal for Chien {
+  | ^^^^^^^^^^^^^^^^^^^^^ missing `cri` in implementation
+```
+
+Signer le contrat oblige à écrire toutes les méthodes sans version par défaut. Ajoutez
+`fn cri(&self) -> String { … }`.
+
+### Mettre deux types dans le même Vec
+
+```rust norun
+struct Chien;
+struct Chat;
+
+fn main() {
+    let animaux = vec![Chien, Chat];
+}
+```
+
+```text
+error[E0308]: mismatched types
+ --> src/main.rs:5:31
+  |
+5 |     let animaux = vec![Chien, Chat];
+  |                               ^^^^ expected `Chien`, found `Chat`
+```
+
+Donnez-leur un trait commun, puis rangez des boîtes :
+`Vec<Box<dyn Animal>>` (voir [Une liste d'objets différents](#une-liste-d-objets-differents)).
+
+### Afficher avec {} sans Display
+
+```rust norun
+struct Euros(f64);
+
+fn main() {
+    let prix = Euros(12.5);
+    println!("{prix}");
+}
+```
+
+```text
+error[E0277]: `Euros` doesn't implement `std::fmt::Display`
+ --> src/main.rs:5:15
+  |
+5 |     println!("{prix}");
+  |               ^^^^^^ `Euros` cannot be formatted with the default formatter
+  |
+  = note: in format strings you may be able to use `{:?}` (or {:#?} for pretty-print) instead
+```
+
+Écrivez `impl fmt::Display for Euros` (voir
+[Display](#display-un-affichage-personnalise)), ou ajoutez `#[derive(Debug)]` et
+affichez avec `{:?}`.
+
+## Testez-vous
+
+**1.** Que signifie `fn f<T: Clone>(x: T)` ?
+
+> **Réponse**
+>
+> `f` accepte une valeur de n'importe quel type `T`, à condition que ce type sache se
+> copier avec `.clone()`.
+
+**2.** Écrivez un trait `Aire` avec une méthode `aire(&self) -> f64`, et
+implémentez-le pour une structure `Carre { cote: f64 }`.
+
+> **Réponse**
+>
+> ```rust
+> trait Aire {
+>     fn aire(&self) -> f64;
+> }
+>
+> struct Carre {
+>     cote: f64,
+> }
+>
+> impl Aire for Carre {
+>     fn aire(&self) -> f64 {
+>         self.cote * self.cote
+>     }
+> }
+>
+> fn main() {
+>     println!("{}", Carre { cote: 3.0 }.aire());
+> }
+> ```
+>
+> ```sortie
+> 9
+> ```
+
+**3.** Pourquoi écrire `Box<dyn Animal>` plutôt que `Chien` dans un `Vec` ?
+
+> **Réponse**
+>
+> Pour ranger des animaux de types différents dans la même liste. `dyn Animal` veut
+> dire « n'importe quel type qui a le trait `Animal` ».
+
 ## En résumé
 
-- `<T>` rend une fonction générique : elle marche pour plusieurs types.
+- `<T>` rend une fonction ou une structure générique : elle marche pour plusieurs
+  types.
 - Une contrainte comme `T: Display` exige une capacité du type.
 - `impl Trait` en paramètre est une écriture courte et lisible.
 - Un trait liste des méthodes ; il peut fournir des méthodes par défaut.
@@ -349,4 +551,5 @@ Euros(12.5) Euros(3.0)
 - `#[derive(Debug, Clone, PartialEq, Default)]` écrit des traits pour vous.
 
 Les types de base sont dans [Structures, énumérations et traits](types.md).
+
 Suite : [Gérer les erreurs](erreurs.md).

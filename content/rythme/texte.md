@@ -2,7 +2,19 @@
 
 Cette page montre les outils de Rythme pour les textes : insérer des valeurs, changer les majuscules, découper, chercher, remplacer, aligner des colonnes, lire un nombre, et une première rencontre avec les expressions régulières.
 
+> **Objectifs :**
+>
+> - vous saurez construire un texte avec des valeurs insérées et des caractères spéciaux ;
+> - vous saurez transformer un texte : majuscules, espaces, remplacement ;
+> - vous saurez découper un texte en morceaux et recoller une liste ;
+> - vous saurez lire un nombre tapé sous forme de texte, sans planter ;
+> - vous saurez chercher des morceaux de texte avec une expression régulière simple.
+
 ## Insérer une valeur dans un texte
+
+Un texte, qu'on appelle aussi une
+[chaîne de caractères](../debuter/glossaire.md#chaine-de-caracteres), est
+une suite de caractères : lettres, chiffres, espaces, signes.
 
 Vous le savez depuis les [premiers pas](premiers-pas.md) : une valeur entre
 accolades `{...}` est insérée dans le texte. On peut y mettre un calcul ou un
@@ -25,6 +37,32 @@ Le double de 21 est 42.
 > **Astuce :** pour transformer n'importe quelle valeur en texte, utilisez
 > `text` : `text(42)` vaut `"42"`.
 
+## Les caractères spéciaux
+
+Certains caractères ne se tapent pas directement dans un texte. On les écrit
+avec une barre oblique inverse `\` devant, une **séquence d'échappement** :
+
+| Écrire | Pour obtenir |
+|--------|--------------|
+| `\n` | un retour à la ligne |
+| `\t` | une tabulation (un grand espace, pour aligner) |
+| `\"` | un guillemet, sans fermer le texte |
+| `\\` | une barre oblique inverse |
+| `\{` et `\}` | des accolades, sans insertion |
+
+```rythme
+print("Elle a dit : \"oui\".")
+print("ligne 1\nligne 2")
+print("Des accolades : \{ et \}")
+```
+
+```sortie
+Elle a dit : "oui".
+ligne 1
+ligne 2
+Des accolades : { et }
+```
+
 ## Longueur et majuscules
 
 `len` compte les caractères. `upper` met tout en majuscules, `lower` tout en
@@ -42,6 +80,24 @@ print(upper(mot), lower("BONJOUR"), capitalize(mot))
 ```
 
 Les accents sont comptés comme un seul caractère : `len("été")` vaut 3.
+
+## Lire un caractère par sa position
+
+Chaque caractère a une position, à partir de **0**. `mot[0]` est le premier
+caractère, `mot[-1]` le dernier. `slice(mot, debut, fin)` prend un morceau,
+de `debut` compris à `fin` non comprise :
+
+```rythme
+mot = "bonjour"
+print(mot[0], mot[-1], slice(mot, 0, 3), slice(mot, 3, 7))
+```
+
+```sortie
+b r bon jour
+```
+
+Comme une règle graduée : le morceau de 0 à 3 contient les caractères aux
+positions 0, 1 et 2.
 
 ## Enlever les espaces avec trim
 
@@ -116,6 +172,17 @@ false
 
 > **Attention :** les majuscules comptent : `contains("Bonjour", "bon")`
 > vaut `false`. Passez d'abord le texte en minuscules avec `lower` si besoin.
+
+Pour comparer deux textes entiers, `==` marche aussi, et les majuscules
+comptent de même. `equals_ignore_case` compare sans en tenir compte :
+
+```rythme
+print("abc" == "abc", "Abc" == "abc", equals_ignore_case("Été", "ÉTÉ"))
+```
+
+```sortie
+true false true
+```
 
 ## Remplacer un morceau
 
@@ -214,7 +281,7 @@ print(pad_left("7", 3, "0"), pad_left("42", 3, "0"))
 ## Lire un nombre dans un texte
 
 Un texte comme `"42"` n'est pas un nombre : on ne peut pas faire de calcul
-avec. `parse_int` (nombre entier) et `parse_float` (nombre à virgule) le
+avec. C'est le cas de tout ce qu'un utilisateur tape au clavier. `parse_int` (nombre entier) et `parse_float` (nombre à virgule) le
 lisent. Le texte peut ne pas être un nombre, alors ils donnent un `Result` :
 `Ok(nombre)` ou `Err(message)`.
 
@@ -251,6 +318,10 @@ le double est 42
 ```
 
 `Result` est expliqué en détail dans [gérer les erreurs](erreurs.md).
+
+> **Note :** `int("42")` lit aussi un nombre, mais arrête le programme
+> (erreur E022) si le texte n'en est pas un. Gardez-le pour un texte écrit
+> par vous ; pour une saisie, préférez `parse_int`.
 
 ## Écrire un grand nombre lisiblement
 
@@ -384,9 +455,101 @@ ci-dessous.
 > **********
 > ```
 
+## Erreurs fréquentes
+
+### Calculer directement avec parse_int
+
+```rythme norun
+saisie = "41"
+print(parse_int(saisie) + 1)
+```
+
+```text
+erreur[E005]: impossible d'utiliser `+` avec Result et Int
+ --> main.ry:2:25
+  |
+2 | print(parse_int(saisie) + 1)
+  |                         ^ Result + Int 1
+  |
+  = en savoir plus : `rythme explain E005`
+```
+
+`parse_int` ne donne pas un nombre, mais un `Result` : une boîte qui
+contient soit le nombre, soit une erreur. Ouvrez-la d'abord :
+`(parse_int(saisie) |> unwrap_or(0)) + 1`, ou avec `match`.
+
+### Oublier que le texte ne change pas
+
+```rythme norun
+nom = "ada"
+upper(nom)
+print(nom)
+```
+
+```text
+avertissement[W008]: le résultat de `upper` est perdu
+ --> main.ry:2:1
+  |
+2 | upper(nom)
+  | ^^^^^^^^^^ cette valeur est perdue
+  |
+  = aide: les valeurs ne changent jamais : `upper(text)` donne une nouvelle valeur, et ne modifie rien.
+      Pour la garder, donnez-lui un nom : `nouveau = upper(text)`
+```
+
+C'est un avertissement : le programme tourne, mais affiche `ada`. `upper`
+fabrique un **nouveau** texte. Gardez-le : `nom_maj = upper(nom)`.
+
+### Une seule barre oblique dans une regex
+
+```rythme norun
+print(matches("2024", "\d+"))
+```
+
+```text
+erreur[E018]: séquence d'échappement inconnue dans le texte
+ --> main.ry:1:24
+  |
+1 | print(matches("2024", "\d+"))
+  |                        ^^
+  |
+  = aide: dans une regex, écrivez la barre oblique inverse deux fois : "\\d" est le texte \d
+  = aide: échappements valides : \n (nouvelle ligne), \t (tabulation), \r (retour chariot), \0 (caractère nul), \\ (barre oblique),
+      \" (guillemet), \{ et \} (accolades), \# (un `#` devant une accolade), \u{e9} (un caractère par son numéro Unicode : é)
+  = en savoir plus : `rythme explain E018`
+```
+
+Dans un texte, `\` commence un caractère spécial. Pour la regex `\d+`,
+écrivez `"\\d+"`.
+
+## Testez-vous
+
+**Question 1 :** que vaut `"  Bonjour  " |> trim |> lower` ?
+
+> **Réponse**
+>
+> `"bonjour"` : `trim` enlève les espaces autour, puis `lower` met en
+> minuscules.
+
+**Question 2 :** que donne `split("12/05/2024", "/")` ?
+
+> **Réponse**
+>
+> La liste `["12", "05", "2024"]`. Ce sont encore des textes : pour
+> calculer, lisez-les avec `parse_int`.
+
+**Question 3 :** pourquoi `parse_int` donne-t-il un `Result`, et pas
+directement un nombre ?
+
+> **Réponse**
+>
+> Parce que le texte peut ne pas être un nombre (`"douze"`). Le `Result`
+> vous oblige à prévoir ce cas : `Ok(nombre)` ou `Err(message)`.
+
 ## En résumé
 
-- Une valeur entre accolades entre dans un texte : `"total : {x}"`.
+- Une valeur entre accolades entre dans un texte : `"total : {x}"` ;
+  `\n`, `\"` et `\{` écrivent des caractères spéciaux.
 - `upper`, `lower`, `capitalize`, `trim` et `replace` donnent un nouveau
   texte ; `contains`, `starts_with` et `ends_with` répondent `true` ou
   `false`.
