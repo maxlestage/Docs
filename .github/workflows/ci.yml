@@ -1,22 +1,37 @@
-# À chaque envoi : le code du site (format, clippy, tests), chaque exemple de la
-# documentation exécuté avec Ruby, Rust et Rythme, et l'export statique.
+# L'intégration continue, à chaque envoi et chaque pull request :
+#   - Rust      : format, clippy, tests (chaque page, chaque lien, chaque ancre) ;
+#   - Exemples  : chaque morceau de code des pages, exécuté avec Ruby, Rust et Rythme ;
+#   - Export    : le site statique (comme sur GitHub Pages), ses liens, et le site dans
+#                 Chromium (téléphone et ordinateur, clair et sombre, recherche, menu) ;
+#   - Serveur   : le serveur Paquets construit comme sur Heroku, qui répond ;
+#   - Docker    : l'image, qui démarre et répond.
+# Si des dépôts dont dépend Paquets sont privés : un secret REPOS_TOKEN (un jeton GitHub
+# qui peut les lire).
+
 name: CI
 
 on:
   push:
   pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  CARGO_TERM_COLOR: always
 
 jobs:
-  site:
-    name: Site (format, clippy, tests, export)
+  rust:
+    name: Rust (format, clippy, tests)
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: dtolnay/rust-toolchain@stable
         with:
           components: clippy, rustfmt
-      - name: Accès aux dépendances git de Paquets
-        # Facultatif : un secret REPOS_TOKEN si certaines sont privées.
+      - name: Accès aux dépendances git
         env:
           REPOS_TOKEN: ${{ secrets.REPOS_TOKEN }}
         run: |
@@ -27,10 +42,8 @@ jobs:
           fi
       - uses: Swatinem/rust-cache@v2
       - run: cargo fmt --check
-      - run: cargo clippy --all-targets -- -D warnings
-      - run: cargo test
-      - name: Export statique
-        run: BASE_PATH=/Docs cargo run --release -- export dist && test -f dist/rust/possession/index.html
+      - run: cargo clippy --all-targets --locked -- -D warnings
+      - run: cargo test --locked
 
   examples:
     name: Exemples (Ruby, Rust, Rythme)
@@ -55,3 +68,74 @@ jobs:
         run: cargo install --git https://github.com/maxlestage/Rythme --locked rythme
       - name: Exécuter chaque exemple
         run: ruby tools/verifier.rb
+
+  export:
+    name: Export statique et navigateur
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - name: Accès aux dépendances git
+        env:
+          REPOS_TOKEN: ${{ secrets.REPOS_TOKEN }}
+        run: |
+          if [ -n "$REPOS_TOKEN" ]; then
+            echo "CARGO_NET_GIT_FETCH_WITH_CLI=true" >> "$GITHUB_ENV"
+            git config --global credential.https://github.com.helper \
+              '!f() { test "$1" = get && echo username=x-access-token && echo "password=$REPOS_TOKEN"; }; f'
+          fi
+      - uses: Swatinem/rust-cache@v2
+      - name: Exporter le site, comme pour GitHub Pages
+        run: |
+          mkdir -p www
+          BASE_PATH=/Docs SITE_URL=http://localhost:8000/Docs cargo run --release --locked -- export www/Docs
+      - name: Vérifier chaque lien
+        run: ruby tools/liens.rb www/Docs /Docs
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Installer Playwright et Chromium
+        run: |
+          npm install --prefix "$RUNNER_TEMP/pw" --no-save playwright@1.56.1
+          "$RUNNER_TEMP/pw/node_modules/.bin/playwright" install --with-deps chromium
+      - name: Le site dans Chromium
+        run: |
+          (cd www && python3 -m http.server 8000 > /dev/null 2>&1 &)
+          sleep 1
+          NODE_PATH="$RUNNER_TEMP/pw/node_modules" node tests/navigateur.js http://localhost:8000/Docs
+
+  server:
+    name: Serveur (comme sur Heroku)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+      - name: Construire comme Heroku (heroku-build.sh)
+        env:
+          REPOS_TOKEN: ${{ secrets.REPOS_TOKEN }}
+        run: ./heroku-build.sh
+      - name: Démarrer et interroger le serveur
+        run: |
+          PORT=5000 target/release/docs &
+          for i in $(seq 30); do curl -fs http://localhost:5000/ > /dev/null && break; sleep 1; done
+          for path in / /comparer/ /ruby/ /rust/possession/ /rythme/types/ /search.json /sitemap.xml /robots.txt /site.css /site.js /manifest.webmanifest /sw.js; do
+            curl -fsS -o /dev/null -w "%{http_code} $path\n" "http://localhost:5000$path"
+          done
+          test "$(curl -s -o /dev/null -w '%{http_code}' http://localhost:5000/nulle-part/)" = 404
+
+  docker:
+    name: Image Docker
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Construire l'image
+        env:
+          REPOS_TOKEN: ${{ secrets.REPOS_TOKEN }}
+        run: DOCKER_BUILDKIT=1 docker build --secret id=repos_token,env=REPOS_TOKEN -t docs .
+      - name: Démarrer et interroger le conteneur
+        run: |
+          docker run -d --name docs -e PORT=5000 -p 5000:5000 docs
+          for i in $(seq 30); do curl -fs http://localhost:5000/ > /dev/null && break; sleep 1; done
+          curl -fsS http://localhost:5000/rust/possession/ | grep -q "Possession"
+          curl -fsS -o /dev/null http://localhost:5000/site.css
