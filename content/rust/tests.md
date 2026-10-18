@@ -456,3 +456,5 @@ Vérifiez que vous appelez bien la fonction avec une valeur qui doit l'arrêter 
 Comparez avec [les tests en Ruby](../ruby/tests.md) et
 [en Rythme](../rythme/tests.md). Suite :
 [Organiser un projet avec Cargo](projet.md).
+
+Suite : [Déboguer en Rust](debogage.md)

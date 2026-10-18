@@ -364,4 +364,4 @@ Il faut d'abord ouvrir le verrou avec `lock()`, puis modifier la valeur avec `*`
 - `thread::scope` permet aux threads d'emprunter des variables locales.
 - Rust refuse à la compilation le code qui partagerait mal les données.
 
-Suite : [Tester son code](tests.md).
+Suite : [La programmation asynchrone](async.md)

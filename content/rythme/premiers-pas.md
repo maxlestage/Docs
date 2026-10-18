@@ -391,5 +391,4 @@ Que faut-il écrire ?
   mélangent jamais avec `+`.
 - `print` (ou `puts`) affiche, et `#` commence un commentaire.
 
-Suite : [conditions et répétition](conditions-boucles.md). Les mêmes bases en
-[Ruby](../ruby/premiers-pas.md) et en [Rust](../rust/premiers-pas.md).
+Suite : [Nombres et calculs](nombres.md)

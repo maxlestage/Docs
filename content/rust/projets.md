@@ -969,3 +969,5 @@ fn main() -> std::io::Result<()> {
 
 Comparez avec [les projets en Ruby](../ruby/projets.md) et
 [en Rythme](../rythme/projets.md). Suite : [Exercices corrigés](exercices.md).
+
+Suite : [Exercices corrigés](exercices.md)

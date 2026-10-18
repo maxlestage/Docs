@@ -552,5 +552,4 @@ ZeroDivisionError: divided by 0
 - `ruby test_fichier.rb` lance les tests : `.` réussi, `F` échec, `E` erreur.
 - Rouge, vert, améliorer : écrivez le test, puis le code, puis rendez-le plus clair.
 
-Suite : [organiser un projet : fichiers, gems et Bundler](projet.md). Comparez avec
-[les tests en Rust](../rust/tests.md) et [en Rythme](../rythme/tests.md).
+Suite : [Déboguer en Ruby](debogage.md)

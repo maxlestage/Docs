@@ -447,5 +447,4 @@ puts Chien.new("Rex").nom
 - `class Chat < Animal` hérite des méthodes de `Animal` ; `super` appelle le parent.
 - Un module partage des méthodes avec `include` ; `Struct` crée vite une petite classe.
 
-Suite : [les modules](modules.md). Comparez avec
-[les types en Rust](../rust/types.md).
+Suite : [Héritage et polymorphisme](heritage.md)

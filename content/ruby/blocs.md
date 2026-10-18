@@ -393,5 +393,4 @@ Une lambda vérifie ses arguments, comme une méthode. Donnez-les tous :
 - Un bloc voit les variables qui l'entourent ; une lambda (`->(x) { ... }`) est un bloc
   rangé dans une variable.
 
-Suite : [les classes et objets](types.md). Pour le style fonctionnel, voyez
-aussi [la page fonctionnelle de Rythme](../rythme/fonctionnel.md).
+Suite : [Procs, lambdas et méthodes](procs-lambdas.md)

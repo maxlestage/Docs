@@ -405,4 +405,4 @@ GitHub ?
 - `git push` envoie sur GitHub, `git clone` récupère un dépôt, `git pull` le met à jour.
 - Faites des petits commits, souvent.
 
-Suite : [quel langage choisir ?](choisir.md)
+Suite : [Comment marche le web](web.md)

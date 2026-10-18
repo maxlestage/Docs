@@ -474,5 +474,4 @@ puts x
 - Seuls `false` et `nil` sont faux ; tout le reste est vrai.
 - `puts` affiche, `print` affiche sans retour à la ligne, `p` montre la valeur exacte.
 
-Suite : [les conditions et les boucles](conditions-boucles.md). Comparez aussi avec
-[les premiers pas en Rust](../rust/premiers-pas.md).
+Suite : [Nombres et calculs](nombres.md)

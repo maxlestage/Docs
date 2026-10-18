@@ -366,3 +366,5 @@ rythme exercise check 01-valeurs.ry   # vérifie votre solution
 Gardez [l'aide-mémoire](aide-memoire.md) ouvert pendant que vous cherchez.
 Les autres parcours ont aussi leurs exercices : [en Ruby](../ruby/exercices.md)
 et [en Rust](../rust/exercices.md).
+
+Suite : [Aide-mémoire](aide-memoire.md)

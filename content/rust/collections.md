@@ -406,4 +406,4 @@ error[E0382]: borrow of moved value: `notes`
 
 Comparez avec [Ruby](../ruby/collections.md) et [Rythme](../rythme/collections.md).
 
-Suite : [Possession et emprunt](possession.md).
+Suite : [HashMap, HashSet et BTreeMap](hashmap.md)

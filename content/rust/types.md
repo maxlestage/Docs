@@ -483,4 +483,4 @@ Ajoutez la variante oubliée : `Feu::Rouge => println!("arrêtez-vous"),`.
 
 Comparez avec [les types en Ruby](../ruby/types.md) et [en Rythme](../rythme/types.md).
 
-Suite : [Génériques et traits](generiques.md).
+Suite : [Le filtrage par motif](pattern-matching.md)

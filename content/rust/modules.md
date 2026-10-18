@@ -491,3 +491,5 @@ Le fichier doit s'appeler exactement comme le module, et se trouver à côté de
 Comparez avec [les modules en Ruby](../ruby/modules.md) et
 [en Rythme](../rythme/modules.md). Suite :
 [Lire et écrire : clavier et fichiers](fichiers.md).
+
+Suite : [Lire et écrire : clavier et fichiers](fichiers.md)

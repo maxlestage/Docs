@@ -66,6 +66,8 @@ jobs:
           fi
       - name: Installer Rythme
         run: cargo install --git https://github.com/maxlestage/Rythme --locked rythme
+      - name: Les liens « Suite » suivent l'ordre des chapitres
+        run: ruby tools/suite.rb --check
       - name: Exécuter chaque exemple
         run: ruby tools/verifier.rb
 

@@ -572,3 +572,5 @@ Tom
 Comparez avec [les blocs en Ruby](../ruby/blocs.md) et
 [le style fonctionnel en Rythme](../rythme/fonctionnel.md). Suite :
 [Modules et crates](modules.md).
+
+Suite : [Modules et crates](modules.md)

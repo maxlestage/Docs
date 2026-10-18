@@ -428,5 +428,4 @@ d'échec, `assert_eq` montre la valeur obtenue et la valeur attendue.
 - Un test échoue s'il s'arrête sur une erreur ou finit par `false`,
   `Err(...)` ou `None` : `?` y est permis.
 
-Suite : [organiser un projet](projet.md). Comparez avec les tests en
-[Ruby](../ruby/tests.md) et en [Rust](../rust/tests.md).
+Suite : [Bien écrire du Rythme](style.md)

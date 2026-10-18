@@ -351,5 +351,4 @@ nombre négatif d'une liste ?
 - Pour répéter « tant que », une fonction récursive, si possible avec un
   accumulateur.
 
-Suite : [vos propres types](types.md). En Ruby, les blocs ont
-[leur propre page](../ruby/blocs.md).
+Suite : [La récursion](recursion.md)

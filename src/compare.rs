@@ -165,6 +165,24 @@ pub const ROWS: &[Row] = &[
         ],
     },
     Row {
+        idea: "Arrondir un nombre",
+        chapter: ["nombres"; 3],
+        code: [
+            "3.14159.round(2)",
+            "(3.14159_f64 * 100.0).round() / 100.0",
+            "round(3.14159, 2)",
+        ],
+    },
+    Row {
+        idea: "Filtrer par motif",
+        chapter: ["pattern-matching"; 3],
+        code: [
+            "case [1, 2]\nin [a, b] then a + b\nend",
+            "match (1, 2) {\n    (a, b) => a + b,\n}",
+            "match [1, 2]\n  [a, b] -> a + b\n  _ -> 0\nend",
+        ],
+    },
+    Row {
         idea: "La longueur d'un texte",
         chapter: ["texte"; 3],
         code: ["\"Bonjour\".length", "\"Bonjour\".chars().count()", "len(\"Bonjour\")"],
@@ -191,6 +209,20 @@ pub const ROWS: &[Row] = &[
             "let texte = fs::read_to_string(\"notes.txt\")?;",
             "texte = read_file(\"notes.txt\")?",
         ],
+    },
+    Row {
+        idea: "Lire du JSON",
+        chapter: ["formats"; 3],
+        code: [
+            "donnees = JSON.parse(texte)",
+            "let donnees: Valeur = serde_json::from_str(&texte)?;",
+            "donnees = parse_json(texte)?",
+        ],
+    },
+    Row {
+        idea: "Les arguments du programme",
+        chapter: ["ligne-de-commande"; 3],
+        code: ["ARGV", "std::env::args().collect::<Vec<_>>()", "args()"],
     },
     Row {
         idea: "Un test",

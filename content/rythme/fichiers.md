@@ -410,5 +410,4 @@ pas ?
   colonnes d'un CSV.
 - `to_json` et `parse_json` écrivent et relisent des données en JSON.
 
-Suite : [tester son code](tests.md). Comparez avec les fichiers en
-[Ruby](../ruby/fichiers.md) et en [Rust](../rust/fichiers.md).
+Suite : [Données JSON](formats.md)

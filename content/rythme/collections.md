@@ -434,5 +434,4 @@ Quelle collection choisir ?
 - Aucune collection ne change : `push`, `put` et `{..r, champ: valeur}`
   fabriquent une nouvelle valeur.
 
-Suite : [penser fonctionnel](fonctionnel.md). Comparez avec les collections
-de [Ruby](../ruby/collections.md) et de [Rust](../rust/collections.md).
+Suite : [Dictionnaires et ensembles](dictionnaires.md)
