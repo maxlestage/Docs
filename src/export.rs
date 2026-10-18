@@ -87,6 +87,7 @@ pub fn with_base(html: &str, base: &str) -> String {
         return html.to_owned();
     }
     html.replace("\"/paquets/", &format!("\"{base}/paquets/"))
+        .replace("\"/icons/", &format!("\"{base}/icons/"))
         .replace("\"/manifest.webmanifest\"", &format!("\"{base}/manifest.webmanifest\""))
         .replace("\"/sw.js\"", &format!("\"{base}/sw.js\""))
 }

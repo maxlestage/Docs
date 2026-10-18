@@ -72,6 +72,9 @@ fn code_el(lang: &str, code: &str) -> Element {
 
 /// Les deux lettres d'un parcours : l'extension de ses fichiers (`Rb`, `Rs`, `Ry`).
 fn badge(track: &Track) -> String {
+    if !track.language {
+        return "✦".to_owned();
+    }
     let mut chars = track.ext.chars();
     chars
         .next()

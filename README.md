@@ -1,7 +1,7 @@
 # 📚 Docs : Ruby, Rust et Rythme
 
 **Des documentations simples, en français, pour apprendre Ruby, Rust et Rythme.**
-Trois parcours de dix chapitres, un exemple pour chaque idée, et du code qui marche
+Un parcours pour débuter, puis un parcours par langage, un exemple pour chaque idée, et du code qui marche
 vraiment : chacun des exemples est exécuté avant d'être publié.
 
 Le site est écrit en Rust avec [Paquets](https://github.com/maxlestage/Paquets) : un
@@ -11,9 +11,13 @@ installable qui marche hors ligne.
 
 | Parcours | Chapitres |
 |---|---|
-| [Ruby](content/ruby) | introduction, premiers pas, conditions et boucles, méthodes, tableaux et hashs, blocs et Enumerable, classes et objets, erreurs, gems et tests, aide-mémoire |
-| [Rust](content/rust) | introduction, premiers pas, conditions et boucles, fonctions, collections, possession et emprunt, structures et traits, erreurs, Cargo et tests, aide-mémoire |
-| [Rythme](content/rythme) | introduction, premiers pas, conditions et répétition, fonctions, listes et enregistrements, penser fonctionnel, types et `match`, erreurs, modules et tests, aide-mémoire |
+| [Débuter](content/debuter) | qu'est-ce que programmer, le terminal, un éditeur de code, quel langage choisir, glossaire |
+| [Ruby](content/ruby) | introduction, premiers pas, conditions et boucles, méthodes, texte, tableaux et hashs, blocs et Enumerable, classes et objets, erreurs, clavier et fichiers, gems et tests, exercices corrigés, aide-mémoire |
+| [Rust](content/rust) | introduction, premiers pas, conditions et boucles, fonctions, texte, collections, possession et emprunt, structures et énumérations, génériques et traits, erreurs, clavier et fichiers, Cargo et tests, exercices corrigés, aide-mémoire |
+| [Rythme](content/rythme) | introduction, premiers pas, conditions et répétition, fonctions, texte, listes et enregistrements, penser fonctionnel, types et `match`, erreurs, clavier et fichiers, modules et tests, exercices corrigés, aide-mémoire |
+
+Chaque chapitre finit par un résumé ; chaque langage a 12 exercices corrigés (solutions
+repliées) et un aide-mémoire.
 
 ## Ce que fait le site
 
@@ -29,6 +33,9 @@ installable qui marche hors ligne.
   bouton « Copier » et la sortie du programme juste en dessous.
 - **Encadrés** (Astuce, À retenir, Attention, Note), tableaux qui défilent sur
   téléphone.
+- **Chapitres lus** : un bouton « Marquer ce chapitre comme lu », des coches dans les
+  sommaires et la progression de chaque parcours, retenus dans le navigateur.
+- **Exercices corrigés** : indices, solutions repliées sous « Voir la solution ».
 - **Clair ou sombre**, mobile d'abord, installable (PWA) et lisible hors ligne,
   imprimable.
 
