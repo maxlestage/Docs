@@ -10,10 +10,40 @@ Une suite d'étapes précises pour résoudre un problème, comme une recette.
 Un programme est un algorithme écrit dans un langage de programmation. Voir
 [Penser comme un programmeur](algorithmes.md) et [pseudo-code](#pseudo-code).
 
+### API
+
+Une liste de services qu'un programme offre à d'autres programmes. Sur le
+web, ce sont des adresses qui répondent avec des données, souvent en
+[JSON](#json), au lieu d'une page. Le nom vient de l'anglais *Application
+Programming Interface*. Voir [Comment marche le web](web.md#les-api-et-json).
+
 ### Argument
 
 La valeur que vous donnez à une [fonction](#fonction) quand vous l'appelez.
 Dans `double(21)`, l'argument est `21`.
+
+### ASCII
+
+Un ancien code qui donne un numéro aux lettres anglaises, aux chiffres et à
+la ponctuation : `A` vaut 65, `a` vaut 97. [Unicode](#unicode) le reprend
+et l'étend à toutes les écritures.
+
+```ruby
+puts "A".ord
+puts 97.chr
+```
+
+```sortie
+65
+a
+```
+
+### Async
+
+Du code **asynchrone** : pendant qu'une tâche attend (une réponse du
+réseau, un fichier), le programme s'occupe d'autre chose au lieu de rester
+bloqué. En Rust, on l'écrit avec `async` et `.await`. Voir
+[l'asynchrone en Rust](../rust/async.md).
 
 ## B
 
@@ -21,6 +51,25 @@ Dans `double(21)`, l'argument est `21`.
 
 Du code déjà écrit par d'autres, que vous pouvez réutiliser dans votre
 programme. Elle vous évite de tout réinventer. Voir aussi [paquet](#paquet).
+
+### Binaire
+
+La façon de compter de l'ordinateur, avec seulement deux chiffres : 0 et 1.
+`101` en binaire vaut 5. Voir
+[Comment marche un ordinateur](ordinateur.md#compter-en-binaire).
+
+```rust
+println!("{:b}", 5);
+```
+
+```sortie
+101
+```
+
+### Bit
+
+Le plus petit morceau d'information : un `0` ou un `1`. Huit bits forment
+un [octet](#octet).
 
 ### Bloc
 
@@ -76,11 +125,22 @@ L'outil de Rust qui crée un projet (`cargo new`), le compile et le lance
 Un texte, écrit entre guillemets : `"Bonjour"`. On dit souvent **chaîne**,
 ou *string* en anglais.
 
+### Chemin
+
+L'adresse d'un fichier ou d'un dossier : `/home/alice/code/bonjour.rb`. Un
+chemin **absolu** part de la racine du disque ; un chemin **relatif** part
+du dossier où vous êtes, et `..` désigne le dossier parent.
+
 ### Classe
 
 Un modèle pour fabriquer des [objets](#objet) du même genre. La classe
 `Chien` décrit ce qu'est un chien ; chaque chien créé est un objet. Ruby
 utilise beaucoup les classes ; Rythme n'en a pas.
+
+### Client
+
+Le programme qui **demande** quelque chose à un [serveur](#serveur). Votre
+navigateur est un client : il demande des pages web.
 
 ### Closure
 
@@ -128,6 +188,12 @@ lancer. Rust utilise un compilateur. Voir aussi
 Le travail du [compilateur](#compilateur) : traduire tout le code en
 langage machine avant de le lancer. En Rust, `cargo build` compile ;
 `cargo run` compile puis lance.
+
+### Concurrence
+
+Faire avancer plusieurs tâches en même temps, par exemple avec plusieurs
+[threads](#thread). Voir [la concurrence en Rust](../rust/concurrence.md)
+et [en Ruby](../ruby/concurrence.md).
 
 ### Condition
 
@@ -185,6 +251,13 @@ puts ages["Ada"]
 36
 ```
 
+### Durée de vie
+
+En Rust, la période pendant laquelle une [référence](#emprunt) reste
+valable. Le compilateur vérifie qu'une référence ne vit jamais plus
+longtemps que la valeur qu'elle désigne. En anglais : *lifetime*. Voir
+[les durées de vie en Rust](../rust/durees-de-vie.md).
+
 ## E
 
 ### Éditeur de code
@@ -211,10 +284,46 @@ print(personne.nom)
 Ada
 ```
 
+### Ensemble
+
+Une collection **sans doublons**, où l'ordre d'arrivée ne compte pas. Un
+élément y est, ou n'y est pas. En anglais : *set*.
+
+```rythme
+print(set([3, 1, 3, 2]))
+```
+
+```sortie
+set(1, 2, 3)
+```
+
 ### Entier
 
 Un nombre sans virgule : `0`, `42`, `-7`. En anglais : *integer*. Voir
 aussi [flottant](#flottant).
+
+### Énumérateur
+
+En Ruby, une valeur qui donne les éléments d'une collection **un par un**,
+à la demande, avec `next`. C'est le cousin Ruby de
+l'[itérateur](#iterateur). Voir [les énumérateurs](../ruby/enumerateurs.md).
+
+```ruby
+lettres = ["a", "b", "c"].each
+puts lettres.next
+puts lettres.next
+```
+
+```sortie
+a
+b
+```
+
+### Énumération
+
+Un [type](#type) qui ne peut prendre qu'une valeur parmi une liste fixée :
+un feu est `Rouge`, `Orange` ou `Vert`. En Rust, on l'écrit avec `enum` ;
+en Rythme, avec `type`.
 
 ### Erreur
 
@@ -242,6 +351,10 @@ Ce n'est pas un nombre.
 
 Un morceau de code qui donne une [valeur](#valeur). `2 + 3` est une
 expression qui vaut `5` ; `"Ada"` est une expression qui vaut `"Ada"`.
+
+### Expression régulière
+
+Un motif qui décrit la forme d'un texte, pour le chercher ou le remplacer. On dit le plus souvent [regex](#regex).
 
 ## F
 
@@ -287,6 +400,42 @@ est une liste d'éléments de n'importe quel type `T` : `Vec<i32>`,
 Un logiciel qui garde l'historique de votre code : chaque version est un
 [commit](#commit), rangé dans un [dépôt](#depot). Voir
 [Sauvegarder son travail avec Git](git.md).
+
+## H
+
+### Héritage
+
+En Ruby, une [classe](#classe) peut reprendre tout ce que sait faire une
+autre classe, puis y ajouter ses propres méthodes. On dit qu'elle en
+**hérite**, avec `<`.
+
+```ruby
+class Animal
+  def respirer = "Je respire."
+end
+
+class Chat < Animal
+end
+
+puts Chat.new.respirer
+```
+
+```sortie
+Je respire.
+```
+
+### HTML
+
+Le langage qui décrit la **structure** d'une page web : titres,
+paragraphes, liens, images. Il s'écrit avec des balises comme `<h1>` et
+`</h1>`. Voir [Comment marche le web](web.md#html-css-et-javascript).
+
+### HTTP
+
+La langue que parlent le [client](#client) et le [serveur](#serveur) sur le
+web : une **requête** (`GET /page`), puis une **réponse** avec un code,
+comme `200` (tout va bien) ou `404` (page introuvable). `HTTPS` est sa
+version chiffrée.
 
 ## I
 
@@ -343,7 +492,38 @@ println!("{total}");
 Un passage dans une [boucle](#boucle). Itérer sur une liste, c'est traiter
 ses éléments un par un.
 
+## J
+
+### JSON
+
+Un format de texte très répandu pour échanger des données entre
+programmes : `{"nom": "Ada", "age": 36}`. Les clés sont toujours entre
+guillemets doubles.
+
+```rythme
+print(to_json({nom: "Ada", age: 36}))
+```
+
+```sortie
+{"nom": "Ada", "age": 36}
+```
+
 ## L
+
+### Lambda
+
+Une [fonction](#fonction) sans nom, rangée dans une variable. En Ruby, on
+l'écrit avec `->` ; c'est souvent aussi une [closure](#closure). Voir
+[procs et lambdas](../ruby/procs-lambdas.md).
+
+```ruby
+double = ->(x) { x * 2 }
+puts double.call(21)
+```
+
+```sortie
+42
+```
 
 ### Liste
 
@@ -374,6 +554,19 @@ end)
 ```sortie
 bien
 ```
+
+### Mémoire vive
+
+La mémoire rapide où un programme range ses données **pendant qu'il
+tourne**. Elle s'efface quand on éteint l'ordinateur, contrairement au
+disque. En anglais : *RAM*. Voir
+[Comment marche un ordinateur](ordinateur.md#la-memoire-vive-et-le-disque).
+
+### Métaprogrammation
+
+Du code qui écrit ou modifie du code pendant que le programme tourne, par
+exemple pour créer des méthodes automatiquement. Ruby le permet beaucoup.
+Voir [la métaprogrammation en Ruby](../ruby/metaprogrammation.md).
 
 ### Méthode
 
@@ -428,6 +621,12 @@ Une valeur spéciale qui veut dire « rien » ou « absent ». Ruby l'appelle
 
 Une valeur qui regroupe des données et des [méthodes](#methode). En Ruby,
 tout est objet : même le nombre `5`.
+
+### Octet
+
+Un groupe de huit [bits](#bit). Il peut valoir de 0 à 255. On mesure la
+taille des fichiers en octets : Ko (mille), Mo (million), Go (milliard). En
+anglais : *byte*.
 
 ### Opérateur
 
@@ -491,6 +690,16 @@ La règle de Rust qui dit que chaque valeur a **un seul propriétaire**.
 Quand le propriétaire disparaît, la valeur est libérée. En anglais :
 *ownership*. Voir [la possession en Rust](../rust/possession.md).
 
+### Processeur
+
+La pièce de l'ordinateur qui exécute les instructions, des milliards par
+seconde. Il ne comprend que le langage machine. En anglais : *CPU*.
+
+### Processus
+
+Un [programme](#programme) en train de tourner. Le même programme lancé
+deux fois donne deux processus, chacun avec sa mémoire.
+
 ### Programme
 
 Une liste d'instructions qu'un ordinateur exécute. Voir
@@ -525,6 +734,21 @@ print(total(4))
 10
 ```
 
+### Regex
+
+Abréviation d'**expression régulière** : un petit langage pour décrire la
+forme d'un texte, afin de le chercher, de le découper ou de le remplacer.
+`[0-9]+` veut dire « un ou plusieurs chiffres ». Voir
+[les regex en Ruby](../ruby/regex.md) et [en Rythme](../rythme/regex.md).
+
+```rythme
+print(find_all("Tél : 06 12, fixe : 01 45", "[0-9]+"))
+```
+
+```sortie
+["06", "12", "01", "45"]
+```
+
 ### REPL
 
 Un mode où l'on tape une ligne de code et où l'on voit le résultat tout de
@@ -547,6 +771,39 @@ Ok(42) true
 
 ## S
 
+### Sérialisation
+
+Transformer une valeur du programme en texte (ou en octets), pour
+l'enregistrer dans un fichier ou l'envoyer sur le réseau. L'inverse, relire
+ce texte, s'appelle la **désérialisation**. [JSON](#json) est un format de
+sérialisation.
+
+### Serveur
+
+Un programme (et, par extension, l'ordinateur qui le fait tourner) qui
+attend des demandes et y **répond**. Un serveur web envoie des pages aux
+[clients](#client).
+
+### Structure
+
+Un [type](#type) qui regroupe plusieurs valeurs nommées, ses **champs**.
+En Rust, on l'écrit avec `struct` ; en Ruby, `Struct` en crée une
+rapidement.
+
+```rust
+struct Personne {
+    nom: String,
+    age: u32,
+}
+
+let ada = Personne { nom: String::from("Ada"), age: 36 };
+println!("{} a {} ans", ada.nom, ada.age);
+```
+
+```sortie
+Ada a 36 ans
+```
+
 ### Symbole
 
 En Ruby et en Rythme, un nom fixe qui commence par deux-points : `:ok`,
@@ -558,6 +815,12 @@ En Ruby et en Rythme, un nom fixe qui commence par deux-points : `:ok`,
 Les règles d'écriture d'un langage : où mettre les parenthèses, les
 guillemets, les mots-clés. Une faute de syntaxe empêche le programme de
 démarrer.
+
+### Système d'exploitation
+
+Le programme qui démarre en premier et gère tout l'ordinateur : il partage
+le processeur et la mémoire, range les fichiers et lance les programmes.
+Exemples : Windows, macOS, Linux, Android.
 
 ## T
 
@@ -584,6 +847,20 @@ En Rust, une liste de méthodes qu'un [type](#type) promet de savoir faire.
 Le trait `Display`, par exemple, dit qu'une valeur sait s'afficher avec
 `{}`.
 
+### Tuple
+
+Un petit groupe de valeurs, de types éventuellement différents, sans noms
+de champs. En Rust, on lit ses éléments par leur position : `.0`, `.1`.
+
+```rust
+let point = (3, 7);
+println!("x = {}, y = {}", point.0, point.1);
+```
+
+```sortie
+x = 3, y = 7
+```
+
 ### Type
 
 La sorte d'une valeur : un [entier](#entier), un texte, un
@@ -599,6 +876,29 @@ puts "Ada".class
 Integer
 String
 ```
+
+## U
+
+### Unicode
+
+Le code qui donne un numéro à **chaque caractère** de toutes les écritures
+du monde, émojis compris : `é` vaut 233, `€` vaut 8364. On le range le plus
+souvent en **UTF-8**.
+
+```rythme
+print(char_code("é"), char(8364))
+```
+
+```sortie
+233 €
+```
+
+### URL
+
+L'adresse d'une ressource sur le web :
+`https://www.exemple.fr/recettes?portions=4`. Elle donne le protocole, la
+machine, le chemin et parfois des paramètres. Voir
+[Comment marche le web](web.md#l-adresse-l-url).
 
 ## V
 

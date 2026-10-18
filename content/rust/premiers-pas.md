@@ -437,4 +437,4 @@ points += 5;
 Le même chapitre existe pour [Ruby](../ruby/premiers-pas.md) et
 [Rythme](../rythme/premiers-pas.md).
 
-Suite : [Conditions et boucles](conditions-boucles.md).
+Suite : [Nombres et calculs](nombres.md)

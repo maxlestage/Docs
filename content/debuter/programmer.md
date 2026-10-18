@@ -264,4 +264,4 @@ bug ?
 - Un bug est une erreur dans le programme, et tout le monde en fait.
 - On apprend en essayant, en se trompant et en lisant les messages d'erreur.
 
-Suite : [penser comme un programmeur](algorithmes.md).
+Suite : [Comment marche un ordinateur](ordinateur.md)

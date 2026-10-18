@@ -393,6 +393,4 @@ décrire l'état d'une commande ?
   enregistrements (`{nom}`) ; une garde `if` ajoute une condition.
 - `rythme check` signale les cas oubliés dans un `match`.
 
-Suite : deux types déjà prêts, `Option` et `Result`, dans
-[gérer les erreurs](erreurs.md). Comparez avec les types de
-[Ruby](../ruby/types.md) et de [Rust](../rust/types.md).
+Suite : [Le filtrage par motif](pattern-matching.md)

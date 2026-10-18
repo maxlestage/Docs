@@ -254,3 +254,5 @@ Utilisez des minuscules et des tirets bas : `cargo new mon_jeu`.
 Comparez avec [les projets en Ruby](../ruby/projet.md) et
 [en Rythme](../rythme/projet.md). Suite : [Projets pas à pas](projets.md). Tout le
 résumé est dans l'[aide-mémoire](aide-memoire.md).
+
+Suite : [Projets pas à pas](projets.md)

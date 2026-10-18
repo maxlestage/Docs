@@ -461,5 +461,4 @@ remplacer, `"a"` pour ajouter.
 - `File.exist?` vérifie qu'un fichier existe ; `Dir.glob` liste les fichiers d'un dossier.
 - Un CSV simple se lit avec `split(",")`, un JSON avec `JSON.parse`.
 
-Suite : [les tests](tests.md). Comparez avec
-[les fichiers en Rust](../rust/fichiers.md).
+Suite : [JSON, CSV et YAML](formats.md)

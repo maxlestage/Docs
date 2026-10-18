@@ -345,4 +345,4 @@ Rust vous oblige à prévoir l'échec. Ajoutez `Err(e) => println!("erreur : {e}
 Comparez avec [les erreurs en Ruby](../ruby/erreurs.md) et
 [en Rythme](../rythme/erreurs.md).
 
-Suite : [Les itérateurs](iterateurs.md).
+Suite : [Les closures en détail](closures.md)

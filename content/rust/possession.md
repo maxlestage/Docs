@@ -402,4 +402,4 @@ fn crier(s: String) {
 - `&mut a` emprunte en écriture ; un seul à la fois.
 - Une référence ne vit jamais plus longtemps que sa valeur : c'est sa durée de vie.
 
-Suite : [Structures, énumérations et traits](types.md).
+Suite : [Les durées de vie](durees-de-vie.md)

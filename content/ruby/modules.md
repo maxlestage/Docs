@@ -520,5 +520,4 @@ et `select` ?
 - `Comparable` demande `<=>` ; `Enumerable` demande `each`.
 - `require_relative "lib/fichier"` charge un fichier de votre projet.
 
-Suite : [gérer les erreurs](erreurs.md). Comparez avec
-[les modules en Rust](../rust/modules.md) et [en Rythme](../rythme/modules.md).
+Suite : [Struct, Data et Set](structures.md)

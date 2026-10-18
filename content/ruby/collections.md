@@ -413,5 +413,4 @@ une clé oubliée. Donnez une valeur par défaut : `config.fetch(:theme, "clair"
 - Une clé absente donne `nil` ; `fetch`, `Hash.new(0)` et `dig` gèrent les absences.
 - `each` parcourt un tableau ou un hash.
 
-Suite : [les blocs et itérateurs](blocs.md). Comparez avec
-[les collections en Rust](../rust/collections.md).
+Suite : [Les intervalles](intervalles.md)
