@@ -35,10 +35,21 @@ print(mezcla)
 ['Alicia', 30, True]
 ```
 
+Línea por línea:
+
+- `compra` recibe una lista de tres textos, guardados en este orden;
+- `vacia = []` crea una lista sin nada dentro, lista para llenarse más tarde;
+- `print(compra)` muestra la lista entera, con sus corchetes y sus comillas;
+- `len(notas)` cuenta los elementos de `notas`: hay 4.
+
 Una lista puede contener valores de tipos distintos. En la práctica, se suelen guardar
 valores del mismo tipo: notas, nombres, precios.
 
 ## Leer un elemento
+
+Una lista no sirve de nada si no puedes recuperar lo que contiene. Igual que lees «la
+tercera línea» de una lista de la compra, le pides a Python el elemento guardado en una
+posición concreta.
 
 Como en un texto, cada elemento tiene un [índice](../debuter/glossaire.md#indice), que
 empieza en **0**. Los índices negativos cuentan desde el final.
@@ -56,6 +67,12 @@ azul
 amarillo
 ```
 
+Línea por línea:
+
+- `colores[0]` da el primer elemento, `"rojo"`: se cuenta desde 0;
+- así que `colores[2]` da el tercero, `"azul"`;
+- `colores[-1]` da el último, `"amarillo"`, sea cual sea la longitud de la lista.
+
 A diferencia de un texto, una lista es [mutable](../debuter/glossaire.md#mutable): se
 puede cambiar un elemento.
 
@@ -70,6 +87,9 @@ print(colores)
 ```
 
 ## Las porciones
+
+A veces no quieres un solo elemento, sino un trozo de la lista: los tres primeros, los
+dos últimos. Es como cortar una rebanada de pan sin tocar el resto de la barra.
 
 Una porción `lista[inicio:fin]` devuelve una **nueva** lista con una parte de los
 elementos. El fin queda excluido, exactamente como con [el texto](texte.md).
@@ -91,7 +111,35 @@ print(numeros[::-1])
 [60, 50, 40, 30, 20, 10]
 ```
 
+Línea por línea:
+
+- `numeros[1:4]` toma los índices 1, 2 y 3: el fin, 4, queda excluido;
+- `numeros[:3]` empieza desde el principio, y `numeros[-2:]` llega hasta el final;
+- `numeros[::2]` toma un elemento de cada dos;
+- `numeros[::-1]` recorre la lista al revés.
+
+**Te toca:** escribe un programa que guarde los días de la semana en una lista `dias`, y
+luego muestre el primer día, el último y la porción de los cinco primeros.
+
+> **Solución**
+>
+> ```python
+> dias = ["lun", "mar", "mié", "jue", "vie", "sáb", "dom"]
+> print(dias[0])
+> print(dias[-1])
+> print(dias[:5])
+> ```
+>
+> ```sortie
+> lun
+> dom
+> ['lun', 'mar', 'mié', 'jue', 'vie']
+> ```
+
 ## Añadir y quitar elementos
+
+Una lista cambia a menudo mientras el programa funciona: añades un artículo a la
+compra, tachas el que ya has comprado. Estos métodos hacen ese trabajo.
 
 | Método | Efecto |
 | --- | --- |
@@ -127,9 +175,37 @@ Zoe ['Alicia']
 ['Alicia', 'David', 'Elena']
 ```
 
+Línea por línea:
+
+- `fila.append("Carla")` añade a Carla al final: la fila tiene ahora tres nombres;
+- `fila.insert(0, "Zoe")` pone a Zoe en el índice 0, delante de todo; los demás
+  retroceden;
+- `fila.remove("Bruno")` busca a Bruno y lo quita;
+- `fila.pop()` quita el último nombre, Carla, y lo guarda en `ultimo`;
+- `fila.extend(["David", "Elena"])` añade dos nombres de golpe, al final.
+
 Estos métodos modifican la lista **en el sitio**: cambian la propia lista.
 
+**Te toca:** escribe un programa que parta de `compra = ["pan", "leche"]`, añada
+«mantequilla» al final, quite «pan» y luego muestre la lista.
+
+> **Solución**
+>
+> ```python
+> compra = ["pan", "leche"]
+> compra.append("mantequilla")
+> compra.remove("pan")
+> print(compra)
+> ```
+>
+> ```sortie
+> ['leche', 'mantequilla']
+> ```
+
 ## Buscar y medir
+
+Una vez llena la lista, quieres hacerle preguntas: «¿está la leche en la lista?»,
+«¿cuántas notas hay?», «¿cuál es la mejor?».
 
 ```python
 notas = [12, 15, 9, 18, 15]
@@ -158,6 +234,9 @@ False
 
 ## Ordenar: sort y sorted
 
+Ordenar es poner orden: colocar notas de la más baja a la más alta, o nombres por
+orden alfabético, como en una guía telefónica.
+
 Hay dos formas de ordenar:
 
 - `lista.sort()` ordena la lista **en el sitio** y no devuelve nada (`None`);
@@ -182,6 +261,13 @@ print(notas)
 [9, 12, 15, 18]
 [18, 15, 12, 9]
 ```
+
+Línea por línea:
+
+- `sorted(notas)` fabrica una nueva lista ordenada, guardada en `ordenadas`;
+- `print(notas)` muestra que `notas` no se ha movido;
+- `notas.sort()` ordena esta vez la propia `notas`;
+- `notas.sort(reverse=True)` la vuelve a ordenar, en el otro sentido.
 
 `reverse=True` ordena del más grande al más pequeño.
 
@@ -215,6 +301,8 @@ Las `lambda` se explican en [las funciones](fonctions.md).
 
 ### Invertir el orden
 
+> **Nota:** esta parte puede esperar. Léela cuando las bases estén firmes.
+
 `reverse()` da la vuelta a la lista en el sitio. `reversed()` o `[::-1]` dan una
 versión al revés sin tocar la original.
 
@@ -234,6 +322,9 @@ print(pasos)
 
 ## Recorrer una lista
 
+A menudo quieres hacer lo mismo con cada elemento: sumar todos los precios de un
+ticket de compra, mostrar cada nombre de una clase.
+
 El bucle `for` recorre los elementos uno a uno. Se explica en
 [condiciones y bucles](conditions-boucles.md).
 
@@ -249,7 +340,33 @@ print(f"Total: {total:.2f} €")
 Total: 19.75 €
 ```
 
+Línea por línea:
+
+- `total = 0` prepara una variable que irá acumulando la suma;
+- `for p in precios:` da a `p` el valor 4.5, luego 12.0 y luego 3.25;
+- en cada vuelta, `total += p` suma el precio a `total`: 4.5, luego 16.5, luego 19.75;
+- después del bucle, el `print` muestra el total con dos decimales.
+
+**Te toca:** escribe un programa que recorra `notas = [12, 15, 9]` y muestre cada nota
+en su propia línea, precedida de «Nota:».
+
+> **Solución**
+>
+> ```python
+> notas = [12, 15, 9]
+> for n in notas:
+>     print("Nota:", n)
+> ```
+>
+> ```sortie
+> Nota: 12
+> Nota: 15
+> Nota: 9
+> ```
+
 ## Las listas anidadas
+
+> **Nota:** esta parte puede esperar. Léela cuando las bases estén firmes.
 
 Una lista puede contener otras listas. Es práctico para una tabla de dos dimensiones:
 una cuadrícula, un tablero de juego.
@@ -279,6 +396,10 @@ elemento de índice 2 de esa fila (`6`).
 
 ## ¿Copiar o compartir? La trampa clásica
 
+A veces quieres guardar una lista intacta y trabajar con un duplicado, como cuando
+fotocopias un documento antes de escribir encima. Pero hace falta tener de verdad dos
+listas.
+
 Escribir `b = a` **no** copia la lista. Pega una segunda etiqueta en la **misma**
 lista. Si la modificas a través de `b`, `a` también cambia: es un **alias**.
 
@@ -296,6 +417,13 @@ print(a is b)
 [1, 2, 3, 4]
 True
 ```
+
+Línea por línea:
+
+- `a = [1, 2, 3]` crea una lista y le da el nombre `a`;
+- `b = a` no crea ninguna lista: `b` pasa a ser un segundo nombre para la misma;
+- `b.append(4)` añade 4 a esa única lista;
+- por eso los dos `print` muestran la misma lista, con el 4; `a is b` vale `True`.
 
 `is` comprueba si dos nombres se refieren al mismo objeto. Aquí, sí: solo hay una
 lista.
@@ -358,6 +486,13 @@ print(type(solo))
 <class 'tuple'>
 ```
 
+Línea por línea:
+
+- `punto = (3, 4)` crea una tupla de dos números;
+- `solo = (42,)` crea una tupla de un solo elemento, gracias a la coma;
+- `punto[0]` y `punto[1]` se leen igual que en una lista;
+- `type(solo)` confirma que se trata de una tupla.
+
 Una tupla de un solo elemento necesita una coma: `(42,)`. Sin ella, `(42)` es solo el
 número 42 entre paréntesis.
 
@@ -391,7 +526,25 @@ x = 3, y = 4
 - `a, b = b, a` intercambia dos variables, sin variable temporal;
 - `*resto` recoge todos los elementos restantes en una lista.
 
+**Te toca:** escribe un programa que desempaquete la tupla `fecha = (14, 7, 1789)` en
+tres variables `dia`, `mes` y `anio`, y luego muestre «Año: 1789».
+
+> **Solución**
+>
+> ```python
+> fecha = (14, 7, 1789)
+> dia, mes, anio = fecha
+> print("Año:", anio)
+> ```
+>
+> ```sortie
+> Año: 1789
+> ```
+
 ## range y las listas
+
+A veces necesitas una lista de números seguidos: del 1 al 10, o todos los números
+pares hasta 20. Escribirlos a mano sería largo, y podrías olvidar alguno.
 
 `range` produce una serie de números a demanda, sin guardarla. Para obtener una lista
 de verdad, pásalo a `list()`.
@@ -407,6 +560,12 @@ print(sum(range(1, 101)))
 [2, 4, 6, 8, 10]
 5050
 ```
+
+Línea por línea:
+
+- `range(5)` da 0, 1, 2, 3, 4: empieza en 0 y se detiene antes de 5;
+- `range(2, 11, 2)` empieza en 2, avanza de 2 en 2 y se detiene antes de 11;
+- `list(...)` convierte esos números en una lista de verdad, que `print` puede mostrar.
 
 `sum(range(1, 101))` suma los números del 1 al 100 sin crear ninguna lista.
 
