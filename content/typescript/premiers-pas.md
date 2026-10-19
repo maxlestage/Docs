@@ -503,4 +503,4 @@ console.log(`${a} x 2 = ${a * 2}`);
 - Un gabarit `` `...${x}...` `` insère des valeurs dans un texte ; `//` commence un
   commentaire.
 
-Suite : [conditions et boucles](conditions-boucles.md).
+Suite : [Nombres et calculs](nombres.md)

@@ -428,4 +428,4 @@ later?
 - For scripts and Ruby on Rails: Ruby.
 - Each path starts with its introduction page.
 
-Next: [the glossary](glossaire.md), to keep at hand.
+Next: [Contribuer à un projet open source](open-source.md)

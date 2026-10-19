@@ -642,6 +642,7 @@ const TEXTS: &[[&str; 3]] = &[
     ["Les autres parcours", "The other tracks", "Los otros cursos"],
     // Les parties des parcours
     ["Comprendre", "Understand", "Entender"],
+    ["Les notions de base", "The core ideas", "Las nociones básicas"],
     ["Les outils", "The tools", "Las herramientas"],
     ["Et après", "What's next", "Y después"],
     ["Les bases", "The basics", "Lo básico"],

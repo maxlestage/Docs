@@ -429,4 +429,4 @@ adelante?
 - Para los scripts y Ruby on Rails: Ruby.
 - Cada recorrido empieza con su página de introducción.
 
-Siguiente: [el glosario](glossaire.md), para tenerlo siempre a mano.
+Siguiente: [Contribuer à un projet open source](open-source.md)

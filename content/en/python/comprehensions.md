@@ -492,4 +492,4 @@ contain?
   only once.
 - If the comprehension gets hard to read, go back to a `for` loop.
 
-Next: [classes and objects](types.md)
+Next: [beginner pitfalls in Python](pieges.md)

@@ -499,4 +499,4 @@ console.log(`${a} x 2 = ${a * 2}`);
 - A template `` `...${x}...` `` inserts values into text; `//` starts a
   comment.
 
-Next: [conditions and loops](conditions-boucles.md).
+Next: [Nombres et calculs](nombres.md)

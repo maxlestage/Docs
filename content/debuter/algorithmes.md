@@ -491,4 +491,4 @@ notre algorithme ?
 - Le même algorithme s'écrit en Python, en JavaScript, en Ruby, en Rust ou en Rythme : seuls les mots changent.
 - Testez à la main avec un tableau de valeurs, sans oublier les cas difficiles.
 
-Suite : [le terminal en 10 minutes](terminal.md).
+Suite : [Les variables, expliquées simplement](variables.md)

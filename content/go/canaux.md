@@ -547,4 +547,4 @@ chaque lettre du mot dans un canal puis le ferme. Affichez-les avec `range`.
 - Un pipeline enchaîne des étapes reliées par des canaux ; un envoi sans receveur
   provoque `all goroutines are asleep - deadlock!`.
 
-Suite : [lire et écrire des fichiers](fichiers.md).
+Suite : [Annuler et limiter dans le temps avec context](context.md)

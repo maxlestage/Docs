@@ -462,4 +462,4 @@ JavaScript?
 - HTML estructura, CSS decora, JavaScript anima; una API devuelve datos en JSON.
 - Ruby (Rails) y Rust (axum) escriben servidores; Rythme lee y escribe JSON y HTML.
 
-Siguiente: [aprender bien a programar](apprendre.md).
+Siguiente: [Qu'est-ce qu'une base de données ?](bases-de-donnees.md)

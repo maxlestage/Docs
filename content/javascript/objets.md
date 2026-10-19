@@ -530,4 +530,4 @@ console.log(p.x);
   `JSON.stringify` l'affiche lisiblement.
 - `Map` pour des clés ajoutées au fil du programme, `Set` pour des valeurs uniques.
 
-Suite : [les types](types.md).
+Suite : [Les pièges du débutant en JavaScript](pieges.md)

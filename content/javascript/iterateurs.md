@@ -483,5 +483,4 @@ affichez ses 4 premières valeurs.
   `prendre`.
 - `...`, `entries()`, `keys()` et `values()` fonctionnent avec tous les itérables.
 
-Suite : [gérer les erreurs](erreurs.md). Comparez avec
-[les énumérateurs en Ruby](../ruby/enumerateurs.md).
+Suite : [Les tableaux en profondeur](tableaux-avances.md)

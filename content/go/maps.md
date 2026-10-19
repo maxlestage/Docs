@@ -492,4 +492,4 @@ alphabétique.
 - Une clé absente donne la valeur zéro ; `v, ok := m[k]` dit si elle existe.
 - L'ordre de `range` est aléatoire : triez avec `slices.Sorted(maps.Keys(m))`.
 
-Suite : [les types](types.md). Comparez avec [la HashMap en Rust](../rust/hashmap.md).
+Suite : [Les pièges du débutant en Go](pieges.md)

@@ -552,4 +552,4 @@ implémentez-le pour une structure `Carre { cote: f64 }`.
 
 Les types de base sont dans [Structures, énumérations et traits](types.md).
 
-Suite : [Les traits de la bibliothèque standard](traits-standard.md)
+Suite : [Les objets traits : dyn Trait](traits-objets.md)
