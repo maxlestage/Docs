@@ -277,26 +277,6 @@ chiffres. Le premier chiffre donne la famille :
 - `4xx` : la faute du **client** (il a mal demandé) ;
 - `5xx` : la faute du **serveur** (votre code).
 
-Node connaît le nom de chaque code dans `STATUS_CODES` :
-
-```javascript
-import { STATUS_CODES } from "node:http";
-
-for (const code of [200, 201, 204, 400, 404, 405, 500]) {
-  console.log(code, STATUS_CODES[code]);
-}
-```
-
-```sortie
-200 OK
-201 Created
-204 No Content
-400 Bad Request
-404 Not Found
-405 Method Not Allowed
-500 Internal Server Error
-```
-
 > **À retenir :** 2xx = réussi, 4xx = le client s'est trompé, 5xx = le serveur s'est
 > trompé. Choisir le bon code aide celui qui utilise votre API.
 
@@ -305,22 +285,13 @@ for (const code of [200, 201, 204, 400, 404, 405, 500]) {
 Avec `POST`, le client envoie des données dans le **corps** de la requête. Elles
 n'arrivent pas d'un bloc : elles arrivent en **morceaux**, comme une longue lettre
 envoyée en plusieurs enveloppes. `req` est un flux qu'on parcourt avec `for await`
-(voir [l'asynchrone](asynchrone.md)), et on recolle les morceaux à la fin.
-
-```javascript norun
-async function lireCorps(req) {
-  const morceaux = [];
-  for await (const morceau of req) {
-    morceaux.push(morceau);
-  }
-  return Buffer.concat(morceaux).toString("utf8");
-}
-```
+(voir [l'asynchrone](asynchrone.md)), on range chaque morceau dans un tableau, et on
+les recolle à la fin avec `Buffer.concat`.
 
 ### Les morceaux pas à pas
 
 Un petit corps arrive souvent en un seul morceau. Pour voir le recollage, donnons à
-`lireCorps` un faux flux de trois morceaux, fabriqué avec `Readable.from` :
+la fonction `lireCorps` un faux flux de trois morceaux, fabriqué avec `Readable.from` :
 
 ```javascript
 import { Readable } from "node:stream";

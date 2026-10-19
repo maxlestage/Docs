@@ -383,7 +383,263 @@ print("recus = {recus}")
 ```sortie
 compte = 0, note = 12 -> 1
 compte = 1, note = 7 -> 1
-compte = 2, note = 15 -> 2
+compte = 1, note = 15 -> 2
+recus = 2
 ```
 
-Hmm
+Chaque ligne affichée est une ligne de votre tableau. Comparez-les une par
+une : la première qui diffère montre votre erreur.
+
+> **Astuce :** quand vous avez trouvé, enlevez ces `print`. Ils servent à
+> chercher, pas à rester.
+
+### debug : afficher sans rien changer
+
+`debug(valeur)` affiche une valeur **et la rend telle quelle**. On peut
+donc l'ajouter au milieu d'un calcul sans le casser :
+
+```rythme
+prix = 8
+total = debug(prix * 3) - 6
+print("total = {total}")
+```
+
+```sortie
+total = 18
+```
+
+Le programme affiche aussi, à part, la position du `debug` dans le fichier
+(ligne 2, colonne 9) et la valeur :
+
+```text
+[debug main.ry:2:9] 24
+```
+
+Ce message va sur la **sortie d'erreur**, un canal séparé de l'affichage
+normal : il ne se mélange pas aux résultats de votre programme.
+
+### scan : tous les tours d'un fold
+
+Vous l'avez vu au programme 3 : remplacez `fold` par `scan`, et vous
+obtenez la dernière colonne de votre tableau, d'un coup.
+
+```rythme
+notes = [12, 7, 15, 9, 10]
+print(scan(notes, 0, fn(c, n) = if n >= 10 then c + 1 else c))
+```
+
+```sortie
+[1, 1, 2, 2, 3]
+```
+
+### rythme etapes : le calcul complet
+
+`rythme etapes fichier.ry` montre chaque étape de chaque ligne, comme
+votre tableau. Avec le programme 1 enregistré dans `courses.ry` :
+
+```text
+$ rythme etapes courses.ry
+prix = 8
+
+quantite = 3
+
+total = prix * quantite
+  → 8 * quantite
+  → 8 * 3
+  → 24
+
+reduction = total // 4
+  → 24 // 4
+  → 6
+
+a_payer = total - reduction
+  → 24 - reduction
+  → 24 - 6
+  → 18
+
+print("À payer : {a_payer} €")
+  → print("À payer : 18 €")
+À payer : 18 €
+  → ()
+```
+
+Chaque `→` est une étape : un nom remplacé par sa valeur, ou une
+opération faite. Pour une seule expression, donnez-la entre guillemets.
+Avec le programme 6 dans `addition.ry` :
+
+```text
+$ rythme etapes addition.ry "additionner([4, 10, 3, 7], 0)"
+additionner([4, 10, 3, 7], 0)
+  → additionner([10, 3, 7], 4)
+  → additionner([3, 7], 14)
+  → additionner([7], 17)
+  → additionner([], 24)
+  → 24
+```
+
+C'est exactement la colonne « Appel suivant » de votre tableau.
+
+> **À retenir :** `print` avec étiquettes pour quelques valeurs, `debug`
+> au milieu d'un calcul, `scan` pour un `fold`, `rythme etapes` pour tout
+> voir.
+
+### Et un débogueur ?
+
+Rythme n'a pas de débogueur qui arrête le programme ligne par ligne :
+comme les valeurs ne changent jamais, `rythme etapes` (ou le bouton
+« Étapes » du playground, ou `:etapes` en mode interactif) montre tout le
+calcul à la place. Le chapitre [comprendre un calcul étape par
+étape](etapes.md) explique toutes ses options, et
+[déboguer](../debuter/deboguer.md) donne une méthode pour chercher un bug.
+
+## Erreurs fréquentes
+
+Ces erreurs se font **en remplissant le tableau**. Les programmes
+ci-dessous montrent ce qui se passe quand on écrit le code avec la même
+idée fausse.
+
+### Croire qu'un nom change à chaque tour
+
+On pense « à chaque tour, `total` augmente », comme une boîte qu'on
+remplit :
+
+```rythme norun
+achats = [4, 10, 3]
+total = 0
+achats.each do |x|
+  total = total + x
+end
+print(total)
+```
+
+```text
+avertissement[W001]: `total` n'est jamais utilisé
+ --> main.ry:4:3
+  |
+4 |   total = total + x
+  |   ^^^^^
+  |
+  = aide: supprimez-le, ou nommez-le `_total` si c'est voulu
+
+0
+```
+
+Le programme affiche `0`. Dans le bloc, `total = total + x` crée un
+**nouveau** `total`, qui disparaît à la fin du bloc. Le `total` du dehors
+vaut toujours 0. Dans le tableau, la case `total` de la ligne 2 ne change
+jamais. Pour porter une valeur d'un tour à l'autre, utilisez `fold` :
+`total = fold(achats, 0, fn(acc, x) = acc + x)`.
+
+### Reprendre la valeur de départ au lieu de la dernière
+
+Dans un `fold`, on se trompe souvent de colonne : on recommence avec la
+valeur de départ au lieu de celle du tour d'avant.
+
+```rythme
+achats = [4, 10, 3, 7]
+print(fold(achats, 0, fn(acc, x) = 0 + x))
+```
+
+```sortie
+7
+```
+
+On voulait 24. Ici, chaque tour ignore `acc` et repart de `0` : le
+résultat est le dernier élément. Le tableau le montre tout de suite : la
+colonne « acc (reçu) » ne sert jamais. Écrivez `acc + x`.
+
+### Oublier un tour, ou en compter un de trop
+
+`1..5` contient **5** nombres : 1 et 5 compris. Mais `slice(liste, 1, 3)`
+s'arrête **avant** la position 3, et les positions commencent à 0.
+
+```rythme
+print(len(1..5), 1..5)
+print(slice([10, 20, 30, 40], 1, 3))
+```
+
+```sortie
+5 [1, 2, 3, 4, 5]
+[20, 30]
+```
+
+Avant de remplir le tableau, écrivez la liste en entier, et numérotez ses
+positions à partir de 0. Comptez les lignes à la fin : il doit y en avoir
+une par élément.
+
+### Confondre ce qui est affiché et ce qui est rendu
+
+`print` **affiche** un texte, mais ce qu'il **rend** est `()`, la valeur
+« rien d'intéressant ».
+
+```rythme
+x = print("bonjour")
+print(x)
+```
+
+```sortie
+bonjour
+()
+```
+
+Dans le tableau, gardez deux choses séparées : la colonne de la valeur, et
+ce qui apparaît à l'écran.
+
+## Testez-vous
+
+**Question 1 :** remplissez le tableau de ce programme. Qu'affiche-t-il ?
+
+```rythme norun
+a = 5
+b = a * 2
+c = b - a
+print(a + b + c)
+```
+
+> **Réponse**
+>
+> | Ligne | a | b | c |
+> |-------|---|---|---|
+> | 1 | 5 | | |
+> | 2 | 5 | 10 | |
+> | 3 | 5 | 10 | 5 |
+>
+> Il affiche `20` : 5 + 10 + 5.
+
+**Question 2 :** que vaut `fold([2, 3, 4], 1, fn(acc, x) = acc * x)` ?
+Faites le tableau des tours.
+
+> **Réponse**
+>
+> | Tour | acc (reçu) | x | acc * x |
+> |------|------------|---|---------|
+> | 1 | 1 | 2 | 2 |
+> | 2 | 2 | 3 | 6 |
+> | 3 | 6 | 4 | 24 |
+>
+> Le résultat est `24`. On part de 1, pas de 0 : avec 0, tout serait
+> multiplié par zéro.
+
+**Question 3 :** avec `fn f(n) = if n > 3 then n - 3 else n + 3`, que vaut
+`f(f(2))` ?
+
+> **Réponse**
+>
+> On commence par l'appel du dedans. `f(2)` : la question `2 > 3` répond
+> `false`, donc 2 + 3 = 5. Puis `f(5)` : `5 > 3` répond `true`, donc
+> 5 - 3 = 2. Le résultat est `2`.
+
+## En résumé
+
+- Pour comprendre un programme, jouez l'ordinateur : une ligne de code, une
+  ligne du tableau de suivi.
+- Devinez la sortie **avant** de lancer, puis comparez : l'écart montre ce
+  qu'il reste à comprendre.
+- En Rythme, chaque case se remplit une seule fois : les valeurs ne changent
+  jamais.
+- Pour `fold` et la récursion, une ligne par tour ou par appel ; la valeur
+  reçue est celle de la ligne d'au-dessus.
+- `print` avec des étiquettes, `debug`, `scan` et `rythme etapes` font
+  afficher ses étapes au programme.
+
+Suite : [les pièges du débutant en Rythme](pieges.md).
