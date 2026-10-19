@@ -1,6 +1,6 @@
 # Tableaux et tuples
 
-Cette page explique comment ranger plusieurs valeurs dans des tableaux, des tuples, des `Map` et des `Set`, et comment les types gardent ces collections cohérentes.
+Cette page explique comment ranger plusieurs valeurs dans des tableaux et des tuples, comment les transformer, et comment les types gardent ces listes cohérentes.
 
 > **Objectifs :**
 >
@@ -8,8 +8,7 @@ Cette page explique comment ranger plusieurs valeurs dans des tableaux, des tupl
 > - vous saurez protéger un tableau avec `readonly` et décrire un tuple
 >   `[string, number]` ;
 > - vous saurez transformer un tableau avec `map`, `filter` et `reduce` ;
-> - vous saurez gérer le `undefined` renvoyé par `find` ;
-> - vous saurez utiliser `Map`, `Set` et `Record`.
+> - vous saurez gérer le `undefined` renvoyé par `find`.
 
 ## Créer un tableau
 
@@ -271,7 +270,7 @@ prix, garder les bonnes notes, calculer un total. Ces méthodes le font en une l
 sans écrire de boucle.
 
 Ces trois méthodes prennent un *callback* (une fonction, voir
-[les fonctions](fonctions.md#les-callbacks-passer-une-fonction-a-une-fonction)). Elles
+[les fonctions](fonctions-avancees.md#les-callbacks-passer-une-fonction-a-une-fonction)). Elles
 ne modifient pas le tableau d'origine : elles en renvoient un nouveau, ou une valeur.
 
 ### map : transformer chaque élément
@@ -467,187 +466,6 @@ Après le test `trouve !== undefined`, TypeScript sait que `trouve` est un `stri
 > **À retenir :** un type `T | undefined` est une question que TypeScript vous pose :
 > « et si rien n'est trouvé ? ». Répondez-y, avec `if`, `?.` ou `??`.
 
-## Map : associer des clés à des valeurs
-
-Une `Map` est un [dictionnaire](../debuter/glossaire.md#dictionnaire) : elle associe
-une **clé** à une **valeur**, comme un annuaire associe un nom à un numéro. Son type
-s'écrit `Map<TypeDesCles, TypeDesValeurs>`.
-
-```typescript
-const stock = new Map<string, number>();
-
-stock.set("pommes", 10);
-stock.set("poires", 4);
-stock.set("pommes", 12);
-
-console.log(stock.get("pommes"));
-console.log(stock.has("kiwis"), stock.size);
-
-for (const [fruit, quantite] of stock) {
-  console.log(`${fruit} : ${quantite}`);
-}
-```
-
-```sortie
-12
-false 2
-pommes : 12
-poires : 4
-```
-
-Ligne par ligne :
-
-- `new Map<string, number>()` crée une `Map` vide : des clés textes, des valeurs
-  nombres ;
-- les `set` rangent `pommes → 10` et `poires → 4`, puis remplacent 10 par 12 ;
-- `get("pommes")` donne 12 ; la clé `"kiwis"` n'existe pas, et la `Map` a 2 paires ;
-- la boucle `for...of` donne chaque paire, dans l'ordre d'ajout.
-
-Les méthodes à connaître :
-
-- `set(clé, valeur)` ajoute ou remplace (une clé est unique) ;
-- `get(clé)` lit la valeur, `has(clé)` teste si la clé existe ;
-- `size` donne le nombre de paires ; `delete(clé)` en retire une.
-
-`get` renvoie `number | undefined` : la clé n'existe peut-être pas. Même réflexe
-qu'avec `find` :
-
-```typescript
-const stock = new Map<string, number>([["pommes", 10]]);
-
-const kiwis = stock.get("kiwis") ?? 0;
-console.log(kiwis + 5);
-```
-
-```sortie
-5
-```
-
-**À vous :** écrivez un programme qui crée une `Map` des âges, y range `"Alice"`
-(30 ans) et `"Bob"` (25 ans), puis affiche l'âge de Bob et celui de `"Zoé"`, avec 0
-si elle est absente.
-
-> **Solution**
->
-> ```typescript
-> const ages = new Map<string, number>();
-> ages.set("Alice", 30);
-> ages.set("Bob", 25);
-> console.log(ages.get("Bob"));
-> console.log(ages.get("Zoé") ?? 0);
-> ```
->
-> ```sortie
-> 25
-> 0
-> ```
-
-## Set : une collection sans doublons
-
-Pensez à la liste des invités d'une fête : écrire deux fois le même nom ne sert à
-rien. Un `Set` s'en charge pour vous et ignore les doublons.
-
-Un `Set` est un [ensemble](../debuter/glossaire.md#ensemble) : chaque valeur n'y
-apparaît qu'une fois. Son type s'écrit `Set<T>`.
-
-```typescript
-const visiteurs = new Set<string>();
-
-visiteurs.add("Alice");
-visiteurs.add("Bob");
-visiteurs.add("Alice");
-
-console.log(visiteurs.size);
-console.log(visiteurs.has("Bob"));
-
-const sansDoublons = [...new Set([3, 1, 3, 2, 1])];
-console.log(sansDoublons);
-```
-
-```sortie
-2
-true
-[ 3, 1, 2 ]
-```
-
-Ligne par ligne :
-
-- `visiteurs` commence vide ;
-- `add` ajoute `"Alice"`, puis `"Bob"`. Le second `"Alice"` est ignoré : elle y est
-  déjà ;
-- `size` vaut donc 2, et `has("Bob")` répond `true` ;
-- la fin crée un `Set` à partir du tableau, puis le remet en tableau avec `[...]`.
-
-`new Set(tableau)` puis `[...]` est l'astuce classique pour retirer les doublons d'un
-tableau, en gardant l'ordre de première apparition.
-
-## Record : un objet clé-valeur
-
-Un `Record` ressemble à une fiche de scores : un nom, un nombre, un nom, un nombre.
-Vous l'écrivez d'un coup, comme un objet ordinaire.
-
-`Record<string, number>` décrit un objet simple dont les clés sont des textes et les
-valeurs des nombres. C'est plus léger qu'une `Map`, et on l'écrit directement avec des
-accolades.
-
-```typescript
-const scores: Record<string, number> = {
-  alice: 12,
-  bob: 8,
-};
-
-scores.chloe = 15;
-scores["bob"] += 1;
-
-console.log(scores);
-console.log(Object.keys(scores));
-
-for (const [nom, points] of Object.entries(scores)) {
-  console.log(nom.padEnd(6), points);
-}
-```
-
-```sortie
-{ alice: 12, bob: 9, chloe: 15 }
-[ 'alice', 'bob', 'chloe' ]
-alice  12
-bob    9
-chloe  15
-```
-
-Ligne par ligne :
-
-- `scores` démarre avec deux paires : `alice → 12` et `bob → 8` ;
-- `scores.chloe = 15` ajoute une clé ; `scores["bob"] += 1` fait passer Bob à 9 ;
-- `Object.keys` liste les clés, dans l'ordre d'ajout ;
-- la boucle donne chaque paire ; `padEnd(6)` complète le nom avec des espaces, pour
-  aligner les colonnes.
-
-`Object.keys` donne les clés, `Object.entries` les paires `[clé, valeur]`.
-
-Avec une union de types littéraux comme clés, `Record` exige **toutes** les clés :
-
-```typescript
-type Jour = "lundi" | "mardi" | "mercredi";
-
-const heures: Record<Jour, number> = {
-  lundi: 7,
-  mardi: 8,
-  mercredi: 4,
-};
-
-console.log(heures.mardi);
-```
-
-```sortie
-8
-```
-
-Oublier `mercredi` serait une erreur.
-
-> **Astuce :** utilisez `Record` pour des données fixes écrites dans le code, et `Map`
-> quand vous ajoutez et retirez souvent des clés.
-
 ## Erreurs fréquentes
 
 ### Ranger une valeur du mauvais type
@@ -713,27 +531,6 @@ Found 2 errors in the same file, starting at: main.ts:1
 Dans un tuple, l'ordre compte : d'abord le texte, puis le nombre.
 Écrivez `["Alice", 42]`.
 
-### Utiliser le résultat de get sans vérifier
-
-```typescript norun
-const stock = new Map<string, number>([["pommes", 10]]);
-const n = stock.get("poires");
-console.log(n + 1);
-```
-
-```text
-main.ts:3:13 - error TS18048: 'n' is possibly 'undefined'.
-
-3 console.log(n + 1);
-              ~
-
-
-Found 1 error in main.ts:3
-```
-
-La clé `"poires"` n'existe peut-être pas. Donnez une valeur par défaut :
-`const n = stock.get("poires") ?? 0;`.
-
 ## Testez-vous
 
 **Question 1 :** quel est le type de `["a", "b"].map((s) => s.length)` ?
@@ -777,9 +574,6 @@ const pair = nombres.find((n) => n % 2 === 0);
 - Un tuple `[string, number]` a une longueur fixe et un type par position.
 - `map`, `filter` et `reduce` renvoient de nouvelles valeurs, dont TypeScript devine le
   type ; triez les nombres avec `sort((a, b) => a - b)`.
-- `find` et `Map.get` renvoient `T | undefined` : traitez le cas avec `if`, `?.` ou
-  `??`.
-- `Map<K, V>` associe des clés à des valeurs, `Set<T>` évite les doublons,
-  `Record<string, number>` décrit un objet clé-valeur.
+- `find` renvoie `T | undefined` : traitez le cas avec `if`, `?.` ou `??`.
 
-Suite : [objets, interfaces et alias de type](objets.md).
+Suite : [Map, Set et Record](map-set.md).
