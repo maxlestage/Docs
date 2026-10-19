@@ -469,7 +469,7 @@ Ligne par ligne :
 
 `[matiere: string]: number` se lit : « pour toute clé texte, une valeur nombre ». Le mot
 `matiere` n'est qu'un nom pour la documentation. C'est la même chose que
-`Record<string, number>`, vu dans [les tableaux](collections.md#record-un-objet-cle-valeur).
+`Record<string, number>`, vu dans [Map, Set et Record](map-set.md#record-un-objet-cle-valeur).
 
 > **Attention :** TypeScript annonce `notes.histoire` comme un `number`, mais la clé
 > n'existe pas : la valeur est `undefined`. Avec une signature d'index, vérifiez
