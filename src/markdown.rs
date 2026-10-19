@@ -2,7 +2,7 @@
 //! langage et un bouton « Copier », sorties de programmes, encadrés (« Astuce », « À
 //! retenir »…), tableaux qui défilent, liens entre les pages devenus liens du site.
 
-use pulldown_cmark::{CodeBlockKind, CowStr, Event, HeadingLevel, Options, Parser, Tag, TagEnd};
+use pulldown_cmark::{Alignment, CodeBlockKind, CowStr, Event, HeadingLevel, Options, Parser, Tag, TagEnd};
 
 use crate::highlight::{escape, highlight, label};
 use crate::i18n::{Lang, tr};
@@ -127,7 +127,7 @@ pub fn code_block(lang: &str, code: &str, l: Lang) -> String {
         return format!(
             r#"<div class="output"><div class="output__head"><span class="output__label">{}</span></div><pre><code>{}</code></pre></div>"#,
             tr(l, "Sortie"),
-            escape(code)
+            lines(&escape(code))
         );
     }
     format!(
@@ -139,10 +139,45 @@ pub fn code_block(lang: &str, code: &str, l: Lang) -> String {
         ),
         lang = escape(lang),
         label = label(lang),
-        html = highlight(lang, code),
+        html = lines(&highlight(lang, code)),
         copy_label = tr(l, "Copier le code"),
         copy = tr(l, "Copier"),
     )
+}
+
+/// Met chaque ligne de `html` (du code déjà coloré) dans un `<span class="ln">`, pour
+/// qu'une ligne trop longue passe à la ligne en retrait au lieu de faire défiler le bloc.
+/// Les balises ouvertes en fin de ligne sont refermées puis rouvertes à la suivante ;
+/// `--i` donne le retrait de la ligne. Le texte (et donc la copie) ne change pas.
+fn lines(html: &str) -> String {
+    let mut out = String::with_capacity(html.len() + html.len() / 4);
+    let mut open: Vec<&str> = Vec::new();
+    for (n, line) in html.split('\n').enumerate() {
+        if n > 0 {
+            out.push_str(&"</span>".repeat(open.len()));
+            out.push_str("\n</span>");
+        }
+        let indent = line.chars().take_while(|&c| c == ' ').count();
+        out.push_str(&format!(r#"<span class="ln" style="--i:{indent}">"#));
+        for tag in &open {
+            out.push_str(tag);
+        }
+        let mut rest = line;
+        while let Some(i) = rest.find('<') {
+            let j = rest[i..].find('>').map_or(rest.len(), |j| i + j + 1);
+            let tag = &rest[i..j];
+            if tag.starts_with("</") {
+                open.pop();
+            } else {
+                open.push(tag);
+            }
+            rest = &rest[j..];
+        }
+        out.push_str(line);
+    }
+    out.push_str(&"</span>".repeat(open.len()));
+    out.push_str("</span>");
+    out
 }
 
 /// Rend `source`, une page du parcours `track`, pour le site en langue `l` : traduite,
@@ -170,6 +205,9 @@ pub fn render(source: &str, track: &str, l: Lang, translated: bool) -> Rendered 
     let mut skipping = false;
     // Les liens ouverts : externe ou non.
     let mut open_links: Vec<bool> = Vec::new();
+    // Un tableau large en cours, empilé en fiches sur téléphone : alignements, intitulés
+    // des colonnes, dans l'en-tête ?, colonne de la cellule suivante.
+    let mut wide: Option<(Vec<Alignment>, Vec<String>, bool, usize)> = None;
 
     let options = Options::ENABLE_TABLES | Options::ENABLE_STRIKETHROUGH;
     for event in Parser::new_ext(source, options) {
@@ -193,6 +231,11 @@ pub fn render(source: &str, track: &str, l: Lang, translated: bool) -> Rendered 
                 }
                 if in_first_paragraph {
                     description.push_str(t);
+                }
+                if let Some((_, labels, true, _)) = wide.as_mut()
+                    && let Some(label) = labels.last_mut()
+                {
+                    label.push_str(t);
                 }
                 if let Some(quote) = quotes.last_mut().filter(|q| !q.2) {
                     quote.2 = true;
@@ -353,13 +396,55 @@ pub fn render(source: &str, track: &str, l: Lang, translated: bool) -> Rendered 
                     events.push(Event::Html(code_block(&lang, &body, l).into()));
                 }
             }
-            Event::Start(Tag::Table(_)) => {
-                events.push(Event::Html(r#"<div class="table-wrap">"#.into()));
+            Event::Start(Tag::Table(ref alignments)) => {
+                // Quatre colonnes ou plus ne tiennent pas sur un téléphone : chaque ligne y
+                // devient une fiche, chaque cellule précédée de l'intitulé de sa colonne.
+                if alignments.len() >= 4 {
+                    wide = Some((alignments.clone(), Vec::new(), false, 0));
+                    events.push(Event::Html(r#"<div class="table-wrap table-wrap--stack">"#.into()));
+                } else {
+                    events.push(Event::Html(r#"<div class="table-wrap">"#.into()));
+                }
                 events.push(event);
             }
             Event::End(TagEnd::Table) => {
+                wide = None;
                 events.push(event);
                 events.push(Event::Html("</div>".into()));
+            }
+            Event::Start(Tag::TableHead) | Event::End(TagEnd::TableHead) => {
+                if let Some(w) = wide.as_mut() {
+                    w.2 = matches!(event, Event::Start(_));
+                }
+                events.push(event);
+            }
+            Event::Start(Tag::TableRow) => {
+                if let Some(w) = wide.as_mut() {
+                    w.3 = 0;
+                }
+                events.push(event);
+            }
+            Event::Start(Tag::TableCell) if wide.is_some() => {
+                let (alignments, labels, head, col) = wide.as_mut().unwrap();
+                if *head {
+                    labels.push(String::new());
+                    events.push(event);
+                } else {
+                    let align = match alignments.get(*col) {
+                        Some(Alignment::Left) => r#" style="text-align: left""#,
+                        Some(Alignment::Center) => r#" style="text-align: center""#,
+                        Some(Alignment::Right) => r#" style="text-align: right""#,
+                        _ => "",
+                    };
+                    let label = labels.get(*col).map_or("", |l| l.trim());
+                    events.push(Event::Html(
+                        format!(r#"<td data-label="{}"{align}><div>"#, escape(label)).into(),
+                    ));
+                    *col += 1;
+                }
+            }
+            Event::End(TagEnd::TableCell) if wide.as_ref().is_some_and(|w| !w.2) => {
+                events.push(Event::Html("</div></td>".into()));
             }
             // Pas de HTML écrit dans les pages : il est montré comme du texte.
             Event::Html(raw) | Event::InlineHtml(raw) => events.push(Event::Text(raw)),
@@ -488,5 +573,46 @@ mod tests {
         assert_eq!(slug("Les boucles « for » et `while`"), "les-boucles-for-et-while");
         assert_eq!(slug("Où ? Ça ! Œuvre"), "ou-ca-oeuvre");
         assert_eq!(slug("Option<T> et Result<T, E>"), "option-t-et-result-t-e");
+    }
+
+    #[test]
+    fn tableaux_larges_et_lignes_de_code() {
+        let r = render(
+            "# T\n\n| A | B |\n|---|---|\n| 1 | 2 |\n\n| Nom | `x` | C | D |\n|---|---|--:|---|\n| a | b | 3 | d |\n",
+            "ruby",
+            Lang::Fr,
+            true,
+        );
+        assert!(r.html.contains(r#"<div class="table-wrap"><table>"#), "{}", r.html);
+        assert!(
+            r.html.contains(r#"<div class="table-wrap table-wrap--stack"><table>"#),
+            "{}",
+            r.html
+        );
+        assert!(r.html.contains("<td>1</td>"), "{}", r.html);
+        assert!(
+            r.html
+                .contains(r#"<td data-label="Nom"><div>a</div></td><td data-label="x"><div>b</div></td>"#),
+            "{}",
+            r.html
+        );
+        assert!(
+            r.html
+                .contains(r#"<td data-label="C" style="text-align: right"><div>3</div></td>"#),
+            "{}",
+            r.html
+        );
+
+        let html = lines("<span class=\"c\">/* a\n  b */</span>\nx");
+        assert_eq!(
+            html,
+            concat!(
+                r#"<span class="ln" style="--i:0"><span class="c">/* a</span>"#,
+                "\n</span>",
+                r#"<span class="ln" style="--i:2"><span class="c">  b */</span>"#,
+                "\n</span>",
+                r#"<span class="ln" style="--i:0">x</span>"#,
+            )
+        );
     }
 }
