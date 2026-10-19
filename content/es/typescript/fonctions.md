@@ -1,14 +1,13 @@
 # Las funciones
 
-Esta página explica cómo escribir funciones en TypeScript, tipar sus parámetros y su valor de retorno, y pasar una función a otra.
+Esta página explica cómo escribir funciones en TypeScript, tipar sus parámetros y su valor de retorno, y saber dónde existen sus variables.
 
 > **Objetivos:**
 >
 > - sabrás escribir una función con parámetros y un tipo de retorno;
 > - sabrás hacer que un parámetro sea opcional o darle un valor por defecto;
 > - sabrás escribir una función flecha `(x) => ...`;
-> - sabrás escribir el tipo de una función: `(x: number) => number`;
-> - sabrás pasar una función como argumento (un *callback*) y tiparla.
+> - sabrás decir dónde existe una variable: su ámbito.
 
 ## Definir y llamar a una función
 
@@ -269,45 +268,6 @@ tamaño, con `"mediano"` como tamaño por defecto. Devuelve, por ejemplo,
 > Un té grande
 > ```
 
-## Un número variable de argumentos
-
-> **Nota:** esta parte puede esperar. Léela cuando las bases estén firmes.
-
-Tres puntos `...` delante del último parámetro lo convierten en **parámetro
-rest**: recibe todos los argumentos restantes, guardados en un array. Su tipo es
-un array, aquí `number[]` («lista de números»).
-
-```typescript
-function suma(...numeros: number[]): number {
-  let total = 0;
-  for (const n of numeros) {
-    total += n;
-  }
-  return total;
-}
-
-console.log(suma(1, 2));
-console.log(suma(1, 2, 3, 4));
-console.log(suma());
-```
-
-```sortie
-3
-10
-0
-```
-
-Línea por línea:
-
-- `suma(1, 2, 3, 4)` guarda los cuatro argumentos en el array `numeros`:
-  `[1, 2, 3, 4]`;
-- `total` empieza en 0, y luego el bucle le suma cada número: 1, 3, 6, 10;
-- `return total` devuelve 10;
-- `suma()` recibe un array vacío: el bucle no da ninguna vuelta, y la función
-  devuelve 0.
-
-Cada argumento se comprueba: `suma(1, "2")` se rechazaría.
-
 ## Las funciones flecha
 
 Muchas funciones son muy pequeñas: una sola línea de cálculo. Escribir `function`,
@@ -348,7 +308,7 @@ Línea por línea:
 
 Una función sin nombre, como esta, también se llama
 [lambda](../debuter/glossaire.md#lambda). Las funciones flecha están por todas partes en
-TypeScript, sobre todo como *callbacks* (más abajo).
+TypeScript, sobre todo como *callbacks* (en el capítulo siguiente).
 
 **Te toca:** escribe una función flecha `triple`, guardada en una constante, que
 reciba un número y devuelva ese número multiplicado por 3. Muestra `triple(7)`.
@@ -363,132 +323,6 @@ reciba un número y devuelva ese número multiplicado por 3. Muestra `triple(7)`
 >
 > ```sortie
 > 21
-> ```
-
-## El tipo de una función
-
-Un enchufe solo acepta una forma de clavija. El tipo de una función cumple el mismo
-papel: dice de antemano qué clase de función acepta una variable o un parámetro.
-
-Una función es un valor, como un número o un texto: se puede guardar en una
-variable. Su tipo se escribe como una función flecha: los parámetros, luego `=>`, luego
-el tipo de retorno.
-
-```typescript
-let operacion: (a: number, b: number) => number;
-
-operacion = (a, b) => a + b;
-console.log(operacion(6, 3));
-
-operacion = (a, b) => a * b;
-console.log(operacion(6, 3));
-```
-
-```sortie
-9
-18
-```
-
-Línea por línea:
-
-- la primera línea crea la variable `operacion`, todavía vacía, y dice qué podrá
-  contener: una función que recibe dos números y devuelve un número;
-- primero se guarda en ella una función que suma: `operacion(6, 3)` da 9;
-- después se reemplaza por una función que multiplica: la misma llamada da 18.
-
-`(a: number, b: number) => number` se lee: «una función que recibe dos números y
-devuelve un número». Fíjate: en `(a, b) => a + b`, ya no hace falta escribir los
-tipos de los parámetros. TypeScript ya los conoce gracias al tipo de `operacion`.
-
-Para reutilizar un tipo de función, dale un nombre con `type`:
-
-```typescript
-type Operacion = (a: number, b: number) => number;
-
-const mas: Operacion = (a, b) => a + b;
-const menos: Operacion = (a, b) => a - b;
-
-console.log(mas(10, 4), menos(10, 4));
-```
-
-```sortie
-14 6
-```
-
-## Los callbacks: pasar una función a una función
-
-Un **callback** («devolución de llamada») es una función que se pasa como argumento a otra
-función, que la llamará más tarde. Es como dejarle tu número al panadero:
-te llamará cuando el pan esté listo.
-
-```typescript
-function repetir(veces: number, accion: (vuelta: number) => void): void {
-  for (let i = 1; i <= veces; i++) {
-    accion(i);
-  }
-}
-
-repetir(3, (vuelta) => {
-  console.log(`Vuelta número ${vuelta}`);
-});
-```
-
-```sortie
-Vuelta número 1
-Vuelta número 2
-Vuelta número 3
-```
-
-Línea por línea:
-
-- `repetir` recibe dos cosas: un número (`veces`) y una función (`accion`);
-- en la llamada, `veces` vale 3 y `accion` es la función flecha escrita entre los
-  paréntesis;
-- el bucle da a `i` los valores 1, 2 y 3, y llama a `accion(i)` en cada vuelta;
-- cada llamada guarda `i` en `vuelta` y muestra la frase.
-
-El parámetro `accion` tiene un tipo de función: `(vuelta: number) => void`. Gracias a él,
-TypeScript sabe que `vuelta` es un `number` dentro de la función flecha pasada en la llamada.
-
-Aquí tienes un ejemplo más útil: una función que transforma cada número de una lista.
-
-```typescript
-function transformar(numeros: number[], f: (n: number) => number): number[] {
-  const resultado: number[] = [];
-  for (const n of numeros) {
-    resultado.push(f(n));
-  }
-  return resultado;
-}
-
-console.log(transformar([1, 2, 3], (n) => n * 10));
-console.log(transformar([1, 2, 3], (n) => n - 1));
-```
-
-```sortie
-[ 10, 20, 30 ]
-[ 0, 1, 2 ]
-```
-
-`push` añade un elemento al final de un array. Los arrays ya tienen un método
-`map` que hace exactamente eso: lo verás en [los arrays](collections.md).
-
-**Te toca:** escribe una función `aplicar` que reciba un número y una función de tipo
-`(n: number) => number`, y devuelva el resultado de esa función sobre el número.
-Muestra `aplicar(5, (n) => n + 100)`.
-
-> **Solución**
->
-> ```typescript
-> function aplicar(x: number, f: (n: number) => number): number {
->   return f(x);
-> }
->
-> console.log(aplicar(5, (n) => n + 100));
-> ```
->
-> ```sortie
-> 105
 > ```
 
 ## El ámbito de las variables
@@ -528,35 +362,6 @@ Línea por línea:
 
 > **Consejo:** una función es más fácil de entender cuando recibe todo lo que
 > necesita como parámetros.
-
-## Las sobrecargas, en pocas palabras
-
-> **Nota:** esta parte puede esperar. Léela cuando las bases estén firmes.
-
-A veces, una función acepta varias formas de llamada, con un tipo de retorno
-diferente para cada una. TypeScript permite enumerarlas antes del cuerpo: son las
-**sobrecargas** (*overloads*).
-
-```typescript
-function duplicar(x: number): number;
-function duplicar(x: string): string;
-function duplicar(x: number | string): number | string {
-  return typeof x === "number" ? x * 2 : x + x;
-}
-
-console.log(duplicar(21));
-console.log(duplicar("ja"));
-```
-
-```sortie
-42
-jaja
-```
-
-Las dos primeras líneas son las formas permitidas; la tercera es el código de verdad.
-Gracias a ellas, se sabe que `duplicar(21)` es un `number`, y `duplicar("ja")` un
-`string`. Las encontrarás en las bibliotecas; para tus comienzos, una unión
-(`number | string`) suele bastar.
 
 ## Errores frecuentes
 
@@ -676,20 +481,22 @@ devuelva su media.
 > 3.5
 > ```
 
-**Pregunta 2:** ¿qué quiere decir el tipo `(texto: string) => boolean`?
-
-> **Respuesta**
->
-> Es el tipo de una función que recibe un texto y devuelve `true` o `false`. Por
-> ejemplo: `(texto) => texto.length > 3`.
-
-**Pregunta 3:** ¿qué diferencia hay entre `titulo?: string` y `titulo = "Sr."`?
+**Pregunta 2:** ¿qué diferencia hay entre `titulo?: string` y `titulo = "Sr."`?
 
 > **Respuesta**
 >
 > Los dos hacen que el parámetro sea opcional. Con `?`, vale `undefined` cuando
 > falta: hay que comprobar ese caso antes de usarlo. Con `= "Sr."`, vale `"Sr."`
 > cuando falta: siempre es un `string`.
+
+**Pregunta 3:** una variable `total` se crea dentro de una función. Después de la llamada,
+¿se puede escribir `console.log(total)` fuera de la función?
+
+> **Respuesta**
+>
+> No. El ámbito de `total` es la función: fuera de ella no existe, y TypeScript
+> lo rechaza (*Cannot find name 'total'*). Para recuperar el valor, la función debe
+> devolverlo con `return`.
 
 ## En resumen
 
@@ -698,10 +505,10 @@ devuelva su media.
 - Los parámetros siempre deben estar tipados; el tipo de retorno se puede adivinar,
   pero escribirlo ayuda.
 - `?` hace que un parámetro sea opcional (entonces vale `undefined`), `= valor` le da
-  un valor por defecto, `...nombre: T[]` recibe todos los argumentos restantes.
+  un valor por defecto.
 - Una función flecha se escribe `(x: number) => x * 2`; `void` quiere decir «no devuelve
   nada».
-- El tipo de una función se escribe `(x: number) => number`: permite tipar los
-  callbacks, cuyos parámetros se adivinan entonces.
+- Los parámetros y las variables creadas dentro de una función solo existen en esa
+  función: es su ámbito.
 
-Siguiente: [trabajar con texto](texte.md).
+Siguiente: [más allá de las funciones](fonctions-avancees.md).

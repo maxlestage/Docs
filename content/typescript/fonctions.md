@@ -1,14 +1,13 @@
 # Les fonctions
 
-Cette page explique comment écrire des fonctions en TypeScript, typer leurs paramètres et leur valeur de retour, et passer une fonction à une autre.
+Cette page explique comment écrire des fonctions en TypeScript, typer leurs paramètres et leur valeur de retour, et savoir où leurs variables existent.
 
 > **Objectifs :**
 >
 > - vous saurez écrire une fonction avec des paramètres et un type de retour ;
 > - vous saurez rendre un paramètre facultatif ou lui donner une valeur par défaut ;
 > - vous saurez écrire une fonction fléchée `(x) => ...` ;
-> - vous saurez écrire le type d'une fonction : `(x: number) => number` ;
-> - vous saurez passer une fonction en argument (un *callback*) et la typer.
+> - vous saurez dire où une variable existe : sa portée.
 
 ## Définir et appeler une fonction
 
@@ -270,44 +269,6 @@ taille, avec `"moyen"` comme taille par défaut. Elle renvoie par exemple
 > Un thé grand
 > ```
 
-## Un nombre variable d'arguments
-
-> **Note :** cette partie peut attendre. Lisez-la quand les bases seront solides.
-
-Trois points `...` devant le dernier paramètre le transforment en **paramètre du
-reste** : il reçoit tous les arguments restants, rangés dans un tableau. Son type est
-un tableau, ici `number[]` (« liste de nombres »).
-
-```typescript
-function somme(...nombres: number[]): number {
-  let total = 0;
-  for (const n of nombres) {
-    total += n;
-  }
-  return total;
-}
-
-console.log(somme(1, 2));
-console.log(somme(1, 2, 3, 4));
-console.log(somme());
-```
-
-```sortie
-3
-10
-0
-```
-
-Ligne par ligne :
-
-- `somme(1, 2, 3, 4)` range les quatre arguments dans le tableau `nombres` :
-  `[1, 2, 3, 4]` ;
-- `total` part de 0, puis la boucle lui ajoute chaque nombre : 1, 3, 6, 10 ;
-- `return total` renvoie 10 ;
-- `somme()` reçoit un tableau vide : la boucle ne tourne pas, et la fonction renvoie 0.
-
-Chaque argument est vérifié : `somme(1, "2")` serait refusé.
-
 ## Les fonctions fléchées
 
 Beaucoup de fonctions sont toutes petites : une seule ligne de calcul. Écrire
@@ -349,7 +310,7 @@ Ligne par ligne :
 
 Une fonction sans nom, comme celle-ci, s'appelle aussi une
 [lambda](../debuter/glossaire.md#lambda). Les fonctions fléchées sont partout en
-TypeScript, surtout comme *callbacks* (plus bas).
+TypeScript, surtout comme *callbacks* (au chapitre suivant).
 
 **À vous :** écrivez une fonction fléchée `triple`, rangée dans une constante, qui
 prend un nombre et renvoie ce nombre multiplié par 3. Affichez `triple(7)`.
@@ -364,133 +325,6 @@ prend un nombre et renvoie ce nombre multiplié par 3. Affichez `triple(7)`.
 >
 > ```sortie
 > 21
-> ```
-
-## Le type d'une fonction
-
-Une prise électrique n'accepte qu'une forme de fiche. Le type d'une fonction joue le
-même rôle : il dit à l'avance quelle sorte de fonction une variable ou un paramètre
-accepte.
-
-Une fonction est une valeur, comme un nombre ou un texte : on peut la ranger dans une
-variable. Son type s'écrit comme une fonction fléchée : les paramètres, puis `=>`, puis
-le type de retour.
-
-```typescript
-let operation: (a: number, b: number) => number;
-
-operation = (a, b) => a + b;
-console.log(operation(6, 3));
-
-operation = (a, b) => a * b;
-console.log(operation(6, 3));
-```
-
-```sortie
-9
-18
-```
-
-Ligne par ligne :
-
-- la première ligne crée la variable `operation`, encore vide, et dit ce qu'elle
-  pourra contenir : une fonction qui prend deux nombres et renvoie un nombre ;
-- on y range d'abord une fonction qui additionne : `operation(6, 3)` donne 9 ;
-- on la remplace ensuite par une fonction qui multiplie : le même appel donne 18.
-
-`(a: number, b: number) => number` se lit : « une fonction qui prend deux nombres et
-renvoie un nombre ». Remarquez : dans `(a, b) => a + b`, plus besoin d'écrire les
-types des paramètres. TypeScript les connaît déjà grâce au type de `operation`.
-
-Pour réutiliser un type de fonction, donnez-lui un nom avec `type` :
-
-```typescript
-type Operation = (a: number, b: number) => number;
-
-const plus: Operation = (a, b) => a + b;
-const moins: Operation = (a, b) => a - b;
-
-console.log(plus(10, 4), moins(10, 4));
-```
-
-```sortie
-14 6
-```
-
-## Les callbacks : passer une fonction à une fonction
-
-Un **callback** (« rappel ») est une fonction passée en argument à une autre
-fonction, qui l'appellera plus tard. C'est comme laisser votre numéro au boulanger :
-il vous rappellera quand le pain sera prêt.
-
-```typescript
-function repeter(fois: number, action: (tour: number) => void): void {
-  for (let i = 1; i <= fois; i++) {
-    action(i);
-  }
-}
-
-repeter(3, (tour) => {
-  console.log(`Tour numéro ${tour}`);
-});
-```
-
-```sortie
-Tour numéro 1
-Tour numéro 2
-Tour numéro 3
-```
-
-Ligne par ligne :
-
-- `repeter` reçoit deux choses : un nombre (`fois`) et une fonction (`action`) ;
-- à l'appel, `fois` vaut 3 et `action` est la fonction fléchée écrite entre
-  parenthèses ;
-- la boucle donne à `i` les valeurs 1, 2 puis 3, et appelle `action(i)` à chaque tour ;
-- chaque appel range `i` dans `tour` et affiche la phrase.
-
-Le paramètre `action` a un type de fonction : `(tour: number) => void`. Grâce à lui,
-TypeScript sait que `tour` est un `number` dans la fonction fléchée passée à l'appel.
-
-Voici un exemple plus utile : une fonction qui transforme chaque nombre d'une liste.
-
-```typescript
-function transformer(nombres: number[], f: (n: number) => number): number[] {
-  const resultat: number[] = [];
-  for (const n of nombres) {
-    resultat.push(f(n));
-  }
-  return resultat;
-}
-
-console.log(transformer([1, 2, 3], (n) => n * 10));
-console.log(transformer([1, 2, 3], (n) => n - 1));
-```
-
-```sortie
-[ 10, 20, 30 ]
-[ 0, 1, 2 ]
-```
-
-`push` ajoute un élément à la fin d'un tableau. Les tableaux ont déjà une méthode
-`map` qui fait exactement cela : vous la verrez dans [les tableaux](collections.md).
-
-**À vous :** écrivez une fonction `appliquer` qui prend un nombre et une fonction de
-type `(n: number) => number`, et renvoie le résultat de cette fonction sur le nombre.
-Affichez `appliquer(5, (n) => n + 100)`.
-
-> **Solution**
->
-> ```typescript
-> function appliquer(x: number, f: (n: number) => number): number {
->   return f(x);
-> }
->
-> console.log(appliquer(5, (n) => n + 100));
-> ```
->
-> ```sortie
-> 105
 > ```
 
 ## La portée des variables
@@ -530,35 +364,6 @@ Ligne par ligne :
 
 > **Astuce :** une fonction est plus facile à comprendre quand elle reçoit tout ce dont
 > elle a besoin en paramètres.
-
-## Les surcharges, en bref
-
-> **Note :** cette partie peut attendre. Lisez-la quand les bases seront solides.
-
-Parfois, une fonction accepte plusieurs formes d'appel, avec un type de retour
-différent pour chacune. TypeScript permet de les lister avant le corps : ce sont les
-**surcharges** (*overloads*).
-
-```typescript
-function doubler(x: number): number;
-function doubler(x: string): string;
-function doubler(x: number | string): number | string {
-  return typeof x === "number" ? x * 2 : x + x;
-}
-
-console.log(doubler(21));
-console.log(doubler("ha"));
-```
-
-```sortie
-42
-haha
-```
-
-Les deux premières lignes sont les formes autorisées ; la troisième est le vrai code.
-Grâce à elles, `doubler(21)` est connu comme un `number`, et `doubler("ha")` comme un
-`string`. Vous en croiserez dans les bibliothèques ; pour vos débuts, une union
-(`number | string`) suffit souvent.
 
 ## Erreurs fréquentes
 
@@ -678,20 +483,22 @@ renvoie leur moyenne.
 > 3.5
 > ```
 
-**Question 2 :** que veut dire le type `(texte: string) => boolean` ?
-
-> **Réponse**
->
-> C'est le type d'une fonction qui prend un texte et renvoie `true` ou `false`. Par
-> exemple : `(texte) => texte.length > 3`.
-
-**Question 3 :** quelle différence entre `titre?: string` et `titre = "M."` ?
+**Question 2 :** quelle différence entre `titre?: string` et `titre = "M."` ?
 
 > **Réponse**
 >
 > Les deux rendent le paramètre facultatif. Avec `?`, il vaut `undefined` quand il est
 > absent : il faut tester ce cas avant de l'utiliser. Avec `= "M."`, il vaut `"M."`
 > quand il est absent : c'est toujours un `string`.
+
+**Question 3 :** une variable `total` est créée dans une fonction. Après l'appel, peut-on
+écrire `console.log(total)` en dehors de la fonction ?
+
+> **Réponse**
+>
+> Non. La portée de `total` est la fonction : en dehors, elle n'existe pas, et
+> TypeScript refuse (*Cannot find name 'total'*). Pour récupérer la valeur, la fonction
+> doit la renvoyer avec `return`.
 
 ## En résumé
 
@@ -700,10 +507,10 @@ renvoie leur moyenne.
 - Les paramètres doivent toujours être typés ; le type de retour peut être deviné,
   mais l'écrire aide.
 - `?` rend un paramètre facultatif (il vaut alors `undefined`), `= valeur` lui donne
-  une valeur par défaut, `...nom: T[]` reçoit tous les arguments restants.
+  une valeur par défaut.
 - Une fonction fléchée s'écrit `(x: number) => x * 2` ; `void` veut dire « ne renvoie
   rien ».
-- Le type d'une fonction s'écrit `(x: number) => number` : il permet de typer les
-  callbacks, dont les paramètres sont alors devinés.
+- Les paramètres et les variables créées dans une fonction n'existent que dans cette
+  fonction : c'est leur portée.
 
-Suite : [travailler avec du texte](texte.md).
+Suite : [aller plus loin avec les fonctions](fonctions-avancees.md).
