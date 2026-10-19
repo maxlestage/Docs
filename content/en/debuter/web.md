@@ -463,4 +463,4 @@ JavaScript?
 - HTML structures, CSS decorates, JavaScript brings to life; an API returns data in JSON.
 - Ruby (Rails) and Rust (axum) write servers; Rythme reads and writes JSON and HTML.
 
-Next: [Qu'est-ce qu'une base de données ?](bases-de-donnees.md)
+Next: [what is a database?](bases-de-donnees.md)

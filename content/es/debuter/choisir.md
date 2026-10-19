@@ -429,4 +429,4 @@ adelante?
 - Para los scripts y Ruby on Rails: Ruby.
 - Cada recorrido empieza con su página de introducción.
 
-Siguiente: [Contribuer à un projet open source](open-source.md)
+Siguiente: [contribuir a un proyecto de código abierto](open-source.md)
