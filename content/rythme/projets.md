@@ -89,7 +89,7 @@ end
 Avec `each`, le jeu continuerait même après « gagné ! ». Il faut
 **s'arrêter** au bon moment, et compter les essais. Rythme n'a pas de
 boucle `while` : on écrit une fonction **récursive** (voir
-[répéter avec la récursion](conditions-boucles.md#repeter-avec-la-recursion)).
+[répéter avec la récursion](boucles.md#repeter-avec-la-recursion)).
 
 `jouer` reçoit le secret, les propositions qui restent, et le numéro de
 l'essai :
