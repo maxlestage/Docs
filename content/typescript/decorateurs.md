@@ -316,6 +316,11 @@ console.log(appuyer());
 Ding dong
 ```
 
+`Reflect.set(this, nom, valeur)` écrit `this[nom] = valeur` sans que TypeScript se
+plaigne du nom inconnu.
+
+Essayez : enlevez la ligne `@lier`. Le programme affiche `(this a été perdu)`.
+
 > **À retenir :** le contexte décrit l'élément décoré (`kind`, `name`, `static`,
 > `private`). `addInitializer` lance du code pour chaque objet créé.
 
