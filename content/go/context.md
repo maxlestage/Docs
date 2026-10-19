@@ -225,7 +225,7 @@ defer cancel() // annulé à la fin de la fonction, quoi qu'il arrive
 ```
 
 `defer` repousse l'appel à la fin de la fonction (voir
-[defer](fonctions.md#defer-repousser-a-la-fin)). Même si la fonction s'arrête plus tôt,
+[defer](fonctions-avancees.md#defer-repousser-a-la-fin)). Même si la fonction s'arrête plus tôt,
 le contexte sera nettoyé.
 
 ## Un délai maximum : WithTimeout

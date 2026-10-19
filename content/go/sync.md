@@ -291,7 +291,7 @@ Les quatre recherches peuvent se faire **en même temps** : elles prennent toute
 ```
 
 `defer a.mu.RUnlock()` rend le verrou à la sortie de la méthode, même avec un `return`
-au milieu (voir [defer](fonctions.md#defer-repousser-a-la-fin)).
+au milieu (voir [defer](fonctions-avancees.md#defer-repousser-a-la-fin)).
 
 Essayez : remplacez `RLock`/`RUnlock` par `Lock`/`Unlock` dans `Chercher`. Le résultat
 est le même, mais les recherches passent une par une.
