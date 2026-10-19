@@ -1,9 +1,12 @@
 //! Les adresses du site : `/`, `/comparer/`, `/{parcours}/`, `/{parcours}/{page}/`,
-//! derrière un chemin de base facultatif (`/Docs` sur GitHub Pages).
+//! en français ; les mêmes derrière `/en` et `/es` (avec `/en/compare/` et
+//! `/es/comparar/`) ; le tout derrière un chemin de base facultatif (`/Docs` sur GitHub
+//! Pages).
 
 use std::sync::OnceLock;
 
 use crate::catalog::{self, TRACKS, Track};
+use crate::i18n::Lang;
 
 static BASE: OnceLock<String> = OnceLock::new();
 
@@ -32,6 +35,16 @@ pub fn link(path: &str) -> String {
     format!("{}{path}", base())
 }
 
+/// Un lien vers `path` dans la langue `lang` : `/en/…`.
+pub fn lang_link(lang: Lang, path: &str) -> String {
+    link(&format!("{}{path}", lang.prefix()))
+}
+
+/// Le nom de la page Comparer dans chaque langue.
+fn compare_slug(lang: Lang) -> &'static str {
+    lang.pick("comparer", "compare", "comparar")
+}
+
 #[derive(Clone, Copy)]
 pub enum Route {
     Home,
@@ -44,43 +57,52 @@ pub enum Route {
 
 impl PartialEq for Route {
     fn eq(&self, other: &Route) -> bool {
-        self.path() == other.path()
+        self.path(Lang::Fr) == other.path(Lang::Fr)
     }
 }
 
 impl std::fmt::Debug for Route {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f, "Route({})", self.path())
+        write!(f, "Route({})", self.path(Lang::Fr))
     }
 }
 
 impl Route {
-    /// La route d'un chemin (sans le chemin de base).
-    pub fn parse(path: &str) -> Route {
-        let parts: Vec<&str> = path.split('/').filter(|p| !p.is_empty()).collect();
-        match parts[..] {
+    /// La langue et la route d'un chemin (sans le chemin de base).
+    pub fn parse(path: &str) -> (Lang, Route) {
+        let mut parts: Vec<&str> = path.split('/').filter(|p| !p.is_empty()).collect();
+        let lang = match parts.first().and_then(|p| Lang::from_prefix(p)) {
+            Some(lang) => {
+                parts.remove(0);
+                lang
+            }
+            None => Lang::Fr,
+        };
+        let route = match parts[..] {
             [] => Route::Home,
-            ["comparer"] => Route::Compare,
+            [c] if c == compare_slug(lang) => Route::Compare,
             [track] => catalog::track(track).map_or(Route::NotFound, Route::Track),
             [track, page] => catalog::find(track, page).map_or(Route::NotFound, |(t, i)| Route::Doc(t, i)),
             _ => Route::NotFound,
-        }
+        };
+        (lang, route)
     }
 
-    /// Le chemin, sans le chemin de base : `/rust/fonctions/`.
-    pub fn path(&self) -> String {
-        match self {
+    /// Le chemin, sans le chemin de base : `/rust/fonctions/`, `/en/rust/fonctions/`.
+    pub fn path(&self, lang: Lang) -> String {
+        let path = match self {
             Route::Home => "/".to_owned(),
-            Route::Compare => "/comparer/".to_owned(),
+            Route::Compare => format!("/{}/", compare_slug(lang)),
             Route::Track(t) => format!("/{}/", t.slug),
             Route::Doc(t, i) => format!("/{}/{}/", t.slug, t.pages[*i].slug),
             Route::NotFound => "/404/".to_owned(),
-        }
+        };
+        format!("{}{path}", lang.prefix())
     }
 
     /// Le lien, avec le chemin de base.
-    pub fn href(&self) -> String {
-        link(&self.path())
+    pub fn href(&self, lang: Lang) -> String {
+        link(&self.path(lang))
     }
 
     /// Le parcours de la page, s'il y en a un.
@@ -103,8 +125,8 @@ impl Route {
 }
 
 /// Le lien vers une page d'un parcours, avec une ancre facultative.
-pub fn doc_href(track: &str, page: &str, anchor: Option<&str>) -> String {
-    let mut href = link(&format!("/{track}/{page}/"));
+pub fn doc_href(lang: Lang, track: &str, page: &str, anchor: Option<&str>) -> String {
+    let mut href = lang_link(lang, &format!("/{track}/{page}/"));
     if let Some(anchor) = anchor.filter(|a| !a.is_empty()) {
         href.push('#');
         href.push_str(anchor);
@@ -119,11 +141,20 @@ mod tests {
     #[test]
     fn parses_and_prints_every_route() {
         for route in Route::all() {
-            assert_eq!(Route::parse(&route.path()), route);
+            for lang in Lang::ALL {
+                assert_eq!(Route::parse(&route.path(lang)), (lang, route));
+            }
         }
-        assert_eq!(Route::parse("/rust/possession").path(), "/rust/possession/");
-        assert_eq!(Route::parse("/ruby/possession/").path(), "/404/");
-        assert_eq!(Route::parse("/a/b/c").path(), "/404/");
+        let path = |p: &str| {
+            let (lang, route) = Route::parse(p);
+            route.path(lang)
+        };
+        assert_eq!(path("/rust/possession"), "/rust/possession/");
+        assert_eq!(path("/en/rust/possession"), "/en/rust/possession/");
+        assert_eq!(path("/es/comparar/"), "/es/comparar/");
+        assert_eq!(path("/en/comparer/"), "/en/404/");
+        assert_eq!(path("/ruby/possession/"), "/404/");
+        assert_eq!(path("/a/b/c"), "/404/");
         assert_eq!(normalize_base("Docs/"), "/Docs");
         assert_eq!(normalize_base(" "), "");
     }

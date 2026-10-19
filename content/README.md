@@ -99,3 +99,37 @@ sans accents, les espaces remplacés par des `-` : `## Les boucles for` → `#le
 ruby tools/verifier.rb                      # tout
 ruby tools/verifier.rb content/rust/*.md    # une partie
 ```
+
+## Traductions (anglais, espagnol)
+
+Le français est la langue de référence : `content/<parcours>/<page>.md`. Les traductions
+sont dans `content/en/<parcours>/<page>.md` et `content/es/<parcours>/<page>.md`, avec le
+même nom de fichier. Une page pas encore traduite s'affiche en français, avec un bandeau.
+
+- Tout se traduit : le texte, les titres, les commentaires du code, les textes affichés
+  par les programmes et les noms de variables quand c'est naturel. Le code doit toujours
+  marcher, et chaque bloc ` ```sortie ` doit être la sortie exacte de la version traduite
+  (`ruby tools/verifier.rb content/en/…`). Les messages d'erreur réels restent ceux que
+  l'outil affiche (Rythme : `RYTHME_LANG=en` ou `es`, le vérificateur le fait).
+- Les mots des encadrés et des sections changent avec la langue :
+
+  | Français | English | Español |
+  |---|---|---|
+  | `**Astuce :**` | `**Tip:**` | `**Consejo:**` |
+  | `**À retenir :**` | `**Remember:**` | `**Recuerda:**` |
+  | `**Attention :**` | `**Warning:**` | `**Atención:**` |
+  | `**Note :**` | `**Note:**` | `**Nota:**` |
+  | `**Indice :**` | `**Hint:**` | `**Pista:**` |
+  | `**Objectifs :**` | `**Goals:**` | `**Objetivos:**` |
+  | `**Solution**` | `**Solution**` | `**Solución**` |
+  | `**Réponse**` | `**Answer**` | `**Respuesta**` |
+  | `## Erreurs fréquentes` | `## Common mistakes` | `## Errores frecuentes` |
+  | `## Testez-vous` | `## Test yourself` | `## Ponte a prueba` |
+  | `## En résumé` | `## Summary` | `## En resumen` |
+  | `Suite : [Titre](page.md)` | `Next: [Title](page.md)` | `Siguiente: [Título](page.md)` |
+  | `Niveau : ★☆☆` | `Level: ★☆☆` | `Nivel: ★☆☆` |
+
+- Les liens relatifs (`fonctions.md`, `../rust/types.md`) restent les mêmes : ils mènent
+  à la page dans la même langue. Une ancre (`page.md#ancre`) doit exister dans la page
+  telle qu'elle est servie dans cette langue : la traduction si elle existe, sinon la
+  page française. Dans le doute, un lien vers la page sans ancre.

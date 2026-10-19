@@ -6,6 +6,7 @@ use std::io;
 use std::path::{Path, PathBuf};
 use std::sync::Arc;
 
+use crate::i18n::Lang;
 use crate::routes::{Route, base, set_base};
 use crate::server::{Site, app, site_dir};
 
@@ -54,16 +55,22 @@ pub async fn export(out: &Path, base_path: &str, site_url: Option<String>) -> io
         }
     };
 
-    for route in Route::all() {
-        let html = String::from_utf8_lossy(&get(route.path(), 200).await?).into_owned();
-        write(
-            &format!("{}index.html", route.path()),
-            with_base(&html, base).as_bytes(),
-        )?;
+    for lang in Lang::ALL {
+        for route in Route::all() {
+            let path = route.path(lang);
+            let html = String::from_utf8_lossy(&get(path.clone(), 200).await?).into_owned();
+            write(&format!("{path}index.html"), with_base(&html, base).as_bytes())?;
+        }
     }
     let missing = String::from_utf8_lossy(&get("/404/".into(), 404).await?).into_owned();
     write("404.html", with_base(&missing, base).as_bytes())?;
-    for file in ["/search.json", "/sitemap.xml", "/robots.txt"] {
+    for file in [
+        "/search.json",
+        "/en/search.json",
+        "/es/search.json",
+        "/sitemap.xml",
+        "/robots.txt",
+    ] {
         write(file, &get(file.to_owned(), 200).await?)?;
     }
     for file in ["/manifest.webmanifest", "/sw.js"] {

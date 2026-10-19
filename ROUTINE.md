@@ -12,13 +12,28 @@ jour la liste ci-dessous, puis publie.
 2. Écrire en français simple, pour des débutants, comme les chapitres existants du même
    parcours (en lire deux d'abord).
 3. Un passage = **2 à 4 chapitres nouveaux ou fortement améliorés**, de préférence dans
-   des langages différents. Mieux vaut peu et juste que beaucoup et faux.
+   des langages différents, **ou 6 à 10 pages traduites** (voir « Traductions »
+   ci-dessous). En priorité, les traductions : un passage sur deux au moins en fait.
+   Mieux vaut peu et juste que beaucoup et faux.
+3 bis. **Traduire** : une page `content/<parcours>/<page>.md` devient
+   `content/en/<parcours>/<page>.md` (anglais, « you ») et
+   `content/es/<parcours>/<page>.md` (espagnol, « tú »), même nom de fichier. Les mots
+   des encadrés, des sections et de la ligne « Suite » sont dans la section
+   « Traductions » de [`content/README.md`](content/README.md). Même plan, mêmes blocs
+   de code (noms, textes et commentaires traduits) ; chaque bloc ```sortie et chaque
+   message d'erreur est la vraie sortie du code traduit (Rythme : `RYTHME_LANG=en` ou
+   `es`). Les liens vers le glossaire gardent l'ancre française, puis
+   `ruby tools/i18n/ancres.rb` les réécrit ; une ancre vers une autre page traduite
+   prend le titre traduit (`slug()` de `src/markdown.rs`), vers une page pas encore
+   traduite, pas d'ancre. Une page sans traduction s'affiche en français avec un
+   bandeau : rien d'autre à faire. Un nouveau chapitre en français ajoute sa ligne à
+   « Traductions » ci-dessous.
 4. Un nouveau chapitre s'ajoute à `src/catalog.rs` (dans la bonne partie du parcours),
    puis `ruby tools/suite.rb` relie les chapitres entre eux.
 5. Avant de publier, tout doit passer :
    - `cargo fmt --check`, `cargo clippy --all-targets -- -D warnings`, `cargo test` ;
    - `ruby tools/verifier.rb content/<parcours>/<fichier>.md …` sur chaque page touchée ;
-   - `ruby tools/suite.rb --check` ;
+   - `ruby tools/suite.rb --check` et `ruby tools/i18n/ancres.rb --check` ;
    - l'export et ses liens : `BASE_PATH=/Docs cargo run --release -- export /tmp/dist`
      puis `ruby tools/liens.rb /tmp/dist /Docs`.
 6. Publier par une pull request, jamais directement sur `master` :
@@ -95,6 +110,22 @@ jour la liste ci-dessous, puis publie.
 - [ ] `open-source` — Contribuer à un projet open source
 - [ ] `metiers` — Les métiers du développement
 
+### Traductions (anglais et espagnol)
+
+Traduit dans les deux langues : tout « Débuter » ; `introduction`, `premiers-pas`,
+`conditions-boucles` et `fonctions` de chaque langage. À traduire ensuite, dans
+l'ordre des parcours (une ligne par lot de 3 à 5 pages, dans les deux langues) :
+
+- [ ] Python : `nombres`, `texte`, `collections`, `dictionnaires`, `comprehensions`
+- [ ] JavaScript : `nombres`, `texte`, `collections`, `objets`
+- [ ] TypeScript : `texte`, `collections`, `objets`, `unions`
+- [ ] Go : `nombres`, `texte`, `collections`, `maps`
+- [ ] Ruby : `nombres`, `texte`, `collections`, `intervalles`
+- [ ] Rust : `nombres`, `texte`, `collections`, `hashmap`
+- [ ] Rythme : `nombres`, `texte`, `collections`, `dictionnaires`
+- [ ] Chaque parcours : `erreurs`, `tests`, `exercices`, `aide-memoire`
+- [ ] Puis le reste de chaque parcours, dans l'ordre de `src/catalog.rs`
+
 ### Pour tous
 - [ ] `exercices-2` — Une deuxième série de 12 exercices corrigés, par langage
 - [ ] La page Comparer : 5 idées de plus (bases de données, classes, itération, …)
@@ -103,3 +134,4 @@ jour la liste ci-dessous, puis publie.
 
 - 2026-10-19 — Mise en place de la routine (7 langages, 223 chapitres).
 - 2026-10-19 — La routine publie par une PR, fusionnée à partir de 3 commits quand la CI est verte.
+- 2026-10-19 — Le site en trois langues (FR, EN, ES) : interface traduite, 39 pages traduites dans chaque langue.

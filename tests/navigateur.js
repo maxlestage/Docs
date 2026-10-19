@@ -77,6 +77,20 @@ const check = (ok, what) => { if (!ok) failures.push(what); };
   check((await copy.locator(".code__copy").first().textContent()).includes("Copié"), "le bouton Copier répond");
   await context.close();
 
+  // En anglais et en espagnol : l'interface, et le sélecteur de langue.
+  const en = await browser.newContext({ permissions: ["clipboard-read", "clipboard-write"], viewport: { width: 1280, height: 800 } });
+  const english = await en.newPage();
+  await english.goto(site + "/en/rust/fonctions/");
+  check(await english.locator("html[lang=en]").count() === 1, "la page anglaise est en anglais");
+  await english.locator(".code").first().hover();
+  await english.locator(".code__copy").first().click();
+  await english.waitForTimeout(200);
+  check((await english.locator(".code__copy").first().textContent()).includes("Copied"), "Copy en anglais");
+  await english.locator(".bar__inner > .lang-switch .lang-switch__item[hreflang=es]").click();
+  await english.waitForURL((url) => url.pathname.endsWith("/es/rust/fonctions/"));
+  check(await english.locator("html[lang=es]").count() === 1, "le sélecteur mène à la page espagnole");
+  await en.close();
+
   await browser.close();
   if (failures.length) {
     console.error(failures.map((f) => "✗ " + f).join("\n"));
