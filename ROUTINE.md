@@ -116,7 +116,7 @@ Traduit dans les deux langues : tout « Débuter » ; `introduction`, `premiers-
 `conditions-boucles` et `fonctions` de chaque langage. À traduire ensuite, dans
 l'ordre des parcours (une ligne par lot de 3 à 5 pages, dans les deux langues) :
 
-- [ ] Python : `nombres`, `texte`, `collections`, `dictionnaires`, `comprehensions`
+- [x] Python : `nombres`, `texte`, `collections`, `dictionnaires`, `comprehensions`
 - [ ] JavaScript : `nombres`, `texte`, `collections`, `objets`
 - [ ] TypeScript : `texte`, `collections`, `objets`, `unions`
 - [ ] Go : `nombres`, `texte`, `collections`, `maps`
@@ -128,6 +128,8 @@ l'ordre des parcours (une ligne par lot de 3 à 5 pages, dans les deux langues) 
 
 ### Pour tous
 - [ ] `exercices-2` — Une deuxième série de 12 exercices corrigés, par langage
+- [ ] Un outil qui signale les blocs `norun` d'erreur (tracebacks) dont le code ne
+  correspond plus à la page traduite (ils ne sont pas vérifiés aujourd'hui)
 - [ ] La page Comparer : 5 idées de plus (bases de données, classes, itération, …)
 
 ## Journal
@@ -135,3 +137,4 @@ l'ordre des parcours (une ligne par lot de 3 à 5 pages, dans les deux langues) 
 - 2026-10-19 — Mise en place de la routine (7 langages, 223 chapitres).
 - 2026-10-19 — La routine publie par une PR, fusionnée à partir de 3 commits quand la CI est verte.
 - 2026-10-19 — Le site en trois langues (FR, EN, ES) : interface traduite, 39 pages traduites dans chaque langue.
+- 2026-10-19 — Traductions EN et ES de Python : `nombres`, `texte`, `collections`, `dictionnaires`, `comprehensions` (10 pages, 182 exemples vérifiés).
