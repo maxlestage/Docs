@@ -12,7 +12,7 @@ Esta página muestra, paso a paso, cómo convertir tu código en una gema: escri
 
 ## ¿Qué es una gema?
 
-Una [gema](../debuter/glossaire.md#gem) es una [biblioteca](../debuter/glossaire.md#bibliotheque)
+Una [gema](../debuter/glossaire.md#gem) es una [biblioteca](../debuter/glossaire.md#biblioteca)
 de Ruby empaquetada para compartirla. Ya usas algunas: la página
 [Organizar un proyecto](projet.md) muestra `gem install` y Bundler. Aquí pasas al
 otro lado: tú **fabricas** la gema.
@@ -51,7 +51,7 @@ Piensa en un paquete postal:
 
 ## El código de la gema: un módulo y un método
 
-Todo el código de una gema vive en un [módulo](../debuter/glossaire.md#module) que lleva su
+Todo el código de una gema vive en un [módulo](../debuter/glossaire.md#modulo) que lleva su
 nombre (mira [los módulos](modules.md)). Así, sus nombres no se mezclan con los de
 otras gemas. Nuestra gema `saludos` dice hola en tres idiomas:
 

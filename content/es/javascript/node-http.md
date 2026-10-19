@@ -12,9 +12,9 @@ Esta página muestra cómo escribir un pequeño servidor web con el módulo `nod
 
 ## Un servidor es una ventanilla
 
-Un [servidor](../debuter/glossaire.md#serveur) es un programa que espera **peticiones**
+Un [servidor](../debuter/glossaire.md#servidor) es un programa que espera **peticiones**
 y devuelve **respuestas**, como la ventanilla de una estación de tren. El
-[cliente](../debuter/glossaire.md#client) (un navegador, `fetch`, `curl`) se acerca a la
+[cliente](../debuter/glossaire.md#cliente) (un navegador, `fetch`, `curl`) se acerca a la
 ventanilla y pide algo. El empleado lee la petición y luego responde.
 
 ```text

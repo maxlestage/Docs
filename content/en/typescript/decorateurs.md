@@ -4,7 +4,7 @@ A decorator is a function that "wraps" a method, a field or an accessor of a cla
 
 > **Goals:**
 >
-> - you will know what a [decorator](../debuter/glossaire.md#decorateur) is and how to
+> - you will know what a [decorator](../debuter/glossaire.md#decorator) is and how to
 >   read the `@name` syntax;
 > - you will know how to write a method decorator, for example to print each call;
 > - you will know how to decorate a field and an accessor created with `accessor`;
@@ -271,7 +271,7 @@ Notice the order: methods first, then `static` fields, then the other fields, an
 class last.
 `"static" in context` checks that the card has a `static` field: a class card doesn't
 have one, and TypeScript knows it (this is
-[narrowing](../debuter/glossaire.md#retrecissement)).
+[narrowing](../debuter/glossaire.md#narrowing)).
 
 ### addInitializer: acting on each object
 

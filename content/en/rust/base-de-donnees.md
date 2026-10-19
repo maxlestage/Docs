@@ -12,7 +12,7 @@ A database keeps your information when the program stops: in Rust, you talk to i
 
 ## Why a database?
 
-Your variables live in [memory](../debuter/glossaire.md#memoire-vive) (RAM).
+Your variables live in [memory](../debuter/glossaire.md#ram) (RAM).
 When the program stops, they disappear. To keep information, you have to write it
 to the disk.
 

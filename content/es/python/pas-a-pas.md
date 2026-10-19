@@ -106,7 +106,7 @@ intercambiado!
 
 ## Programa 2: una condición
 
-Añadamos una [condición](../debuter/glossaire.md#condition). Con un `if`, algunas líneas
+Añadamos una [condición](../debuter/glossaire.md#condicion). Con un `if`, algunas líneas
 se **saltan**. La tabla debe mostrarlo.
 
 ```text
@@ -174,7 +174,7 @@ primera vía, muestra `camiseta`, y ni siquiera mira `lluvia`.
 
 ## Programa 3: un bucle que acumula
 
-Con un [bucle](../debuter/glossaire.md#boucle), las mismas líneas vuelven varias veces.
+Con un [bucle](../debuter/glossaire.md#bucle), las mismas líneas vuelven varias veces.
 En la tabla aparecen, por tanto, varias veces, una por vuelta.
 
 ```text
@@ -254,7 +254,7 @@ Mucha gente adivina `3 1`. La tabla muestra por qué es falso: cuando queda 1, l
 
 ## Programa 4: una función llamada dos veces
 
-Una [función](../debuter/glossaire.md#fonction) es una pequeña máquina: le das algo,
+Una [función](../debuter/glossaire.md#funcion) es una pequeña máquina: le das algo,
 trabaja por su cuenta y luego **devuelve** un resultado. Cuando Python encuentra una
 llamada, **salta** a la función y luego **vuelve** al lugar de la llamada.
 
@@ -309,8 +309,8 @@ Dos detalles importantes:
 
 - `precio` e `iva` solo existen **durante** la llamada. En cada nueva llamada, vuelven a
   empezar de cero. Se dice que son variables locales (mira
-  [el ámbito](../debuter/glossaire.md#portee)).
-- En la segunda llamada, el [parámetro](../debuter/glossaire.md#parametre) `precio`
+  [el ámbito](../debuter/glossaire.md#ambito)).
+- En la segunda llamada, el [parámetro](../debuter/glossaire.md#parametro) `precio`
   recibe el valor de `a`, es decir, 60.
 
 ```python
@@ -336,7 +336,7 @@ Prueba: sustituye `return precio + iva` por `print(precio + iva)`. La función m
 
 ## Programa 5: una lista y una condición en el bucle
 
-Último programa: un bucle sobre una [lista](../debuter/glossaire.md#liste), con un `if`
+Último programa: un bucle sobre una [lista](../debuter/glossaire.md#lista), con un `if`
 dentro. Todo lo que has visto se combina.
 
 ```text
@@ -460,7 +460,7 @@ pasar cada nota, una por línea, antes que los demás mensajes de esa vuelta.
 
 ## ¿Y el depurador?
 
-Python también tiene un [depurador](../debuter/glossaire.md#debogage), `pdb`: escribe
+Python también tiene un [depurador](../debuter/glossaire.md#depuracion), `pdb`: escribe
 `breakpoint()` en tu código, y el programa se detiene ahí para dejarte mirar las
 variables (`p total`) y luego avanzar una línea (`n`). Es tu tabla de seguimiento, pero
 en directo; todo se explica en [Depurar en Python](debogage.md).

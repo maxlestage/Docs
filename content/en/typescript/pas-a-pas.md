@@ -41,7 +41,7 @@ A trace table looks like a notebook:
 
 - a **Step** (or **Line**) column: where the program is;
 - one column per [variable](../debuter/glossaire.md#variable): its
-  [value](../debuter/glossaire.md#valeur) at that moment;
+  [value](../debuter/glossaire.md#value) at that moment;
 - a **Prints** column: what `console.log` writes on the screen.
 
 Four simple rules:
@@ -166,7 +166,7 @@ the `else if`.
 
 ## Program 3: a loop that adds up
 
-A [loop](../debuter/glossaire.md#boucle) repeats the same lines. Here, we add twice
+A [loop](../debuter/glossaire.md#loop) repeats the same lines. Here, we add twice
 `i` to `total`, four times.
 
 ```typescript
@@ -233,7 +233,7 @@ never empty it.
 
 ## Program 4: a function called twice
 
-A [function](../debuter/glossaire.md#fonction) is a machine: you give it values, it
+A [function](../debuter/glossaire.md#function) is a machine: you give it values, it
 gives back a result. Here, `discountedPrice` computes a price after a percentage
 discount.
 
@@ -273,7 +273,7 @@ L6 console.log(...)
 ```
 
 Each call opens a **new sheet** of scrap paper for the function. Its
-[parameters](../debuter/glossaire.md#parametre) `price` and `percent` receive the
+[parameters](../debuter/glossaire.md#parameter) `price` and `percent` receive the
 [arguments](../debuter/glossaire.md#argument) of the call. At the `return`, the sheet
 is thrown away: `discount` no longer exists.
 
@@ -440,7 +440,7 @@ end: 18 40
 
 ## The debugger, in two sentences
 
-A [debugger](../debuter/glossaire.md#debogage) stops the program on a chosen line (a
+A [debugger](../debuter/glossaire.md#debugging) stops the program on a chosen line (a
 breakpoint) and lets you move forward one line at a time, showing all the variables:
 it is an automatic trace table. In VS Code, click in the margin to the left of a line,
 then start "Run and Debug"; everything is explained in

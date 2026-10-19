@@ -44,8 +44,8 @@ Every example on this page follows the same method:
 
 In many languages, a [variable](../debuter/glossaire.md#variable)
 is a box whose contents you change. In Rythme, a
-[value](../debuter/glossaire.md#valeur) is
-[immutable](../debuter/glossaire.md#immuable): a name, once given, keeps
+[value](../debuter/glossaire.md#value) is
+[immutable](../debuter/glossaire.md#immutable): a name, once given, keeps
 its value until the end (see [the traps](pieges.md)).
 
 Good news for tracing: in your table, **each cell is filled in only
@@ -210,9 +210,9 @@ print(book, pen, book + pen)
 
 **Before running it, guess what it prints.** `with_tax` adds 20% to a price.
 
-A [function](../debuter/glossaire.md#fonction) is a small machine:
+A [function](../debuter/glossaire.md#function) is a small machine:
 you put a value in, another one comes out. At each call, its
-[parameter](../debuter/glossaire.md#parametre) `net` takes the value given,
+[parameter](../debuter/glossaire.md#parameter) `net` takes the value given,
 only for the duration of the call.
 
 ```text

@@ -44,8 +44,8 @@ Cada ejemplo de esta página sigue el mismo método:
 
 En muchos lenguajes, una [variable](../debuter/glossaire.md#variable)
 es una caja cuyo contenido se cambia. En Rythme, un
-[valor](../debuter/glossaire.md#valeur) es
-[inmutable](../debuter/glossaire.md#immuable): un nombre, una vez dado,
+[valor](../debuter/glossaire.md#valor) es
+[inmutable](../debuter/glossaire.md#inmutable): un nombre, una vez dado,
 conserva su valor hasta el final (mira [las trampas](pieges.md)).
 
 Buena noticia para el seguimiento: en tu tabla, **cada casilla se rellena
@@ -107,7 +107,7 @@ print("Hoy: {ropa}{accesorio}")
 
 **Antes de ejecutarlo, adivina lo que se muestra.**
 
-Para una [condición](../debuter/glossaire.md#condition), añade dos
+Para una [condición](../debuter/glossaire.md#condicion), añade dos
 columnas: la **pregunta** que se hace, y la **respuesta**, `true` o `false`.
 
 | Línea | Pregunta | Respuesta | Qué pasa | ropa | accesorio |
@@ -210,9 +210,9 @@ print(libro, boli, libro + boli)
 **Antes de ejecutarlo, adivina lo que se muestra.** `con_iva` añade un 20 %
 a un precio.
 
-Una [función](../debuter/glossaire.md#fonction) es una pequeña máquina:
+Una [función](../debuter/glossaire.md#funcion) es una pequeña máquina:
 le metes un valor y sale otro. En cada llamada, su
-[parámetro](../debuter/glossaire.md#parametre) `neto` toma el valor dado,
+[parámetro](../debuter/glossaire.md#parametro) `neto` toma el valor dado,
 solo mientras dura la llamada.
 
 ```text

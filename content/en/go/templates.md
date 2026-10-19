@@ -71,7 +71,7 @@ value.
 
 ## Fields: {{.Field}}
 
-Usually, you pass a [struct](../debuter/glossaire.md#structure). `{{.Name}}` reads its
+Usually, you pass a [struct](../debuter/glossaire.md#struct). `{{.Name}}` reads its
 `Name` field.
 
 ```go

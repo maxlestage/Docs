@@ -104,7 +104,7 @@ Calling `cancel` a second time does nothing more. It isn't an error.
 
 ## Listening to ctx.Done() in a select
 
-`ctx.Done()` is a [channel](../debuter/glossaire.md#canal). It **closes** when the
+`ctx.Done()` is a [channel](../debuter/glossaire.md#channel). It **closes** when the
 context is cancelled. Receiving from a closed channel succeeds right away: that's the
 signal.
 
@@ -214,7 +214,7 @@ Try it: replace `i < 3` with `i < 5`. You receive 1 to 5, then `producer: stoppe
 ## Always call cancel with defer
 
 A cancellable context holds on to a bit of
-[memory](../debuter/glossaire.md#memoire-vive) as long as it isn't cancelled. The rule
+[memory](../debuter/glossaire.md#ram) as long as it isn't cancelled. The rule
 is simple: right after creating the context, write `defer cancel()`.
 
 ```go norun

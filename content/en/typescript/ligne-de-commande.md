@@ -359,7 +359,7 @@ the **standard input** (*stdin*) of the next one.
 ```
 
 The `text` function from `node:stream/consumers` reads all of standard input and returns
-a [promise](../debuter/glossaire.md#promesse) of `string`. This example cannot run here,
+a [promise](../debuter/glossaire.md#promise) of `string`. This example cannot run here,
 because it waits for text coming from the terminal:
 
 ```typescript norun

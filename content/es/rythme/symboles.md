@@ -12,7 +12,7 @@ Un símbolo como `:hecho` o `:derecha` es un pequeño nombre usado como valor: e
 
 ## Un nombre usado como valor
 
-Un [símbolo](../debuter/glossaire.md#symbole) es un nombre precedido de dos
+Un [símbolo](../debuter/glossaire.md#simbolo) es un nombre precedido de dos
 puntos: `:sí`, `:hecho`, `:derecha`. No es un nombre que designa un valor.
 Es **el valor mismo**.
 
@@ -258,7 +258,7 @@ Prueba: pon la limpieza en `:hecho`. La última línea muestra entonces
 ## Símbolos como claves de diccionario
 
 Un símbolo también es una buena clave de
-[diccionario](../debuter/glossaire.md#dictionnaire) (ver
+[diccionario](../debuter/glossaire.md#diccionario) (ver
 [diccionarios y conjuntos](dictionnaires.md)):
 
 ```rythme

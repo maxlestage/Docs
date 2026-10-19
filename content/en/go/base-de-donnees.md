@@ -34,7 +34,7 @@ brings them to you. The language you use to talk to them is called **SQL**.
 
 Go has a single package for all databases: `database/sql`. But it can't talk to **any**
 database on its own. It needs a **driver**: a small
-[package](../debuter/glossaire.md#paquet) that knows one specific database.
+[package](../debuter/glossaire.md#package) that knows one specific database.
 
 It's like a travel plug adapter: `database/sql` is your device, the driver is the
 adapter for the country.

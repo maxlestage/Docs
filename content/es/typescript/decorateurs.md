@@ -4,7 +4,7 @@ Un decorador es una función que «envuelve» un método, un campo o un accesor 
 
 > **Objetivos:**
 >
-> - sabrás qué es un [decorador](../debuter/glossaire.md#decorateur) y leer la
+> - sabrás qué es un [decorador](../debuter/glossaire.md#decorador) y leer la
 >   sintaxis `@nombre`;
 > - sabrás escribir un decorador de método, por ejemplo para mostrar cada llamada;
 > - sabrás decorar un campo y un accesor creado con `accessor`;
@@ -272,7 +272,7 @@ Fíjate en el orden: primero los métodos, luego los campos `static`, luego los 
 campos, y la clase al final.
 `"static" in contexto` comprueba que la ficha tiene un campo `static`: una ficha de
 clase no lo tiene, y TypeScript lo sabe (es un
-[estrechamiento](../debuter/glossaire.md#retrecissement)).
+[estrechamiento](../debuter/glossaire.md#estrechamiento)).
 
 ### addInitializer: actuar sobre cada objeto
 

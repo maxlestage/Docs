@@ -51,7 +51,7 @@ Throughout this page, we use the same small table of sales:
 The CSV format was introduced in [file formats](formats.md).
 Usually, you read a file. Here, so that each example fits in one block, the CSV text is
 **inside** the program. `io.StringIO` makes it look like a file: it is a fake file, in
-[memory](../debuter/glossaire.md#memoire-vive).
+[memory](../debuter/glossaire.md#ram).
 
 ```python
 import csv
@@ -72,7 +72,7 @@ print(rows[0])
 {'day': 'monday', 'product': 'baguette', 'quantity': '40', 'price': '1.10'}
 ```
 
-Each row becomes a [dictionary](../debuter/glossaire.md#dictionnaire). The keys come
+Each row becomes a [dictionary](../debuter/glossaire.md#dictionary). The keys come
 from the first line of the CSV.
 
 > **Note:** with a real file, replace `io.StringIO(TEXT)` with an open file:
@@ -471,9 +471,9 @@ Total          208    347.50
 ## What about pandas?
 
 For big tables, analysts use **pandas**, an external
-[library](../debuter/glossaire.md#bibliotheque). It does not come with Python: you
+[library](../debuter/glossaire.md#library). It does not come with Python: you
 install it with [pip](../debuter/glossaire.md#pip) (`pip install pandas`), preferably in
-a [virtual environment](../debuter/glossaire.md#environnement-virtuel). The blocks
+a [virtual environment](../debuter/glossaire.md#virtual-environment). The blocks
 below are therefore not run on this site, but their outputs are real.
 
 pandas stores the data in a **DataFrame**: a table, like a spreadsheet, with named

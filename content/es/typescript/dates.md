@@ -447,7 +447,7 @@ discretamente en el 2 de marzo. `leerDia` vuelve a leer la fecha obtenida con
 
 Gracias al tipo `Date | null`, TypeScript **obliga** a quien llama a tratar el caso
 inválido antes de usar la fecha (es el
-[estrechamiento](../debuter/glossaire.md#retrecissement)).
+[estrechamiento](../debuter/glossaire.md#estrechamiento)).
 
 Prueba: borra el bloque `if (dia === null) { … }`. TypeScript rechaza el programa:
 `dia` quizá sea `null`.

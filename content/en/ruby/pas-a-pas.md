@@ -165,7 +165,7 @@ shorts". Then try `temperature = 15`: `15 > 15` is **false**, so it is the coat.
 
 ## Program 3: a loop that accumulates
 
-A [loop](../debuter/glossaire.md#boucle) repeats lines. In the table, you write **one
+A [loop](../debuter/glossaire.md#loop) repeats lines. In the table, you write **one
 row per pass**.
 
 You put 10 euros in a magic piggy bank. Every week, what it holds doubles. After how
@@ -222,8 +222,8 @@ pass, and you get "Week 4: 160 euros".
 
 ## Program 4: a method called twice
 
-A [method](../debuter/glossaire.md#methode) is like a coffee machine. You put
-something in it (the [parameter](../debuter/glossaire.md#parametre)), it works, and it
+A [method](../debuter/glossaire.md#method) is like a coffee machine. You put
+something in it (the [parameter](../debuter/glossaire.md#parameter)), it works, and it
 gives you back a result. You can use it several times.
 
 ```ruby

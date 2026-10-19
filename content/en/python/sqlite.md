@@ -34,7 +34,7 @@ already knows how to talk to it thanks to the [module](../debuter/glossaire.md#m
 `sqlite3`. The page [databases](../debuter/bases-de-donnees.md) explains the general idea.
 
 > **Note:** in this page, the database is created in
-> [memory](../debuter/glossaire.md#memoire-vive) with `":memory:"`. It disappears at the
+> [memory](../debuter/glossaire.md#ram) with `":memory:"`. It disappears at the
 > end of the program. To keep it, give a file name:
 > `sqlite3.connect("address_book.db")`.
 
@@ -198,7 +198,7 @@ The second `fetchone()` returns `None`: there was only one row.
 
 With a tuple, you have to remember that the name is at position 0 and the age at
 position 1. That is fragile. By setting `row_factory`, each row becomes an object you
-read **by the column name**, like a [dictionary](../debuter/glossaire.md#dictionnaire).
+read **by the column name**, like a [dictionary](../debuter/glossaire.md#dictionary).
 
 ```python
 import sqlite3

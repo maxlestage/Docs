@@ -212,7 +212,7 @@ Pruébalo: cambia `i < 3` por `i < 5`. Recibes del 1 al 5 y luego `productor: de
 
 ## Llamar siempre a cancel con defer
 
-Un contexto cancelable guarda un poco de [memoria](../debuter/glossaire.md#memoire-vive)
+Un contexto cancelable guarda un poco de [memoria](../debuter/glossaire.md#memoria-ram)
 mientras no se cancela. La regla es sencilla: justo después de crear el contexto,
 escribe `defer cancel()`.
 

@@ -317,7 +317,7 @@ el orden** de la primera aparición. Pruébala con `[3, 1, 3, 2, 1, 4]` y
 ['rojo', 'verde']
 ```
 
-> **Pista:** guarda un [conjunto](../debuter/glossaire.md#ensemble) `ya_vistos` con los
+> **Pista:** guarda un [conjunto](../debuter/glossaire.md#conjunto) `ya_vistos` con los
 > elementos que ya has encontrado. Un conjunto responde muy rápido a la pregunta
 > `x in ya_vistos`.
 
