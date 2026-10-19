@@ -129,7 +129,7 @@ l'ordre des parcours (une ligne par lot de 3 à 5 pages, dans les deux langues) 
 - [x] Chaque langage : `pieges`, `exercices-faciles`
 - [x] Débuter : `bases-de-donnees`, `securite`, `open-source`, `metiers`
 - [x] Nouveaux chapitres : Python `contextes`, TypeScript `regex`, Go `embed`
-- [ ] Chaque langage : `pas-a-pas`, `exercices-2` ; et les chapitres cochés le 2026-10-19 (session principale)
+- [x] Chaque langage : `pas-a-pas`, `exercices-2` ; et les chapitres cochés le 2026-10-19 (session principale)
 - [ ] Puis le reste de chaque parcours, dans l'ordre de `src/catalog.rs`
 
 ### Pour tous
@@ -166,3 +166,4 @@ l'ordre des parcours (une ligne par lot de 3 à 5 pages, dans les deux langues) 
 - 2026-10-19 — Traductions EN et ES de Débuter : `variables`, `logique`, `boucles`, `fonctions`, `donnees`, `lire-une-erreur`, `bloque`, `bases-de-donnees`, `securite`, `open-source`, `metiers` (22 pages, 238 exemples vérifiés). Tout le parcours Débuter est traduit.
 - 2026-10-19 — Traductions EN et ES : `pieges` et `exercices-faciles` des sept langages (28 pages, 484 exemples vérifiés).
 - 2026-10-19 — Site sur téléphone : les lignes de code trop longues passent à la ligne (en retrait), les tableaux de 4 colonnes ou plus deviennent des fiches, marges et cartes de chapitres resserrées. À 375 px : plus aucun bloc de code (14 090 avant) ni tableau (1 230 avant) qui défile de côté ; le test navigateur le vérifie.
+- 2026-10-19 — Traductions EN et ES : `pas-a-pas` et `exercices-2` des sept langages, et les 24 chapitres écrits par la session principale (Python `sqlite`, `collections-avancees`, `logging`, `donnees` ; JavaScript `tableaux-avances`, `node-http`, `canvas`, `stockage` ; TypeScript `nombres`, `dates`, `ligne-de-commande`, `decorateurs` ; Go `templates`, `context`, `sync`, `base-de-donnees` ; Ruby `base-de-donnees`, `rails`, `gems` ; Rust `traits-objets`, `base-de-donnees`, `wasm` ; Rythme `symboles`, `textes-avances`) : 76 pages, 824 exemples vérifiés.
