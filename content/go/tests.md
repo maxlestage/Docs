@@ -231,19 +231,22 @@ Les espaces des noms de sous-tests deviennent des `_` : `un seul` → `un_seul`.
 ### Quand un test échoue
 
 Introduisons un bug : dans `Maximum`, on part de `0` au lieu du premier nombre
-(`plusGrand := 0`). Pour des nombres négatifs, le résultat devient faux :
+(`plusGrand := 0`). Le résultat devient faux pour des nombres négatifs, et aussi pour
+un seul nombre, puisque la boucle saute le premier :
 
 ```text
 --- FAIL: TestMaximum (0.00s)
     --- FAIL: TestMaximum/négatifs (0.00s)
         calcul_test.go:29: Maximum([-5 -2 -9]) = 0, attendu -2
+    --- FAIL: TestMaximum/un_seul (0.00s)
+        calcul_test.go:29: Maximum([4]) = 0, attendu 4
 FAIL
 exit status 1
 FAIL	calcul	0.003s
 ```
 
 Le rapport donne tout ce qu'il faut : le sous-test (`négatifs`), le fichier et la ligne
-(`calcul_test.go:29`), puis votre message. Les autres cas sont passés : sans `-v`, Go
+(`calcul_test.go:29`), puis votre message. Le cas `positifs` est passé : sans `-v`, Go
 n'affiche que les échecs.
 
 ### Choisir les tests à lancer
