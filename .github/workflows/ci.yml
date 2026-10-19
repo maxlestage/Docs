@@ -90,8 +90,13 @@ jobs:
       - name: Les liens « Suite » suivent l'ordre des chapitres
         if: matrix.track == 'debuter'
         run: ruby tools/suite.rb --check
-      - name: Exécuter chaque exemple
-        run: ruby tools/verifier.rb content/${{ matrix.track }}/*.md
+      - name: Les pages traduites mènent au glossaire traduit
+        if: matrix.track == 'debuter'
+        run: ruby tools/i18n/ancres.rb --check
+      - name: Exécuter chaque exemple (en français, en anglais, en espagnol)
+        run: |
+          shopt -s nullglob
+          ruby tools/verifier.rb content/${{ matrix.track }}/*.md content/en/${{ matrix.track }}/*.md content/es/${{ matrix.track }}/*.md
 
   export:
     name: Export statique et navigateur

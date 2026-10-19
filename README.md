@@ -1,6 +1,6 @@
 # 📚 Docs : apprendre à programmer
 
-**Des documentations simples, en français, pour apprendre Python, JavaScript, TypeScript, Go, Ruby, Rust et Rythme.**
+**Des documentations simples, en français, en anglais et en espagnol, pour apprendre Python, JavaScript, TypeScript, Go, Ruby, Rust et Rythme.**
 Un parcours pour débuter, puis un parcours par langage, un exemple pour chaque idée, et du code qui marche
 vraiment : chacun des exemples est exécuté avant d'être publié.
 
@@ -25,6 +25,12 @@ fréquentes (avec les vrais messages d'erreur), « Testez-vous » (réponses rep
 résumé. Chaque langage a 3 projets guidés, 12 exercices corrigés et un aide-mémoire.
 
 ## Ce que fait le site
+
+- **Trois langues** : le français aux adresses d'origine (`/rust/fonctions/`),
+  l'anglais derrière `/en/` et l'espagnol derrière `/es/` (`/en/compare/`,
+  `/es/comparar/`). Le sélecteur FR · EN · ES de l'en-tête mène à la même page dans
+  l'autre langue. Toute l'interface est traduite ; un chapitre pas encore traduit
+  s'affiche en français, avec un bandeau et la mention « FR » dans les listes.
 
 - **Une page par chapitre**, avec le sommaire des chapitres à gauche, celui de la page
   à droite (qui suit la lecture), une barre de progression, le chapitre précédent et
@@ -56,13 +62,16 @@ canoniques), prise de chaque requête sinon.
 
 ## Écrire ou corriger une page
 
-Les pages sont dans `content/{ruby,rust,rythme}/`, en Markdown ; leur ordre est dans
-[`src/catalog.rs`](src/catalog.rs). Les règles d'écriture (titre, résumé, code exécuté,
+Les pages sont dans `content/<parcours>/`, en Markdown ; leur ordre est dans
+[`src/catalog.rs`](src/catalog.rs). Les traductions sont dans `content/en/<parcours>/`
+et `content/es/<parcours>/`, sous le même nom ; elles sont prises en compte toutes
+seules à la compilation (`build.rs`). Les règles d'écriture (titre, résumé, code exécuté,
 sorties vérifiées, encadrés, liens) sont dans [`content/README.md`](content/README.md).
 
 ```sh
 ruby tools/verifier.rb       # exécute chaque exemple et compare sa sortie
-ruby tools/suite.rb          # relie chaque chapitre au suivant (« Suite : »)
+ruby tools/suite.rb          # relie chaque chapitre au suivant (« Suite : », « Next: », « Siguiente: »)
+ruby tools/i18n/ancres.rb    # les liens des traductions vers le glossaire traduit
 cargo test                   # chaque page, chaque lien et chaque ancre
 ```
 
@@ -100,7 +109,8 @@ dans le secret (ou la variable Heroku) `REPOS_TOKEN`.
 
 | Dossier | Contenu |
 |---|---|
-| `content/` | les pages, en Markdown |
+| `content/` | les pages, en Markdown (`content/en/`, `content/es/` : les traductions) |
+| `src/i18n.rs` | les trois langues et les textes de l'interface |
 | `src/catalog.rs` | les parcours et l'ordre de leurs pages |
 | `src/markdown.rs` | Markdown → HTML : ancres, sommaire, code, sorties, encadrés, liens |
 | `src/highlight.rs` | les couleurs du code (Ruby, Rust, Rythme, shell, TOML) |
@@ -113,3 +123,4 @@ dans le secret (ou la variable Heroku) `REPOS_TOKEN`.
 | `tests/site.rs` | le site entier, par le client de test de Paquets |
 | `tests/navigateur.js` | le site dans Chromium |
 | `tools/liens.rb` | chaque lien de l'export statique |
+| `tools/i18n/` | les ancres du glossaire traduit, et le script qui les réécrit |

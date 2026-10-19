@@ -409,6 +409,16 @@ pub static TRACKS: [Track; 8] = [
     },
 ];
 
+include!(concat!(env!("OUT_DIR"), "/translations.rs"));
+
+/// Le texte de la page `page` du parcours `track` traduit en `lang`, s'il l'est.
+pub fn translation(lang: crate::i18n::Lang, track: &str, page: &str) -> Option<&'static str> {
+    TRANSLATIONS
+        .iter()
+        .find(|(l, t, p, _)| *l == lang.code() && *t == track && *p == page)
+        .map(|(_, _, _, markdown)| *markdown)
+}
+
 /// Les langages, sans le parcours « Débuter ».
 pub fn languages() -> impl Iterator<Item = &'static Track> {
     TRACKS.iter().filter(|t| t.language)
@@ -453,5 +463,9 @@ mod tests {
         }
         assert!(find("python", "introduction").is_some());
         assert!(find("cobol", "introduction").is_none());
+        // Chaque traduction est celle d'une page du catalogue.
+        for (lang, track, page, _) in TRANSLATIONS {
+            assert!(find(track, page).is_some(), "content/{lang}/{track}/{page}.md");
+        }
     }
 }

@@ -5,6 +5,7 @@
 use pulldown_cmark::{CodeBlockKind, CowStr, Event, HeadingLevel, Options, Parser, Tag, TagEnd};
 
 use crate::highlight::{escape, highlight, label};
+use crate::i18n::{Lang, tr};
 use crate::routes::doc_href;
 
 /// Un titre du sommaire.
@@ -58,24 +59,43 @@ pub fn slug(text: &str) -> String {
     out.trim_end_matches('-').to_owned()
 }
 
-/// Les encadrés : le mot qui commence la citation, et la classe de l'encadré.
-const CALLOUTS: [(&str, &str); 9] = [
+/// Les encadrés : le mot qui commence la citation (en français, en anglais ou en
+/// espagnol), et la classe de l'encadré.
+const CALLOUTS: [(&str, &str); 23] = [
     ("Astuce", "tip"),
+    ("Tip", "tip"),
+    ("Consejo", "tip"),
     ("Indice", "hint"),
+    ("Hint", "hint"),
+    ("Pista", "hint"),
     ("Objectifs", "goals"),
+    ("Goals", "goals"),
+    ("Objetivos", "goals"),
     // La solution d'un exercice, la réponse d'une question : repliées.
     ("Solution", "solution"),
+    ("Solución", "solution"),
     ("Réponse", "answer"),
+    ("Answer", "answer"),
+    ("Respuesta", "answer"),
     ("À retenir", "key"),
+    ("Remember", "key"),
+    ("Recuerda", "key"),
     ("Attention", "warn"),
+    ("Warning", "warn"),
+    ("Atención", "warn"),
     ("Note", "note"),
+    ("Nota", "note"),
     ("Le saviez-vous", "note"),
 ];
 
 /// Où mène un lien de la page `track` : un lien du site pour un fichier `.md`
 /// (`fonctions.md#x`, `../rust/possession.md`), l'adresse telle quelle sinon ; et
 /// `(parcours, page, ancre)` pour un lien vers une autre page.
-pub fn rewrite_link(dest: &str, track: &str) -> (String, Option<(String, String, String)>) {
+///
+/// Sur le site en `l`, une page `translated` (ou pas encore traduite) qui mène à une
+/// page qui ne l'est pas (ou l'est déjà) perd son ancre : les titres, donc les ancres,
+/// ne sont pas dans la même langue.
+pub fn rewrite_link(dest: &str, track: &str, l: Lang, translated: bool) -> (String, Option<(String, String, String)>) {
     if dest.starts_with("http://")
         || dest.starts_with("https://")
         || dest.starts_with('#')
@@ -92,18 +112,21 @@ pub fn rewrite_link(dest: &str, track: &str) -> (String, Option<(String, String,
         Some((other, page)) => (other, page),
         None => (track, file),
     };
+    let target = l == Lang::Fr || crate::catalog::translation(l, track, page).is_some();
+    let anchor = if target == translated { anchor } else { "" };
     (
-        doc_href(track, page, Some(anchor)),
+        doc_href(l, track, page, Some(anchor)),
         Some((track.to_owned(), page.to_owned(), anchor.to_owned())),
     )
 }
 
 /// Un bloc de code : son en-tête (langage, bouton « Copier ») et le code coloré.
-pub fn code_block(lang: &str, code: &str) -> String {
+pub fn code_block(lang: &str, code: &str, l: Lang) -> String {
     let code = code.strip_suffix('\n').unwrap_or(code);
     if lang == "sortie" {
         return format!(
-            r#"<div class="output"><div class="output__head"><span class="output__label">Sortie</span></div><pre><code>{}</code></pre></div>"#,
+            r#"<div class="output"><div class="output__head"><span class="output__label">{}</span></div><pre><code>{}</code></pre></div>"#,
+            tr(l, "Sortie"),
             escape(code)
         );
     }
@@ -111,17 +134,20 @@ pub fn code_block(lang: &str, code: &str) -> String {
         concat!(
             r#"<div class="code" data-lang="{lang}"><div class="code__head">"#,
             r#"<span class="code__lang code__lang--{lang}">{label}</span>"#,
-            r#"<button class="code__copy" type="button" aria-label="Copier le code">Copier</button>"#,
+            r#"<button class="code__copy" type="button" aria-label="{copy_label}">{copy}</button>"#,
             r#"</div><pre><code class="language-{lang}">{html}</code></pre></div>"#,
         ),
         lang = escape(lang),
         label = label(lang),
         html = highlight(lang, code),
+        copy_label = tr(l, "Copier le code"),
+        copy = tr(l, "Copier"),
     )
 }
 
-/// Rend `source`, une page du parcours `track`.
-pub fn render(source: &str, track: &str) -> Rendered {
+/// Rend `source`, une page du parcours `track`, pour le site en langue `l` : traduite,
+/// ou en français si elle ne l'est pas encore (`translated`).
+pub fn render(source: &str, track: &str, l: Lang, translated: bool) -> Rendered {
     let mut title = String::new();
     let mut description = String::new();
     let mut toc = Vec::new();
@@ -219,7 +245,8 @@ pub fn render(source: &str, track: &str) -> Rendered {
                 events[at] = Event::Html(format!(r#"<h{level} id="{id}">"#).into());
                 events.push(Event::Html(
                     format!(
-                        r##"<a class="anchor" href="#{id}" aria-label="Lien vers cette section">#</a></h{level}>"##
+                        r##"<a class="anchor" href="#{id}" aria-label="{}">#</a></h{level}>"##,
+                        tr(l, "Lien vers cette section")
                     )
                     .into(),
                 ));
@@ -262,11 +289,17 @@ pub fn render(source: &str, track: &str) -> Rendered {
                 };
                 let (open, close) = match callout {
                     Some("solution") => (
-                        r#"<details class="solution"><summary>Voir la solution</summary>"#.to_owned(),
+                        format!(
+                            r#"<details class="solution"><summary>{}</summary>"#,
+                            tr(l, "Voir la solution")
+                        ),
                         "</details>",
                     ),
                     Some("answer") => (
-                        r#"<details class="solution solution--answer"><summary>Voir la réponse</summary>"#.to_owned(),
+                        format!(
+                            r#"<details class="solution solution--answer"><summary>{}</summary>"#,
+                            tr(l, "Voir la réponse")
+                        ),
                         "</details>",
                     ),
                     Some(class) => (format!(r#"<aside class="callout callout--{class}">"#), "</aside>"),
@@ -281,7 +314,7 @@ pub fn render(source: &str, track: &str) -> Rendered {
                 title,
                 id,
             }) => {
-                let (dest, internal) = rewrite_link(&dest_url, track);
+                let (dest, internal) = rewrite_link(&dest_url, track, l, translated);
                 let external = dest.starts_with("http");
                 open_links.push(external);
                 if let Some(target) = internal {
@@ -317,7 +350,7 @@ pub fn render(source: &str, track: &str) -> Rendered {
             Event::End(TagEnd::CodeBlock) => {
                 if let Some((lang, body)) = code.take() {
                     words += body.split_whitespace().count();
-                    events.push(Event::Html(code_block(&lang, &body).into()));
+                    events.push(Event::Html(code_block(&lang, &body, l).into()));
                 }
             }
             Event::Start(Tag::Table(_)) => {
@@ -354,7 +387,7 @@ mod tests {
 
     #[test]
     fn renders_a_page() {
-        let r = render(PAGE, "ruby");
+        let r = render(PAGE, "ruby", Lang::Fr, true);
         assert_eq!(r.title, "Les fonctions");
         assert_eq!(r.description, "Une fonction range du code.");
         assert!(
@@ -417,6 +450,8 @@ mod tests {
         let r = render(
             "# E\n\nUn exercice.\n\n> **Indice :** pensez-y.\n\n> **Solution**\n>\n> ```ruby\n> puts 1\n> ```\n",
             "ruby",
+            Lang::Fr,
+            true,
         );
         assert!(
             r.html.contains(r#"<aside class="callout callout--hint">"#),
@@ -432,6 +467,20 @@ mod tests {
         assert!(!r.html.contains("<strong>Solution</strong>"), "{}", r.html);
         assert!(r.html.contains(r#"<div class="code" data-lang="ruby">"#));
         assert!(r.html.trim_end().ends_with("</details>"), "{}", r.html);
+    }
+
+    #[test]
+    fn english_pages() {
+        let r = render(
+            "# E\n\nAn exercise, [see](fonctions.md).\n\n> **Tip:** try it.\n\n> **Answer**\n>\n> Yes.\n\n```sortie\n1\n```\n",
+            "rust",
+            Lang::En,
+            true,
+        );
+        assert!(r.html.contains(r#"<aside class="callout callout--tip">"#), "{}", r.html);
+        assert!(r.html.contains("<summary>Show the answer</summary>"), "{}", r.html);
+        assert!(r.html.contains(r#"href="/en/rust/fonctions/""#), "{}", r.html);
+        assert!(r.html.contains(">Output<"), "{}", r.html);
     }
 
     #[test]

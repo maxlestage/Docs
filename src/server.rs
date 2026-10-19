@@ -9,6 +9,7 @@ use std::sync::Arc;
 
 use paquets::prelude::*;
 
+use crate::i18n::Lang;
 use crate::pages::{self, Ctx};
 use crate::routes::{Route, base, link};
 
@@ -84,8 +85,9 @@ impl Site {
         format!("{proto}://{host}{}", base())
     }
 
-    fn ctx(&self, req: &Request, route: Route) -> Ctx {
+    fn ctx(&self, req: &Request, lang: Lang, route: Route) -> Ctx {
         Ctx {
+            lang,
             route,
             origin: self.origin(req),
             version: self.version.clone(),
@@ -93,10 +95,11 @@ impl Site {
     }
 }
 
-/// Une page : `/`, `/comparer/`, `/{parcours}/`, `/{parcours}/{page}/`.
+/// Une page : `/`, `/comparer/`, `/{parcours}/`, `/{parcours}/{page}/`, et les mêmes
+/// derrière `/en` et `/es`.
 fn page(site: &Site, req: &Request) -> Response {
     let path = req.path();
-    let route = Route::parse(path);
+    let (lang, route) = Route::parse(path);
     if route == Route::NotFound {
         return not_found(site, req);
     }
@@ -104,30 +107,54 @@ fn page(site: &Site, req: &Request) -> Response {
         let query = req.uri().query().map(|q| format!("?{q}")).unwrap_or_default();
         return Redirect::permanent(format!("{}/{query}", link(path))).into_response();
     }
-    pages::render(&site.ctx(req, route))
+    pages::render(&site.ctx(req, lang, route))
         .into_response()
         .header("cache-control", "no-cache")
 }
 
 fn not_found(site: &Site, req: &Request) -> Response {
-    pages::not_found(&site.ctx(req, Route::NotFound)).into_response()
+    let (lang, _) = Route::parse(req.path());
+    pages::not_found(&site.ctx(req, lang, Route::NotFound)).into_response()
 }
 
-/// `/search.json` : l'index de la recherche, téléchargé une fois par le navigateur.
-fn search(_site: &Site, _req: &Request) -> Response {
+/// `/search.json` (et `/en/search.json`, `/es/search.json`) : l'index de la recherche,
+/// téléchargé une fois par le navigateur.
+fn search(_site: &Site, req: &Request) -> Response {
+    let lang = req
+        .path()
+        .trim_start_matches('/')
+        .split('/')
+        .next()
+        .and_then(Lang::from_prefix)
+        .unwrap_or(Lang::Fr);
     Response::new()
         .header("content-type", "application/json; charset=utf-8")
         .header("cache-control", "public, max-age=300")
-        .send(crate::library::search_index())
+        .send(crate::library::search_index(lang))
 }
 
 fn sitemap(site: &Site, req: &Request) -> Response {
     let origin = site.origin(req);
     let mut xml = String::from(
-        "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\">\n",
+        "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\" xmlns:xhtml=\"http://www.w3.org/1999/xhtml\">\n",
     );
     for route in Route::all() {
-        xml.push_str(&format!("<url><loc>{origin}{}</loc></url>\n", route.path()));
+        let alternates: String = Lang::ALL
+            .iter()
+            .map(|l| {
+                format!(
+                    r#"<xhtml:link rel="alternate" hreflang="{}" href="{origin}{}"/>"#,
+                    l.code(),
+                    route.path(*l)
+                )
+            })
+            .collect();
+        for lang in Lang::ALL {
+            xml.push_str(&format!(
+                "<url><loc>{origin}{}</loc>{alternates}</url>\n",
+                route.path(lang)
+            ));
+        }
     }
     xml.push_str("</urlset>\n");
     Response::new()
@@ -155,10 +182,12 @@ fn route(app: &mut App, path: &str, site: &Arc<Site>, handler: fn(&Site, &Reques
 /// L'application, prête à lancer ou à tester.
 pub fn app(site: Arc<Site>) -> App {
     let mut app = App::new();
-    route(&mut app, "/search.json", &site, search);
+    for path in ["/search.json", "/en/search.json", "/es/search.json"] {
+        route(&mut app, path, &site, search);
+    }
     route(&mut app, "/sitemap.xml", &site, sitemap);
     route(&mut app, "/robots.txt", &site, robots);
-    for path in ["/", "/:a", "/:a/:b"] {
+    for path in ["/", "/:a", "/:a/:b", "/:a/:b/:c"] {
         route(&mut app, path, &site, page);
     }
     // Installable sur téléphone et ordinateur, lisible hors ligne.

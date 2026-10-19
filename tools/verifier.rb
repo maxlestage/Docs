@@ -82,7 +82,10 @@ def run(block, dir)
   when "rythme"
     path = File.join(dir, "main.ry")
     File.write(path, block.code + "\n")
-    Open3.capture3({ "RYTHME_LANG" => "fr" }, RYTHME, "run", path, chdir: dir)
+    # Les pages traduites (content/en/…, content/es/…) montrent les messages de Rythme
+    # dans leur langue.
+    lang = block.file[%r{content/(en|es)/}, 1] || "fr"
+    Open3.capture3({ "RYTHME_LANG" => lang }, RYTHME, "run", path, chdir: dir)
   when "python"
     path = File.join(dir, "main.py")
     File.write(path, block.code + "\n")

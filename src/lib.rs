@@ -6,6 +6,7 @@ pub mod catalog;
 pub mod compare;
 pub mod export;
 pub mod highlight;
+pub mod i18n;
 pub mod library;
 pub mod markdown;
 pub mod pages;

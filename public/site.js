@@ -6,6 +6,26 @@
 
   var root = document.documentElement;
 
+  // Les textes du script, dans la langue de la page (fr, en ou es).
+  var TEXTS = {
+    fr: {
+      copied: "Copié ✓", copy: "Copier", failed: "La recherche n'a pas pu se charger.",
+      nothing: function (q) { return "Rien trouvé pour « " + q + " ». Essayez un mot plus court."; },
+      read: " lus", done: "Chapitre lu", mark: "Marquer ce chapitre comme lu"
+    },
+    en: {
+      copied: "Copied ✓", copy: "Copy", failed: "The search could not load.",
+      nothing: function (q) { return "Nothing found for “" + q + "”. Try a shorter word."; },
+      read: " read", done: "Chapter read", mark: "Mark this chapter as read"
+    },
+    es: {
+      copied: "Copiado ✓", copy: "Copiar", failed: "La búsqueda no se pudo cargar.",
+      nothing: function (q) { return "No se encontró nada para «" + q + "». Prueba una palabra más corta."; },
+      read: " leídos", done: "Capítulo leído", mark: "Marcar este capítulo como leído"
+    }
+  };
+  var T = TEXTS[root.lang] || TEXTS.fr;
+
   function ready(fn) {
     if (document.readyState !== "loading") fn();
     else document.addEventListener("DOMContentLoaded", fn);
@@ -37,9 +57,9 @@
       var code = btn.closest(".code").querySelector("pre code");
       var text = code ? code.textContent : "";
       var done = function () {
-        btn.textContent = "Copié ✓";
+        btn.textContent = T.copied;
         btn.classList.add("is-done");
-        setTimeout(function () { btn.textContent = "Copier"; btn.classList.remove("is-done"); }, 1600);
+        setTimeout(function () { btn.textContent = T.copy; btn.classList.remove("is-done"); }, 1600);
       };
       if (navigator.clipboard && navigator.clipboard.writeText) {
         navigator.clipboard.writeText(text).then(done, function () {});
@@ -143,7 +163,7 @@
           list.innerHTML = "";
           var li = document.createElement("li");
           li.className = "search__empty";
-          li.textContent = "La recherche n'a pas pu se charger.";
+          li.textContent = T.failed;
           list.appendChild(li);
         });
       return loading;
@@ -197,7 +217,7 @@
       var words = q.split(/\s+/).filter(Boolean);
       list.innerHTML = "";
       if (!index) return;
-      var pool = index.filter(function (e) { return !filter || e.p === filter || e.p === "Docs"; });
+      var pool = index.filter(function (e) { return !filter || e.s === filter || !e.s; });
       if (!words.length) {
         results = pool.filter(function (e) { return e.k === "page"; }).slice(0, 40);
       } else {
@@ -211,7 +231,7 @@
       if (!results.length) {
         var li = document.createElement("li");
         li.className = "search__empty";
-        li.textContent = "Rien trouvé pour « " + input.value.trim() + " ». Essayez un mot plus court.";
+        li.textContent = T.nothing(input.value.trim());
         list.appendChild(li);
         return;
       }
@@ -221,12 +241,12 @@
         li.id = "result-" + i;
         var a = document.createElement("a");
         a.href = e.u;
-        var cls = { Ruby: "t-ruby", Rust: "t-rust", Rythme: "t-rythme", "Débuter": "t-debuter", Python: "t-python", Go: "t-go", JavaScript: "t-javascript", TypeScript: "t-typescript" }[e.p] || "";
+        var cls = e.s ? "t-" + e.s : "";
         if (cls) li.className = cls;
         var kind = document.createElement("span");
         kind.className = "search__kind";
         kind.setAttribute("aria-hidden", "true");
-        kind.textContent = e.k === "page" ? ({ Ruby: "Rb", Rust: "Rs", Rythme: "Ry", "Débuter": "✦", Python: "Py", Go: "Go", JavaScript: "Js", TypeScript: "Ts" }[e.p] || "⇄") : "#";
+        kind.textContent = e.k === "page" ? ({ ruby: "Rb", rust: "Rs", rythme: "Ry", debuter: "✦", python: "Py", go: "Go", javascript: "Js", typescript: "Ts" }[e.s] || "⇄") : "#";
         var title = document.createElement("span");
         title.className = "search__title";
         mark(title, e.t, words);
@@ -298,12 +318,12 @@
       document.querySelectorAll("[data-done-track]").forEach(function (el) {
         var prefix = el.getAttribute("data-done-track") + "/";
         var n = done.filter(function (k) { return k.indexOf(prefix) === 0; }).length;
-        el.textContent = n ? n + "/" + el.getAttribute("data-done-total") + " lus" : "";
+        el.textContent = n ? n + "/" + el.getAttribute("data-done-total") + T.read : "";
       });
       document.querySelectorAll("[data-done]").forEach(function (b) {
         var on = done.indexOf(b.getAttribute("data-done")) >= 0;
         b.setAttribute("aria-pressed", on ? "true" : "false");
-        b.querySelector(".done__text").textContent = on ? "Chapitre lu" : "Marquer ce chapitre comme lu";
+        b.querySelector(".done__text").textContent = on ? T.done : T.mark;
       });
     };
     document.querySelectorAll("[data-done]").forEach(function (b) {
