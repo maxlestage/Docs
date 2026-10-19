@@ -483,4 +483,4 @@ créez un type `Etiquette` qui contient seulement `titre` et `prix`, et utilisez
 - Les types transformés (`[K in keyof T]`), conditionnels (`A extends B ? X : Y`) et
   les gabarits (`` `on${Nom}` ``) sont les briques des types utilitaires.
 
-Suite : [gérer les erreurs](erreurs.md)
+Suite : [Les décorateurs](decorateurs.md)

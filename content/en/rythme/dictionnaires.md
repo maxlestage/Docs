@@ -439,4 +439,4 @@ dance = set(["Léa", "Sam", "Tom"])
 - Fields known in advance: record; keys that come from the data:
   dictionary; just presence: set.
 
-Next: [beginner pitfalls in Rythme](pieges.md)
+Next: [following a program step by step](pas-a-pas.md).

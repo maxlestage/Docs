@@ -557,4 +557,4 @@ and `type Student = Person & { grade: string }`?
 - Typing is structural: an object fits if it has the right shape, even with extra
   properties, unless it is written directly at that spot.
 
-Next: [beginner pitfalls in TypeScript](pieges.md)
+Next: [following a program step by step](pas-a-pas.md).

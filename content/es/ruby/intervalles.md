@@ -370,4 +370,4 @@ Un rango sin fin tiene infinitos valores. Toma solo algunos con `first(n)` o
 - `array[1..3]` o `texto[2..]` cortan un trozo.
 - `5..` no tiene fin, `..5` no tiene inicio: usa `first(n)` para leerlos.
 
-Siguiente: [las trampas del principiante en Ruby](pieges.md)
+Siguiente: [seguir un programa paso a paso en Ruby](pas-a-pas.md).

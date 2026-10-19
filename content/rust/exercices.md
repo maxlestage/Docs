@@ -446,4 +446,4 @@ somme des aires.
 Pour continuer, essayez les mêmes exercices en [Ruby](../ruby/exercices.md) ou en
 [Rythme](../rythme/exercices.md).
 
-Suite : [Aide-mémoire](aide-memoire.md)
+Suite : [Exercices corrigés : deuxième série](exercices-2.md)

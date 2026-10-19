@@ -581,4 +581,4 @@ before reading `[0]`?
   compile time.
 - Escape any user input before `new RegExp` with your own `escapeRegex` function.
 
-Next: [TypeScript for the web](web.md).
+Next: [dates and times](dates.md).
