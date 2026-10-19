@@ -393,4 +393,4 @@ décrire l'état d'une commande ?
   enregistrements (`{nom}`) ; une garde `if` ajoute une condition.
 - `rythme check` signale les cas oubliés dans un `match`.
 
-Suite : [Le filtrage par motif](pattern-matching.md)
+Suite : [Les symboles et quand les utiliser](symboles.md)

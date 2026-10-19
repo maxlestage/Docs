@@ -493,4 +493,4 @@ edad, sin construir una lista nueva?
   utilizable una sola vez.
 - Si la comprensión se vuelve difícil de leer, vuelve a un bucle `for`.
 
-Siguiente: [clases y objetos](types.md)
+Siguiente: [las trampas del principiante en Python](pieges.md)

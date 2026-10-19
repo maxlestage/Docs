@@ -376,5 +376,4 @@ Kiwi,0.4
 - `csv.DictWriter` écrit un CSV et gère les virgules dans les valeurs.
 - CSV pour les tableaux simples, JSON pour les données imbriquées et le web.
 
-Suite : [les expressions régulières](regex.md). Comparez avec
-[les formats en Ruby](../ruby/formats.md).
+Suite : [Une base de données avec sqlite3](sqlite.md)

@@ -83,7 +83,7 @@ Tous les chapitres suivent le même plan, pour que le lecteur s'y retrouve :
 6. `## En résumé` : 3 à 6 points, ce qu'il faut retenir, puis une ligne
    « Suite : [le chapitre suivant](….md) ».
 
-Les pages « Exercices corrigés », « Aide-mémoire » et « Glossaire » n'ont ni objectifs,
+Les pages « Exercices corrigés », « Exercices pour bien démarrer », « Aide-mémoire » et « Glossaire » n'ont ni objectifs,
 ni erreurs fréquentes, ni « Testez-vous ».
 
 ## Liens
