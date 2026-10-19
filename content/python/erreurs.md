@@ -519,5 +519,5 @@ est négatif, et renvoie `n` sinon.
 - `with` libère une ressource automatiquement, même en cas d'erreur.
 - En Python, on essaie souvent d'abord et on attrape l'erreur ensuite (EAFP).
 
-Suite : [modules, paquets et pip](modules.md). Comparez avec
+Suite : [les gestionnaires de contexte](contextes.md). Comparez avec
 [les erreurs en Ruby](../ruby/erreurs.md).
