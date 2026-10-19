@@ -13,6 +13,9 @@ This page shows how to choose between several paths with `if` and `match`, and h
 
 ## The if condition
 
+A program often has to decide. If it is hot, it suggests a drink; if it is cold, a
+coat. `if` is how you make that choice.
+
 `if` runs a block only if the condition is true. No need for parentheses,
 but the curly braces are required.
 
@@ -30,6 +33,14 @@ if temperature > 30 {
 ```sortie
 It's nice.
 ```
+
+Line by line:
+
+- `let temperature = 25;` stores 25 in the variable `temperature`;
+- first test: "is 25 greater than 30?". No: Rust skips that block;
+- second test, with `else if`: "is 25 greater than 15?". Yes: Rust prints
+  "It's nice.";
+- the `else` block does not run, because a test already succeeded.
 
 Rust tests the conditions in order and stops at the first true one. `else`
 catches all the other cases.
@@ -63,7 +74,30 @@ Entry allowed
 Teenager
 ```
 
+**Your turn:** write a program that stores `hour = 15` in a variable, then prints
+"Good morning" if the hour is before 12, "Good afternoon" if it is before 18, and
+"Good evening" otherwise.
+
+> **Solution**
+>
+> ```rust
+> let hour = 15;
+> if hour < 12 {
+>     println!("Good morning");
+> } else if hour < 18 {
+>     println!("Good afternoon");
+> } else {
+>     println!("Good evening");
+> }
+> ```
+>
+> ```sortie
+> Good afternoon
+> ```
+
 ## if is an expression
+
+> **Note:** this part can wait. Read it once the basics feel solid.
 
 In Rust, `if` **returns a value**. You can store it in a variable:
 
@@ -80,6 +114,9 @@ adult
 > **Warning:** both branches must give the same type.
 
 ## Choosing with match
+
+When a value can take many shapes, a long chain of `else if` becomes hard to read.
+`match` lays out all these cases neatly, one under the other.
 
 `match` compares a value with several **patterns** (possible shapes). The first
 one that matches wins. Think of mail sorting: each letter goes into the first box
@@ -101,6 +138,14 @@ println!("{name}");
 weekend
 ```
 
+Line by line:
+
+- `day` is 6;
+- `match day` compares 6 with each pattern, from top to bottom: 1? no. 2, 3 or 4? no.
+  5? no;
+- `6 | 7` matches: the `match` gives the text `"weekend"`, stored in `name`;
+- the `_` pattern is not used here: it only counts when no other pattern matches.
+
 `|` means "or". Patterns can also be ranges:
 
 ```rust
@@ -119,7 +164,29 @@ Good
 > **Remember:** `match` must cover **all** the cases. The `_` pattern catches everything
 > else.
 
+**Your turn:** write a program that stores `coins = 3` in a variable, then uses
+`match` to print "one" for 1, "two" for 2, "three" for 3, and "many" for
+everything else.
+
+> **Solution**
+>
+> ```rust
+> let coins = 3;
+> match coins {
+>     1 => println!("one"),
+>     2 => println!("two"),
+>     3 => println!("three"),
+>     _ => println!("many"),
+> }
+> ```
+>
+> ```sortie
+> three
+> ```
+
 ### Guards
+
+> **Note:** this part can wait. Read it once the basics feel solid.
 
 A pattern can be followed by `if` and a condition: this is a **guard**. The name `n`
 receives the tested value:
@@ -159,6 +226,9 @@ false
 
 ## The loop loop
 
+Imagine you are asked to print the numbers from 1 to 100. Writing 100 `println!`
+would be long and tedious. A loop does this repetitive work for you.
+
 A [loop](../debuter/glossaire.md#loop) repeats a block of code. `loop` repeats
 forever, until a `break`. The `break` can return a value:
 
@@ -177,7 +247,17 @@ println!("{result}");
 128
 ```
 
+Line by line:
+
+- `n` starts at 1; `mut` lets you change it later;
+- on each turn, `n` is multiplied by 2: it becomes 2, then 4, 8, 16, 32, 64, 128;
+- as long as `n` is not above 100, the `if` does nothing and the loop starts again;
+- when `n` is 128, `break n;` stops the loop and gives 128, stored in `result`.
+
 ## The while loop
+
+Sometimes you do not know in advance how many turns you will need. You repeat as
+long as a situation lasts, like stirring a soup as long as it is not hot.
 
 `while` repeats as long as the condition is true. It is tested before each turn:
 
@@ -197,7 +277,41 @@ println!("Go!");
 Go!
 ```
 
+Line by line:
+
+- `count` starts at 3;
+- before each turn, Rust asks `count > 0`. `3 > 0` is true: it enters the block;
+- the block prints `count`, then takes 1 away from it (`-= 1`): it becomes 2, then
+  1, then 0;
+- when `count` is 0, `0 > 0` is false: Rust leaves the loop and prints "Go!".
+
+**Your turn:** write a program that prints the numbers from 1 to 5 with a `while`
+loop, then "Done!".
+
+> **Solution**
+>
+> ```rust
+> let mut n = 1;
+> while n <= 5 {
+>     println!("{n}");
+>     n += 1;
+> }
+> println!("Done!");
+> ```
+>
+> ```sortie
+> 1
+> 2
+> 3
+> 4
+> 5
+> Done!
+> ```
+
 ## The for loop
+
+Very often, you have a series of things to handle one by one: each item on a
+shopping list, each number from 1 to 10. `for` is made for this.
 
 `for` goes through a range or a collection, element by element. It is the most
 used loop.
@@ -223,6 +337,13 @@ println!();
 4 3 2 1 
 ```
 
+Line by line:
+
+- `for i in 1..4` gives `i` the value 1, then 2, then 3;
+- `print!` prints without going to a new line: the numbers stay side by side;
+- `println!()`, empty, just goes to a new line;
+- the second loop does the same from 1 to 4, but backwards thanks to `rev()`.
+
 ### Over a collection
 
 ```rust
@@ -246,7 +367,31 @@ I like kiwis
 
 `enumerate()` gives, along with each element, its position (starting from 0).
 
+**Your turn:** write a program that prints the 7 times table, from "7 x 1 = 7" to
+"7 x 5 = 35", one line per calculation.
+
+> **Solution**
+>
+> ```rust
+> for i in 1..=5 {
+>     let result = 7 * i;
+>     println!("7 x {i} = {result}");
+> }
+> ```
+>
+> ```sortie
+> 7 x 1 = 7
+> 7 x 2 = 14
+> 7 x 3 = 21
+> 7 x 4 = 28
+> 7 x 5 = 35
+> ```
+
 ## continue and break
+
+Sometimes you want to change the course of a loop along the way: stop searching as
+soon as you have found something, or skip some elements. That is what these two
+words are for.
 
 `continue` goes to the next turn, `break` stops the loop:
 
@@ -266,6 +411,14 @@ println!();
 ```sortie
 1 3 5 7 
 ```
+
+Line by line:
+
+- `n` takes the values 1, 2, 3… up to 9;
+- if `n` is even (the remainder of the division by 2 is 0), `continue` goes straight
+  to the next turn: the `print!` is not reached;
+- if `n` is above 7, `break` stops the whole loop: 9 is never printed;
+- otherwise, `print!` prints the number.
 
 ### Leaving two loops: labels
 
@@ -294,6 +447,10 @@ End
 loop.
 
 ## if let and while let
+
+Think of a mailbox: sometimes there is a letter, sometimes nothing. Before reading
+the letter, you have to check that it is there. `if let` and `while let` do this
+check for you.
 
 Some values are **optional**: they are `Some(x)` if there is something,
 or `None` if there is nothing. This is the `Option` type, covered in detail in
