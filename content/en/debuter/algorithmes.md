@@ -484,4 +484,4 @@ algorithm?
 - The same algorithm can be written in Python, JavaScript, Ruby, Rust or Rythme: only the words change.
 - Test by hand with a table of values, without forgetting the tricky cases.
 
-Next: [Les variables, expliquées simplement](variables.md)
+Next: [variables, explained simply](variables.md)

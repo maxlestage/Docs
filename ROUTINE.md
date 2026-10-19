@@ -125,9 +125,9 @@ l'ordre des parcours (une ligne par lot de 3 à 5 pages, dans les deux langues) 
 - [x] Rust : `nombres`, `texte`, `collections`, `hashmap`
 - [x] Rythme : `nombres`, `texte`, `collections`, `dictionnaires`
 - [x] Chaque parcours : `erreurs`, `tests`, `exercices`, `aide-memoire`
-- [ ] Débuter : `variables`, `logique`, `boucles`, `fonctions`, `donnees`, `lire-une-erreur`, `bloque`
+- [x] Débuter : `variables`, `logique`, `boucles`, `fonctions`, `donnees`, `lire-une-erreur`, `bloque`
 - [ ] Chaque langage : `pieges`, `exercices-faciles`
-- [ ] Débuter : `bases-de-donnees`, `securite`, `open-source`, `metiers`
+- [x] Débuter : `bases-de-donnees`, `securite`, `open-source`, `metiers`
 - [x] Nouveaux chapitres : Python `contextes`, TypeScript `regex`, Go `embed`
 - [ ] Chaque langage : `pas-a-pas`, `exercices-2` ; et les chapitres cochés le 2026-10-19 (session principale)
 - [ ] Puis le reste de chaque parcours, dans l'ordre de `src/catalog.rs`
@@ -163,3 +163,4 @@ l'ordre des parcours (une ligne par lot de 3 à 5 pages, dans les deux langues) 
 - 2026-10-19 — Les 50 chapitres de « Les bases » des sept langages enrichis pour les grands débutants, en FR, EN et ES (148 pages, 2942 exemples vérifiés).
 - 2026-10-19 — `conditions-boucles` découpé en deux chapitres (conditions, puis `boucles`) dans les sept langages, en FR, EN et ES (42 pages, 460 exemples vérifiés).
 - 2026-10-19 — Découpage : `fonctions` → `fonctions` + `fonctions-avancees` (Go, Python, TypeScript) et TypeScript `collections` → `collections` + `map-set`, en FR, EN et ES (24 pages, 345 exemples vérifiés).
+- 2026-10-19 — Traductions EN et ES de Débuter : `variables`, `logique`, `boucles`, `fonctions`, `donnees`, `lire-une-erreur`, `bloque`, `bases-de-donnees`, `securite`, `open-source`, `metiers` (22 pages, 238 exemples vérifiés). Tout le parcours Débuter est traduit.
