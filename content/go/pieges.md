@@ -1,6 +1,6 @@
 # Les pièges du débutant en Go
 
-Cette page rassemble les dix pièges où presque tous les débutants en Go tombent, avec pour chacun ce qui se passe, pourquoi, et comment l'éviter.
+Cette page rassemble onze pièges où presque tous les débutants en Go tombent, avec pour chacun ce qui se passe, pourquoi, et comment l'éviter.
 
 > **Objectifs :**
 >

@@ -12,16 +12,9 @@ Une base de données range des informations en tableaux pour les retrouver vite 
 
 ## Pourquoi pas un simple fichier texte ?
 
-Imaginez que vous notez vos livres dans un fichier texte. Une ligne par
-livre, avec un `;` entre le titre, l'auteur et l'année :
-
-```text
-Le Petit Prince;Saint-Exupéry;1943
-Les Misérables;Hugo;1862
-```
-
-Cela marche… jusqu'au jour où un titre contient lui-même un `;`.
-Regardez :
+Imaginez que vous notez vos livres dans un fichier texte : une ligne par
+livre, avec un `;` entre le titre, l'auteur et l'année. Cela marche…
+jusqu'au jour où un titre contient lui-même un `;`. Regardez :
 
 ```python
 lignes = [
@@ -39,17 +32,14 @@ for ligne in lignes:
 ```
 
 La deuxième ligne est coupée en 4 au lieu de 3 : le programme croit que
-l'auteur s'appelle « mode d'emploi ». Et ce n'est pas le seul souci :
+l'auteur s'appelle « mode d'emploi ». Autres soucis : pour trouver un
+livre, il faut lire **tout** le fichier, et rien n'empêche d'écrire
+« mille neuf cent » à la place d'une année.
 
-- pour trouver un livre, il faut lire **tout** le fichier ;
-- si deux programmes écrivent en même temps, le fichier peut s'abîmer ;
-- rien n'empêche d'écrire « mille neuf cent » à la place d'une année.
+Une **base de données** règle ces problèmes : ce programme spécialisé garde
+vos données, les vérifie et les retrouve très vite.
 
-Une **base de données** règle ces problèmes. C'est un programme spécialisé
-qui garde vos données, les vérifie, et les retrouve très vite.
-
-> **À retenir :** un fichier texte, c'est un cahier. Une base de données,
-> c'est un classeur bien rangé, avec un bibliothécaire qui le tient.
+> **À retenir :** un fichier texte est un cahier ; une base de données, un classeur tenu par un bibliothécaire.
 
 ## Une table, c'est comme un tableur
 
@@ -71,12 +61,10 @@ Table « livres »
 - une **colonne** est une sorte d'information (le titre, l'année…). Chaque
   colonne a un [type](glossaire.md#type) : du texte, un nombre entier… ;
 - une **ligne** est une chose rangée : ici, un livre ;
-- la **clé** (ici `id`) est un numéro unique par ligne. Deux livres peuvent
-  avoir le même titre, mais jamais le même `id`. C'est comme le numéro de
-  sécurité sociale : il désigne une seule personne.
+- la **clé** (ici `id`) est un numéro unique par ligne, comme un numéro de
+  sécurité sociale : deux livres peuvent avoir le même titre, jamais le même `id`.
 
-> **À retenir :** une table = des colonnes (les sortes d'informations) et
-> des lignes (les choses rangées). La clé désigne une ligne sans erreur.
+> **À retenir :** une table = des colonnes et des lignes ; la clé désigne une ligne sans erreur.
 
 ## SQL : la langue des bases de données
 
@@ -92,14 +80,13 @@ ou « sequel »). Ses phrases ressemblent à de l'anglais simple :
 | `WHERE`   | « seulement si… »    | `WHERE auteur = 'Hugo'`                  |
 | `ORDER BY`| « trié par… »        | `ORDER BY annee`                         |
 
-Pour essayer, nous utilisons **SQLite** : une petite base de données livrée
-avec Python. Rien à installer. Avec `":memory:"`, la base vit dans la
-[mémoire vive](glossaire.md#memoire-vive) et disparaît à la fin du programme :
-parfait pour s'entraîner.
+Pour essayer, nous utilisons **SQLite**, livré avec Python : rien à installer.
+Avec `":memory:"`, la base vit dans la [mémoire vive](glossaire.md#memoire-vive)
+et disparaît à la fin du programme : parfait pour s'entraîner.
 
 ## Créer une table et ajouter des lignes
 
-Trois étapes : se connecter, créer la table, ajouter des lignes.
+Trois étapes : se connecter, créer la table, ajouter des lignes :
 
 ```python
 import sqlite3
@@ -108,8 +95,6 @@ con = sqlite3.connect(":memory:")
 con.execute("CREATE TABLE livres (id INTEGER PRIMARY KEY, titre TEXT, auteur TEXT, annee INTEGER)")
 con.execute("INSERT INTO livres (titre, auteur, annee) VALUES (?, ?, ?)",
             ("Le Petit Prince", "Saint-Exupéry", 1943))
-con.execute("INSERT INTO livres (titre, auteur, annee) VALUES (?, ?, ?)",
-            ("Les Misérables", "Hugo", 1862))
 
 for ligne in con.execute("SELECT * FROM livres"):
     print(ligne)
@@ -117,7 +102,6 @@ for ligne in con.execute("SELECT * FROM livres"):
 
 ```sortie
 (1, 'Le Petit Prince', 'Saint-Exupéry', 1943)
-(2, 'Les Misérables', 'Hugo', 1862)
 ```
 
 Lisons-le ligne par ligne :
@@ -125,8 +109,7 @@ Lisons-le ligne par ligne :
 | Ligne du programme        | Ce qui se passe                                        |
 |---------------------------|--------------------------------------------------------|
 | `sqlite3.connect(…)`      | ouvre une base vide                                     |
-| `CREATE TABLE livres (…)` | crée la table et ses 4 colonnes                         |
-| `INTEGER PRIMARY KEY`     | `id` est la clé : SQLite la numérote tout seul (1, 2…) |
+| `CREATE TABLE livres (…)` | crée la table ; `id` est la clé, numérotée toute seule |
 | `INSERT INTO … VALUES`    | ajoute une ligne                                        |
 | `SELECT * FROM livres`    | « montre-moi toutes les colonnes de la table livres »   |
 
@@ -134,14 +117,13 @@ Les `?` sont des **places réservées**. Python y glisse les valeurs, dans
 l'ordre. C'est la bonne habitude : la page sur
 [la sécurité](securite.md) explique pourquoi.
 
-Essayez : ajoutez un troisième `INSERT` avec `("L'Étranger", "Camus", 1942)`.
-Une troisième ligne apparaît, avec l'`id` 3.
+Essayez : copiez l'`INSERT` avec `("Les Misérables", "Hugo", 1862)`.
+Une deuxième ligne apparaît, avec l'`id` 2.
 
 ## Choisir des lignes avec WHERE
 
-`SELECT` peut ne prendre que certaines colonnes, et `WHERE` ne garde que
-certaines lignes. Pour aller plus vite, on ajoute ici tous les livres d'un
-coup avec `executemany` :
+`WHERE` ne garde que certaines lignes. Ici, `executemany` ajoute tous les
+livres d'un coup :
 
 ```python
 import sqlite3
@@ -149,10 +131,8 @@ import sqlite3
 con = sqlite3.connect(":memory:")
 con.execute("CREATE TABLE livres (id INTEGER PRIMARY KEY, titre TEXT, auteur TEXT, annee INTEGER)")
 con.executemany("INSERT INTO livres (titre, auteur, annee) VALUES (?, ?, ?)", [
-    ("Le Petit Prince", "Saint-Exupéry", 1943),
-    ("Les Misérables", "Hugo", 1862),
-    ("Notre-Dame de Paris", "Hugo", 1831),
-    ("L'Étranger", "Camus", 1942),
+    ("Le Petit Prince", "Saint-Exupéry", 1943), ("Les Misérables", "Hugo", 1862),
+    ("Notre-Dame de Paris", "Hugo", 1831), ("L'Étranger", "Camus", 1942),
 ])
 
 for ligne in con.execute("SELECT titre, annee FROM livres WHERE auteur = 'Hugo'"):
@@ -206,9 +186,8 @@ for titre, annee in con.execute("SELECT titre, annee FROM livres ORDER BY annee"
 1943 Le Petit Prince
 ```
 
-Remarquez `for titre, annee in …` : chaque ligne est un
-[tuple](glossaire.md#tuple), qu'on ouvre en deux
-[variables](glossaire.md#variable).
+Chaque ligne est un [tuple](glossaire.md#tuple), ouvert en deux variables
+par `for titre, annee in …`.
 
 Essayez : écrivez `ORDER BY annee DESC`. L'ordre s'inverse : 1943 d'abord.
 
@@ -223,13 +202,11 @@ import sqlite3
 con = sqlite3.connect(":memory:")
 con.execute("CREATE TABLE livres (id INTEGER PRIMARY KEY, titre TEXT, annee INTEGER)")
 con.executemany("INSERT INTO livres (titre, annee) VALUES (?, ?)", [
-    ("Le Petit Prince", 1900),
-    ("Les Misérables", 1862),
-    ("Livre en double", 2000),
+    ("Le Petit Prince", 1900), ("Les Misérables", 1862), ("Livre en double", 2000),
 ])
 
 con.execute("UPDATE livres SET annee = ? WHERE id = ?", (1943, 1))
-con.execute("DELETE FROM livres WHERE id = ?", (3,))
+con.execute("DELETE FROM livres WHERE id = 3")
 
 for ligne in con.execute("SELECT * FROM livres"):
     print(ligne)
@@ -240,28 +217,18 @@ for ligne in con.execute("SELECT * FROM livres"):
 (2, 'Les Misérables', 1862)
 ```
 
-Voici la table avant et après :
+| id | Avant                  | Ordre    | Après                  |
+|----|------------------------|----------|------------------------|
+| 1  | Le Petit Prince, 1900  | `UPDATE` | Le Petit Prince, 1943  |
+| 2  | Les Misérables, 1862   | (rien)   | Les Misérables, 1862   |
+| 3  | Livre en double, 2000  | `DELETE` | (disparue)             |
 
-```text
-Avant                                 Après
-┌────┬─────────────────┬───────┐      ┌────┬─────────────────┬───────┐
-│ 1  │ Le Petit Prince │ 1900  │  →   │ 1  │ Le Petit Prince │ 1943  │  UPDATE
-│ 2  │ Les Misérables  │ 1862  │      │ 2  │ Les Misérables  │ 1862  │
-│ 3  │ Livre en double │ 2000  │      └────┴─────────────────┴───────┘  DELETE
-└────┴─────────────────┴───────┘
-```
-
-Notez `(3,)` avec une virgule : c'est un tuple d'un seul élément. Sans la
-virgule, Python verrait juste le nombre `3` entre parenthèses.
-
-> **À retenir :** `UPDATE` et `DELETE` sans `WHERE` touchent **toutes** les
-> lignes. Écrivez le `WHERE` en premier, avant même le reste.
+> **À retenir :** `UPDATE` et `DELETE` sans `WHERE` touchent **toutes** les lignes.
 
 ## Relier deux tables avec JOIN
 
-Écrire « Hugo » sur chaque livre, c'est répéter la même information. Si
-l'on corrige l'orthographe, il faut la corriger partout. On range donc les
-auteurs dans **leur propre table**, et chaque livre garde seulement le
+Écrire « Hugo » sur chaque livre répète la même information. On range donc
+les auteurs dans **leur propre table**, et chaque livre garde seulement le
 **numéro** de son auteur :
 
 ```text
@@ -275,9 +242,8 @@ auteurs dans **leur propre table**, et chaque livre garde seulement le
                            └────┴─────────────────────┴───────────┘
 ```
 
-Un `JOIN` (« joindre ») recolle les deux tables le temps d'une question :
-pour chaque livre, la base va chercher l'auteur dont l'`id` vaut
-`auteur_id`.
+Un `JOIN` (« joindre ») recolle les deux tables : pour chaque livre, la
+base cherche l'auteur dont l'`id` vaut `auteur_id`.
 
 ```python
 import sqlite3
@@ -287,17 +253,12 @@ con.execute("CREATE TABLE auteurs (id INTEGER PRIMARY KEY, nom TEXT)")
 con.execute("CREATE TABLE livres (id INTEGER PRIMARY KEY, titre TEXT, auteur_id INTEGER)")
 con.executemany("INSERT INTO auteurs (nom) VALUES (?)", [("Saint-Exupéry",), ("Hugo",)])
 con.executemany("INSERT INTO livres (titre, auteur_id) VALUES (?, ?)", [
-    ("Le Petit Prince", 1),
-    ("Les Misérables", 2),
-    ("Notre-Dame de Paris", 2),
+    ("Le Petit Prince", 1), ("Les Misérables", 2), ("Notre-Dame de Paris", 2),
 ])
 
-requete = """
-    SELECT livres.titre, auteurs.nom
-    FROM livres
-    JOIN auteurs ON livres.auteur_id = auteurs.id
-    ORDER BY livres.titre
-"""
+requete = """SELECT livres.titre, auteurs.nom FROM livres
+             JOIN auteurs ON livres.auteur_id = auteurs.id
+             ORDER BY livres.titre"""
 for titre, nom in con.execute(requete):
     print(f"{titre} — {nom}")
 ```
@@ -308,14 +269,12 @@ Les Misérables — Hugo
 Notre-Dame de Paris — Hugo
 ```
 
-`livres.titre` veut dire « la colonne `titre` de la table `livres` ». On
-précise la table, car les deux tables ont une colonne `id`.
+`livres.titre` veut dire « la colonne `titre` de la table `livres` ».
 
 Essayez : ajoutez `WHERE auteurs.nom = 'Hugo'` juste avant `ORDER BY`.
 Seuls les deux livres de Hugo restent.
 
-> **À retenir :** chaque information est écrite **une seule fois**, dans sa
-> table. `JOIN` les rassemble quand vous en avez besoin.
+> **À retenir :** chaque information est écrite **une seule fois** ; `JOIN` les rassemble.
 
 ## SQL, NoSQL et les outils
 
@@ -342,9 +301,7 @@ import sqlite3
 con = sqlite3.connect(":memory:")
 con.execute("CREATE TABLE livres (id INTEGER PRIMARY KEY, titre TEXT, annee INTEGER)")
 con.executemany("INSERT INTO livres (titre, annee) VALUES (?, ?)", [
-    ("Le Petit Prince", 1900),
-    ("Les Misérables", 1862),
-    ("L'Étranger", 1942),
+    ("Le Petit Prince", 1900), ("Les Misérables", 1862), ("L'Étranger", 1942),
 ])
 
 con.execute("UPDATE livres SET annee = 1943")  # oups : pas de WHERE
@@ -361,13 +318,8 @@ for ligne in con.execute("SELECT * FROM livres"):
 
 Aucun message d'erreur : SQL a fait exactement ce qu'on lui a dit. Les
 **trois** livres ont maintenant 1943. La correction :
-
-```text
-UPDATE livres SET annee = 1943 WHERE id = 1
-```
-
-Avant un `UPDATE` ou un `DELETE`, lancez d'abord un `SELECT` avec le même
-`WHERE` : vous voyez quelles lignes seront touchées.
+`UPDATE livres SET annee = 1943 WHERE id = 1`. Astuce : lancez d'abord un
+`SELECT` avec le même `WHERE` pour voir quelles lignes seront touchées.
 
 ### Une faute de frappe dans un ordre SQL
 
@@ -387,9 +339,7 @@ sqlite3.OperationalError: near "SELEC": syntax error
 ```
 
 `near "SELEC"` veut dire « près du mot `SELEC` » : c'est là que la base ne
-comprend plus. Corrigez en `SELECT`. Si le mot est juste mais la table
-mal écrite, le message est différent : `no such table: livre` (la table
-`livre` n'existe pas).
+comprend plus. Corrigez en `SELECT`.
 
 ### Fabriquer l'ordre SQL en collant du texte
 
@@ -413,14 +363,10 @@ Traceback (most recent call last):
 sqlite3.OperationalError: near "Hermite": syntax error
 ```
 
-L'apostrophe de « L'Hermite » ferme le texte trop tôt. Pire : une personne
-malveillante peut écrire du SQL à la place d'un nom. C'est l'**injection
-SQL**, expliquée dans [les bases de la sécurité](securite.md). La
-correction est toujours la même, des `?` :
-
-```text
-con.execute("INSERT INTO eleves (nom) VALUES (?)", (nom,))
-```
+L'apostrophe de « L'Hermite » ferme le texte trop tôt. Pire : un pirate
+peut écrire du SQL à la place d'un nom (l'**injection SQL**, voir
+[la sécurité](securite.md)). La correction, toujours la même, des `?` :
+`con.execute("INSERT INTO eleves (nom) VALUES (?)", (nom,))`.
 
 ## Testez-vous
 
@@ -428,8 +374,7 @@ con.execute("INSERT INTO eleves (nom) VALUES (?)", (nom,))
 
 > **Réponse**
 >
-> À désigner une ligne sans erreur possible : chaque ligne a une clé
-> différente, même si deux lignes ont le même titre.
+> À désigner une ligne sans erreur : chaque ligne a sa propre clé.
 
 **2.** Que fait `DELETE FROM livres` sans `WHERE` ?
 
@@ -438,8 +383,7 @@ con.execute("INSERT INTO eleves (nom) VALUES (?)", (nom,))
 > Il supprime **toutes** les lignes de la table. Il faut un `WHERE` pour
 > viser seulement certaines lignes, par exemple `WHERE id = 3`.
 
-**3.** Écrivez l'ordre SQL qui montre les titres des livres parus après
-1900, du plus récent au plus ancien.
+**3.** Quel ordre SQL montre les titres parus après 1900, du plus récent au plus ancien ?
 
 > **Réponse**
 >

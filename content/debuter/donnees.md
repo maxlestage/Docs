@@ -30,15 +30,11 @@ ne veut rien dire.
 Python donne le type d'une valeur avec `type` :
 
 ```python
-print(type(12))
-print(type("bonjour"))
-print(type([12, 15, 9]))
+print(type(12), type("bonjour"), type([12, 15, 9]))
 ```
 
 ```sortie
-<class 'int'>
-<class 'str'>
-<class 'list'>
+<class 'int'> <class 'str'> <class 'list'>
 ```
 
 `int` veut dire nombre entier, `str` veut dire texte, `list` veut dire liste.
@@ -84,32 +80,23 @@ Essayez : remplacez `7` par `10`. Le reste `10 % 2` vaut `0` : 10 est pair.
 
 ### Le mystère de 0.1 + 0.2
 
-Faites ce calcul :
-
 ```python
 print(0.1 + 0.2)
+print(round(0.1 + 0.2, 2))
 ```
 
 ```sortie
 0.30000000000000004
+0.3
 ```
 
 Ce n'est pas un bug de Python. L'ordinateur range les décimaux en binaire
 (avec des 0 et des 1). Certains nombres, comme 0.1, ne tombent pas juste,
 comme 1/3 qui s'écrit 0.3333… sans fin. Il reste une toute petite erreur.
+JavaScript et Ruby donnent le même résultat.
 
-Pour afficher un résultat propre, on arrondit avec `round` :
-
-```python
-print(round(0.1 + 0.2, 2))
-```
-
-```sortie
-0.3
-```
-
-Le `2` veut dire « deux chiffres après la virgule ». JavaScript et Ruby
-donnent exactement le même `0.30000000000000004`.
+Pour un affichage propre, on arrondit avec `round` : le `2` veut dire
+« deux chiffres après la virgule ».
 
 > **À retenir :** les décimaux sont parfois un tout petit peu faux.
 > Arrondissez avant d'afficher, et ne comptez jamais l'argent avec eux sans
@@ -147,23 +134,16 @@ texte.
 
 ## Convertir d'un type à l'autre
 
-`"3"` et `3` se ressemblent, mais ce n'est pas la même chose :
-
-```text
-  "3"  →  un texte qui contient le caractère 3   (comme une étiquette)
-   3   →  le nombre trois                        (on peut calculer avec)
-```
-
-Avec `+`, la différence se voit tout de suite :
+`"3"` et `3` se ressemblent, mais ce n'est pas la même chose. `"3"` est un
+texte, comme une étiquette où est écrit 3. `3` est le nombre trois, avec
+lequel on calcule. Avec `+`, la différence se voit tout de suite :
 
 ```python
-print("3" + "3")
-print(3 + 3)
+print("3" + "3", 3 + 3)
 ```
 
 ```sortie
-33
-6
+33 6
 ```
 
 Deux textes sont collés : `"33"`. Deux nombres sont additionnés : `6`.
@@ -276,17 +256,7 @@ print(fruits)
 Essayez : affichez `fruits[-1]`. Python donne la **dernière** case :
 `fraise`.
 
-En JavaScript, c'est presque pareil :
-
-```javascript
-const fruits = ["pomme", "poire", "kiwi"];
-fruits.push("fraise");
-console.log(fruits[0], fruits.length);
-```
-
-```sortie
-pomme 4
-```
+En JavaScript et en Ruby, c'est presque pareil :
 
 | Action | Python | JavaScript | Ruby |
 |---|---|---|---|
@@ -333,19 +303,12 @@ True
 - `annuaire["Zoé"] = …` ajoute une nouvelle entrée ;
 - `"Léo" in annuaire` demande : « cette clé existe-t-elle ? ».
 
-En Ruby, on parle de **hash**, et on écrit `=>` entre la clé et la
-valeur :
+Lire une clé absente, comme `annuaire["Max"]`, arrête le programme avec
+l'erreur `KeyError` (« clé inconnue »).
 
-```ruby
-annuaire = { "Ada" => "06 12 34 56 78" }
-puts annuaire["Ada"]
-```
-
-```sortie
-06 12 34 56 78
-```
-
-En JavaScript, on parle d'**objet** : `{ Ada: "06 12 34 56 78" }`.
+En JavaScript, on parle d'**objet** : `{ Ada: "06 12 34 56 78" }`. En
+Ruby, de **hash** : `{ "Ada" => "06 12 34 56 78" }`. On les lit de la même
+façon : `annuaire["Ada"]`.
 
 > **À retenir :** une liste se lit par position (0, 1, 2…), un
 > dictionnaire se lit par clé (`"Ada"`).
@@ -354,13 +317,8 @@ En JavaScript, on parle d'**objet** : `{ Ada: "06 12 34 56 78" }`.
 
 Parfois, il n'y a **pas de valeur** : une case vide, une personne absente
 de l'annuaire. Les langages ont une valeur spéciale qui veut dire « rien »
-(voir [null](glossaire.md#null)) :
-
-| Langage | « Rien » |
-|---|---|
-| Python | `None` |
-| JavaScript | `null` et `undefined` |
-| Ruby | `nil` |
+(voir [null](glossaire.md#null)) : `None` en Python, `null` et
+`undefined` en JavaScript, `nil` en Ruby.
 
 En Python, `get` cherche une clé et donne `None` si elle n'existe pas :
 
@@ -417,24 +375,6 @@ IndexError: list index out of range
 
 La liste a 3 cases : 0, 1 et 2. La case 3 est « hors de la liste » (*out of
 range*). Correction : `fruits[2]`, ou `fruits[-1]` pour la dernière.
-
-### Chercher une clé absente
-
-```python norun
-annuaire = {"Ada": "06 12 34 56 78"}
-print(annuaire["Léo"])
-```
-
-```text
-Traceback (most recent call last):
-  File "/home/ada/annuaire.py", line 2, in <module>
-    print(annuaire["Léo"])
-          ~~~~~~~~^^^^^^^
-KeyError: 'Léo'
-```
-
-`KeyError` veut dire « clé inconnue ». Correction : `annuaire.get("Léo")`,
-qui donne `None` au lieu de s'arrêter.
 
 ## Testez-vous
 

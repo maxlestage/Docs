@@ -50,27 +50,13 @@ Une image aide beaucoup : une **boîte** avec une **étiquette**.
 - Quand vous écrivez `age`, l'ordinateur ouvre la boîte et prend ce qu'il
   y a dedans.
 
-Une boîte peut contenir un nombre, un texte, ou autre chose. Le genre de
-valeur s'appelle le **type** (voir [type](glossaire.md#type)) :
+Une boîte peut contenir un nombre (`30`, `1.65`), un texte (`"Ada"`), ou
+autre chose. Le genre de valeur s'appelle le **type** (voir
+[type](glossaire.md#type)).
 
-```python
-prenom = "Ada"
-taille = 1.65
-age = 30
-print(prenom, taille, age)
-```
-
-```sortie
-Ada 1.65 30
-```
-
-`"Ada"` est un texte : on dit une **chaîne de caractères**, et on
-l'écrit entre guillemets (voir
-[chaîne de caractères](glossaire.md#chaine-de-caracteres)). `1.65` est un
-nombre à virgule ; en programmation, la virgule s'écrit avec un **point**.
-
-Essayez : remplacez `"Ada"` par votre prénom. Le programme affiche votre
-prénom.
+Un texte s'appelle une **chaîne de caractères**, et on l'écrit entre
+guillemets (voir [chaîne de caractères](glossaire.md#chaine-de-caracteres)).
+Un nombre à virgule s'écrit avec un **point** : `1.65`.
 
 ## Les limites de l'image de la boîte
 
@@ -148,17 +134,8 @@ Essayez : mettez `quantite = 10`. Le programme affiche `40`.
 On peut ranger une nouvelle valeur sous un nom qui existe déjà. L'ancienne
 valeur est **oubliée**.
 
-```python
-meteo = "pluie"
-print(meteo)
-meteo = "soleil"
-print(meteo)
-```
-
-```sortie
-pluie
-soleil
-```
+Avec `meteo = "pluie"` puis `meteo = "soleil"`, la boîte `meteo` contient
+`"soleil"` : `"pluie"` a disparu.
 
 Très souvent, on calcule la nouvelle valeur à partir de l'ancienne :
 
@@ -210,22 +187,9 @@ print(a, b)
 
 À l'étape 4, `a` vaut déjà 5 : `b` reçoit donc `10`, pas `4`.
 
-Inversons deux lignes :
-
-```python
-a = 2
-b = 3
-b = a * 2
-a = a + b
-print(a, b)
-```
-
-```sortie
-6 4
-```
-
-Cette fois, `b` est calculé quand `a` vaut encore 2 : `b` reçoit 4, puis
-`a` devient `2 + 4`, soit 6. Mêmes lignes, autre ordre : autre résultat.
+Inversez les lignes 3 et 4 : le programme affiche `6 4`. Cette fois, `b`
+est calculé quand `a` vaut encore 2 : `b` reçoit 4, puis `a` devient
+`2 + 4`, soit 6. Mêmes lignes, autre ordre : autre résultat.
 
 Essayez : faites le tableau sur papier **avant** de lancer le programme.
 Puis comparez avec ce qu'il affiche.

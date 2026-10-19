@@ -32,10 +32,8 @@ Git, Firefox et VLC sont open source.
 ## Les licences, en mots simples
 
 Une **licence** est un petit texte, en général dans un fichier `LICENSE`.
-Il dit ce que vous avez le droit de faire avec le code. C'est le
-« mode d'emploi juridique » du projet.
-
-Deux licences reviennent très souvent :
+Il dit ce que vous avez le droit de faire avec le code. Deux licences
+reviennent très souvent :
 
 | Licence | En une phrase | Ce qu'elle demande |
 |---|---|---|
@@ -45,8 +43,7 @@ Deux licences reviennent très souvent :
 Une image pour la GPL : on vous prête un livre de recettes, à condition
 que vos nouvelles recettes soient prêtées de la même façon.
 
-Il en existe d'autres (Apache, BSD, MPL…). Pour contribuer, vous n'avez pas
-besoin de les connaître par cœur.
+Il en existe d'autres (Apache, BSD…) : inutile de les apprendre par cœur.
 
 > **Attention :** un code **sans licence** n'est pas libre, même s'il est
 > public sur GitHub. Par défaut, l'auteur garde tous les droits.
@@ -63,12 +60,9 @@ a besoin de beaucoup de choses qui ne sont pas du code compliqué :
 - **signaler un [bug](glossaire.md#bug)** proprement, dans une issue ;
 - **ajouter un exemple** ou un [test](glossaire.md#test).
 
-Et vous y gagnez :
-
-- vous lisez du vrai code, écrit par d'autres ;
-- vous apprenez à travailler en équipe, avec [Git](glossaire.md#git) ;
-- vous recevez des conseils de gens expérimentés ;
-- vos contributions sont visibles sur votre profil GitHub.
+Et vous y gagnez : vous lisez du vrai code, vous apprenez à travailler en
+équipe avec [Git](glossaire.md#git), et vous recevez des conseils de gens
+expérimentés.
 
 > **À retenir :** une faute corrigée dans une documentation est une vraie
 > contribution. Tout le monde commence par là.
@@ -80,18 +74,14 @@ changer quoi que ce soit, lisez trois choses.
 
 ### Le README
 
-Le fichier `README.md` s'affiche sur la page d'accueil du dépôt. Il dit :
-
-- à quoi sert le projet ;
-- comment l'installer et le lancer.
+Le fichier `README.md` s'affiche sur la page d'accueil du dépôt. Il dit à
+quoi sert le projet, et comment l'installer et le lancer.
 
 ### Le CONTRIBUTING
 
 Le fichier `CONTRIBUTING.md` est le **règlement intérieur** du projet. Il
-dit comment proposer un changement : comment nommer la branche, comment
-écrire le message de commit, quels tests lancer.
-
-Lisez-le **en entier**. Chaque projet a ses habitudes.
+dit comment proposer un changement : nom de branche, message de commit,
+tests à lancer. Lisez-le **en entier** : chaque projet a ses habitudes.
 
 ### Les issues
 
@@ -108,22 +98,16 @@ help wanted           ← le projet cherche de l'aide
 documentation         ← la tâche concerne la documentation
 ```
 
-Avant de commencer une issue, écrivez un message dessous :
-
-```text
-Bonjour ! Je débute et j'aimerais m'occuper de cette issue.
-Est-ce qu'elle est encore disponible ?
-```
-
-Ainsi, deux personnes ne font pas le même travail.
+Avant de commencer, écrivez sous l'issue « Bonjour ! J'aimerais m'en
+occuper, est-elle encore disponible ? ». Ainsi, deux personnes ne font pas
+le même travail.
 
 > **Astuce :** sur GitHub, cherchez `label:"good first issue"` dans la barre
 > de recherche des issues pour filtrer les tâches faciles.
 
 ## Le chemin d'une contribution
 
-Voici tout le voyage, avant de le faire pas à pas. On utilise les mots de
-GitHub, que l'on explique juste après.
+Voici tout le voyage, avant de le faire pas à pas.
 
 ```text
   LE PROJET (github.com/projet/outil)
@@ -174,23 +158,7 @@ cd outil
 Cloning into 'outil'...
 ```
 
-Puis notez l'adresse du projet d'origine. Par habitude, on l'appelle
-`upstream` (« en amont ») :
-
-```sh norun
-git remote add upstream https://github.com/projet/outil.git
-git remote -v
-```
-
-```text
-origin	https://github.com/alice/outil.git (fetch)
-origin	https://github.com/alice/outil.git (push)
-upstream	https://github.com/projet/outil.git (fetch)
-upstream	https://github.com/projet/outil.git (push)
-```
-
-- `origin`, c'est **votre** copie.
-- `upstream`, c'est **le projet**.
+Pour Git, cette copie en ligne s'appelle maintenant `origin`.
 
 ## Étape 3 : créer une branche
 
@@ -237,6 +205,9 @@ Envoyez votre branche sur **votre** fork, `origin` :
 git push -u origin corrige-faute-readme
 ```
 
+`-u` est nécessaire la première fois : il dit à Git où envoyer cette
+branche. Ensuite, `git push` suffit.
+
 GitHub répond avec un lien tout prêt :
 
 ```text
@@ -251,8 +222,7 @@ branch 'corrige-faute-readme' set up to track 'origin/corrige-faute-readme'.
 
 ## Étape 6 : ouvrir la pull request
 
-Une **pull request** (souvent abrégée **PR**) est une demande : « Voici
-mon changement, voulez-vous l'ajouter au projet ? »
+Une **pull request** (**PR**) est une demande : « Voulez-vous ajouter mon changement ? »
 
 1. Ouvrez le lien affiché par `git push`, ou la page de votre fork.
 2. Cliquez sur **Compare & pull request**.
@@ -274,11 +244,9 @@ Lien : corrige l'issue #42.
 
 ## Répondre à la relecture
 
-Quelqu'un du projet va **relire** votre PR. C'est la *review*. Il peut :
-
-- l'accepter tout de suite (on dit **merger**, « fusionner ») ;
-- demander des changements ;
-- poser une question.
+Quelqu'un du projet va **relire** votre PR : c'est la *review*. Il peut
+l'accepter (on dit **merger**, « fusionner »), poser une question ou
+demander des changements.
 
 Une demande de changement n'est **pas** un refus. C'est une étape normale,
 même pour les experts.
@@ -291,9 +259,7 @@ git commit -m "Applique la remarque de la relecture"
 git push
 ```
 
-La PR se met à jour toute seule. Pas besoin d'en ouvrir une nouvelle.
-
-Puis répondez au commentaire :
+La PR se met à jour toute seule. Puis répondez au commentaire :
 
 ```text
 Merci pour la relecture ! C'est corrigé dans le dernier commit.
@@ -304,8 +270,7 @@ Merci pour la relecture ! C'est corrigé dans le dernier commit.
 
 ## Être poli et patient
 
-Les projets open source sont souvent tenus par des bénévoles, sur leur
-temps libre.
+Beaucoup de projets sont tenus par des bénévoles, sur leur temps libre.
 
 - Dites **bonjour** et **merci**.
 - Soyez **patient** : une réponse peut prendre plusieurs jours, ou semaines.
@@ -313,19 +278,6 @@ temps libre.
   « Bonjour, avez-vous eu le temps de regarder ? Merci ! »
 - Si vous ne comprenez pas une remarque, **demandez**. C'est normal.
 - Respectez le **code de conduite** (fichier `CODE_OF_CONDUCT.md`).
-
-## Garder son fork à jour
-
-Pendant que vous travaillez, le projet avance. Avant une nouvelle
-contribution, récupérez ses changements :
-
-```sh norun
-git checkout main
-git pull upstream main
-git push origin main
-```
-
-Puis créez une **nouvelle** branche pour la contribution suivante.
 
 ## Idées de première contribution
 
@@ -348,43 +300,12 @@ Classées de la plus facile à la moins facile :
 
 ### Travailler directement sur main
 
-Vous modifiez le code sans créer de branche, puis vous voulez faire une
-deuxième PR. Les deux changements se mélangent dans la même PR.
+Vous faites deux changements sur `main`, sans branche. Ils se
+retrouvent mélangés dans la même PR, et le relecteur ne peut pas accepter
+l'un sans l'autre.
 
-```sh norun
-git checkout main
-git commit -am "Corrige une faute"
-git commit -am "Ajoute une traduction"
-```
-
-Correction : avant **chaque** contribution, partez de `main` à jour et
-créez une branche :
-
-```sh norun
-git checkout main
-git checkout -b ajoute-traduction
-```
-
-### Pousser une nouvelle branche sans dire où
-
-```sh norun
-git checkout -b corrige-faute
-git push
-```
-
-```text
-fatal: The current branch corrige-faute has no upstream branch.
-To push the current branch and set the remote as upstream, use
-
-    git push --set-upstream origin corrige-faute
-
-To have this happen automatically for branches without a tracking
-upstream, see 'push.autoSetupRemote' in 'git help config'.
-```
-
-Git ne sait pas encore où envoyer cette branche. Faites ce qu'il dit :
-`git push -u origin corrige-faute` (`-u` est la forme courte de
-`--set-upstream`). Ensuite, `git push` suffit.
+Correction : avant **chaque** contribution, créez une branche depuis
+`main` : `git checkout -b ajoute-traduction`.
 
 ### Un git push refusé
 
