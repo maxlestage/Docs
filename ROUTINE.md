@@ -118,7 +118,7 @@ Traduit dans les deux langues : tout « Débuter » ; `introduction`, `premiers-
 l'ordre des parcours (une ligne par lot de 3 à 5 pages, dans les deux langues) :
 
 - [x] Python : `nombres`, `texte`, `collections`, `dictionnaires`, `comprehensions`
-- [ ] JavaScript : `nombres`, `texte`, `collections`, `objets`
+- [x] JavaScript : `nombres`, `texte`, `collections`, `objets`
 - [ ] TypeScript : `texte`, `collections`, `objets`, `unions`
 - [ ] Go : `nombres`, `texte`, `collections`, `maps`
 - [ ] Ruby : `nombres`, `texte`, `collections`, `intervalles`
@@ -147,3 +147,4 @@ l'ordre des parcours (une ligne par lot de 3 à 5 pages, dans les deux langues) 
 - 2026-10-19 — Traductions EN et ES de Python : `nombres`, `texte`, `collections`, `dictionnaires`, `comprehensions` (10 pages, 182 exemples vérifiés).
 - 2026-10-19 — Session principale : 32 pages de plus pour les débutants qui peinent (Débuter : 7 pages « Les notions de base », bases de données, sécurité, open source, métiers ; dans chaque langage les pièges du débutant et 15 exercices faciles ; 7 chapitres de la liste).
 - 2026-10-19 — Trois chapitres : Python `contextes`, TypeScript `regex`, Go `embed` (37 exemples exécutés, et les exemples `norun` vérifiés à la main). `go/context` et `rust/traits-objets`, pris par la session principale, ont été laissés.
+- 2026-10-19 — Traductions EN et ES de JavaScript : `nombres`, `texte`, `collections`, `objets` (8 pages, 140 exemples vérifiés).
