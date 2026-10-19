@@ -12,6 +12,9 @@ Cette page explique comment JavaScript calcule : les opérateurs, l'objet `Math`
 
 ## Un seul type de nombre
 
+Les programmes calculent tout le temps : le total d'un panier, un score, l'âge d'une
+personne. Avant de faire des calculs, voyons à quoi ressemble un nombre en JavaScript.
+
 Beaucoup de langages séparent les [entiers](../debuter/glossaire.md#entier) (`3`) et les
 [flottants](../debuter/glossaire.md#flottant) (`3.5`). JavaScript, lui, n'a qu'un seul
 type pour les deux : `number`.
@@ -30,10 +33,21 @@ true
 true
 ```
 
+Ligne par ligne :
+
+- `typeof 3` demande le type de la valeur `3` : la réponse est `number` ;
+- `typeof 3.5` donne aussi `number` : même type, avec ou sans virgule ;
+- `3 === 3.0` compare les deux valeurs : elles sont égales, donc `true` ;
+- `Number.isInteger(5.0)` répond `true`, car `5.0` n'a rien après la virgule.
+
 `3` et `3.0` sont exactement la même valeur. `Number.isInteger` dit si un nombre n'a pas
 de partie décimale.
 
 ## Les opérateurs
+
+Un programme sert souvent à calculer à votre place, comme une calculatrice : le prix de
+trois cafés, la moyenne d'une classe. Les opérateurs sont les signes qui écrivent ces
+calculs.
 
 Les [opérateurs](../debuter/glossaire.md#operateur) de calcul sont ceux de l'école, plus
 deux nouveaux.
@@ -110,7 +124,27 @@ console.log(vies);
 21
 ```
 
+**À vous :** écrivez un programme qui partage 23 bonbons entre 5 enfants. Il
+affiche combien de bonbons chaque enfant reçoit, puis combien il en reste.
+
+> **Solution**
+>
+> ```javascript
+> const bonbons = 23;
+> const enfants = 5;
+> console.log(Math.floor(bonbons / enfants));
+> console.log(bonbons % enfants);
+> ```
+>
+> ```sortie
+> 4
+> 3
+> ```
+
 ## L'objet Math
+
+Certains calculs reviennent sans cesse : arrondir un prix, trouver la meilleure note
+d'une liste. Plutôt que de les écrire vous-même, vous les prenez tout prêts.
 
 `Math` est une boîte à outils livrée avec JavaScript. Elle contient des fonctions de
 calcul et quelques constantes.
@@ -176,7 +210,25 @@ console.log(de);
 
 Le résultat change à chaque lancement : le vôtre sera sans doute différent.
 
+**À vous :** écrivez un programme qui affiche la meilleure des trois notes 12, 17
+et 9, puis leur moyenne arrondie à l'entier le plus proche.
+
+> **Solution**
+>
+> ```javascript
+> console.log(Math.max(12, 17, 9));
+> console.log(Math.round((12 + 17 + 9) / 3));
+> ```
+>
+> ```sortie
+> 17
+> 13
+> ```
+
 ## Les nombres à virgule ne sont pas exacts
+
+Cette partie vous évite un piège classique, par exemple un total de panier avec une
+quinzaine de chiffres après la virgule. Mieux vaut le connaître avant de le rencontrer.
 
 Voici une surprise célèbre :
 
@@ -216,6 +268,10 @@ true
 
 ## Nombres et texte
 
+Les nombres et les textes passent souvent de l'un à l'autre. Ce que l'on tape au
+clavier arrive comme un texte, même « 42 ». Et pour afficher un prix proprement, on
+transforme un nombre en texte. Cette partie fait le pont dans les deux sens.
+
 ### Afficher avec toFixed
 
 `toFixed(n)` renvoie un **texte** avec exactement `n` chiffres après la virgule.
@@ -232,6 +288,13 @@ console.log(typeof prix.toFixed(2));
 10.00
 string
 ```
+
+Ligne par ligne :
+
+- `prix` reçoit `0.1 + 0.2`, c'est-à-dire `0.30000000000000004` ;
+- `prix.toFixed(2)` garde deux chiffres après la virgule et arrondit : `0.30` ;
+- `(10).toFixed(2)` ajoute les zéros qui manquent : `10.00` ;
+- `typeof` montre que le résultat de `toFixed` est un `string`, donc un texte.
 
 Le résultat est une chaîne : parfait pour l'affichage, pas pour continuer à calculer.
 
@@ -268,7 +331,25 @@ NaN
 > **À retenir :** préférez `Number(...)`. Il refuse les textes douteux, au lieu d'en
 > prendre un morceau en silence.
 
+**À vous :** écrivez un programme qui transforme le texte `"19.99"` en nombre, lui
+ajoute 5, puis affiche le résultat avec deux chiffres après la virgule.
+
+> **Solution**
+>
+> ```javascript
+> const texte = "19.99";
+> const total = Number(texte) + 5;
+> console.log(total.toFixed(2));
+> ```
+>
+> ```sortie
+> 24.99
+> ```
+
 ## NaN : « pas un nombre »
+
+Un utilisateur peut taper « trente » au lieu de « 30 ». Votre programme doit alors
+savoir repérer que la conversion a échoué.
 
 Quand un calcul n'a pas de sens, JavaScript ne s'arrête pas : il renvoie `NaN` (*Not a
 Number*, « pas un nombre »). Et `NaN` contamine tous les calculs qui l'utilisent.
@@ -289,6 +370,13 @@ number
 false
 true
 ```
+
+Ligne par ligne :
+
+- `Number("trente")` ne sait pas lire ce mot comme un nombre : `age` vaut `NaN` ;
+- `age + 1` donne encore `NaN` : un calcul avec `NaN` donne toujours `NaN` ;
+- `typeof age` répond `number`, ce qui surprend (voir plus bas) ;
+- `age === NaN` répond `false`, alors que `Number.isNaN(age)` répond bien `true`.
 
 Deux bizarreries :
 
@@ -311,6 +399,8 @@ false
 
 ## Infinity
 
+> **Note :** cette partie peut attendre. Lisez-la quand les bases seront solides.
+
 Diviser par zéro ne provoque pas d'erreur en JavaScript : on obtient l'infini.
 
 ```javascript
@@ -330,6 +420,8 @@ false
 `Number.isFinite(x)` vérifie qu'un nombre est un vrai nombre : ni `Infinity`, ni `NaN`.
 
 ## Les très grands entiers : BigInt
+
+> **Note :** cette partie peut attendre. Lisez-la quand les bases seront solides.
 
 Un `number` garde les entiers exacts jusqu'à environ 9 millions de milliards. Au-delà,
 il perd en précision.
@@ -396,6 +488,20 @@ console.log(pourcent.format(0.25));
 > **espace insécable** (U+00A0). Elles empêchent un retour à la ligne au milieu d'un
 > nombre. Conséquence : `euros.format(1234.5) === "1 234,50 €"` (tapé au clavier)
 > répond `false`.
+
+**À vous :** écrivez un programme qui affiche le prix 12500 en euros, au format
+français.
+
+> **Solution**
+>
+> ```javascript
+> const euros = new Intl.NumberFormat("fr-FR", { style: "currency", currency: "EUR" });
+> console.log(euros.format(12500));
+> ```
+>
+> ```sortie
+> 12 500,00 €
+> ```
 
 ## Erreurs fréquentes
 

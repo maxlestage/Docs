@@ -31,6 +31,14 @@ console.log(chat);
 { nom: 'Félix', age: 3, couleur: 'roux', vaccine: true }
 ```
 
+Ligne par ligne :
+
+- `const chat = {` ouvre l'objet et lui donne un nom : `chat` ;
+- les quatre lignes suivantes sont ses propriétés : la clé `nom` vaut `"Félix"`,
+  la clé `age` vaut `3`, et ainsi de suite ;
+- `};` ferme l'objet ;
+- `console.log(chat)` affiche l'objet entier, avec toutes ses propriétés.
+
 - L'objet s'écrit entre accolades `{ }`.
 - Chaque propriété s'écrit `clé: valeur`, et les propriétés sont séparées par des
   virgules.
@@ -41,6 +49,9 @@ Un tableau range des valeurs **dans l'ordre**, par numéro. Un objet les range *
 nom**. Ailleurs, on parle de [dictionnaire](../debuter/glossaire.md#dictionnaire).
 
 ## Lire une propriété
+
+Une fiche ne sert que si vous pouvez la consulter : retrouver le nom du chat, ou son
+âge. Lire une propriété, c'est regarder une ligne précise de la fiche.
 
 On lit une propriété avec un point `.` ou avec des crochets `[ ]`.
 
@@ -62,12 +73,23 @@ undefined
 Félix
 ```
 
+Ligne par ligne :
+
+- `chat.nom` va chercher la valeur rangée sous la clé `nom` : `"Félix"` ;
+- `chat["age"]` fait la même chose avec des crochets, et donne `3` ;
+- `chat.poids` cherche une clé qui n'existe pas : le résultat est `undefined` ;
+- `cle` contient le texte `"nom"`, donc `chat[cle]` revient à écrire `chat["nom"]`.
+
 - Le point est le plus courant : `chat.nom`.
 - Les crochets prennent un **texte** : utile quand la clé est dans une variable
   (`chat[cle]`) ou contient une espace (`objet["date de naissance"]`).
 - Une propriété qui n'existe pas donne `undefined`, sans erreur.
 
 ## Ajouter, modifier, supprimer
+
+Les informations changent avec le temps : le chat prend un an, vous apprenez sa
+couleur. Comme sur une fiche écrite au crayon, vous pouvez corriger une ligne, en
+ajouter une ou en effacer une.
 
 Un objet se modifie après sa création, même s'il est dans une `const` (comme un
 tableau : `const` empêche seulement de remplacer l'objet entier).
@@ -90,9 +112,33 @@ true
 false
 ```
 
+Ligne par ligne :
+
+- `chat.age = 4;` remplace 3 par 4 : la clé `age` existait déjà ;
+- `chat.couleur = "roux";` ajoute une ligne à la fiche, car `couleur` n'existait pas ;
+- `delete chat.nom;` efface la propriété `nom` ;
+- `"couleur" in chat` répond `true`, et `"nom" in chat` répond `false` : `nom` a été
+  supprimé.
+
 - Affecter une clé qui existe la **modifie** ; une clé nouvelle est **ajoutée**.
 - `delete` supprime une propriété.
 - `"clé" in objet` vérifie si une propriété existe.
+
+**À vous :** écrivez un programme qui crée un objet `livre` avec un `titre`
+(« Le Petit Prince ») et un nombre de `pages` (96). Ajoutez ensuite une propriété `lu`
+qui vaut `true`, puis affichez l'objet.
+
+> **Solution**
+>
+> ```javascript
+> const livre = { titre: "Le Petit Prince", pages: 96 };
+> livre.lu = true;
+> console.log(livre);
+> ```
+>
+> ```sortie
+> { titre: 'Le Petit Prince', pages: 96, lu: true }
+> ```
 
 ## Les propriétés raccourcies
 
@@ -113,6 +159,10 @@ console.log(personne);
 `{ nom, age }` est un raccourci pour `{ nom: nom, age: age }`.
 
 ## Les méthodes et this
+
+Un objet peut aussi savoir faire des choses, pas seulement garder des informations.
+Un compte en banque a un solde, mais vous voulez aussi y déposer de l'argent : une
+méthode range cette action dans l'objet, à côté des données qu'elle utilise.
 
 Une propriété peut contenir une fonction : on l'appelle alors une
 [méthode](../debuter/glossaire.md#methode). À l'intérieur, le mot `this` (« ceci »)
@@ -138,6 +188,15 @@ console.log(compte.resume());
 Alice a 150 €
 ```
 
+Ligne par ligne :
+
+- `compte` a deux propriétés simples, `titulaire` et `solde`, et deux méthodes,
+  `deposer` et `resume` ;
+- `compte.deposer(50)` appelle la méthode avec `montant` qui vaut 50 :
+  `this.solde += montant` fait passer le solde de 100 à 150 ;
+- `compte.resume()` construit un texte avec `this.titulaire` et `this.solde` ;
+- `console.log` affiche ce texte : « Alice a 150 € ».
+
 `deposer(montant) { ... }` est un raccourci pour `deposer: function (montant) { ... }`.
 Dans `compte.deposer(50)`, `this` est l'objet avant le point : `compte`.
 
@@ -147,7 +206,34 @@ Dans `compte.deposer(50)`, `this` est l'objet avant le point : `compte`.
 Les objets qui partagent les mêmes méthodes se fabriquent avec des **classes** : ce sera
 pour [la page sur l'héritage](heritage.md).
 
+**À vous :** écrivez un programme qui crée un objet `compteur` avec une propriété
+`valeur` qui vaut 0 et une méthode `augmenter()` qui ajoute 1 à `valeur`. Appelez
+`augmenter()` deux fois, puis affichez `compteur.valeur`.
+
+> **Solution**
+>
+> ```javascript
+> const compteur = {
+>   valeur: 0,
+>   augmenter() {
+>     this.valeur += 1;
+>   },
+> };
+>
+> compteur.augmenter();
+> compteur.augmenter();
+> console.log(compteur.valeur);
+> ```
+>
+> ```sortie
+> 2
+> ```
+
 ## Parcourir un objet
+
+Parfois, vous ne voulez pas lire une seule propriété, mais toutes : faire l'inventaire
+d'un stock, ou afficher chaque ligne d'une fiche. Il faut alors obtenir la liste de ce
+que contient l'objet.
 
 Trois fonctions transforment un objet en tableau :
 
@@ -168,6 +254,14 @@ console.log(Object.entries(stock));
 [ 12, 5, 0 ]
 [ [ 'pommes', 12 ], [ 'poires', 5 ], [ 'kiwis', 0 ] ]
 ```
+
+Ligne par ligne :
+
+- `stock` range trois fruits, chacun avec sa quantité ;
+- `Object.keys(stock)` donne le tableau des clés : les noms des fruits ;
+- `Object.values(stock)` donne le tableau des valeurs : les quantités ;
+- `Object.entries(stock)` donne un tableau de paires : chaque paire contient une clé et
+  sa valeur.
 
 Avec `for...of` et une décomposition, on parcourt clés et valeurs d'un coup :
 
@@ -192,7 +286,28 @@ Total : 17
 Les clés sont parcourues dans l'ordre où elles ont été ajoutées (sauf les clés qui sont
 des nombres entiers, rangées en premier par ordre croissant).
 
+**À vous :** écrivez un programme qui range l'objet `{ maths: 15, histoire: 12 }`
+dans `notes`, puis affiche chaque matière et sa note sous la forme « maths : 15 »,
+avec `Object.entries` et `for...of`.
+
+> **Solution**
+>
+> ```javascript
+> const notes = { maths: 15, histoire: 12 };
+>
+> for (const [matiere, note] of Object.entries(notes)) {
+>   console.log(`${matiere} : ${note}`);
+> }
+> ```
+>
+> ```sortie
+> maths : 15
+> histoire : 12
+> ```
+
 ## La décomposition d'objet
+
+> **Note :** cette partie peut attendre. Lisez-la quand les bases seront solides.
 
 Comme pour les tableaux, on peut ranger plusieurs propriétés dans des variables d'un
 coup. Ici, c'est le **nom** qui compte, pas la position.
@@ -231,6 +346,9 @@ Alice, 30 ans
 
 ## Copier un objet
 
+Copier sert à modifier une version sans abîmer l'original, comme photocopier un
+formulaire avant de le remplir.
+
 Comme les tableaux, un objet est partagé par **référence** : `b = a` ne copie rien, les
 deux noms désignent le même objet. Pour copier, utilisez le spread `...`.
 
@@ -251,6 +369,13 @@ console.log(enrichi);
 { nom: 'Alice', age: 31 }
 { nom: 'Alice', age: 40, ville: 'Lyon' }
 ```
+
+Ligne par ligne :
+
+- `copie` reçoit un nouvel objet, rempli avec les propriétés de `original` ;
+- `copie.age = 31` modifie seulement la copie : `original` garde 30 ;
+- `enrichi` copie aussi `original`, ajoute `ville`, et remplace `age` par 40 ;
+- les trois `console.log` montrent bien trois objets différents.
 
 Dans `enrichi`, les propriétés écrites **après** le spread remplacent celles de
 l'original.
@@ -306,10 +431,21 @@ Personne : {"nom":"Alice","age":30,"langues":["fr","en"]}
 }
 ```
 
+Ligne par ligne :
+
+- le premier `console.log` place l'objet tel quel dans le gabarit : on obtient
+  `[object Object]`, peu utile ;
+- le deuxième passe d'abord par `JSON.stringify` : l'objet devient un texte sur une
+  ligne ;
+- le troisième ajoute `null, 2` : le texte s'étale sur plusieurs lignes, plus
+  faciles à lire.
+
 Le troisième argument (`2`) indente le résultat de 2 espaces. Le JSON sert aussi à
 enregistrer des données dans un fichier : voir [les formats de données](formats.md).
 
 ## Le chaînage optionnel
+
+> **Note :** cette partie peut attendre. Lisez-la quand les bases seront solides.
 
 Dans des objets imbriqués, une propriété du milieu peut manquer. `?.` s'arrête
 proprement et renvoie `undefined` au lieu de planter ; `??` fournit alors une valeur de
@@ -333,6 +469,9 @@ Bob : inconnue
 ```
 
 ## Map et Set
+
+Un objet est parfait pour décrire une chose. Mais pour compter des mots, ou pour noter
+qui est déjà passé, JavaScript propose deux outils mieux adaptés : `Map` et `Set`.
 
 ### Map : un dictionnaire sur mesure
 
@@ -365,6 +504,15 @@ chat 3
 chien 1
 ```
 
+Ligne par ligne :
+
+- `new Map()` crée une `Map` vide, rangée dans `compteur` ;
+- la boucle lit les mots un par un. `compteur.get(mot) ?? 0` donne le compte actuel du
+  mot (0 s'il est nouveau), et `set` range ce compte plus 1 ;
+- après la boucle, `"chat"` vaut 3 et `"chien"` vaut 1 ;
+- `get`, `has` et `size` interrogent la `Map`, et la dernière boucle affiche chaque
+  paire.
+
 ### Set : un ensemble sans doublons
 
 Un `Set` est un [ensemble](../debuter/glossaire.md#ensemble) : une collection de valeurs
@@ -392,6 +540,23 @@ true
 ```
 
 `[...new Set(tableau)]` est l'astuce classique pour retirer les doublons d'un tableau.
+
+**À vous :** écrivez un programme qui crée un `Set` vide nommé `couleurs`, y ajoute
+`"rouge"`, puis `"bleu"`, puis encore `"rouge"`, et affiche le nombre de couleurs.
+
+> **Solution**
+>
+> ```javascript
+> const couleurs = new Set();
+> couleurs.add("rouge");
+> couleurs.add("bleu");
+> couleurs.add("rouge");
+> console.log(couleurs.size);
+> ```
+>
+> ```sortie
+> 2
+> ```
 
 ### Que choisir ?
 
