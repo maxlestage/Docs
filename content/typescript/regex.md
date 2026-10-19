@@ -582,4 +582,4 @@ faire avant de lire `[0]` ?
   vérifient qu'à la compilation.
 - Échappez toute saisie avant `new RegExp` avec votre propre fonction `echapper`.
 
-Suite : [TypeScript pour le web](web.md).
+Suite : [Dates et heures](dates.md)

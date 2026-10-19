@@ -490,4 +490,4 @@ alphabetical order.
 - A missing key gives the zero value; `v, ok := m[k]` tells whether it exists.
 - The order of `range` is random: sort with `slices.Sorted(maps.Keys(m))`.
 
-Next: [common Go pitfalls for beginners](pieges.md)
+Next: [following a program step by step in Go](pas-a-pas.md).

@@ -291,5 +291,4 @@ Placez-vous dans le dossier du projet (`cd mon_projet`), ou créez le `Gemfile`.
   `Gemfile.lock`.
 - RuboCop vérifie le style du code.
 
-Suite : mettez tout en pratique avec [les projets pas à pas](projets.md). Comparez avec
-[les projets en Rust](../rust/projet.md) et [en Rythme](../rythme/projet.md).
+Suite : [Créer et publier sa propre gem](gems.md)

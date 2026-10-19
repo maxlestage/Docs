@@ -443,4 +443,4 @@ danza = set(["Lea", "Sam", "Tom"])
 - Campos conocidos de antemano: registro; claves que vienen de los datos:
   diccionario; simple presencia: conjunto.
 
-Siguiente: [las trampas del principiante en Rythme](pieges.md)
+Siguiente: [seguir un programa paso a paso](pas-a-pas.md).

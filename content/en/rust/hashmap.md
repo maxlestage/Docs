@@ -522,4 +522,4 @@ exist?
 - `HashSet` keeps unique values and offers `union`, `intersection`, `difference`.
 - `VecDeque` is a queue: `push_back` at the back, `pop_front` at the front.
 
-Next: [Common Rust beginner traps](pieges.md)
+Next: [following a program step by step](pas-a-pas.md).

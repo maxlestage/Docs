@@ -501,5 +501,4 @@ affichez `Pixel a 3 ans`.
 - `csv.NewReader` et `csv.NewWriter` lisent et écrivent des tableaux ; appelez `Flush()`.
 - JSON pour les données imbriquées et les API, CSV pour les tableaux simples.
 
-Suite : [les expressions régulières](regex.md). Comparez avec
-[les formats en Ruby](../ruby/formats.md).
+Suite : [Générer du texte et du HTML avec les templates](templates.md)

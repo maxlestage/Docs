@@ -488,4 +488,4 @@ alfabético.
 - Una clave que no está da el valor cero; `v, ok := m[k]` dice si existe.
 - El orden de `range` es aleatorio: ordena con `slices.Sorted(maps.Keys(m))`.
 
-Siguiente: [las trampas de Go para principiantes](pieges.md)
+Siguiente: [seguir un programa paso a paso en Go](pas-a-pas.md).

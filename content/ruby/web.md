@@ -359,4 +359,4 @@ d'un tableau `articles`.
   ActiveRecord.
 - ERB insère du Ruby dans du texte : `<%= %>` affiche, `<% %>` exécute seulement.
 
-Suite : [Tester son code](tests.md)
+Suite : [Un premier site avec Rails, pas à pas](rails.md)

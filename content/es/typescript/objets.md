@@ -559,4 +559,4 @@ variable `const gato = { nombre: "Félix", edad: 3 }`?
 - El tipado es estructural: un objeto sirve si tiene la forma correcta, incluso con
   propiedades de más, salvo si se escribe directamente en ese lugar.
 
-Siguiente: [las trampas del principiante en TypeScript](pieges.md)
+Siguiente: [seguir un programa paso a paso](pas-a-pas.md).

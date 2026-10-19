@@ -541,5 +541,4 @@ sommes partielles et affiche le total.
 - Les exercices 9 et 10 utilisent les interfaces et les erreurs ; 11 et 12, les
   génériques et les goroutines.
 
-Suite : gardez [l'aide-mémoire](aide-memoire.md) sous la main. Comparez avec
-[les exercices en Ruby](../ruby/exercices.md) et [en Rust](../rust/exercices.md).
+Suite : [Exercices corrigés : deuxième série](exercices-2.md)
