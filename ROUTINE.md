@@ -66,44 +66,44 @@ jour la liste ci-dessous, puis publie.
 
 ### Python
 - [x] `sqlite` — Une base de données avec sqlite3 (exécutable : base en mémoire)
-- [ ] `collections-avancees` — namedtuple, deque, heapq, bisect, Counter en détail
+- [x] `collections-avancees` — namedtuple, deque, heapq, bisect, Counter en détail
 - [x] `contextes` — Les gestionnaires de contexte (with, contextlib)
-- [ ] `logging` — Journaliser avec logging
-- [ ] `donnees` — Analyser des données (csv + statistics ; pandas en `norun`)
+- [x] `logging` — Journaliser avec logging
+- [x] `donnees` — Analyser des données (csv + statistics ; pandas en `norun`)
 
 ### JavaScript
 - [x] `tableaux-avances` — (flatMap, groupBy, toSorted, structuredClone)
-- [ ] `node-http` — Un serveur avec node:http et ses routes
-- [ ] `canvas` — Dessiner dans le navigateur (norun) et la logique à côté
-- [ ] `stockage` — localStorage, IndexedDB (norun) et JSON
+- [x] `node-http` — Un serveur avec node:http et ses routes
+- [x] `canvas` — Dessiner dans le navigateur (norun) et la logique à côté
+- [x] `stockage` — localStorage, IndexedDB (norun) et JSON
 
 ### TypeScript
 - [x] `nombres` — Nombres et calculs en TypeScript
 - [x] `regex` — Les expressions régulières typées
-- [ ] `dates` — Dates et heures
-- [ ] `ligne-de-commande` — Un outil en ligne de commande typé
-- [ ] `decorateurs` — Les décorateurs (TypeScript 5)
+- [x] `dates` — Dates et heures
+- [x] `ligne-de-commande` — Un outil en ligne de commande typé
+- [x] `decorateurs` — Les décorateurs (TypeScript 5)
 
 ### Go
-- [ ] `templates` — Générer du texte et du HTML avec text/template et html/template
+- [x] `templates` — Générer du texte et du HTML avec text/template et html/template
 - [x] `context` — Annuler et limiter dans le temps avec context
-- [ ] `sync` — sync.Once, RWMutex, atomic, errgroup (norun)
-- [ ] `base-de-donnees` — database/sql (norun) et un stockage en mémoire testable
+- [x] `sync` — sync.Once, RWMutex, atomic, errgroup (norun)
+- [x] `base-de-donnees` — database/sql (norun) et un stockage en mémoire testable
 - [x] `embed` — Embarquer des fichiers avec embed
 
 ### Ruby
 - [x] `base-de-donnees` — SQLite et ActiveRecord (norun) ; un stockage en mémoire testable
-- [ ] `rails` — Un premier site avec Rails, pas à pas (norun)
-- [ ] `gems` — Créer et publier sa propre gem
+- [x] `rails` — Un premier site avec Rails, pas à pas (norun)
+- [x] `gems` — Créer et publier sa propre gem
 
 ### Rust
 - [x] `traits-objets` — dyn Trait, Box<dyn Trait> et la répartition dynamique
-- [ ] `base-de-donnees` — rusqlite (norun) et un stockage en mémoire testable
-- [ ] `wasm` — Rust dans le navigateur avec WebAssembly (norun)
+- [x] `base-de-donnees` — rusqlite (norun) et un stockage en mémoire testable
+- [x] `wasm` — Rust dans le navigateur avec WebAssembly (norun)
 
 ### Rythme
 - [x] `symboles` — Les symboles et quand les utiliser
-- [ ] `textes-avances` — format_number, colonnes, rapports
+- [x] `textes-avances` — format_number, colonnes, rapports
 
 ### Débuter
 - [x] `bases-de-donnees` — Qu'est-ce qu'une base de données
@@ -129,15 +129,16 @@ l'ordre des parcours (une ligne par lot de 3 à 5 pages, dans les deux langues) 
 - [ ] Chaque langage : `pieges`, `exercices-faciles`
 - [ ] Débuter : `bases-de-donnees`, `securite`, `open-source`, `metiers`
 - [ ] Nouveaux chapitres : Python `contextes`, TypeScript `regex`, Go `embed`
+- [ ] Chaque langage : `pas-a-pas`, `exercices-2` ; et les chapitres cochés le 2026-10-19 (session principale)
 - [ ] Puis le reste de chaque parcours, dans l'ordre de `src/catalog.rs`
 
 ### Pour tous
-- [ ] Pour chaque langage, une page « Pas à pas » de plus dans « Les bases » si un
+- [x] Pour chaque langage, une page « Pas à pas » de plus dans « Les bases » si un
   chapitre est trop dense (le découper, avec des tableaux qui suivent les variables)
-- [ ] `exercices-2` — Une deuxième série de 12 exercices corrigés, par langage
+- [x] `exercices-2` — Une deuxième série de 12 exercices corrigés, par langage
 - [ ] Un outil qui signale les blocs `norun` d'erreur (tracebacks) dont le code ne
   correspond plus à la page traduite (ils ne sont pas vérifiés aujourd'hui)
-- [ ] La page Comparer : 5 idées de plus (bases de données, classes, itération, …)
+- [x] La page Comparer : 5 idées de plus (bases de données, classes, itération, …)
 
 ## Journal
 
