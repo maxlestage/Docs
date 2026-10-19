@@ -124,7 +124,7 @@ l'ordre des parcours (une ligne par lot de 3 à 5 pages, dans les deux langues) 
 - [x] Ruby : `nombres`, `texte`, `collections`, `intervalles`
 - [x] Rust : `nombres`, `texte`, `collections`, `hashmap`
 - [x] Rythme : `nombres`, `texte`, `collections`, `dictionnaires`
-- [ ] Chaque parcours : `erreurs`, `tests`, `exercices`, `aide-memoire`
+- [x] Chaque parcours : `erreurs`, `tests`, `exercices`, `aide-memoire`
 - [ ] Débuter : `variables`, `logique`, `boucles`, `fonctions`, `donnees`, `lire-une-erreur`, `bloque`
 - [ ] Chaque langage : `pieges`, `exercices-faciles`
 - [ ] Débuter : `bases-de-donnees`, `securite`, `open-source`, `metiers`
@@ -151,3 +151,4 @@ l'ordre des parcours (une ligne par lot de 3 à 5 pages, dans les deux langues) 
 - 2026-10-19 — Traductions EN et ES de JavaScript : `nombres`, `texte`, `collections`, `objets` (8 pages, 140 exemples vérifiés).
 - 2026-10-19 — Traductions EN et ES : TypeScript (`texte`, `collections`, `objets`, `unions`, `regex`), Go (`nombres`, `texte`, `collections`, `maps`, `embed`), Ruby (`nombres`, `texte`, `collections`, `intervalles`), Rust (`nombres`, `texte`, `collections`, `hashmap`), Rythme (`nombres`, `texte`, `collections`, `dictionnaires`) et Python `contextes` (46 pages, 704 exemples vérifiés).
 - 2026-10-19 — Session principale : toute la liste « À faire » (16 chapitres), une page « pas à pas » et une deuxième série d'exercices dans chaque langage, 5 idées de plus sur Comparer (31 pages, 674 exemples exécutés).
+- 2026-10-19 — Traductions EN et ES : `erreurs`, `tests`, `exercices`, `aide-memoire` des sept langages (56 pages, 596 exemples vérifiés). Trois sorties de tests corrigées dans les pages françaises (python, ruby et go `tests`).
