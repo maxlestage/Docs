@@ -285,3 +285,371 @@ Deux choses à remarquer :
 
 > **À retenir :** à chaque appel, on « entre » dans la fonction avec la valeur donnée,
 > on la suit jusqu'au résultat, puis on revient à l'endroit exact de l'appel.
+
+## Programme 5 : une liste et une condition dans la boucle
+
+Dernier programme : une boucle sur une [liste](../debuter/glossaire.md#liste) (un
+`Vec`), avec une condition **dans** la boucle. On compte les grosses dépenses (plus de
+10 €) et on les additionne.
+
+```rust
+fn main() {
+    let depenses = vec![4, 25, 12, 7, 30];
+    let mut grosses = 0;
+    let mut somme = 0;
+    for d in &depenses {
+        if *d > 10 {
+            grosses += 1;
+            somme += d;
+        }
+    }
+    println!("{grosses} grosses dépenses, total {somme}");
+}
+```
+
+Avant de lancer, devinez ce qui s'affiche.
+
+`for d in &depenses` prend les cases **une par une**, de gauche à droite. Le `&` veut
+dire « regarder sans prendre » : la liste reste utilisable après. L'étoile de `*d` lit
+le nombre à travers ce `&`.
+
+```text
+ depenses : [ 4 | 25 | 12 |  7 | 30 ]
+              ▲    ▲    ▲    ▲    ▲
+ tour :       1    2    3    4    5
+```
+
+À chaque tour, il y a un test. Ajoutez une colonne pour lui :
+
+| Tour | d | d > 10 ? | grosses | somme |
+|------|---|----------|---------|-------|
+| avant | | | 0 | 0 |
+| 1 | 4 | false | 0 | 0 |
+| 2 | 25 | **true** | 1 | 25 |
+| 3 | 12 | **true** | 2 | 37 |
+| 4 | 7 | false | 2 | 37 |
+| 5 | 30 | **true** | 3 | 67 |
+
+```sortie
+3 grosses dépenses, total 67
+```
+
+Aux tours 1 et 4, le test est faux : `grosses` et `somme` ne bougent pas. Vous
+**recopiez** simplement leurs valeurs dans le tableau.
+
+> **Essayez :** remplacez `*d > 10` par `*d >= 12`. Le 12 compte toujours, mais pas
+> le 4 ni le 7 : la sortie ne change pas. Avec `*d > 12`, en revanche, vous obtenez
+> `2 grosses dépenses, total 55`.
+
+> **À retenir :** quand le test d'un tour est faux, les variables gardent leur valeur.
+> Recopiez-la : ne sautez pas la ligne du tableau.
+
+## Faire afficher ses étapes au programme
+
+Votre tableau est-il juste ? Le programme peut vous le dire lui-même : il suffit de lui
+faire afficher ses variables pendant qu'il travaille. C'est comme demander à un
+cuisinier de dire à voix haute chaque geste qu'il fait.
+
+### Avec println! et une étiquette
+
+Ajoutez un `println!` dans la boucle, avec une **étiquette** pour savoir d'où vient
+chaque ligne :
+
+```rust
+fn main() {
+    let mut total = 0;
+    for i in 1..5 {
+        total += i * 2;
+        println!("[tour {i}] total = {total}");
+    }
+    println!("total = {total}");
+}
+```
+
+```sortie
+[tour 1] total = 2
+[tour 2] total = 6
+[tour 3] total = 12
+[tour 4] total = 20
+total = 20
+```
+
+Ce sont exactement les lignes de notre tableau du programme 3. Sans l'étiquette
+`[tour …]`, vous verriez juste des nombres, sans savoir lequel est lequel.
+
+### Avec dbg!
+
+Rust a une [macro](../debuter/glossaire.md#macro) faite pour cela : `dbg!`. Elle
+affiche le nom du fichier, le numéro de ligne, le nom de la variable **et** sa valeur.
+Vous n'avez pas à écrire d'étiquette.
+
+```rust
+fn main() {
+    let mut total = 0;
+    for i in 1..5 {
+        total += i * 2;
+        dbg!(i, total);
+    }
+    println!("total = {total}");
+}
+```
+
+```sortie
+total = 20
+```
+
+La sortie ci-dessus ne contient qu'une ligne ! C'est normal : `dbg!` n'écrit **pas**
+sur la sortie normale (*stdout*), mais sur la **sortie d'erreur** (*stderr*). Dans
+votre terminal, avec `cargo run` (le fichier est alors `src/main.rs`), vous voyez les
+deux mélangées :
+
+```text
+[src/main.rs:5:9] i = 1
+[src/main.rs:5:9] total = 2
+[src/main.rs:5:9] i = 2
+[src/main.rs:5:9] total = 6
+[src/main.rs:5:9] i = 3
+[src/main.rs:5:9] total = 12
+[src/main.rs:5:9] i = 4
+[src/main.rs:5:9] total = 20
+total = 20
+```
+
+`[src/main.rs:5:9]` veut dire : fichier `src/main.rs`, ligne 5, colonne 9.
+
+Pourquoi deux sorties ? Imaginez deux tuyaux qui sortent du programme. Le premier
+porte les **résultats**, le second les **messages pour vous**. Si vous envoyez les
+résultats dans un fichier (`cargo run > resultat.txt`), les messages de `dbg!`
+restent à l'écran et ne salissent pas le fichier.
+
+```text
+              ┌─────────────┐  stdout (println!) ──▶ résultats
+ programme ──▶│             │
+              └─────────────┘  stderr (dbg!)     ──▶ messages de débogage
+```
+
+Bonus : `dbg!` **renvoie** la valeur qu'on lui donne. Vous pouvez l'entourer autour
+d'un calcul sans rien casser :
+
+```rust
+fn prix_ttc(ht: i32) -> i32 {
+    let taxe = ht / 5;
+    dbg!(ht + taxe)
+}
+
+fn main() {
+    let a = prix_ttc(100);
+    println!("a = {a}");
+}
+```
+
+```sortie
+a = 120
+```
+
+Et sur la sortie d'erreur, en plus :
+
+```text
+[src/main.rs:3:5] ht + taxe = 120
+```
+
+> **Essayez :** dans le programme 5, ajoutez `dbg!(d, grosses, somme);` à la fin du
+> bloc de la boucle. Lancez avec `cargo run` : vous obtenez votre tableau de trace,
+> écrit par le programme lui-même.
+
+> **À retenir :** `println!` avec une étiquette, ou `dbg!(variable)`, transforment le
+> programme en tableau de trace. `dbg!` écrit sur *stderr* : pensez à l'enlever quand
+> vous avez trouvé.
+
+## Et le débogueur ?
+
+Un [débogueur](../debuter/glossaire.md#debogage) met le programme en pause sur une
+ligne et vous montre toutes les variables, sans rien ajouter au code. Il fait votre
+tableau de trace à votre place, une ligne à la fois : voyez
+[Un débogueur dans VS Code](debogage.md#un-debogueur-dans-vs-code), dans le chapitre
+[Déboguer en Rust](debogage.md).
+
+## Erreurs fréquentes
+
+### Oublier une étape
+
+Dans le programme 5, on saute souvent les tours où « il ne se passe rien ». Le tableau
+devient alors faux, car on ne sait plus où on en est dans la liste.
+
+```text
+Tableau incomplet (faux) :     Tableau complet (juste) :
+| d  | grosses | somme |       | d  | grosses | somme |
+| 25 | 1       | 25    |       | 4  | 0       | 0     |
+| 12 | 2       | 37    |       | 25 | 1       | 25    |
+| 30 | 3       | 67    |       | 12 | 2       | 37    |
+                               | 7  | 2       | 37    |
+                               | 30 | 3       | 67    |
+```
+
+Correction : **une ligne par tour**, même si rien ne change. Recopiez les valeurs.
+
+### Réutiliser une ancienne valeur
+
+Dans le programme 1, à la ligne `b = a - b;`, beaucoup calculent 3 − 5 avec le `a` du
+départ. Mais `a` vaut déjà 8 :
+
+```text
+Faux : b = 3 - 5 = -2     (le "a" de l'étape 1)
+Juste : b = 8 - 5 = 3     (le "a" de l'étape 3, la ligne juste au-dessus)
+```
+
+Correction : lisez toujours la valeur dans la **dernière** ligne du tableau.
+
+### Un tour de trop (ou de moins)
+
+`for i in 1..5` ne fait que **4** tours. Compter jusqu'à 5 donne un mauvais total
+(30 au lieu de 20) :
+
+```text
+1..5   → 1, 2, 3, 4        (le 5 est exclu)
+1..=5  → 1, 2, 3, 4, 5     (le 5 est inclus)
+```
+
+Correction : avant de remplir le tableau, écrivez la liste des valeurs que prendra la
+variable de boucle.
+
+### Oublier mut sur une variable qui change
+
+En recopiant un programme pour le suivre, on oublie parfois `mut`. Rust refuse alors
+de le compiler :
+
+```rust norun
+fn main() {
+    let total = 0;
+    for i in 1..5 {
+        total += i * 2;
+    }
+    println!("total = {total}");
+}
+```
+
+```text
+error[E0384]: cannot assign twice to immutable variable `total`
+ --> src/main.rs:4:9
+  |
+2 |     let total = 0;
+  |         ----- first assignment to `total`
+3 |     for i in 1..5 {
+4 |         total += i * 2;
+  |         ^^^^^^^^^^^^^^ cannot assign twice to immutable variable
+  |
+help: consider making this binding mutable
+  |
+2 |     let mut total = 0;
+  |         +++
+```
+
+Correction : `let mut total = 0;`. Dans votre tableau aussi, c'est un bon repère :
+seules les variables `mut` peuvent changer de colonne en colonne.
+
+### Donner la liste à dbg! au lieu de la prêter
+
+`dbg!(depenses)` **prend** la liste (on dit qu'elle est
+[déplacée](possession.md)). Ensuite, elle n'est plus utilisable :
+
+```rust norun
+fn main() {
+    let depenses = vec![4, 25, 12];
+    dbg!(depenses);
+    println!("{}", depenses.len());
+}
+```
+
+```text
+error[E0382]: borrow of moved value: `depenses`
+ --> src/main.rs:4:20
+  |
+2 |     let depenses = vec![4, 25, 12];
+  |         -------- move occurs because `depenses` has type `Vec<i32>`, which does not implement the `Copy` trait
+3 |     dbg!(depenses);
+  |     -------------- value moved here
+4 |     println!("{}", depenses.len());
+  |                    ^^^^^^^^ value borrowed here after move
+  |
+help: consider borrowing instead of transferring ownership
+  |
+3 |     dbg!(&depenses);
+  |          +
+```
+
+Correction : prêtez-la avec `&` : `dbg!(&depenses);`.
+
+## Testez-vous
+
+**1.** Que vaut `x` à la fin de ces trois lignes ?
+`let mut x = 2; x = x * 3; x = x - 1;`
+
+> **Réponse**
+>
+> | Étape | x |
+> |-------|---|
+> | 1 | 2 |
+> | 2 | 2 × 3 = 6 |
+> | 3 | 6 − 1 = 5 |
+>
+> `x` vaut **5** : chaque ligne part de la valeur de la ligne d'avant.
+
+**2.** Combien de tours fait `for i in 0..3`, et quelles valeurs prend `i` ?
+
+> **Réponse**
+>
+> Trois tours : `i` vaut 0, puis 1, puis 2. Le 3 est exclu.
+
+**3.** Qu'affiche ce programme ? Faites le tableau avant de regarder la réponse.
+
+```rust norun
+fn main() {
+    let mut compte = 0;
+    for n in [3, 8, 5, 10] {
+        if n % 2 == 0 {
+            compte += n;
+        }
+    }
+    println!("{compte}");
+}
+```
+
+> **Réponse**
+>
+> | Tour | n | n pair ? | compte |
+> |------|---|----------|--------|
+> | 1 | 3 | false | 0 |
+> | 2 | 8 | true | 8 |
+> | 3 | 5 | false | 8 |
+> | 4 | 10 | true | 18 |
+>
+> Le programme additionne les nombres pairs. Le voici avec sa sortie :
+>
+> ```rust
+> fn main() {
+>     let mut compte = 0;
+>     for n in [3, 8, 5, 10] {
+>         if n % 2 == 0 {
+>             compte += n;
+>         }
+>     }
+>     println!("{compte}");
+> }
+> ```
+>
+> ```sortie
+> 18
+> ```
+
+## En résumé
+
+- Suivre un programme, c'est jouer l'ordinateur : une ligne à la fois, de haut en bas.
+- Le tableau de trace a une colonne par variable et une ligne par étape (ou par tour).
+- Utilisez toujours la valeur **la plus récente** ; recopiez les valeurs qui ne
+  changent pas.
+- Pour une fonction, entrez dedans avec la valeur reçue, suivez-la, puis revenez au
+  point d'appel avec le résultat.
+- `println!` avec une étiquette ou `dbg!` font afficher ses étapes au programme ;
+  `dbg!` écrit sur la sortie d'erreur (*stderr*).
+
+Suite : [Les pièges du débutant en Rust](pieges.md)

@@ -174,23 +174,6 @@ Suivons la file à chaque étape :
 | ajouter | `appendleft(x)` | `append(x)` |
 | retirer | `popleft()` | `pop()` |
 
-```python
-from collections import deque
-
-d = deque([2, 3])
-d.appendleft(1)
-d.append(4)
-print(d)
-print(d.pop(), d.popleft())
-print(d)
-```
-
-```sortie
-deque([1, 2, 3, 4])
-4 1
-deque([2, 3])
-```
-
 ### Garder les N derniers : maxlen
 
 Avec `maxlen`, la deque a une taille maximale. Quand elle est pleine, ajouter à droite
@@ -708,16 +691,17 @@ qu'il ne sait pas comparer. Ajoutez un numéro d'ordre unique au milieu :
 import bisect
 
 notes = [15, 5, 18, 8]
-print(bisect.bisect(notes, 10))
+bisect.insort(notes, 16)
+print(notes)
 ```
 
 ```sortie
-2
+[15, 5, 16, 18, 8]
 ```
 
-Pas d'erreur, mais la réponse n'a pas de sens : la place 2 tombe entre 5 et 18. Dans la
-liste triée `[5, 8, 15, 18]`, 10 irait à la place 2, entre 8 et 15 : c'est un hasard. Triez
-d'abord avec `notes.sort()`, puis gardez la liste triée avec `insort`.
+Pas d'erreur, mais le résultat n'a pas de sens : `insort` croit la liste triée et range
+16 au mauvais endroit. Triez d'abord avec `notes.sort()`, puis gardez la liste triée
+avec `insort`.
 
 ## Testez-vous
 
