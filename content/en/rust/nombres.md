@@ -12,6 +12,10 @@ Rust offers several number types, integers and decimals: this chapter shows how 
 
 ## Integers
 
+A program counts all the time: an age, a score, the items in a shopping cart. Rust
+wants to know in advance how much room to set aside for each number, just as you pick a
+box of the right size to store something.
+
 An [integer](../debuter/glossaire.md#integer) is a number without a decimal point: `3`,
 `-12`, `2026`. Rust has several integer types. Their name tells you two things:
 
@@ -44,6 +48,16 @@ println!("{year} {age} {population}");
 2026 12 8100000000
 ```
 
+Line by line:
+
+- `let year = 2026;` creates the variable `year`, which holds 2026. No type is written,
+  so Rust chooses `i32`;
+- `let age: u8 = 12;`: the `: u8` after the name sets the type. 12 easily fits between
+  0 and 255;
+- `population` is a `u64`: 8 billion would not fit in an `i32`, which stops at about
+  2.1 billion;
+- `println!` replaces each `{name}` with the value of the variable and prints it all.
+
 > **Tip:** the underscore `_` separates digits to make them easier to read:
 > `8_100_000_000` is the same number as `8100000000`.
 
@@ -65,6 +79,9 @@ println!("{n} fruits, the second one is {}", fruits[i]);
 ```
 
 ## Decimal numbers
+
+Integers are not enough for a price of 19.99, a height of 1.75 m or an average of
+13.5. For these values with a part after the decimal point, you need another type.
 
 A [float](../debuter/glossaire.md#float) is a number with a decimal part. In Rust,
 you write a **point**: `3.14`. There are two types:
@@ -103,7 +120,25 @@ true
 > **Remember:** never compare two floats with `==`. Check instead that the difference
 > between them is very small. For money, count in cents with an integer.
 
+**Your turn:** write a program that stores a number of days, `7`, and a temperature,
+`21.5`, in two variables, then prints "7 days at 21.5 degrees".
+
+> **Solution**
+>
+> ```rust
+> let days = 7;
+> let temperature = 21.5;
+> println!("{days} days at {temperature} degrees");
+> ```
+>
+> ```sortie
+> 7 days at 21.5 degrees
+> ```
+
 ## Operators
+
+Calculating is a computer's first job: the total of a cart, an average, the time left
+before the end of a movie. Operators are the signs that write these calculations.
 
 The usual [operators](../debuter/glossaire.md#operator) work like in math:
 
@@ -128,6 +163,13 @@ println!("{score}");
 30
 ```
 
+Line by line:
+
+- `let mut score = 10;` creates `score`, which holds 10. `mut` allows it to change;
+- `score += 5;` is a short form of `score = score + 5`: `score` now holds 15;
+- `score *= 2;` multiplies by 2: 15 × 2 gives 30;
+- `println!` prints the current value of `score`: 30.
+
 ### Integer division and remainder
 
 Between two integers, `/` gives an **integer division**: the part after the decimal
@@ -151,7 +193,25 @@ println!("{} h {} min", minutes / 60, minutes % 60);
 
 > **Tip:** `n % 2 == 0` is the classic way to test that a number is even.
 
+**Your turn:** write a program that stores `200` seconds in a variable, then prints
+this duration in minutes and seconds: "3 min 20 s".
+
+> **Solution**
+>
+> ```rust
+> let seconds = 200;
+> println!("{} min {} s", seconds / 60, seconds % 60);
+> ```
+>
+> ```sortie
+> 3 min 20 s
+> ```
+
 ## Overflow
+
+A number type is like a box of fixed size: if you put too much in it, it overflows.
+This section shows how to keep a calculation from giving a wrong result or stopping
+your program.
 
 A `u8` does not go above 255. What happens if a calculation goes further? This is
 called an **overflow**.
@@ -188,9 +248,38 @@ Some(253)
 0
 ```
 
+Line by line:
+
+- `x` holds 250, and a `u8` does not go above 255;
+- `checked_add(10)`: 260 does not fit, so the method returns `None` ("nothing").
+  `checked_add(3)`: 253 fits, so it returns `Some(253)`. `{:?}` is used to print these
+  values;
+- `wrapping_add(10)` wraps around: after 255 it starts again from 0, and 260 - 256
+  gives 4;
+- `saturating_add(10)` stays stuck at the maximum, 255;
+- `lives` holds 1. Removing 5 would give -4, which is impossible for a `u8`:
+  `saturating_sub` stops at 0.
+
 The same methods exist for `sub`, `mul` and `div`: `checked_mul`,
 `saturating_sub`… `checked_` is the safest: it returns an
 [Option](types.md) that you must handle.
+
+**Your turn:** write a program that stores `3` in a variable `lives` of type `u8`.
+Print what is left after losing 5 lives, without going below zero, then the result of
+`lives.checked_sub(5)`.
+
+> **Solution**
+>
+> ```rust
+> let lives: u8 = 3;
+> println!("{}", lives.saturating_sub(5));
+> println!("{:?}", lives.checked_sub(5));
+> ```
+>
+> ```sortie
+> 0
+> None
+> ```
 
 ## Converting a number
 
@@ -217,6 +306,14 @@ println!("{}", 'A' as u32);
 44
 65
 ```
+
+Line by line:
+
+- `n as f64` turns 7 into 7.0: the division happens between two floats and gives 3.5;
+- `3.99_f64` is the number 3.99 of type `f64` (the suffix attaches the type to the
+  number). `as i32` cuts off the decimal part, without rounding: 3;
+- `300_i32 as u8`: 300 does not fit in a `u8`, and `as` distorts it into 44;
+- `'A' as u32` gives the number of the letter A in the character table: 65.
 
 `300 as u8` gives `44` (300 - 256) without warning: only use `as` when you are sure the
 number fits.
@@ -266,6 +363,10 @@ error: invalid digit found in string
 
 ## Math methods
 
+Rounding a price, computing a power, keeping a grade between 0 and 20: these
+calculations come up often. Rust gives them to you ready-made, so you do not have to
+write them yourself.
+
 Numbers have methods. You call them with a dot:
 
 ```rust
@@ -302,6 +403,11 @@ println!("{}", 2.1_f64.ceil());
 
 ## Useful constants
 
+> **Note:** this part can wait. Read it once the basics feel solid.
+
+Rather than memorizing 2147483647 or 3.14159…, you can ask Rust for them. The name is
+clearer, and there is no risk of a typo.
+
 Each type knows its limits, and `std::f64::consts` contains the math constants:
 
 ```rust
@@ -321,7 +427,16 @@ println!("{}", PI * radius * radius);
 12.566370614359172
 ```
 
+Line by line:
+
+- `use std::f64::consts::PI;` makes the constant `PI` available under this short name;
+- `i32::MAX`, `u8::MAX` and `i64::MIN` give the largest or smallest value of each type;
+- the last line computes the area of a disk of radius 2: π × 2 × 2.
+
 ## Displaying a number nicely
+
+A result like `12.666666666666666` is hard to read. On a receipt, you want `12.67`,
+and prices neatly lined up in a column. Formats are made for this.
 
 Inside the curly braces of `println!`, after a colon `:`, you can adjust the display:
 
@@ -352,6 +467,14 @@ println!("[{pi:>10.1}]");
 [       3.1]
 ```
 
+Line by line:
+
+- `{:.2}` keeps 2 digits after the decimal point, rounding: 3.14;
+- `{:>8}` reserves 8 spaces and pushes 42 to the right; `{:<8}` pushes it to the left.
+  The brackets `[ ]` are there so you can see the spaces;
+- `{:08.3}`: 3 decimals, 8 characters in total, filled with zeros in front;
+- in the last line, the variable name goes before the colon: `{pi:>10.1}`.
+
 This is handy to align a price list:
 
 ```rust
@@ -366,6 +489,22 @@ bread        1.20 €
 cheese       4.75 €
 apples      12.00 €
 ```
+
+**Your turn:** write a program that stores a total of points, `38`, and a number of
+grades, `3`, in two integers. Print the average with two decimals: "Average: 12.67".
+
+> **Solution**
+>
+> ```rust
+> let total = 38;
+> let count = 3;
+> let average = total as f64 / count as f64;
+> println!("Average: {average:.2}");
+> ```
+>
+> ```sortie
+> Average: 12.67
+> ```
 
 ## Common mistakes
 

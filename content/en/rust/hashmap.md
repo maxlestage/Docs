@@ -37,6 +37,14 @@ fn main() {
 12
 ```
 
+Line by line:
+
+- `use std::collections::HashMap;` makes `HashMap` available in the program;
+- `HashMap::new()` creates an empty map. The `mut` then lets you fill it;
+- the two `insert` calls add two pairs: "Zoé" with 12, then "Léo" with 9;
+- `ages.len()` counts the pairs: 2. `ages["Zoé"]` looks up the value stored under the
+  key "Zoé": 12.
+
 All the keys have the same type (here `&str`), and so do all the values (here `i32`).
 A key appears only once: inserting an existing key **replaces** its value.
 
@@ -58,7 +66,33 @@ Some(12) 13
 `insert` returns the old value in an [Option](types.md): `None` if the key was
 new.
 
+**Your turn:** write a program that stores two countries and their capital in a
+`HashMap`: "France" with "Paris", "Italy" with "Rome". Display the number of pairs,
+then the capital of Italy.
+
+> **Solution**
+>
+> ```rust
+> use std::collections::HashMap;
+>
+> fn main() {
+>     let mut capitals = HashMap::new();
+>     capitals.insert("France", "Paris");
+>     capitals.insert("Italy", "Rome");
+>     println!("{}", capitals.len());
+>     println!("{}", capitals["Italy"]);
+> }
+> ```
+>
+> ```sortie
+> 2
+> Rome
+> ```
+
 ## Reading, checking and removing
+
+A map is there to find information again. But you can ask for a key that is not in it,
+like looking up a name that is not in the phone book. You have to plan for that case.
 
 `ages["Zoé"]` stops the program if the key does not exist. Prefer `get`, which returns
 an `Option`:
@@ -96,6 +130,15 @@ no kiwis
 0
 ```
 
+Line by line:
+
+- `stock.get("apples")` finds the key and returns `Some(3)`. The key `"kiwis"` does not
+  exist: `get` returns `None`;
+- `contains_key("pears")` only answers yes or no: `true`;
+- `remove("pears")` removes the pair and returns its value, `Some(0)`. 1 pair is left;
+- the `match` handles both cases. Here it is `None`: it displays "no kiwis";
+- the last line gives 0 when the key is missing, without writing a `match`.
+
 > **Note:** `get` returns a **reference** (`Some(&3)`, displayed as `Some(3)`).
 > `.copied()` makes a copy of it, and `unwrap_or(0)` gives a default value.
 
@@ -119,6 +162,10 @@ fn main() {
 ```
 
 ## Counting with entry
+
+Counting comes up all the time: the votes in an election, the words in a text, the
+items in a basket. On paper, you would write each name with tally marks next to it. A
+`HashMap` does the same: the name is the key, the number of marks is the value.
 
 `entry(key)` gives access to the slot of a key, whether it exists or not.
 `or_insert(0)` creates it with `0` if it is missing, then returns a reference to the
@@ -145,6 +192,14 @@ and: 2
 cat: 1
 ```
 
+Line by line:
+
+- `count` starts empty;
+- `split_whitespace()` cuts the text into words, and the loop takes them one by one;
+- at the first "the", the slot does not exist: `or_insert(0)` creates it with 0, then
+  `+= 1` brings it to 1;
+- at the second "the", the slot already exists: it goes to 2, then to 3 at the third.
+
 Read the important line like this: "take the slot of `word`, put 0 in it if it is
 empty, then add 1". The star `*` changes the value the reference points to.
 
@@ -170,7 +225,34 @@ fn main() {
 ["Bea", "Bob"]
 ```
 
+**Your turn:** write a program that counts the votes in `"yes no yes yes no yes"`, then
+displays the number of "yes" and the number of "no".
+
+> **Solution**
+>
+> ```rust
+> use std::collections::HashMap;
+>
+> fn main() {
+>     let votes = "yes no yes yes no yes";
+>     let mut count = HashMap::new();
+>     for vote in votes.split_whitespace() {
+>         *count.entry(vote).or_insert(0) += 1;
+>     }
+>     println!("yes: {}", count["yes"]);
+>     println!("no: {}", count["no"]);
+> }
+> ```
+>
+> ```sortie
+> yes: 4
+> no: 2
+> ```
+
 ## Looping over a HashMap
+
+Sometimes you want the whole content of the map, not a single value: to display
+everything, or to compute a total. It is like reading a report card from top to bottom.
 
 A `for` loop over `&map` gives `(key, value)` pairs:
 
@@ -194,6 +276,14 @@ fn main() {
 ```sortie
 total: 44
 ```
+
+Line by line:
+
+- the map holds three pairs: a subject and its grade;
+- `total` starts at 0;
+- at each turn, the loop gives a pair: the subject goes into `_subject`, the grade into
+  `grade`. The `_` at the start of the name means "I do not use this variable";
+- each grade is added to the total: 15 + 12 + 17 = 44, whatever the order of the turns.
 
 > **Warning:** a `HashMap` keeps **no order**. Two runs of the same program can
 > display the pairs in a different order. This is on purpose: it protects against
@@ -228,6 +318,9 @@ maths: 15
 
 ## BTreeMap: keys always sorted
 
+A paper dictionary keeps its words in alphabetical order: that is what makes it easy to
+read. A `BTreeMap` does the same with its keys.
+
 A `BTreeMap` is used exactly like a `HashMap`, but it keeps its keys **sorted**. No
 need to sort before displaying:
 
@@ -253,11 +346,47 @@ Zoé: 30
 Some(("Ali", 25))
 ```
 
+Line by line:
+
+- the three names are inserted out of order: Zoé, Ali, then Léo;
+- the map sorts them right away, in alphabetical order;
+- so the `for` loop displays them in order: Ali, Léo, Zoé;
+- `first_key_value()` gives the pair with the smallest key: `("Ali", 25)`.
+
 > **Tip:** a `HashMap` is a bit faster; a `BTreeMap` always gives the same result.
 > When you are starting out, and as soon as you display a map, the `BTreeMap` is often
 > the simplest choice.
 
+**Your turn:** write a program that stores three fruits and their price in a
+`BTreeMap`: "pear" at 3, "banana" at 2, "apricot" at 4. Display them in alphabetical
+order, one per line, in the form "apricot: 4".
+
+> **Solution**
+>
+> ```rust
+> use std::collections::BTreeMap;
+>
+> fn main() {
+>     let mut prices = BTreeMap::new();
+>     prices.insert("pear", 3);
+>     prices.insert("banana", 2);
+>     prices.insert("apricot", 4);
+>     for (fruit, p) in &prices {
+>         println!("{fruit}: {p}");
+>     }
+> }
+> ```
+>
+> ```sortie
+> apricot: 4
+> banana: 2
+> pear: 3
+> ```
+
 ## HashSet: a set without duplicates
+
+Think of a guest list: writing the same name twice is useless. A set keeps each value
+only once, and quickly answers the question "is it in there?".
 
 A `HashSet` is a bag where each value appears **only once**. There is no associated
 value: only items. `insert` returns `false` if the item was already there.
@@ -283,6 +412,13 @@ false
 true
 ```
 
+Line by line:
+
+- `seen` starts empty;
+- "red" is new: `insert` adds it and returns `true`. Same for "blue";
+- the second "red" is already there: nothing is added, and `insert` returns `false`;
+- so the set holds 2 items, and "blue" is one of them.
+
 ### Removing duplicates from a list
 
 ```rust
@@ -300,6 +436,28 @@ fn main() {
 ```sortie
 ["Lyon", "Nice", "Paris"]
 ```
+
+**Your turn:** visitors sign a guest book: `["Ali", "Bea", "Ali", "Dan", "Bea"]`. Write
+a program that displays how many **different** people came, using a `HashSet`.
+
+> **Solution**
+>
+> ```rust
+> use std::collections::HashSet;
+>
+> fn main() {
+>     let visitors = ["Ali", "Bea", "Ali", "Dan", "Bea"];
+>     let mut different = HashSet::new();
+>     for v in visitors {
+>         different.insert(v);
+>     }
+>     println!("{} different people", different.len());
+> }
+> ```
+>
+> ```sortie
+> 3 different people
+> ```
 
 ### Union, intersection and difference
 
@@ -339,6 +497,8 @@ The braces `{ }` in the output remind you that this is a set.
 
 ## VecDeque: a queue
 
+> **Note:** this part can wait. Read it once the basics feel solid.
+
 A `Vec` adds and removes quickly **at the end**. Removing **at the start** is slow:
 all the items have to shift. A `VecDeque` (say "vec-deck") is fast at both ends. It is
 the line at the bakery: you join at the back, you are served at the front.
@@ -368,7 +528,19 @@ Serving Dan
 true
 ```
 
+Line by line:
+
+- three customers join at the back with `push_back`: Ali, Bea, then Dan;
+- Grandma goes first with `push_front`: the queue becomes Grandma, Ali, Bea, Dan;
+- `while let Some(customer) = queue.pop_front()` serves the first person in the queue,
+  turn after turn, as long as someone is left;
+- when the queue is empty, `pop_front` returns `None`: the loop stops, and
+  `is_empty()` displays `true`.
+
 ## Which collection should you choose?
+
+Each collection is a different way of storing things, like a shelf, a binder or a
+sorting box. The right choice makes your code simpler.
 
 | Need | Collection |
 |------|------------|

@@ -37,6 +37,14 @@ fn main() {
 12
 ```
 
+Ligne par ligne :
+
+- `use std::collections::HashMap;` rend `HashMap` disponible dans le programme ;
+- `HashMap::new()` crée une table vide. Le `mut` permet ensuite de la remplir ;
+- les deux `insert` ajoutent deux paires : « Zoé » avec 12, puis « Léo » avec 9 ;
+- `ages.len()` compte les paires : 2. `ages["Zoé"]` cherche la valeur rangée sous la
+  clé « Zoé » : 12.
+
 Toutes les clés ont le même type (ici `&str`), et toutes les valeurs aussi (ici `i32`).
 Une clé n'apparaît qu'une fois : insérer une clé existante **remplace** sa valeur.
 
@@ -58,7 +66,33 @@ Some(12) 13
 `insert` renvoie l'ancienne valeur dans une [Option](types.md#le-type-option) : `None`
 si la clé était nouvelle.
 
+**À vous :** écrivez un programme qui range deux pays et leur capitale dans une
+`HashMap` : « France » avec « Paris », « Italie » avec « Rome ». Affichez le nombre de
+paires, puis la capitale de l'Italie.
+
+> **Solution**
+>
+> ```rust
+> use std::collections::HashMap;
+>
+> fn main() {
+>     let mut capitales = HashMap::new();
+>     capitales.insert("France", "Paris");
+>     capitales.insert("Italie", "Rome");
+>     println!("{}", capitales.len());
+>     println!("{}", capitales["Italie"]);
+> }
+> ```
+>
+> ```sortie
+> 2
+> Rome
+> ```
+
 ## Lire, tester et retirer
+
+Une table sert à retrouver une information. Mais vous pouvez demander une clé qui n'y
+est pas, comme chercher dans l'annuaire un nom qui n'y figure pas. Il faut prévoir ce cas.
 
 `ages["Zoé"]` arrête le programme si la clé n'existe pas. Préférez `get`, qui renvoie
 une `Option` :
@@ -96,6 +130,15 @@ pas de kiwis
 0
 ```
 
+Ligne par ligne :
+
+- `stock.get("pommes")` trouve la clé et renvoie `Some(3)`. La clé `"kiwis"` n'existe
+  pas : `get` renvoie `None` ;
+- `contains_key("poires")` répond seulement oui ou non : `true` ;
+- `remove("poires")` retire la paire et renvoie sa valeur, `Some(0)`. Il reste 1 paire ;
+- le `match` traite les deux cas. Ici, c'est `None` : il affiche « pas de kiwis » ;
+- la dernière ligne donne 0 quand la clé manque, sans écrire de `match`.
+
 > **Note :** `get` renvoie une **référence** (`Some(&3)`, affichée `Some(3)`).
 > `.copied()` en fait une copie, et `unwrap_or(0)` donne une valeur par défaut.
 
@@ -119,6 +162,10 @@ fn main() {
 ```
 
 ## Compter avec entry
+
+Compter revient souvent : les votes d'une élection, les mots d'un texte, les articles
+d'un panier. Sur papier, vous écririez chaque nom avec des bâtons à côté. Une `HashMap`
+fait pareil : le nom est la clé, le nombre de bâtons est la valeur.
 
 `entry(clé)` donne accès à la case d'une clé, qu'elle existe ou non. `or_insert(0)`
 la crée avec `0` si elle manque, puis renvoie une référence vers la valeur. C'est la
@@ -145,6 +192,14 @@ et : 2
 chat : 1
 ```
 
+Ligne par ligne :
+
+- `compte` commence vide ;
+- `split_whitespace()` découpe le texte en mots, et la boucle les prend un par un ;
+- au premier « le », la case n'existe pas : `or_insert(0)` la crée avec 0, puis `+= 1`
+  la fait passer à 1 ;
+- au deuxième « le », la case existe déjà : elle passe à 2, puis à 3 au troisième.
+
 Lisez la ligne importante ainsi : « prends la case de `mot`, mets-y 0 si elle est vide,
 puis ajoute 1 ». L'étoile `*` modifie la valeur pointée par la référence.
 
@@ -170,7 +225,34 @@ fn main() {
 ["Bea", "Bob"]
 ```
 
+**À vous :** écrivez un programme qui compte les votes de `"oui non oui oui non oui"`,
+puis affiche le nombre de « oui » et le nombre de « non ».
+
+> **Solution**
+>
+> ```rust
+> use std::collections::HashMap;
+>
+> fn main() {
+>     let votes = "oui non oui oui non oui";
+>     let mut compte = HashMap::new();
+>     for vote in votes.split_whitespace() {
+>         *compte.entry(vote).or_insert(0) += 1;
+>     }
+>     println!("oui : {}", compte["oui"]);
+>     println!("non : {}", compte["non"]);
+> }
+> ```
+>
+> ```sortie
+> oui : 4
+> non : 2
+> ```
+
 ## Parcourir une HashMap
+
+Parfois, vous voulez tout le contenu de la table, pas une seule valeur : pour tout
+afficher, ou pour faire un total. C'est comme relire un carnet de notes en entier.
 
 Une boucle `for` sur `&table` donne des paires `(clé, valeur)` :
 
@@ -194,6 +276,14 @@ fn main() {
 ```sortie
 total : 44
 ```
+
+Ligne par ligne :
+
+- la table contient trois paires : une matière et sa note ;
+- `total` commence à 0 ;
+- à chaque tour, la boucle donne une paire : la matière va dans `_matiere`, la note dans
+  `note`. Le `_` au début du nom veut dire « je n'utilise pas cette variable » ;
+- chaque note s'ajoute au total : 15 + 12 + 17 = 44, quel que soit l'ordre des tours.
 
 > **Attention :** une `HashMap` ne garde **aucun ordre**. Deux exécutions du même
 > programme peuvent afficher les paires dans un ordre différent. C'est voulu : cela
@@ -228,6 +318,9 @@ maths : 15
 
 ## BTreeMap : des clés toujours triées
 
+Un dictionnaire en papier range ses mots par ordre alphabétique : c'est ce qui le rend
+facile à lire. La `BTreeMap` fait pareil avec ses clés.
+
 Une `BTreeMap` s'utilise exactement comme une `HashMap`, mais elle garde ses clés
 **triées**. Plus besoin de trier avant d'afficher :
 
@@ -253,11 +346,47 @@ Zoé : 30
 Some(("Ali", 25))
 ```
 
+Ligne par ligne :
+
+- les trois noms sont insérés dans le désordre : Zoé, Ali, puis Léo ;
+- la table les range aussitôt par ordre alphabétique ;
+- la boucle `for` les affiche donc dans l'ordre : Ali, Léo, Zoé ;
+- `first_key_value()` donne la paire de la plus petite clé : `("Ali", 25)`.
+
 > **Astuce :** une `HashMap` est un peu plus rapide ; une `BTreeMap` donne un résultat
 > toujours identique. Pour débuter, et dès que vous affichez une table, la `BTreeMap`
 > est souvent le choix le plus simple.
 
+**À vous :** écrivez un programme qui range trois fruits et leur prix dans une
+`BTreeMap` : « poire » à 3, « banane » à 2, « abricot » à 4. Affichez-les dans l'ordre
+alphabétique, un par ligne, sous la forme « abricot : 4 ».
+
+> **Solution**
+>
+> ```rust
+> use std::collections::BTreeMap;
+>
+> fn main() {
+>     let mut prix = BTreeMap::new();
+>     prix.insert("poire", 3);
+>     prix.insert("banane", 2);
+>     prix.insert("abricot", 4);
+>     for (fruit, p) in &prix {
+>         println!("{fruit} : {p}");
+>     }
+> }
+> ```
+>
+> ```sortie
+> abricot : 4
+> banane : 2
+> poire : 3
+> ```
+
 ## HashSet : un ensemble sans doublons
+
+Pensez à une liste d'invités : écrire deux fois le même nom ne sert à rien. Un ensemble
+garde chaque valeur une seule fois, et répond vite à la question « est-il dedans ? ».
 
 Un `HashSet` est un sac où chaque valeur n'apparaît **qu'une fois**. Il n'y a pas de
 valeur associée : seulement des éléments. `insert` renvoie `false` si l'élément était
@@ -284,6 +413,13 @@ false
 true
 ```
 
+Ligne par ligne :
+
+- `vus` commence vide ;
+- « rouge » est nouveau : `insert` l'ajoute et renvoie `true`. Pareil pour « bleu » ;
+- le second « rouge » est déjà là : rien n'est ajouté, et `insert` renvoie `false` ;
+- l'ensemble contient donc 2 éléments, et « bleu » en fait partie.
+
 ### Retirer les doublons d'une liste
 
 ```rust
@@ -301,6 +437,29 @@ fn main() {
 ```sortie
 ["Lyon", "Nice", "Paris"]
 ```
+
+**À vous :** des visiteurs signent un livre d'or : `["Ali", "Bea", "Ali", "Dan", "Bea"]`.
+Écrivez un programme qui affiche combien de personnes **différentes** sont venues, avec
+un `HashSet`.
+
+> **Solution**
+>
+> ```rust
+> use std::collections::HashSet;
+>
+> fn main() {
+>     let visiteurs = ["Ali", "Bea", "Ali", "Dan", "Bea"];
+>     let mut differents = HashSet::new();
+>     for v in visiteurs {
+>         differents.insert(v);
+>     }
+>     println!("{} personnes différentes", differents.len());
+> }
+> ```
+>
+> ```sortie
+> 3 personnes différentes
+> ```
 
 ### Union, intersection et différence
 
@@ -341,6 +500,8 @@ Un `BTreeSet` est l'ensemble trié : il est à `HashSet` ce que `BTreeMap` est �
 
 ## VecDeque : une file d'attente
 
+> **Note :** cette partie peut attendre. Lisez-la quand les bases seront solides.
+
 Un `Vec` ajoute et retire vite **à la fin**. Retirer **au début** est lent : tous les
 éléments doivent se décaler. Une `VecDeque` (prononcez « vec-dèque ») est rapide aux
 deux bouts. C'est la file d'attente à la boulangerie : on arrive derrière, on est
@@ -371,7 +532,19 @@ Je sers Dan
 true
 ```
 
+Ligne par ligne :
+
+- trois clients arrivent par derrière avec `push_back` : Ali, Bea, puis Dan ;
+- Mamie passe devant avec `push_front` : la file devient Mamie, Ali, Bea, Dan ;
+- `while let Some(client) = file.pop_front()` sert la première personne de la file, tour
+  après tour, tant qu'il reste quelqu'un ;
+- quand la file est vide, `pop_front` renvoie `None` : la boucle s'arrête, et
+  `is_empty()` affiche `true`.
+
 ## Quelle collection choisir ?
+
+Chaque collection est un rangement différent, comme une étagère, un classeur ou une
+boîte de tri. Le bon choix rend votre code plus simple.
 
 | Besoin | Collection |
 |--------|------------|
