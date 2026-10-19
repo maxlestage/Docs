@@ -12,6 +12,9 @@ Cette page présente les briques de base de TypeScript : les variables, les type
 
 ## Afficher avec console.log
 
+Un programme qui calcule sans rien montrer ne vous sert pas à grand-chose : vous ne
+voyez pas le résultat. `console.log` est la fenêtre par laquelle il vous parle.
+
 `console.log` affiche une valeur dans le terminal, puis passe à la ligne. Il accepte
 plusieurs valeurs, séparées par des virgules : il les affiche avec une espace entre
 elles.
@@ -28,10 +31,21 @@ Bonjour !
 Total : 5 euros
 ```
 
+Ligne par ligne :
+
+- la première ligne affiche le texte entre guillemets, tel quel ;
+- la deuxième calcule `2 + 3`, puis affiche le résultat, `5` ;
+- la troisième reçoit trois valeurs : un texte, un calcul et un autre texte. Elle les
+  affiche sur une seule ligne, séparées par une espace.
+
 Un texte s'écrit entre guillemets doubles `"..."` ou simples `'...'`. Sans guillemets,
 TypeScript calcule : `2 + 3` donne `5`.
 
 ## Les variables : let et const
+
+Un programme doit souvent se souvenir de choses : le prénom d'un joueur, son score, un
+prix. Une variable garde une valeur pour la réutiliser plus loin, comme un numéro noté
+sur un post-it pour ne pas l'oublier.
 
 Une [variable](../debuter/glossaire.md#variable) est une boîte avec une étiquette :
 l'étiquette est le nom, le contenu est la valeur. Deux mots permettent d'en créer une :
@@ -54,6 +68,14 @@ Alice 10
 Alice 20
 ```
 
+Ligne par ligne :
+
+- `const prenom = "Alice"` range le texte `"Alice"` dans la boîte `prenom`, pour de bon ;
+- `let score = 10` crée une boîte ouverte, `score`, qui contient 10 ;
+- le premier `console.log` affiche le contenu des deux boîtes : `Alice 10` ;
+- `score = 15` remplace 10 par 15, puis `score = score + 5` le fait passer à 20 ;
+- le second `console.log` affiche donc `Alice 20`.
+
 `score = score + 5` se lit de droite à gauche : on calcule `score + 5` (soit `20`),
 puis on range le résultat dans `score`.
 
@@ -66,7 +88,27 @@ les noms composés en `camelCase` : `prixTotal`, `nombreDeJoueurs`.
 > **Note :** vous verrez parfois `var` dans de vieux programmes. C'est l'ancêtre de
 > `let`, avec des règles plus piégeuses. N'en écrivez pas.
 
+**À vous :** écrivez un programme qui crée une constante `fruit` qui vaut `"pomme"` et
+une variable `quantite` qui vaut 3, ajoute 2 à `quantite`, puis affiche les deux.
+
+> **Solution**
+>
+> ```typescript
+> const fruit = "pomme";
+> let quantite = 3;
+> quantite = quantite + 2;
+> console.log(fruit, quantite);
+> ```
+>
+> ```sortie
+> pomme 5
+> ```
+
 ## Les types simples
+
+Un nombre et un texte ne se manient pas de la même façon : on peut multiplier 30 par 2,
+pas « Lyon ». Le type dit quel genre de valeur contient une boîte. TypeScript s'en sert
+pour vous arrêter avant une bêtise.
 
 Chaque valeur a un [type](../debuter/glossaire.md#type). Les trois types de base sont :
 
@@ -91,6 +133,14 @@ console.log(typeof age, typeof ville, typeof estMajeur);
 30 Lyon true
 number string boolean
 ```
+
+Ligne par ligne :
+
+- `const age: number = 30` crée une boîte `age` qui ne peut contenir qu'un nombre, et y
+  range 30 ;
+- les deux lignes suivantes font de même avec un texte et un booléen ;
+- le premier `console.log` affiche les trois valeurs ;
+- le second affiche le type de chacune, grâce à `typeof`.
 
 `typeof` donne le type d'une valeur pendant l'exécution, sous forme de texte.
 
@@ -122,7 +172,28 @@ console.log((10 / 3).toFixed(2));
 - `Math.round` arrondit, `Math.floor` arrondit vers le bas.
 - `toFixed(2)` donne un texte avec 2 chiffres après la virgule.
 
+**À vous :** 17 bonbons sont partagés entre 5 enfants. Écrivez un programme qui range
+ces deux nombres dans `bonbons` et `enfants`, puis affiche combien de bonbons reçoit
+chaque enfant (avec `Math.floor`) et combien il en reste (avec `%`).
+
+> **Solution**
+>
+> ```typescript
+> const bonbons = 17;
+> const enfants = 5;
+> console.log("Chacun :", Math.floor(bonbons / enfants));
+> console.log("Reste :", bonbons % enfants);
+> ```
+>
+> ```sortie
+> Chacun : 3
+> Reste : 2
+> ```
+
 ## L'inférence : TypeScript devine
+
+Écrire le type de chaque variable serait vite pénible, surtout quand il saute aux
+yeux : `10` est évidemment un nombre. TypeScript sait faire ce travail à votre place.
 
 Vous n'êtes pas obligé d'écrire le type. Quand une variable reçoit une valeur dès sa
 création, TypeScript **devine** son type : c'est l'**inférence**.
@@ -138,6 +209,12 @@ console.log(score, message);
 ```sortie
 20 Gagné
 ```
+
+Ligne par ligne :
+
+- `let score = 10` : TypeScript voit un nombre, il note que `score` est un `number` ;
+- `const message = "Gagné"` : il voit un texte, `message` est donc un `string` ;
+- `score = score * 2` range un nombre dans `score` : c'est permis, il vaut maintenant 20.
 
 TypeScript a déduit que `score` est un `number` et `message` un `string`. Dans votre
 éditeur, survolez `score` : il affiche `let score: number`.
@@ -166,6 +243,8 @@ Found 1 error in main.ts:2
 
 ### const et les types précis
 
+> **Note :** cette partie peut attendre. Lisez-la quand les bases seront solides.
+
 Avec `const`, TypeScript va plus loin. Comme la valeur ne changera jamais, il retient
 la valeur exacte comme type :
 
@@ -185,6 +264,9 @@ et aucun autre), `autreCouleur` a le type `string`. Ces types précis seront tr�
 dans [le chapitre sur le texte](texte.md).
 
 ## Les gabarits de texte
+
+Vous voudrez souvent fabriquer une phrase avec des valeurs dedans : « Alice a 30 ans. ».
+Un gabarit fait cela simplement, comme un formulaire à trous que l'on remplit.
 
 Un texte entre accents graves `` ` `` est un **gabarit** (*template literal*). Il peut
 contenir `${...}` : l'expression entre les accolades est calculée et insérée dans le
@@ -207,6 +289,13 @@ Ligne 1
 Ligne 2
 ```
 
+Ligne par ligne :
+
+- les deux premières lignes rangent un prénom et un âge ;
+- dans le premier gabarit, `${prenom}` est remplacé par `Alice` et `${age}` par `30` ;
+- dans le deuxième, `${age + 5}` est d'abord calculé (35), puis inséré ;
+- le troisième gabarit contient un vrai retour à la ligne : il s'affiche sur deux lignes.
+
 Un gabarit peut aussi s'étendre sur plusieurs lignes.
 
 Avec des guillemets normaux, il faut coller les morceaux avec `+` :
@@ -220,7 +309,26 @@ console.log("Bonjour, " + prenom + " !");
 Bonjour, Alice !
 ```
 
+**À vous :** une nuit d'hôtel coûte 80 euros. Écrivez un programme qui range `"Lyon"`
+dans `ville` et `2` dans `nuits`, puis affiche avec un gabarit : « Séjour à Lyon : 2
+nuits, soit 160 euros. ».
+
+> **Solution**
+>
+> ```typescript
+> const ville = "Lyon";
+> const nuits = 2;
+> console.log(`Séjour à ${ville} : ${nuits} nuits, soit ${nuits * 80} euros.`);
+> ```
+>
+> ```sortie
+> Séjour à Lyon : 2 nuits, soit 160 euros.
+> ```
+
 ## Les commentaires
+
+Dans quelques semaines, vous aurez oublié pourquoi vous avez écrit telle ligne. Un
+commentaire est un mot que vous laissez à votre futur vous, ou à un collègue.
 
 Un [commentaire](../debuter/glossaire.md#commentaire) est une note pour les humains :
 TypeScript l'ignore.
@@ -244,6 +352,14 @@ console.log(prixHT * (1 + tva));
 120
 ```
 
+Ligne par ligne :
+
+- tout ce qui suit `//` est ignoré. Sur la deuxième ligne, `const tva = 0.2;` s'exécute
+  bien : seul le texte après `//` est ignoré ;
+- tout ce qui est entre `/*` et `*/` est ignoré, même sur plusieurs lignes ;
+- il reste trois vraies instructions : `tva` vaut 0.2, `prixHT` vaut 100, et
+  `console.log` affiche `100 * 1.2`, soit 120.
+
 Le commentaire `/** ... */` est un commentaire de documentation : votre éditeur
 l'affiche quand vous survolez `prixHT`.
 
@@ -251,6 +367,9 @@ l'affiche quand vous survolez `prixHT`.
 > code. `// TVA française` est utile ; `// multiplie par 0.2` ne l'est pas.
 
 ## null et undefined : l'absence de valeur
+
+Une information peut manquer : un client n'a pas toujours de surnom, un formulaire
+n'est pas encore rempli. Il faut une façon de dire « ici, il n'y a rien ».
 
 Deux valeurs spéciales représentent « rien » (voir [null](../debuter/glossaire.md#null)) :
 
@@ -279,12 +398,38 @@ Ali
 undefined
 ```
 
+Ligne par ligne :
+
+- `surnom` peut contenir un texte ou `null`. Au départ, elle vaut `null` : pas de
+  surnom ;
+- on lui donne ensuite le texte `"Ali"`, et le deuxième affichage le montre ;
+- `reponse` est créée sans valeur : elle contient `undefined`.
+
 `string | null` se lit « un texte ou null ». C'est une **union** de types : vous en
 verrez beaucoup dans [le chapitre sur les unions](unions.md).
 
 > **À retenir :** en TypeScript strict, l'absence de valeur se voit dans le type. Vous
 > ne pouvez pas l'oublier : c'est la cause de très nombreux bugs dans d'autres
 > langages.
+
+**À vous :** écrivez un programme qui crée une variable `telephone` de type
+`string | null`, qui vaut `null` au départ. Affichez-la, donnez-lui la valeur
+`"0601020304"`, puis affichez-la de nouveau.
+
+> **Solution**
+>
+> ```typescript
+> let telephone: string | null = null;
+> console.log(telephone);
+>
+> telephone = "0601020304";
+> console.log(telephone);
+> ```
+>
+> ```sortie
+> null
+> 0601020304
+> ```
 
 ## any et unknown : quand on ne sait pas
 
@@ -327,6 +472,13 @@ if (typeof donnee === "string") {
 SALUT
 ```
 
+Ligne par ligne :
+
+- `donnee` est de type `unknown` : TypeScript ne fait aucune supposition sur son
+  contenu ;
+- `typeof donnee === "string"` pose la question « est-ce un texte ? ». Ici, oui ;
+- dans le bloc, `toUpperCase()` met le texte en majuscules : `SALUT`.
+
 Dans le bloc `if`, TypeScript sait que `donnee` est un `string`, et autorise
 `toUpperCase()`. Les conditions sont expliquées dans
 [le chapitre suivant](conditions-boucles.md).
@@ -336,6 +488,9 @@ Dans le bloc `if`, TypeScript sait que `donnee` est un `string`, et autorise
 > regarder.
 
 ## Lire une erreur de type, ligne par ligne
+
+Une erreur de type n'est pas une punition : c'est TypeScript qui vous prévient d'un bug
+avant même le lancement. Savoir la lire vous fait gagner beaucoup de temps.
 
 Voici un programme qui additionne un nombre et un texte :
 
