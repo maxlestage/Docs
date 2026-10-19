@@ -1,14 +1,13 @@
-# Conditions et boucles
+# Les conditions
 
-Cette page explique comment faire des choix avec `if`, `switch` et l'opérateur ternaire, comment répéter des actions avec des boucles, et ce que les types apportent à chaque fois.
+Cette page explique comment faire des choix avec `if`, `switch` et l'opérateur ternaire, et ce que les types apportent à chaque décision.
 
 > **Objectifs :**
 >
 > - vous saurez écrire une condition avec `if`, `else if` et `else` ;
 > - vous saurez comparer avec `===` et reconnaître les valeurs « fausses » ;
 > - vous saurez gérer une valeur absente avec `??` et `?.` ;
-> - vous saurez écrire un `switch` qui n'oublie aucun cas grâce à `never` ;
-> - vous saurez répéter avec `for`, `while` et `for...of`.
+> - vous saurez écrire un `switch` qui n'oublie aucun cas grâce à `never`.
 
 ## if et else
 
@@ -267,157 +266,6 @@ Deux `case` à la suite partagent le même code : `samedi` et `dimanche` affiche
 > **Attention :** sans `break`, l'exécution continue dans le cas suivant. Oublier
 > `break` est un piège classique.
 
-## Les boucles
-
-Imaginez qu'on vous demande d'afficher les nombres de 1 à 100. Écrire 100
-`console.log` serait long et pénible. Une boucle fait ce travail répétitif à votre
-place.
-
-Une [boucle](../debuter/glossaire.md#boucle) répète un bloc de code.
-
-### for : compter
-
-La boucle `for` a trois parties, séparées par des points-virgules : le départ, la
-condition pour continuer, et le pas.
-
-```typescript
-for (let i = 1; i <= 3; i++) {
-  console.log(`Tour ${i}`);
-}
-```
-
-```sortie
-Tour 1
-Tour 2
-Tour 3
-```
-
-- `let i = 1` : le compteur commence à 1 ;
-- `i <= 3` : on continue tant que `i` vaut au plus 3 ;
-- `i++` : après chaque tour, on ajoute 1 à `i`.
-
-**À vous :** écrivez un programme qui affiche la table de 7, de « 7 x 1 = 7 » à
-« 7 x 5 = 35 », une ligne par calcul.
-
-> **Solution**
->
-> ```typescript
-> for (let i = 1; i <= 5; i++) {
->   console.log(`7 x ${i} = ${7 * i}`);
-> }
-> ```
->
-> ```sortie
-> 7 x 1 = 7
-> 7 x 2 = 14
-> 7 x 3 = 21
-> 7 x 4 = 28
-> 7 x 5 = 35
-> ```
-
-### while : tant que
-
-`while` (« tant que ») répète tant que sa condition est vraie. Utilisez-la quand vous
-ne savez pas d'avance combien de tours il faut.
-
-```typescript
-let argent = 100;
-let annees = 0;
-
-while (argent < 150) {
-  argent = argent * 1.1;
-  annees++;
-}
-
-console.log(`${annees} ans, ${argent.toFixed(2)} euros`);
-```
-
-```sortie
-5 ans, 161.05 euros
-```
-
-Ligne par ligne :
-
-- au départ, `argent` vaut 100 et `annees` vaut 0 ;
-- avant chaque tour, `while` vérifie `argent < 150`. 100 est plus petit : il entre
-  dans le bloc ;
-- à chaque tour, `argent` grandit de 10 % (110, puis 121, 133.1, 146.41, 161.051) et
-  `annees` augmente de 1 ;
-- après 5 tours, `argent < 150` est faux : la boucle s'arrête, et le dernier
-  `console.log` affiche le résultat, arrondi à deux chiffres par `toFixed(2)`.
-
-> **Attention :** si la condition reste toujours vraie, la boucle ne s'arrête jamais.
-> Vérifiez que quelque chose change à chaque tour. Pour arrêter un programme bloqué,
-> tapez `Ctrl+C` dans le terminal.
-
-### for...of : parcourir une liste
-
-`for...of` prend les éléments d'une liste un par un. La liste s'écrit entre crochets ;
-les [tableaux](collections.md) sont expliqués plus loin.
-
-```typescript
-const fruits = ["pomme", "poire", "kiwi"];
-
-for (const fruit of fruits) {
-  console.log(fruit.toUpperCase());
-}
-```
-
-```sortie
-POMME
-POIRE
-KIWI
-```
-
-TypeScript sait que `fruits` contient des `string` : `fruit` est donc un `string`, et
-`toUpperCase()` est autorisé. Un `const` suffit : chaque tour crée un nouveau `fruit`.
-
-**À vous :** écrivez un programme qui range la liste de courses `["pain", "lait",
-"œufs"]` dans une constante, puis affiche chaque article sur sa ligne, précédé d'un
-tiret.
-
-> **Solution**
->
-> ```typescript
-> const courses = ["pain", "lait", "œufs"];
->
-> for (const article of courses) {
->   console.log(`- ${article}`);
-> }
-> ```
->
-> ```sortie
-> - pain
-> - lait
-> - œufs
-> ```
-
-### break et continue
-
-- `break` sort de la boucle tout de suite ;
-- `continue` passe directement au tour suivant.
-
-```typescript
-for (let i = 1; i <= 10; i++) {
-  if (i % 2 === 0) {
-    continue;
-  }
-  if (i > 7) {
-    break;
-  }
-  console.log(i);
-}
-```
-
-```sortie
-1
-3
-5
-7
-```
-
-Les nombres pairs sont sautés (`continue`), et la boucle s'arrête à 9 (`break`).
-
 ## Le rétrécissement : les types suivent vos tests
 
 > **Note :** cette partie peut attendre. Lisez-la quand les bases seront solides.
@@ -425,6 +273,10 @@ Les nombres pairs sont sautés (`continue`), et la boucle s'arrête à 9 (`break
 Voici ce que les types apportent aux conditions. Quand une variable peut avoir
 plusieurs types, un test **rétrécit** son type dans le bloc (*narrowing*). C'est comme
 un vigile à l'entrée d'une salle : une fois passé, on sait qui est à l'intérieur.
+
+Les exemples de cette page parcourent parfois une liste avec `for...of` : il suffit de
+savoir que le bloc s'exécute une fois pour chaque élément. Cette boucle est expliquée
+dans [les boucles](boucles.md#for-of-parcourir-une-liste).
 
 ```typescript
 const reponses: (string | number)[] = ["oui", 3.14159];
@@ -626,29 +478,6 @@ Found 1 error in main.ts:3
 dans [les tableaux](collections.md)). TypeScript vous oblige à prévoir ce cas. Écrivez
 `trouve?.toUpperCase()`, ou testez d'abord : `if (trouve !== undefined) { ... }`.
 
-### Utiliser le compteur après la boucle
-
-```typescript norun
-for (let i = 0; i < 3; i++) {
-  console.log(i);
-}
-console.log(i);
-```
-
-```text
-main.ts:4:13 - error TS2304: Cannot find name 'i'.
-
-4 console.log(i);
-              ~
-
-
-Found 1 error in main.ts:4
-```
-
-Une variable créée avec `let` n'existe que dans son bloc : c'est sa
-[portée](../debuter/glossaire.md#portee). Si vous avez besoin de la valeur après la
-boucle, créez la variable avant : `let i = 0; for (; i < 3; i++) { ... }`.
-
 ### Oublier un cas dans un switch exhaustif
 
 Vous avez ajouté `"clignotant"` au type `Feu`, mais pas au `switch` :
@@ -701,26 +530,21 @@ console.log(stock ?? 10, stock || 10);
 > `0 10`. `??` ne remplace que `null` et `undefined` : il garde `0`. `||` remplace
 > toutes les valeurs fausses, dont `0`.
 
-**Question 2 :** écrivez une boucle qui affiche les nombres de 10 à 0, de 2 en 2.
+**Question 2 :** qu'affiche ce code ?
+
+```typescript norun
+const nom = "";
+if (nom) {
+  console.log(`Bonjour ${nom}`);
+} else {
+  console.log("Anonyme");
+}
+```
 
 > **Réponse**
 >
-> ```typescript
-> for (let i = 10; i >= 0; i -= 2) {
->   console.log(i);
-> }
-> ```
->
-> ```sortie
-> 10
-> 8
-> 6
-> 4
-> 2
-> 0
-> ```
->
-> `i -= 2` est un raccourci pour `i = i - 2`.
+> `Anonyme`. Le texte vide `""` compte comme faux : c'est le bloc du `else` qui
+> s'exécute.
 
 **Question 3 :** à quoi sert `const impossible: never = feu;` dans le `default` d'un
 `switch` ?
@@ -740,7 +564,7 @@ console.log(stock ?? 10, stock || 10);
 - Un test comme `typeof x === "string"` rétrécit le type de `x` dans le bloc.
 - `??` donne une valeur par défaut, `?.` appelle une action seulement si la valeur
   existe.
-- `for` compte, `while` répète tant que, `for...of` parcourt une liste ; un `switch`
-  avec `never` dans `default` n'oublie aucun cas.
+- `switch` choisit parmi plusieurs valeurs ; avec `never` dans `default`, il n'oublie
+  aucun cas.
 
-Suite : [les fonctions](fonctions.md).
+Suite : [les boucles](boucles.md).

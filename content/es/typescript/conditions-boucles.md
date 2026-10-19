@@ -1,14 +1,13 @@
-# Condiciones y bucles
+# Las condiciones
 
-Esta página explica cómo tomar decisiones con `if`, `switch` y el operador ternario, cómo repetir acciones con bucles, y lo que aportan los tipos en cada caso.
+Esta página explica cómo tomar decisiones con `if`, `switch` y el operador ternario, y lo que aportan los tipos a cada decisión.
 
 > **Objetivos:**
 >
 > - sabrás escribir una condición con `if`, `else if` y `else`;
 > - sabrás comparar con `===` y reconocer los valores «falsos»;
 > - sabrás manejar un valor ausente con `??` y `?.`;
-> - sabrás escribir un `switch` que no olvida ningún caso gracias a `never`;
-> - sabrás repetir con `for`, `while` y `for...of`.
+> - sabrás escribir un `switch` que no olvida ningún caso gracias a `never`.
 
 ## if y else
 
@@ -267,156 +266,6 @@ Dos `case` seguidos comparten el mismo código: `sábado` y `domingo` muestran
 > **Atención:** sin `break`, la ejecución continúa en el caso siguiente. Olvidar
 > `break` es una trampa clásica.
 
-## Los bucles
-
-Imagina que te piden mostrar los números del 1 al 100. Escribir 100 `console.log`
-sería largo y pesado. Un bucle hace ese trabajo repetitivo por ti.
-
-Un [bucle](../debuter/glossaire.md#bucle) repite un bloque de código.
-
-### for: contar
-
-El bucle `for` tiene tres partes, separadas por puntos y coma: el inicio, la
-condición para continuar, y el paso.
-
-```typescript
-for (let i = 1; i <= 3; i++) {
-  console.log(`Vuelta ${i}`);
-}
-```
-
-```sortie
-Vuelta 1
-Vuelta 2
-Vuelta 3
-```
-
-- `let i = 1`: el contador empieza en 1;
-- `i <= 3`: se continúa mientras `i` valga como mucho 3;
-- `i++`: después de cada vuelta, se suma 1 a `i`.
-
-**Te toca:** escribe un programa que muestre la tabla del 7, de «7 x 1 = 7» a
-«7 x 5 = 35», una línea por cálculo.
-
-> **Solución**
->
-> ```typescript
-> for (let i = 1; i <= 5; i++) {
->   console.log(`7 x ${i} = ${7 * i}`);
-> }
-> ```
->
-> ```sortie
-> 7 x 1 = 7
-> 7 x 2 = 14
-> 7 x 3 = 21
-> 7 x 4 = 28
-> 7 x 5 = 35
-> ```
-
-### while: mientras
-
-`while` («mientras») repite mientras su condición sea verdadera. Úsalo cuando
-no sabes de antemano cuántas vueltas hacen falta.
-
-```typescript
-let dinero = 100;
-let anios = 0;
-
-while (dinero < 150) {
-  dinero = dinero * 1.1;
-  anios++;
-}
-
-console.log(`${anios} años, ${dinero.toFixed(2)} euros`);
-```
-
-```sortie
-5 años, 161.05 euros
-```
-
-Línea por línea:
-
-- al principio, `dinero` vale 100 y `anios` vale 0;
-- antes de cada vuelta, `while` comprueba `dinero < 150`. 100 es menor: entra en el
-  bloque;
-- en cada vuelta, `dinero` crece un 10 % (110, luego 121, 133.1, 146.41, 161.051) y
-  `anios` aumenta en 1;
-- tras 5 vueltas, `dinero < 150` es falso: el bucle se detiene, y el último
-  `console.log` muestra el resultado, redondeado a dos cifras por `toFixed(2)`.
-
-> **Atención:** si la condición sigue siendo siempre verdadera, el bucle no se detiene nunca.
-> Comprueba que algo cambia en cada vuelta. Para detener un programa bloqueado,
-> pulsa `Ctrl+C` en la terminal.
-
-### for...of: recorrer una lista
-
-`for...of` toma los elementos de una lista uno a uno. La lista se escribe entre corchetes;
-los [arrays](collections.md) se explican más adelante.
-
-```typescript
-const frutas = ["manzana", "pera", "kiwi"];
-
-for (const fruta of frutas) {
-  console.log(fruta.toUpperCase());
-}
-```
-
-```sortie
-MANZANA
-PERA
-KIWI
-```
-
-TypeScript sabe que `frutas` contiene `string`: por tanto `fruta` es un `string`, y
-`toUpperCase()` está permitido. Basta con un `const`: cada vuelta crea una nueva `fruta`.
-
-**Te toca:** escribe un programa que guarde la lista de la compra `["pan", "leche",
-"huevos"]` en una constante y luego muestre cada artículo en su línea, precedido de
-un guion.
-
-> **Solución**
->
-> ```typescript
-> const compras = ["pan", "leche", "huevos"];
->
-> for (const articulo of compras) {
->   console.log(`- ${articulo}`);
-> }
-> ```
->
-> ```sortie
-> - pan
-> - leche
-> - huevos
-> ```
-
-### break y continue
-
-- `break` sale del bucle de inmediato;
-- `continue` pasa directamente a la vuelta siguiente.
-
-```typescript
-for (let i = 1; i <= 10; i++) {
-  if (i % 2 === 0) {
-    continue;
-  }
-  if (i > 7) {
-    break;
-  }
-  console.log(i);
-}
-```
-
-```sortie
-1
-3
-5
-7
-```
-
-Los números pares se saltan (`continue`), y el bucle se detiene en 9 (`break`).
-
 ## El estrechamiento: los tipos siguen tus pruebas
 
 > **Nota:** esta parte puede esperar. Léela cuando las bases estén firmes.
@@ -424,6 +273,10 @@ Los números pares se saltan (`continue`), y el bucle se detiene en 9 (`break`).
 Esto es lo que aportan los tipos a las condiciones. Cuando una variable puede tener
 varios tipos, una prueba **estrecha** su tipo dentro del bloque (*narrowing*). Es como
 un portero a la entrada de una sala: una vez pasada la puerta, se sabe quién está dentro.
+
+Algunos ejemplos de esta página recorren una lista con `for...of`: basta con saber que
+el bloque se ejecuta una vez por cada elemento. Este bucle se explica en
+[los bucles](boucles.md#for-of-recorrer-una-lista).
 
 ```typescript
 const respuestas: (string | number)[] = ["sí", 3.14159];
@@ -624,29 +477,6 @@ Found 1 error in main.ts:3
 en [los arrays](collections.md)). TypeScript te obliga a prever este caso. Escribe
 `encontrado?.toUpperCase()`, o prueba primero: `if (encontrado !== undefined) { ... }`.
 
-### Usar el contador después del bucle
-
-```typescript norun
-for (let i = 0; i < 3; i++) {
-  console.log(i);
-}
-console.log(i);
-```
-
-```text
-main.ts:4:13 - error TS2304: Cannot find name 'i'.
-
-4 console.log(i);
-              ~
-
-
-Found 1 error in main.ts:4
-```
-
-Una variable creada con `let` solo existe dentro de su bloque: es su
-[ámbito](../debuter/glossaire.md#ambito). Si necesitas el valor después del
-bucle, crea la variable antes: `let i = 0; for (; i < 3; i++) { ... }`.
-
 ### Olvidar un caso en un switch exhaustivo
 
 Has añadido `"intermitente"` al tipo `Semaforo`, pero no al `switch`:
@@ -699,26 +529,21 @@ console.log(stock ?? 10, stock || 10);
 > `0 10`. `??` solo reemplaza `null` y `undefined`: conserva `0`. `||` reemplaza
 > todos los valores falsos, entre ellos `0`.
 
-**Pregunta 2:** escribe un bucle que muestre los números de 10 a 0, de 2 en 2.
+**Pregunta 2:** ¿qué muestra este código?
+
+```typescript norun
+const nombre = "";
+if (nombre) {
+  console.log(`Hola ${nombre}`);
+} else {
+  console.log("Anónimo");
+}
+```
 
 > **Respuesta**
 >
-> ```typescript
-> for (let i = 10; i >= 0; i -= 2) {
->   console.log(i);
-> }
-> ```
->
-> ```sortie
-> 10
-> 8
-> 6
-> 4
-> 2
-> 0
-> ```
->
-> `i -= 2` es un atajo de `i = i - 2`.
+> `Anónimo`. El texto vacío `""` cuenta como falso: se ejecuta el bloque del
+> `else`.
 
 **Pregunta 3:** ¿para qué sirve `const imposible: never = luz;` en el `default` de un
 `switch`?
@@ -738,7 +563,7 @@ console.log(stock ?? 10, stock || 10);
 - Una prueba como `typeof x === "string"` estrecha el tipo de `x` dentro del bloque.
 - `??` da un valor por defecto, `?.` llama a una acción solo si el valor
   existe.
-- `for` cuenta, `while` repite mientras, `for...of` recorre una lista; un `switch`
-  con `never` en `default` no olvida ningún caso.
+- `switch` elige entre varios valores; con `never` en `default`, no olvida ningún
+  caso.
 
-Siguiente: [las funciones](fonctions.md).
+Siguiente: [los bucles](boucles.md).
