@@ -1,6 +1,6 @@
 # Arrays y tuplas
 
-Esta página explica cómo guardar varios valores en arrays, tuplas, `Map` y `Set`, y cómo los tipos mantienen coherentes estas colecciones.
+Esta página explica cómo guardar varios valores en arrays y tuplas, cómo transformarlos, y cómo los tipos mantienen coherentes estas listas.
 
 > **Objetivos:**
 >
@@ -8,8 +8,7 @@ Esta página explica cómo guardar varios valores en arrays, tuplas, `Map` y `Se
 > - sabrás proteger un array con `readonly` y describir una tupla
 >   `[string, number]`;
 > - sabrás transformar un array con `map`, `filter` y `reduce`;
-> - sabrás manejar el `undefined` que devuelve `find`;
-> - sabrás usar `Map`, `Set` y `Record`.
+> - sabrás manejar el `undefined` que devuelve `find`.
 
 ## Crear un array
 
@@ -271,7 +270,7 @@ quedarte con las buenas notas, calcular un total. Estos métodos lo hacen en una
 sin escribir un bucle.
 
 Estos tres métodos reciben un *callback* (una función, ver
-[las funciones](fonctions.md#los-callbacks-pasar-una-funcion-a-una-funcion)). No
+[las funciones](fonctions-avancees.md#los-callbacks-pasar-una-funcion-a-una-funcion)). No
 modifican el array original: devuelven uno nuevo, o un valor.
 
 ### map: transformar cada elemento
@@ -469,185 +468,6 @@ un `string`.
 > **Recuerda:** un tipo `T | undefined` es una pregunta que TypeScript te hace: «¿y si
 > no se encuentra nada?». Respóndela, con `if`, `?.` o `??`.
 
-## Map: asociar claves a valores
-
-Un `Map` es un [diccionario](../debuter/glossaire.md#diccionario): asocia una
-**clave** a un **valor**, como una guía telefónica asocia un nombre a un número. Su
-tipo se escribe `Map<TipoDeClaves, TipoDeValores>`.
-
-```typescript
-const stock = new Map<string, number>();
-
-stock.set("manzanas", 10);
-stock.set("peras", 4);
-stock.set("manzanas", 12);
-
-console.log(stock.get("manzanas"));
-console.log(stock.has("kiwis"), stock.size);
-
-for (const [fruta, cantidad] of stock) {
-  console.log(`${fruta}: ${cantidad}`);
-}
-```
-
-```sortie
-12
-false 2
-manzanas: 12
-peras: 4
-```
-
-Línea por línea:
-
-- `new Map<string, number>()` crea un `Map` vacío: claves de texto, valores numéricos;
-- los `set` guardan `manzanas → 10` y `peras → 4`, y luego reemplazan 10 por 12;
-- `get("manzanas")` da 12; la clave `"kiwis"` no existe, y el `Map` tiene 2 pares;
-- el bucle `for...of` da cada par, en el orden en que se añadieron.
-
-Los métodos que debes conocer:
-
-- `set(clave, valor)` añade o reemplaza (una clave es única);
-- `get(clave)` lee el valor, `has(clave)` comprueba si la clave existe;
-- `size` da el número de pares; `delete(clave)` quita uno.
-
-`get` devuelve `number | undefined`: puede que la clave no exista. El mismo reflejo
-que con `find`:
-
-```typescript
-const stock = new Map<string, number>([["manzanas", 10]]);
-
-const kiwis = stock.get("kiwis") ?? 0;
-console.log(kiwis + 5);
-```
-
-```sortie
-5
-```
-
-**Te toca:** escribe un programa que cree un `Map` de edades, guarde en él `"Alice"`
-(30 años) y `"Bob"` (25 años), y luego muestre la edad de Bob y la de `"Zoé"`, con 0
-si no está.
-
-> **Solución**
->
-> ```typescript
-> const edades = new Map<string, number>();
-> edades.set("Alice", 30);
-> edades.set("Bob", 25);
-> console.log(edades.get("Bob"));
-> console.log(edades.get("Zoé") ?? 0);
-> ```
->
-> ```sortie
-> 25
-> 0
-> ```
-
-## Set: una colección sin duplicados
-
-Piensa en la lista de invitados de una fiesta: escribir dos veces el mismo nombre no
-sirve de nada. Un `Set` se encarga de ello y descarta los duplicados.
-
-Un `Set` es un [conjunto](../debuter/glossaire.md#conjunto): cada valor aparece en él
-una sola vez. Su tipo se escribe `Set<T>`.
-
-```typescript
-const visitantes = new Set<string>();
-
-visitantes.add("Alice");
-visitantes.add("Bob");
-visitantes.add("Alice");
-
-console.log(visitantes.size);
-console.log(visitantes.has("Bob"));
-
-const sinDuplicados = [...new Set([3, 1, 3, 2, 1])];
-console.log(sinDuplicados);
-```
-
-```sortie
-2
-true
-[ 3, 1, 2 ]
-```
-
-Línea por línea:
-
-- `visitantes` empieza vacío;
-- `add` añade `"Alice"` y luego `"Bob"`. El segundo `"Alice"` se ignora: ya está;
-- por eso `size` vale 2, y `has("Bob")` responde `true`;
-- el final crea un `Set` a partir del array y lo vuelve a convertir en array con
-  `[...]`.
-
-`new Set(array)` y luego `[...]` es el truco clásico para quitar los duplicados de un
-array, conservando el orden de primera aparición.
-
-## Record: un objeto clave-valor
-
-Un `Record` se parece a una hoja de puntuaciones: un nombre, un número, un nombre, un
-número. Lo escribes de una vez, como un objeto normal.
-
-`Record<string, number>` describe un objeto simple cuyas claves son textos y cuyos
-valores son números. Es más ligero que un `Map`, y se escribe directamente con llaves.
-
-```typescript
-const puntuaciones: Record<string, number> = {
-  alice: 12,
-  bob: 8,
-};
-
-puntuaciones.chloe = 15;
-puntuaciones["bob"] += 1;
-
-console.log(puntuaciones);
-console.log(Object.keys(puntuaciones));
-
-for (const [nombre, puntos] of Object.entries(puntuaciones)) {
-  console.log(nombre.padEnd(6), puntos);
-}
-```
-
-```sortie
-{ alice: 12, bob: 9, chloe: 15 }
-[ 'alice', 'bob', 'chloe' ]
-alice  12
-bob    9
-chloe  15
-```
-
-Línea por línea:
-
-- `puntuaciones` empieza con dos pares: `alice → 12` y `bob → 8`;
-- `puntuaciones.chloe = 15` añade una clave; `puntuaciones["bob"] += 1` sube a Bob a 9;
-- `Object.keys` lista las claves, en el orden en que se añadieron;
-- el bucle da cada par; `padEnd(6)` completa el nombre con espacios, para alinear las
-  columnas.
-
-`Object.keys` da las claves, `Object.entries` los pares `[clave, valor]`.
-
-Con una unión de tipos literales como claves, `Record` exige **todas** las claves:
-
-```typescript
-type Dia = "lunes" | "martes" | "miercoles";
-
-const horas: Record<Dia, number> = {
-  lunes: 7,
-  martes: 8,
-  miercoles: 4,
-};
-
-console.log(horas.martes);
-```
-
-```sortie
-8
-```
-
-Olvidar `miercoles` sería un error.
-
-> **Consejo:** usa `Record` para datos fijos escritos en el código, y `Map` cuando
-> añades y quitas claves a menudo.
-
 ## Errores frecuentes
 
 ### Guardar un valor del tipo incorrecto
@@ -713,27 +533,6 @@ Found 2 errors in the same file, starting at: main.ts:1
 En una tupla, el orden importa: primero el texto, luego el número.
 Escribe `["Alice", 42]`.
 
-### Usar el resultado de get sin comprobarlo
-
-```typescript norun
-const stock = new Map<string, number>([["manzanas", 10]]);
-const n = stock.get("peras");
-console.log(n + 1);
-```
-
-```text
-main.ts:3:13 - error TS18048: 'n' is possibly 'undefined'.
-
-3 console.log(n + 1);
-              ~
-
-
-Found 1 error in main.ts:3
-```
-
-Puede que la clave `"peras"` no exista. Da un valor por defecto:
-`const n = stock.get("peras") ?? 0;`.
-
 ## Ponte a prueba
 
 **Pregunta 1:** ¿cuál es el tipo de `["a", "b"].map((s) => s.length)`?
@@ -778,8 +577,6 @@ const par = numeros.find((n) => n % 2 === 0);
 - Una tupla `[string, number]` tiene una longitud fija y un tipo por posición.
 - `map`, `filter` y `reduce` devuelven valores nuevos, cuyo tipo adivina TypeScript;
   ordena los números con `sort((a, b) => a - b)`.
-- `find` y `Map.get` devuelven `T | undefined`: trata el caso con `if`, `?.` o `??`.
-- `Map<K, V>` asocia claves a valores, `Set<T>` evita los duplicados,
-  `Record<string, number>` describe un objeto clave-valor.
+- `find` devuelve `T | undefined`: trata el caso con `if`, `?.` o `??`.
 
-Siguiente: [objetos, interfaces y alias de tipo](objets.md).
+Siguiente: [Map, Set y Record](map-set.md).
