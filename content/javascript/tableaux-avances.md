@@ -511,11 +511,11 @@ const nouvelles = notes.with(5, 20);
 ```text
 file:///home/alice/js/main.mjs:2
 const nouvelles = notes.with(5, 20);
-                        ^
+                            ^
 
 RangeError: Invalid index : 5
     at Array.with (<anonymous>)
-    at file:///home/alice/js/main.mjs:2:25
+    at file:///home/alice/js/main.mjs:2:29
 
 Node.js v22.22.0
 ```
