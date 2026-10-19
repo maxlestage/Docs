@@ -759,6 +759,23 @@ const TEXTS: &[[&str; 3]] = &[
     ],
     ["Un test", "A test", "Un test"],
     ["Lancer un programme", "Run a program", "Ejecutar un programa"],
+    ["Trier une liste", "Sort a list", "Ordenar una lista"],
+    [
+        "Parcourir avec la position",
+        "Loop with the position",
+        "Recorrer con la posición",
+    ],
+    ["Compter les mots", "Count the words", "Contar las palabras"],
+    [
+        "Une fonction propre à un type",
+        "A method on your type",
+        "Un método de tu tipo",
+    ],
+    [
+        "Assembler une liste en texte",
+        "Join a list into text",
+        "Unir una lista en un texto",
+    ],
 ];
 
 #[cfg(test)]
