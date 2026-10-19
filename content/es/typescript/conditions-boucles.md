@@ -12,6 +12,9 @@ Esta página explica cómo tomar decisiones con `if`, `switch` y el operador ter
 
 ## if y else
 
+Un programa no siempre hace lo mismo. Tú coges un paraguas si llueve y gafas de sol
+si hace bueno. Una condición permite al programa hacer este tipo de elección.
+
 Una [condición](../debuter/glossaire.md#condicion) elige qué código ejecutar. `if`
 («si») ejecuta su bloque `{ ... }` solo si la prueba entre paréntesis es verdadera.
 `else` («si no») da el bloque que se ejecuta en caso contrario.
@@ -29,6 +32,14 @@ if (temperatura > 25) {
 ```sortie
 Hace calor.
 ```
+
+Línea por línea:
+
+- `const temperatura: number = 28;` guarda 28 en la variable `temperatura`;
+- `if (temperatura > 25)` hace una pregunta: «¿28 es mayor que 25?». La respuesta es
+  sí;
+- así que el primer bloque se ejecuta y muestra «Hace calor.»;
+- el bloque del `else` se salta: solo sirve si la respuesta es no.
 
 Para más de dos casos, encadena con `else if` («si no, si»). Las pruebas se leen
 en orden; la primera verdadera gana, las demás se ignoran.
@@ -51,7 +62,32 @@ if (nota >= 16) {
 Notable
 ```
 
+**Te toca:** escribe un programa que guarde `15` en una constante `hora` y luego
+muestre «Buenos días» si la hora es antes de las 12, «Buenas tardes» si es antes de
+las 18, y «Buenas noches» si no.
+
+> **Solución**
+>
+> ```typescript
+> const hora: number = 15;
+> if (hora < 12) {
+>   console.log("Buenos días");
+> } else if (hora < 18) {
+>   console.log("Buenas tardes");
+> } else {
+>   console.log("Buenas noches");
+> }
+> ```
+>
+> ```sortie
+> Buenas tardes
+> ```
+
 ## Comparar con ===
+
+Para decidir, un programa hace primero una pregunta: «¿la edad vale 20?», «¿la
+temperatura pasa de 25?». Los operadores de comparación sirven para escribir esas
+preguntas. La respuesta siempre es sí (`true`) o no (`false`).
 
 Los operadores de comparación dan un `boolean` (`true` o `false`):
 
@@ -81,6 +117,15 @@ false
 false
 ```
 
+Línea por línea:
+
+- `edad === 20` es verdadero y `edad !== 20` es falso: la primera línea muestra
+  `true false`;
+- `edad >= 18 && tieneEntrada`: las dos pruebas son verdaderas, así que `&&` da
+  `true`;
+- `edad < 12 || edad > 65`: ninguna de las dos es verdadera, así que `||` da `false`;
+- `!tieneEntrada` invierte `true`: se obtiene `false`.
+
 > **Atención:** escribe siempre `===` (tres signos), nunca `==` (dos). `==`
 > transforma los valores antes de comparar: ¡`0 == ""` vale `true` en JavaScript!
 > Y un solo `=` no compara: guarda un valor en una variable.
@@ -89,7 +134,30 @@ TypeScript vigila tus comparaciones. Comparar un número y un texto siempre da
 falso: seguramente es un error, y te lo dice (ver los
 [errores frecuentes](#errores-frecuentes)).
 
+**Te toca:** escribe un programa que guarde `70` en una constante `edad` y luego
+muestre «Tarifa reducida» si la edad es menor de 18 o mayor o igual que 65, y
+«Tarifa completa» si no.
+
+> **Solución**
+>
+> ```typescript
+> const edad: number = 70;
+> if (edad < 18 || edad >= 65) {
+>   console.log("Tarifa reducida");
+> } else {
+>   console.log("Tarifa completa");
+> }
+> ```
+>
+> ```sortie
+> Tarifa reducida
+> ```
+
 ## Los valores «verdaderos» y «falsos»
+
+A menudo solo quieres saber si una casilla está rellena: un nombre escrito, un
+mensaje no vacío. Un `if` te deja preguntarlo muy rápido, siempre que conozcas sus
+reglas.
 
 Un `if` acepta cualquier valor, no solo un `boolean`. Seis valores
 cuentan como falsos (*falsy*):
@@ -117,12 +185,22 @@ false false false
 true true true
 ```
 
+Línea por línea:
+
+- `texto` contiene `""`, el texto vacío;
+- `if (texto)`: el texto vacío cuenta como falso, así que se ejecuta el bloque del
+  `else`;
+- las dos últimas líneas muestran cómo ve un `if` seis valores: los tres primeros
+  cuentan como falsos, los tres siguientes como verdaderos.
+
 `Boolean(x)` muestra cómo ve un `if` el valor `x`.
 
 > **Consejo:** cuando sea posible, escribe la prueba completa: `texto !== ""` o
 > `numero !== 0`. Quien lee entiende enseguida qué estás probando.
 
 ## El operador ternario
+
+> **Nota:** esta parte puede esperar. Léela cuando las bases estén firmes.
 
 El ternario `prueba ? siVerdadero : siFalso` es un `if/else` que **da un valor**.
 Cabe en una línea.
@@ -148,6 +226,10 @@ Léelo como una pregunta: «¿edad ≥ 18? entonces "mayor de edad", si no "meno
 
 ## switch: elegir entre varios valores
 
+Cuando una misma variable puede tomar muchos valores, una larga serie de `else if`
+se hace pesada de leer. `switch` coloca los casos uno debajo de otro, como los cajones
+etiquetados de una cómoda.
+
 `switch` compara un valor con una lista de casos (`case`). Ejecuta el código del caso que
 coincide. `break` sale del `switch`; `default` trata todos los demás casos.
 
@@ -171,6 +253,14 @@ switch (dia) {
 ¡Fin de semana!
 ```
 
+Línea por línea:
+
+- `dia` contiene `"sábado"`;
+- `switch (dia)` compara ese valor con cada `case`, de arriba abajo;
+- `case "sábado":` coincide: la ejecución empieza ahí, baja hasta el `console.log` y
+  muestra «¡Fin de semana!»;
+- `break` sale del `switch`: los demás casos se ignoran.
+
 Dos `case` seguidos comparten el mismo código: `sábado` y `domingo` muestran
 «¡Fin de semana!».
 
@@ -178,6 +268,9 @@ Dos `case` seguidos comparten el mismo código: `sábado` y `domingo` muestran
 > `break` es una trampa clásica.
 
 ## Los bucles
+
+Imagina que te piden mostrar los números del 1 al 100. Escribir 100 `console.log`
+sería largo y pesado. Un bucle hace ese trabajo repetitivo por ti.
 
 Un [bucle](../debuter/glossaire.md#bucle) repite un bloque de código.
 
@@ -202,6 +295,25 @@ Vuelta 3
 - `i <= 3`: se continúa mientras `i` valga como mucho 3;
 - `i++`: después de cada vuelta, se suma 1 a `i`.
 
+**Te toca:** escribe un programa que muestre la tabla del 7, de «7 x 1 = 7» a
+«7 x 5 = 35», una línea por cálculo.
+
+> **Solución**
+>
+> ```typescript
+> for (let i = 1; i <= 5; i++) {
+>   console.log(`7 x ${i} = ${7 * i}`);
+> }
+> ```
+>
+> ```sortie
+> 7 x 1 = 7
+> 7 x 2 = 14
+> 7 x 3 = 21
+> 7 x 4 = 28
+> 7 x 5 = 35
+> ```
+
 ### while: mientras
 
 `while` («mientras») repite mientras su condición sea verdadera. Úsalo cuando
@@ -222,6 +334,16 @@ console.log(`${anios} años, ${dinero.toFixed(2)} euros`);
 ```sortie
 5 años, 161.05 euros
 ```
+
+Línea por línea:
+
+- al principio, `dinero` vale 100 y `anios` vale 0;
+- antes de cada vuelta, `while` comprueba `dinero < 150`. 100 es menor: entra en el
+  bloque;
+- en cada vuelta, `dinero` crece un 10 % (110, luego 121, 133.1, 146.41, 161.051) y
+  `anios` aumenta en 1;
+- tras 5 vueltas, `dinero < 150` es falso: el bucle se detiene, y el último
+  `console.log` muestra el resultado, redondeado a dos cifras por `toFixed(2)`.
 
 > **Atención:** si la condición sigue siendo siempre verdadera, el bucle no se detiene nunca.
 > Comprueba que algo cambia en cada vuelta. Para detener un programa bloqueado,
@@ -248,6 +370,26 @@ KIWI
 
 TypeScript sabe que `frutas` contiene `string`: por tanto `fruta` es un `string`, y
 `toUpperCase()` está permitido. Basta con un `const`: cada vuelta crea una nueva `fruta`.
+
+**Te toca:** escribe un programa que guarde la lista de la compra `["pan", "leche",
+"huevos"]` en una constante y luego muestre cada artículo en su línea, precedido de
+un guion.
+
+> **Solución**
+>
+> ```typescript
+> const compras = ["pan", "leche", "huevos"];
+>
+> for (const articulo of compras) {
+>   console.log(`- ${articulo}`);
+> }
+> ```
+>
+> ```sortie
+> - pan
+> - leche
+> - huevos
+> ```
 
 ### break y continue
 
@@ -276,6 +418,8 @@ for (let i = 1; i <= 10; i++) {
 Los números pares se saltan (`continue`), y el bucle se detiene en 9 (`break`).
 
 ## El estrechamiento: los tipos siguen tus pruebas
+
+> **Nota:** esta parte puede esperar. Léela cuando las bases estén firmes.
 
 Esto es lo que aportan los tipos a las condiciones. Cuando una variable puede tener
 varios tipos, una prueba **estrecha** su tipo dentro del bloque (*narrowing*). Es como
@@ -306,6 +450,9 @@ En el primer bloque, TypeScript sabe que `respuesta` es un `string`: permite
 
 ## Los valores ausentes: ?? y ?.
 
+A veces falta un dato: un campo de formulario que se dejó vacío, un ajuste que nunca
+se eligió. Estos dos operadores evitan que tu programa falle en ese caso.
+
 Un valor de tipo `string | undefined` puede faltar. Dos operadores ayudan a
 manejarlo sin riesgo.
 
@@ -326,6 +473,14 @@ for (const volumen of volumenes) {
 0 5
 5 5
 ```
+
+Línea por línea:
+
+- `volumenes` contiene tres ajustes: 7, 0 y `null` (ningún ajuste);
+- el bucle los toma uno a uno y muestra dos columnas: `volumen ?? 5`, y luego
+  `volumen || 5`;
+- para 7, los dos conservan 7; para `null`, los dos dan 5;
+- para 0, no están de acuerdo: esa es toda la diferencia.
 
 Compara las dos columnas: `||` reemplaza **todos** los valores falsos, incluido
 `0`. `??` solo reemplaza `null` y `undefined`. Un volumen a `0` es un ajuste de verdad:
@@ -392,6 +547,14 @@ Pasa
 Frena
 Para
 ```
+
+Línea por línea:
+
+- `type Semaforo = ...` crea un tipo que solo acepta tres textos;
+- `semaforos` es una lista de `Semaforo`: TypeScript rechazaría `"azul"` en ella;
+- el bucle toma cada luz, y el `switch` muestra el mensaje del `case` que coincide;
+- el `default` nunca se alcanza aquí: sirve para la comprobación que se explica justo
+  después.
 
 El tipo `never` quiere decir «ningún valor posible». En el `default`, todos los casos
 ya se han tratado: `luz` ya no puede valer nada, así que su tipo es `never`, y la

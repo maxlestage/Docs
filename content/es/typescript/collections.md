@@ -13,6 +13,9 @@ Esta página explica cómo guardar varios valores en arrays, tuplas, `Map` y `Se
 
 ## Crear un array
 
+Imagina una lista de la compra: una sola hoja, varios artículos, en un orden preciso.
+Un array cumple ese papel en un programa: guarda varios valores bajo un solo nombre.
+
 Un array es una [lista](../debuter/glossaire.md#lista) ordenada de valores, escrita
 entre corchetes. Su tipo se escribe con el tipo de los elementos seguido de `[]`:
 
@@ -29,6 +32,13 @@ console.log(nombres.length, vacio.length);
 [ 12, 15, 9 ]
 3 0
 ```
+
+Línea por línea:
+
+- `notas` recibe tres números; `number[]` anuncia «solo números»;
+- `nombres` recibe tres textos, y `vacio` un array sin ningún elemento;
+- `console.log(notas)` muestra el array entero, entre corchetes;
+- `.length` da el número de elementos: 3 para `nombres`, 0 para `vacio`.
 
 `number[]` se lee «array de números». Existe otra forma de escribirlo, que significa
 exactamente lo mismo: `Array<number>`. Los signos `< >` indican el tipo de los
@@ -52,6 +62,9 @@ puede saber qué vas a guardar en él.
 > forma.
 
 ## Leer y modificar
+
+Una lista está viva: miras un artículo, cambias uno, añades uno abajo, tachas el
+último. Un array permite todo eso.
 
 Cada elemento tiene un [índice](../debuter/glossaire.md#indice) que empieza en **0**.
 
@@ -77,6 +90,17 @@ fresa [ 'manzana', 'mango', 'kiwi' ]
 true 2
 ```
 
+Línea por línea:
+
+- `frutas[0]` lee la primera casilla: `"manzana"`; `at(-1)` cuenta desde el final:
+  `"kiwi"`;
+- `frutas[1] = "mango"` reemplaza `"pera"`, y luego `push` añade `"fresa"`: 4
+  elementos;
+- `pop()` quita `"fresa"` y la guarda en `ultima`: quedan 3 elementos;
+- `"kiwi"` sigue ahí, en la posición 2 (la tercera casilla, porque se cuenta desde 0).
+
+Los métodos que debes conocer:
+
 - `frutas[1] = ...` reemplaza un elemento;
 - `push` añade al final, `pop` quita y devuelve el último;
 - `includes` responde `true` o `false`, `indexOf` da la posición (`-1` si no está).
@@ -87,6 +111,23 @@ array por otro.
 > **Atención:** leer un índice que no existe (`frutas[10]`) da `undefined`, pero
 > TypeScript anuncia de todos modos un `string`. Comprueba antes la longitud, o
 > prefiere `at()`, cuyo tipo `string | undefined` te recuerda el riesgo.
+
+**Te toca:** escribe un programa que cree un array `compra` con `"pan"` y `"leche"`,
+añada `"huevos"` al final y luego muestre el número de artículos y el array.
+
+> **Solución**
+>
+> ```typescript
+> const compra: string[] = ["pan", "leche"];
+> compra.push("huevos");
+> console.log(compra.length);
+> console.log(compra);
+> ```
+>
+> ```sortie
+> 3
+> [ 'pan', 'leche', 'huevos' ]
+> ```
 
 ### Recorrer un array
 
@@ -110,6 +151,9 @@ for (const [i, nombre] of podio.entries()) {
 explicada más abajo con las tuplas.
 
 ## Los arrays de solo lectura
+
+Algunas listas no deben cambiar nunca: los días de la semana, los meses del año.
+`readonly` te protege de modificarlas por error.
 
 Añade `readonly` delante del tipo: el array ya no se puede modificar. `push`, `pop` o
 `frutas[0] = ...` se rechazan.
@@ -147,6 +191,10 @@ console.log(media([12, 15, 9]));
 
 ## Las tuplas
 
+A veces, dos o tres valores de tipos distintos van juntos, como una fila de una tabla
+de puntuaciones: un nombre y unos puntos. La tupla los mantiene uno al lado del otro,
+en un orden fijo.
+
 Una [tupla](../debuter/glossaire.md#tupla) es un array de **longitud fija**, donde
 cada posición tiene su propio tipo. `[string, number]` significa: «exactamente dos
 elementos, un texto y luego un número».
@@ -166,6 +214,13 @@ ALICE
 1250
 Alice tiene 1200 puntos.
 ```
+
+Línea por línea:
+
+- `jugador` contiene dos casillas: `"Alice"` (un texto) y luego `1200` (un número);
+- `jugador[0].toUpperCase()` pone el texto en mayúsculas: `ALICE`;
+- `jugador[1] + 50` calcula con el número: `1250`. `jugador` no cambia;
+- el final guarda `"Alice"` en `nombre` y `1200` en `puntos`, y muestra la frase.
 
 TypeScript sabe que `jugador[0]` es un `string` y `jugador[1]` un `number`. La línea
 `const [nombre, puntos] = jugador;` guarda el primer elemento en `nombre` y el segundo
@@ -193,7 +248,27 @@ separados: `Math.min(4, 9, 1, 7)`.
 > (¿qué significa `jugador[3]`?). Prefiere entonces un objeto con nombres de
 > propiedades: ver [los objetos](objets.md).
 
+**Te toca:** escribe un programa que guarde un producto en una tupla
+`[string, number]`: `"bolígrafo"` y `2`. Sepáralo en dos variables y muestra
+«bolígrafo cuesta 2 €».
+
+> **Solución**
+>
+> ```typescript
+> const producto: [string, number] = ["bolígrafo", 2];
+> const [articulo, precio] = producto;
+> console.log(`${articulo} cuesta ${precio} €`);
+> ```
+>
+> ```sortie
+> bolígrafo cuesta 2 €
+> ```
+
 ## Transformar: map, filter, reduce
+
+Muy a menudo, quieres hacer lo mismo con toda una lista: subir todos los precios,
+quedarte con las buenas notas, calcular un total. Estos métodos lo hacen en una línea,
+sin escribir un bucle.
 
 Estos tres métodos reciben un *callback* (una función, ver
 [las funciones](fonctions.md#los-callbacks-pasar-una-funcion-a-una-funcion)). No
@@ -214,6 +289,14 @@ console.log(etiquetas);
 [ 12, 24, 42 ]
 [ '10 €', '20 €', '35 €' ]
 ```
+
+Línea por línea:
+
+- `precios` contiene tres números;
+- `precios.map((p) => p * 1.2)` da cada precio a `p`, uno tras otro, y guarda cada
+  resultado en un array nuevo: `[12, 24, 42]`;
+- la línea siguiente hace lo mismo, pero el callback fabrica un texto: `"10 €"`…;
+- `precios` no ha cambiado: sigue valiendo `[10, 20, 35]`.
 
 TypeScript lo adivina todo: `p` es un `number` (un elemento de `precios`),
 `preciosConIva` es un `number[]`, y `etiquetas` un `string[]`, porque el callback
@@ -260,7 +343,28 @@ console.log(letras);
 En la primera vuelta, `suma` vale `0` (el valor inicial); después `4.5`, `16.5` y por
 último `20`. El tipo del acumulador viene del valor inicial: `0` da un `number`.
 
+**Te toca:** a partir de `const numeros = [2, 5, 8];`, escribe un programa que cree
+el array de los dobles con `map` y luego calcule la suma de `numeros` con `reduce`.
+Muestra los dos resultados.
+
+> **Solución**
+>
+> ```typescript
+> const numeros = [2, 5, 8];
+> const dobles = numeros.map((n) => n * 2);
+> const suma = numeros.reduce((acc, n) => acc + n, 0);
+> console.log(dobles);
+> console.log(suma);
+> ```
+>
+> ```sortie
+> [ 4, 10, 16 ]
+> 15
+> ```
+
 ### Encadenar
+
+> **Nota:** esta parte puede esperar. Léela cuando las bases estén firmes.
 
 Como cada método devuelve un array, se pueden encadenar:
 
@@ -305,6 +409,9 @@ console.log([...numeros].sort((a, b) => b - a));
 
 ## find: un resultado que puede faltar
 
+Buscar en una lista es como buscar un nombre en una agenda: a veces no está.
+TypeScript te obliga a prever ese caso.
+
 `find` devuelve el **primer** elemento que cumple la prueba. Si no encuentra ninguno,
 devuelve `undefined`. Su tipo lo dice claramente: para un `string[]`, es
 `string | undefined`.
@@ -321,6 +428,12 @@ console.log(conC, conZ);
 ```sortie
 Chloé undefined
 ```
+
+Línea por línea:
+
+- `find` prueba cada nombre con la prueba `p.startsWith("C")` («¿empieza por C?»);
+- `"Alice"` y `"Bob"` fallan, `"Chloé"` la supera: `conC` vale `"Chloé"`;
+- ningún nombre empieza por Z: `conZ` vale `undefined`.
 
 Aquí es donde TypeScript te protege: no puedes usar el resultado como un `string` sin
 tratar el caso `undefined`. Tres formas de hacerlo:
@@ -384,6 +497,15 @@ manzanas: 12
 peras: 4
 ```
 
+Línea por línea:
+
+- `new Map<string, number>()` crea un `Map` vacío: claves de texto, valores numéricos;
+- los `set` guardan `manzanas → 10` y `peras → 4`, y luego reemplazan 10 por 12;
+- `get("manzanas")` da 12; la clave `"kiwis"` no existe, y el `Map` tiene 2 pares;
+- el bucle `for...of` da cada par, en el orden en que se añadieron.
+
+Los métodos que debes conocer:
+
 - `set(clave, valor)` añade o reemplaza (una clave es única);
 - `get(clave)` lee el valor, `has(clave)` comprueba si la clave existe;
 - `size` da el número de pares; `delete(clave)` quita uno.
@@ -402,7 +524,29 @@ console.log(kiwis + 5);
 5
 ```
 
+**Te toca:** escribe un programa que cree un `Map` de edades, guarde en él `"Alice"`
+(30 años) y `"Bob"` (25 años), y luego muestre la edad de Bob y la de `"Zoé"`, con 0
+si no está.
+
+> **Solución**
+>
+> ```typescript
+> const edades = new Map<string, number>();
+> edades.set("Alice", 30);
+> edades.set("Bob", 25);
+> console.log(edades.get("Bob"));
+> console.log(edades.get("Zoé") ?? 0);
+> ```
+>
+> ```sortie
+> 25
+> 0
+> ```
+
 ## Set: una colección sin duplicados
+
+Piensa en la lista de invitados de una fiesta: escribir dos veces el mismo nombre no
+sirve de nada. Un `Set` se encarga de ello y descarta los duplicados.
 
 Un `Set` es un [conjunto](../debuter/glossaire.md#conjunto): cada valor aparece en él
 una sola vez. Su tipo se escribe `Set<T>`.
@@ -427,10 +571,21 @@ true
 [ 3, 1, 2 ]
 ```
 
+Línea por línea:
+
+- `visitantes` empieza vacío;
+- `add` añade `"Alice"` y luego `"Bob"`. El segundo `"Alice"` se ignora: ya está;
+- por eso `size` vale 2, y `has("Bob")` responde `true`;
+- el final crea un `Set` a partir del array y lo vuelve a convertir en array con
+  `[...]`.
+
 `new Set(array)` y luego `[...]` es el truco clásico para quitar los duplicados de un
 array, conservando el orden de primera aparición.
 
 ## Record: un objeto clave-valor
+
+Un `Record` se parece a una hoja de puntuaciones: un nombre, un número, un nombre, un
+número. Lo escribes de una vez, como un objeto normal.
 
 `Record<string, number>` describe un objeto simple cuyas claves son textos y cuyos
 valores son números. Es más ligero que un `Map`, y se escribe directamente con llaves.
@@ -459,6 +614,14 @@ alice  12
 bob    9
 chloe  15
 ```
+
+Línea por línea:
+
+- `puntuaciones` empieza con dos pares: `alice → 12` y `bob → 8`;
+- `puntuaciones.chloe = 15` añade una clave; `puntuaciones["bob"] += 1` sube a Bob a 9;
+- `Object.keys` lista las claves, en el orden en que se añadieron;
+- el bucle da cada par; `padEnd(6)` completa el nombre con espacios, para alinear las
+  columnas.
 
 `Object.keys` da las claves, `Object.entries` los pares `[clave, valor]`.
 

@@ -14,6 +14,9 @@ This page shows how to handle text in TypeScript: measure, search, cut, replace,
 
 ## Strings
 
+A program handles text all the time: a first name, a message, an email address.
+Knowing how to measure it and read its letters one by one is the first step.
+
 A text is a [string](../debuter/glossaire.md#string), of type `string`.
 Each character has a position, its [index](../debuter/glossaire.md#index), which
 starts at **0**.
@@ -44,6 +47,9 @@ method of a `string`: type `word.` and it suggests them, with their type.
 
 ## Changing case and cleaning up
 
+A text typed by someone is rarely clean: extra spaces, random capital letters. These
+methods tidy it up, the way you sort out a drawer before using it.
+
 ```typescript
 const input = "  Marie Curie  ";
 
@@ -72,7 +78,25 @@ TypeScript forbids it anyway: `word[0] = "w"` is refused (see the
 > **Tip:** apply `trim()` to any text typed by a user: extra spaces are a classic cause
 > of failed comparisons.
 
+**Your turn:** write a program that stores `"  hello  "` in a variable, removes the spaces
+around it, then displays the result in uppercase.
+
+> **Solution**
+>
+> ```typescript
+> const input = "  hello  ";
+> const clean = input.trim();
+> console.log(clean.toUpperCase());
+> ```
+>
+> ```sortie
+> HELLO
+> ```
+
 ## Searching in a text
+
+Before acting, a program often needs to check something: does an address contain an
+`@`? Does a file name end with `.pdf`?
 
 These methods answer a question. Their return type tells you what shape the answer
 has:
@@ -102,6 +126,15 @@ false
 -1
 ```
 
+Line by line:
+
+- `sentence` holds the text you search in;
+- `includes("cat")` answers `true`: the word "cat" is in the sentence;
+- `endsWith("!")` answers `false`: the sentence ends with a period, not with `!`;
+- `indexOf("sleeps")` gives `8`: counting from 0, the "s" of "sleeps" is the ninth
+  character;
+- `indexOf("dog")` gives `-1`: "dog" appears nowhere.
+
 All these searches tell uppercase and lowercase apart: `"Cat"` is not `"cat"`. To
 search without caring about case, put everything in lowercase first.
 
@@ -115,6 +148,9 @@ true
 ```
 
 ## Extracting a piece with slice
+
+Often, only part of a text interests you: the year in a file name, the extension at
+the end. `slice` cuts out that piece, like a pair of scissors.
 
 `slice(start, end)` cuts out part of the text, from character `start` **included** to
 character `end` **excluded**. Without `end`, it goes to the end. A negative number
@@ -134,10 +170,37 @@ report
 pdf
 ```
 
+Line by line:
+
+- `file` holds `"report-2024.pdf"`: the "r" is at position 0, the dash at position 6;
+- `slice(0, 6)` takes positions 0 to 5: `report`;
+- `slice(7, 11)` takes positions 7 to 10, just after the dash: `2024`;
+- `slice(-3)` takes the last three characters: `pdf`.
+
 Think of positions as the marks on a ruler: `slice(0, 6)` takes everything between
 mark 0 and mark 6.
 
+**Your turn:** write a program that stores the date `"2026-10-19"` in a variable, then
+displays the year on one line and the month on the next, using `slice`.
+
+> **Solution**
+>
+> ```typescript
+> const date = "2026-10-19";
+> console.log(date.slice(0, 4));
+> console.log(date.slice(5, 7));
+> ```
+>
+> ```sortie
+> 2026
+> 10
+> ```
+
 ## Splitting and joining
+
+Data often arrives on a single line: a shopping list separated by commas, a
+spreadsheet row separated by `;`. To handle each item, you first have to cut that
+line.
 
 `split(separator)` cuts a text into pieces. It returns an **array of texts**, of type
 `string[]`. `join(separator)` does the opposite: it glues an array back into a single
@@ -160,10 +223,20 @@ apple, pear, kiwi
 [ 'a', 'b', 'c' ]
 ```
 
+Line by line:
+
+- `line` is a single text, with `;` between the fruits;
+- `split(";")` cuts at each `;` and stores the three pieces in the array `fruits`;
+- `fruits.length` counts the pieces: 3;
+- `join(", ")` glues the pieces back, putting `", "` between each one.
+
 `split("")` cuts between every character. Arrays are covered in detail in
 [the chapter on arrays](collections.md).
 
 ## Replacing
+
+Fixing a word, removing the spaces from a phone number: that's the "find and replace"
+feature of a word processor. In code, it's these two methods.
 
 `replace(a, b)` replaces the **first** occurrence of `a` with `b`. `replaceAll`
 replaces every occurrence.
@@ -183,6 +256,9 @@ The dog sees the dog.
 ```
 
 ## Converting between text and number
+
+Everything a user types on the keyboard arrives as text, even an age or a price. To
+calculate with it, you first have to convert it.
 
 A text that contains digits is still a text: `"42"` is not `42`. TypeScript stops you
 from mixing them up. To convert, use:
@@ -231,6 +307,21 @@ for (const attempt of attempts) {
 "twelve" is not a number.
 ```
 
+**Your turn:** write a program that stores the texts `"20"` and `"22"` in two variables,
+converts them to numbers, then displays their sum.
+
+> **Solution**
+>
+> ```typescript
+> const first = "20";
+> const second = "22";
+> console.log(Number(first) + Number(second));
+> ```
+>
+> ```sortie
+> 42
+> ```
+
 ## Literal types: "yes" | "no"
 
 Here is a strength of TypeScript. A type can accept **only certain texts**. You list
@@ -251,6 +342,15 @@ console.log(reply("no"));
 Perfect!
 Too bad.
 ```
+
+Line by line:
+
+- `type Answer = "yes" | "no";` creates a new type, which only accepts these two
+  texts;
+- the function `reply` receives `r`, of type `Answer`;
+- `r === "yes" ? "Perfect!" : "Too bad."` chooses: if `r` is `"yes"`, the result is
+  `"Perfect!"`, otherwise `"Too bad."`;
+- the two calls therefore display one answer each.
 
 `"yes"` and `"no"` are **literal types**: each one accepts a single text. Their union
 `"yes" | "no"` accepts one or the other, and nothing else. It's like a form with
@@ -278,6 +378,8 @@ green 3
 > size), use a union of literal types rather than `string`.
 
 ### Template literal types, in short
+
+> **Note:** this part can wait. Read it once the basics feel solid.
 
 TypeScript can even describe the **shape** of a text, with the template string syntax.
 These are *template literal types*:
@@ -352,6 +454,9 @@ console.log(short.format(2));
 
 ## Lining up columns with padStart and padEnd
 
+When you display a list of prices, the digits must line up under each other, or it's
+hard to read. These methods add just the right amount of filling.
+
 `padStart(length, filler)` fills a text **at the start** up to the wanted length.
 `padEnd` fills **at the end**. Without a filler, it uses spaces.
 
@@ -366,6 +471,13 @@ console.log("ok".padEnd(5, ".") + "|");
    42|
 ok...|
 ```
+
+Line by line:
+
+- `"7".padStart(3, "0")` adds `0`s at the start up to 3 characters: `007`;
+- `"42".padStart(5)` adds three spaces before `42`; the `|` shows where the text
+  ends;
+- `"ok".padEnd(5, ".")` adds three dots after `ok`, to reach 5 characters.
 
 It's perfect for printing a neatly aligned table: texts on the left with `padEnd`,
 numbers on the right with `padStart`.
@@ -392,6 +504,23 @@ Total         117.70
 
 `repeat(20)` repeats a text 20 times. The decimal points of the prices line up, like on
 a receipt.
+
+**Your turn:** write a program that displays the numbers `"1"`, `"25"` and `"300"` with
+three digits, filling with zeros at the start.
+
+> **Solution**
+>
+> ```typescript
+> console.log("1".padStart(3, "0"));
+> console.log("25".padStart(3, "0"));
+> console.log("300".padStart(3, "0"));
+> ```
+>
+> ```sortie
+> 001
+> 025
+> 300
+> ```
 
 ## Common mistakes
 

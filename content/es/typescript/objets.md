@@ -14,6 +14,10 @@ Esta página explica cómo agrupar valores en objetos, describir su forma con `i
 
 ## Crear un objeto
 
+Imagina que guardas la información de un libro en tres variables separadas: `titulo`,
+`autor`, `paginas`. Con diez libros, sería un desorden enseguida. Un objeto guarda todo
+lo que se refiere a una misma cosa en una sola caja.
+
 Un [objeto](../debuter/glossaire.md#objeto) agrupa varios valores bajo un mismo nombre.
 Cada valor tiene una etiqueta: su **propiedad**. Se escribe entre llaves, con pares
 `nombre: valor`.
@@ -48,7 +52,32 @@ TypeScript adivina el tipo de este objeto: `{ titulo: string; autor: string; pag
 number }`. Así que conoce cada propiedad y su tipo. `libro.paginas = "muchas"` sería
 rechazado, y también una errata como `libro.titulos`.
 
+**Te toca:** escribe un programa que cree un objeto `pelicula` con un `titulo` («El rey
+león») y un `anio` (1994). Muestra el título, cambia el año a 2019 y luego muestra el
+año.
+
+> **Solución**
+>
+> ```typescript
+> const pelicula = {
+>   titulo: "El rey león",
+>   anio: 1994,
+> };
+>
+> console.log(pelicula.titulo);
+> pelicula.anio = 2019;
+> console.log(pelicula.anio);
+> ```
+>
+> ```sortie
+> El rey león
+> 2019
+> ```
+
 ## Describir un objeto: el tipo objeto
+
+Una función no ve de antemano el objeto que le darás. Para que sepa qué propiedades
+tendrá, debes describirle el objeto esperado, como una lista de lo que hay que traer.
 
 Para una función que recibe un objeto, hay que escribir su forma. Se describe entre
 llaves, como un objeto, pero con tipos en lugar de valores:
@@ -65,10 +94,23 @@ console.log(presentar({ nombre: "Alicia", edad: 30 }));
 Alicia, 30 años
 ```
 
+Línea por línea:
+
+- `persona: { nombre: string; edad: number }` dice que el parámetro `persona` debe
+  tener un `nombre` (texto) y una `edad` (número);
+- `: string` después del paréntesis anuncia que la función devuelve un texto;
+- la llamada `presentar({ nombre: "Alicia", edad: 30 })` crea un objeto en el sitio y
+  se lo da a la función;
+- dentro de la función, `persona.nombre` vale `"Alicia"` y `persona.edad` vale `30`:
+  devuelve `"Alicia, 30 años"`, que `console.log` muestra.
+
 Escribir esta forma cada vez sería pesado. Por eso se le da un nombre, de dos maneras
 posibles: `interface` o `type`.
 
 ## interface y type
+
+Dar un nombre a una forma es como crear un modelo de formulario: lo dibujas una vez y
+luego lo usas para cada ficha nueva. Si la forma cambia, la corriges en un solo sitio.
 
 ### interface
 
@@ -96,6 +138,16 @@ console.log(presentar(bruno));
 Alicia, 30 años
 Bruno, 25 años
 ```
+
+Línea por línea:
+
+- `interface Persona { … }` no crea ningún valor: solo describe una forma, con un
+  `nombre` y una `edad`;
+- `const alicia: Persona = …` crea un objeto y pide a TypeScript que compruebe que
+  tiene esa forma. Lo mismo para `bruno`;
+- `function presentar(p: Persona)` acepta cualquier `Persona`;
+- los dos `console.log` llaman a la misma función, primero con `alicia` y luego con
+  `bruno`.
 
 Por convención, el nombre de una interfaz empieza por mayúscula.
 
@@ -132,7 +184,35 @@ Para describir un objeto, los dos valen casi siempre lo mismo. La diferencia:
 > para todo lo demás (uniones, tuplas, funciones). Sobre todo, sé coherente dentro de
 > un mismo proyecto.
 
+**Te toca:** escribe una interfaz `Animal` con un `nombre` (texto) y un número de
+`patas` (número). Crea un gato (4 patas) y una gallina (2 patas), y luego muestra «El
+gato tiene 4 patas.» y «La gallina tiene 2 patas.» leyendo sus propiedades.
+
+> **Solución**
+>
+> ```typescript
+> interface Animal {
+>   nombre: string;
+>   patas: number;
+> }
+>
+> const gato: Animal = { nombre: "gato", patas: 4 };
+> const gallina: Animal = { nombre: "gallina", patas: 2 };
+>
+> console.log(`El ${gato.nombre} tiene ${gato.patas} patas.`);
+> console.log(`La ${gallina.nombre} tiene ${gallina.patas} patas.`);
+> ```
+>
+> ```sortie
+> El gato tiene 4 patas.
+> La gallina tiene 2 patas.
+> ```
+
 ## Las propiedades opcionales
+
+En la vida real, no siempre se sabe todo. En un formulario, algunas casillas son
+obligatorias (el nombre) y otras opcionales (el teléfono). El `?` sirve para decirle
+eso a TypeScript.
 
 Un `?` después del nombre hace que una propiedad sea opcional: el objeto puede tenerla
 o no. Su tipo pasa a ser `string | undefined`.
@@ -156,10 +236,42 @@ Alicia: alicia@ejemplo.es
 Bruno: sin dirección
 ```
 
+Línea por línea:
+
+- `email?: string`: la propiedad `email` puede faltar;
+- `alicia` tiene un email, `bruno` no: los dos son `Usuario` válidos;
+- el bucle `for` toma `alicia`, luego `bruno`, y los guarda por turnos en `u`;
+- `u.email ?? "sin dirección"` da el email si existe y, si no, el texto «sin
+  dirección».
+
 Antes de usar `u.email` como un texto, TypeScript te obliga a tratar el caso en que
 falte: con `??`, `?.` o un `if`.
 
+**Te toca:** escribe una interfaz `Contacto` con un `nombre` (texto) y un `telefono`
+opcional (texto). Crea el contacto «Karim» sin teléfono y luego muestra «Karim: sin
+número».
+
+> **Solución**
+>
+> ```typescript
+> interface Contacto {
+>   nombre: string;
+>   telefono?: string;
+> }
+>
+> const karim: Contacto = { nombre: "Karim" };
+> console.log(`${karim.nombre}: ${karim.telefono ?? "sin número"}`);
+> ```
+>
+> ```sortie
+> Karim: sin número
+> ```
+
 ## Las propiedades de solo lectura
+
+Algunos datos nunca deben cambiar una vez escritos, como el número impreso en un
+documento de identidad. `readonly` pide a TypeScript que los proteja contra un cambio
+hecho por error.
 
 `readonly` delante de una propiedad impide modificarla después de crear el objeto.
 
@@ -179,6 +291,13 @@ console.log(llegada);
 { x: 3, y: 4 }
 ```
 
+Línea por línea:
+
+- `readonly x` y `readonly y`: una vez creado un punto, sus coordenadas quedan fijas;
+- `salida` vale `{ x: 0, y: 0 }`;
+- `llegada` es un punto **nuevo**, calculado a partir de `salida`: `0 + 3` y `0 + 4`;
+- `salida` no ha cambiado: se han leído sus valores, sin modificarlos.
+
 Para «mover» un punto, se crea uno nuevo. Esta comprobación solo existe en
 TypeScript: al ejecutar el programa, el objeto es un objeto JavaScript normal.
 
@@ -186,6 +305,12 @@ TypeScript: al ejecutar el programa, el objeto es un objeto JavaScript normal.
 > identificador. TypeScript las vigilará por ti.
 
 ## Los objetos anidados y los métodos
+
+> **Nota:** esta parte puede esperar. Léela cuando las bases estén firmes.
+
+Una ficha real suele contener otras fichas: un cliente tiene una dirección, que a su
+vez tiene una ciudad y un código postal. Así que un objeto puede contener otro, como
+una caja guardada dentro de otra caja.
 
 Una propiedad puede contener otro objeto, un array o una función. Una función guardada
 en un objeto se llama [método](../debuter/glossaire.md#metodo).
@@ -228,6 +353,9 @@ Sevilla
 
 ## Extender una interfaz
 
+Cuando dos formas se parecen mucho, escribirlas dos veces sería largo. Y con cada
+cambio, habría que acordarse de corregir las dos.
+
 `extends` («extiende») crea una interfaz que toma todas las propiedades de otra y
 añade algunas. Es como una ficha «Alumno» que toma la ficha «Persona» y añade el
 curso.
@@ -257,6 +385,13 @@ Lea (15 años)
 4.º B
 ```
 
+Línea por línea:
+
+- `Alumno extends Persona`: un `Alumno` tiene un `nombre`, una `edad` **y** un `curso`;
+- así que `lea` debe tener las tres propiedades;
+- `presentar` espera una `Persona`: solo lee el `nombre` y la `edad` de `lea`;
+- `lea.curso` sigue disponible, porque `lea` es un `Alumno`.
+
 Un `Alumno` tiene todo lo que tiene una `Persona`: por eso se le puede pasar a
 `presentar`.
 
@@ -273,6 +408,29 @@ console.log(rex.nombre, rex.raza);
 ```sortie
 Rex pastor
 ```
+
+**Te toca:** escribe una interfaz `Vehiculo` con una `marca` (texto) y luego una
+interfaz `Coche` que la extienda con un número de `puertas`. Crea un coche de la marca
+«Seat» con 5 puertas y muestra su marca y su número de puertas.
+
+> **Solución**
+>
+> ```typescript
+> interface Vehiculo {
+>   marca: string;
+> }
+>
+> interface Coche extends Vehiculo {
+>   puertas: number;
+> }
+>
+> const miCoche: Coche = { marca: "Seat", puertas: 5 };
+> console.log(miCoche.marca, miCoche.puertas);
+> ```
+>
+> ```sortie
+> Seat 5
+> ```
 
 ## Las firmas de índice
 
@@ -298,6 +456,14 @@ mates: 15
 lengua: 12
 ingles: 14
 ```
+
+Línea por línea:
+
+- `notas` empieza con dos asignaturas: `mates` y `lengua`;
+- `notas.ingles = 14` añade una tercera clave, algo que la firma de índice permite;
+- `Object.entries(notas)` da los pares `[clave, valor]` uno a uno;
+- en cada vuelta, el bucle guarda la clave en `asignatura`, el valor en `nota`, y
+  muestra los dos.
 
 `[asignatura: string]: number` se lee: «para cualquier clave de texto, un valor
 numérico». La palabra `asignatura` es solo un nombre para la documentación. Es lo
