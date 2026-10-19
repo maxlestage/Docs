@@ -69,7 +69,7 @@ The **Application** tab (Chrome) or **Storage** tab (Firefox) shows the lockers.
 ## Trying the API in Node
 
 To understand and test without a browser, let's build a **fake** `localStorage`: a
-[class](../debuter/glossaire.md#classe) that has the same methods. It stores
+[class](../debuter/glossaire.md#class) that has the same methods. It stores
 everything in a `Map` (see [collections](collections.md)).
 
 ```javascript
@@ -131,7 +131,7 @@ You get `0 null`.
 
 ## Everything becomes text
 
-The notebook only keeps [strings](../debuter/glossaire.md#chaine-de-caracteres).
+The notebook only keeps [strings](../debuter/glossaire.md#string).
 If you store a number, it is converted to text. When it comes back, it is no longer a
 number.
 
@@ -173,7 +173,7 @@ JSON (next section).
 [JSON](../debuter/glossaire.md#json) is a way to write an object or a list as text, and
 then to read it back. It is like taking a piece of furniture apart to put it in a box,
 then putting it back together when it arrives (this is called
-[serialization](../debuter/glossaire.md#serialisation)).
+[serialization](../debuter/glossaire.md#serialization)).
 
 - `JSON.stringify(value)`: object → text (we pack it in a box);
 - `JSON.parse(text)`: text → object (we put it back together).
@@ -388,7 +388,7 @@ function openDatabase() {
 ```
 
 IndexedDB lets you know through **events** (`onsuccess`, `onerror`). We wrap it in a
-[promise](../debuter/glossaire.md#promesse) so that we can write `await` (see
+[promise](../debuter/glossaire.md#promise) so that we can write `await` (see
 [asynchronous code](asynchrone.md)).
 
 ### Adding and reading
@@ -438,7 +438,7 @@ Browser storage is a **postcard**, not a safe:
 - a password, even "temporarily";
 - a credit card number;
 - a login token that gives access to an account (better: an `HttpOnly` cookie, set by
-  the [server](../debuter/glossaire.md#serveur), which JavaScript cannot read);
+  the [server](../debuter/glossaire.md#server), which JavaScript cannot read);
 - sensitive personal data (health, identity documents).
 
 Store there without worry: the theme, the language, a draft, the state of a game, a

@@ -160,7 +160,7 @@ than 12): the price is 7.
 
 ## Program 3: a loop that accumulates
 
-A [loop](../debuter/glossaire.md#boucle) repeats lines. Here, a piggy bank: in week 1,
+A [loop](../debuter/glossaire.md#loop) repeats lines. Here, a piggy bank: in week 1,
 you put in €2, in week 2, you put in €4, and so on.
 
 ```javascript
@@ -223,7 +223,7 @@ program prints `Week 4, savings €12`.
 
 ## Program 4: a function called twice
 
-A [function](../debuter/glossaire.md#fonction) is a small machine: you give it a value,
+A [function](../debuter/glossaire.md#function) is a small machine: you give it a value,
 it works, it gives back a result. Here, you call it twice.
 
 ```javascript
@@ -426,7 +426,7 @@ console.table(steps);
 
 ## The debugger in two sentences
 
-A [debugger](../debuter/glossaire.md#debogage) pauses the program on a line (with the
+A [debugger](../debuter/glossaire.md#debugging) pauses the program on a line (with the
 `debugger;` statement or a click in the editor's margin) and shows you the value of each
 variable. You then move forward one line at a time: it is the trace table, filled in by
 the computer; everything is explained in [debugging](debogage.md).
@@ -461,7 +461,7 @@ The trace shows the problem. `grades.length` is 3. The test `3 <= 3` is true: th
 | 3 | 2 | `true` | 9 | 36 |
 | 4 | 3 | `true` | `undefined` | `NaN` |
 
-Fix: `i < grades.length`. The [indexes](../debuter/glossaire.md#indice) go from `0` to
+Fix: `i < grades.length`. The [indexes](../debuter/glossaire.md#index) go from `0` to
 `grades.length - 1`.
 
 ### Reusing an old value

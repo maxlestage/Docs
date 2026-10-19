@@ -32,7 +32,7 @@ El problema                          La herramienta
 «ordenar por grupos»             →   defaultdict
 ```
 
-Casi todas vienen del [módulo](../debuter/glossaire.md#module) `collections`.
+Casi todas vienen del [módulo](../debuter/glossaire.md#modulo) `collections`.
 `heapq` y `bisect` son dos pequeños módulos aparte. Todo viene con Python: no hay nada
 que instalar.
 
@@ -41,7 +41,7 @@ que instalar.
 
 ## namedtuple: una tupla con nombres
 
-Una [tupla](../debuter/glossaire.md#tuple) guarda valores en posiciones numeradas.
+Una [tupla](../debuter/glossaire.md#tupla) guarda valores en posiciones numeradas.
 ¿Qué es `point[0]`? ¿La x? ¿La y? Hay que acordarse.
 
 Una `namedtuple` es una tupla en la que cada casilla lleva una **etiqueta**. Es una
@@ -88,7 +88,7 @@ Línea por línea:
 
 ### Desempaquetar y cambiar una casilla
 
-Una `namedtuple` se desempaqueta como una tupla. Es [inmutable](../debuter/glossaire.md#immuable):
+Una `namedtuple` se desempaqueta como una tupla. Es [inmutable](../debuter/glossaire.md#inmutable):
 para «cambiar» una casilla, `_replace` fabrica una ficha **nueva**.
 
 ```python

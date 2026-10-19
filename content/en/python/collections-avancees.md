@@ -88,7 +88,7 @@ Line by line:
 
 ### Unpacking and changing a slot
 
-A `namedtuple` unpacks like a tuple. It is [immutable](../debuter/glossaire.md#immuable):
+A `namedtuple` unpacks like a tuple. It is [immutable](../debuter/glossaire.md#immutable):
 to "change" a slot, `_replace` makes a **new** card.
 
 ```python

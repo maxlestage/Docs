@@ -360,7 +360,7 @@ comando se convierte en la **entrada estándar** (*stdin*) del siguiente.
 ```
 
 La función `text` de `node:stream/consumers` lee toda la entrada estándar y devuelve
-una [promesa](../debuter/glossaire.md#promesse) de `string`. Este ejemplo no puede
+una [promesa](../debuter/glossaire.md#promesa) de `string`. Este ejemplo no puede
 ejecutarse aquí, porque espera un texto que llega de la terminal:
 
 ```typescript norun

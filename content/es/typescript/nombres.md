@@ -16,8 +16,8 @@ Esta página muestra cómo calcula TypeScript: el tipo `number`, los operadores,
 Un programa calcula sin parar: un precio, una edad, una puntuación, una distancia. Antes
 de calcular, hay que saber cómo guarda TypeScript esos números.
 
-En muchos lenguajes hay un tipo para los [enteros](../debuter/glossaire.md#entier)
-(`7`) y otro para los números decimales, los [flotantes](../debuter/glossaire.md#flottant)
+En muchos lenguajes hay un tipo para los [enteros](../debuter/glossaire.md#entero)
+(`7`) y otro para los números decimales, los [flotantes](../debuter/glossaire.md#flotante)
 (`7.5`). En TypeScript, no: los dos son `number`.
 
 ```typescript
@@ -54,7 +54,7 @@ Línea por línea:
 Calcular es el trabajo básico de un ordenador. Los operadores son las teclas de su
 calculadora: los combinas para obtener un total, una media, un precio.
 
-Un [operador](../debuter/glossaire.md#operateur) es un símbolo que calcula. Estos son
+Un [operador](../debuter/glossaire.md#operador) es un símbolo que calcula. Estos son
 los de los números:
 
 | Operador | Función | Ejemplo | Resultado |
@@ -115,7 +115,7 @@ console.log(10 - 4 - 3);
    14                 20
 ```
 
-> **Prueba:** cambia `10 - 4 - 3` por `10 - (4 - 3)`. El resultado pasa a ser `9`: el
+> **Pruébalo:** cambia `10 - 4 - 3` por `10 - (4 - 3)`. El resultado pasa a ser `9`: el
 > paréntesis se calcula primero.
 
 ## El resto: %
@@ -171,7 +171,7 @@ console.log(`${horas} h ${resto} min`);
 | 2 | `Math.floor(2.25)` | `2` → `horas` |
 | 3 | `135 % 60` | `15` → `resto` |
 
-> **Prueba:** pon `minutos = 59`. Obtienes `0 h 59 min`.
+> **Pruébalo:** pon `minutos = 59`. Obtienes `0 h 59 min`.
 
 > **Recuerda:** `/` divide, `%` da el resto. Juntos, dividen un número en trozos (horas
 > y minutos, cajas y huevos sobrantes).
@@ -318,7 +318,7 @@ console.log(Math.sqrt(16));
 `Math.abs` da el valor sin el signo: la «distancia» a cero. `Math.sqrt` da la raíz
 cuadrada.
 
-> **Prueba:** para una nota entre 0 y 20, escribe `Math.min(20, Math.max(0, nota))`.
+> **Pruébalo:** para una nota entre 0 y 20, escribe `Math.min(20, Math.max(0, nota))`.
 > Con `nota = 23`, obtienes `20`; con `nota = -1`, obtienes `0`.
 
 ## Mostrar un número de forma bonita
@@ -473,7 +473,7 @@ false
 ```
 
 No es un error de TypeScript. El ordenador guarda los números en
-[binario](../debuter/glossaire.md#binaire) (con 0 y 1). Pero `0.1` no se puede escribir
+[binario](../debuter/glossaire.md#binario) (con 0 y 1). Pero `0.1` no se puede escribir
 exactamente en binario, igual que `1/3` no se puede escribir exactamente en decimal
 (`0.3333…`). Queda un error minúsculo, que a veces aparece. Python, Java o JavaScript
 hacen exactamente lo mismo.

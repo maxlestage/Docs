@@ -59,7 +59,7 @@ that is what keeps a big website easy to organise.
 ### The restaurant in plain Ruby
 
 Here is the idea in pure Ruby, without Rails. Each role is a small
-[class](../debuter/glossaire.md#classe).
+[class](../debuter/glossaire.md#class).
 
 ```ruby
 class Kitchen # the model
@@ -175,8 +175,8 @@ articles GET  /articles(.:format) articles#index
 
 ### A router in plain Ruby
 
-A router is mostly a [dictionary](../debuter/glossaire.md#dictionnaire): an address
-gives the name of a [method](../debuter/glossaire.md#methode). `send` calls the method
+A router is mostly a [dictionary](../debuter/glossaire.md#dictionary): an address
+gives the name of a [method](../debuter/glossaire.md#method). `send` calls the method
 whose name you give it.
 
 ```ruby

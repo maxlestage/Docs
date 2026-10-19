@@ -71,7 +71,7 @@ casilleros.
 ## Probar la API en Node
 
 Para entender y probar sin navegador, fabriquemos un `localStorage` **falso**: una
-[clase](../debuter/glossaire.md#classe) que tiene los mismos métodos. Lo guarda todo en
+[clase](../debuter/glossaire.md#clase) que tiene los mismos métodos. Lo guarda todo en
 un `Map` (mira [las colecciones](collections.md)).
 
 ```javascript
@@ -133,7 +133,7 @@ Obtienes `0 null`.
 
 ## Todo se vuelve texto
 
-El cuaderno solo guarda [cadenas de caracteres](../debuter/glossaire.md#chaine-de-caracteres).
+El cuaderno solo guarda [cadenas de caracteres](../debuter/glossaire.md#cadena-de-caracteres).
 Si guardas un número, se convierte en texto. A la vuelta, ya no es un número.
 
 ```javascript
@@ -174,7 +174,7 @@ Para un número, conviértelo a la vuelta con `Number(...)`. Para todo lo demás
 [JSON](../debuter/glossaire.md#json) es una forma de escribir un objeto o una lista como
 texto, y luego volver a leerlo. Es como desmontar un mueble para meterlo en una caja, y
 volver a montarlo al llegar (se habla de
-[serialización](../debuter/glossaire.md#serialisation)).
+[serialización](../debuter/glossaire.md#serializacion)).
 
 - `JSON.stringify(valor)`: objeto → texto (lo metemos en la caja);
 - `JSON.parse(texto)`: texto → objeto (lo volvemos a montar).
@@ -389,7 +389,7 @@ function abrir() {
 ```
 
 IndexedDB avisa mediante **eventos** (`onsuccess`, `onerror`). Lo envolvemos en una
-[promesa](../debuter/glossaire.md#promesse) para poder escribir `await` (mira
+[promesa](../debuter/glossaire.md#promesa) para poder escribir `await` (mira
 [la asincronía](asynchrone.md)).
 
 ### Añadir y leer
@@ -439,7 +439,7 @@ El almacenamiento del navegador es una **postal**, no una caja fuerte:
 - una contraseña, ni siquiera «temporalmente»;
 - un número de tarjeta bancaria;
 - un token de sesión que da acceso a una cuenta (mejor: una cookie `HttpOnly`, puesta
-  por el [servidor](../debuter/glossaire.md#serveur), que JavaScript no puede leer);
+  por el [servidor](../debuter/glossaire.md#servidor), que JavaScript no puede leer);
 - datos personales sensibles (salud, documentos de identidad).
 
 Guarda ahí sin miedo: el tema, el idioma, un borrador, el estado de un juego, una lista

@@ -15,7 +15,7 @@ Esta página muestra cómo escribir números legibles con `format_number`, aline
 ## El objetivo: un informe legible
 
 Tienes una lista de ventas,
-[registros](../debuter/glossaire.md#enregistrement) como
+[registros](../debuter/glossaire.md#registro) como
 `{nombre: "Fresas", cant: 12, precio: 0.85}`. Mostrarlos tal cual es
 correcto, pero difícil de leer. Al final de esta página, sabrás escribir
 esto:
@@ -41,7 +41,7 @@ de un archivo, mira [los archivos](fichiers.md).
 ## Escribir un número para las personas
 
 `format_number(numero, decimales, idioma)` transforma un número en un
-[texto](../debuter/glossaire.md#chaine-de-caracteres) fácil de leer:
+[texto](../debuter/glossaire.md#cadena-de-caracteres) fácil de leer:
 
 - separa los miles;
 - escribe **exactamente** el número de decimales pedido;
@@ -96,7 +96,7 @@ Prueba: cambia `"es"` por `"fr"` en el primer ejemplo. Obtienes
 
 ### Esconde los pequeños errores de los números decimales
 
-Un [número decimal](../debuter/glossaire.md#flottant) no siempre es exacto
+Un [número decimal](../debuter/glossaire.md#flotante) no siempre es exacto
 en un ordenador (mira [las trampas](pieges.md)). `format_number` redondea,
 y el problema desaparece al mostrarlo:
 
@@ -154,7 +154,7 @@ ceros del final. Para **mostrar** dos decimales, hace falta un texto:
 ### Los importes en céntimos
 
 Para el dinero, una buena costumbre: contar en **céntimos**, con
-[enteros](../debuter/glossaire.md#entier). Los enteros siempre son exactos.
+[enteros](../debuter/glossaire.md#entero). Los enteros siempre son exactos.
 Solo se divide entre 100 para mostrar:
 
 ```rythme
@@ -311,7 +311,7 @@ como al montar un mueble: una pieza cada vez, y se comprueba en cada paso.
 
 ### Paso 1: una sola línea
 
-Primero escribimos una [función](../debuter/glossaire.md#fonction) que
+Primero escribimos una [función](../debuter/glossaire.md#funcion) que
 transforma **una** venta en **una** línea de texto. Y una pequeña función
 `euros` para los importes:
 

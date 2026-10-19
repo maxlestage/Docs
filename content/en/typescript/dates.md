@@ -444,7 +444,7 @@ longer the same text, it returns `null`.
 
 Thanks to the `Date | null` type, TypeScript **forces** the caller to handle the
 invalid case before using the date (this is
-[narrowing](../debuter/glossaire.md#retrecissement)).
+[narrowing](../debuter/glossaire.md#narrowing)).
 
 Try it: delete the `if (day === null) { … }` block. TypeScript refuses the program:
 `day` may be `null`.

@@ -103,7 +103,7 @@ El programa muestra `14 30`.
 
 ## Programa 2: una condición
 
-Una [condición](../debuter/glossaire.md#condition) es un cambio de vía: el programa
+Una [condición](../debuter/glossaire.md#condicion) es un cambio de vía: el programa
 toma un solo camino. En la tabla, anotas la respuesta a la pregunta (verdadero o
 falso) y luego saltas directamente al bloque correcto.
 
@@ -165,7 +165,7 @@ porque 20 no es **mayor** que 20. Con `temperatura := 5`, muestra
 
 ## Programa 3: un bucle que acumula
 
-Un [bucle](../debuter/glossaire.md#boucle) repite líneas. Piensa en una hucha: en cada
+Un [bucle](../debuter/glossaire.md#bucle) repite líneas. Piensa en una hucha: en cada
 vuelta, metes una moneda y el total crece. La variable `total` es la hucha.
 
 ```go
@@ -223,8 +223,8 @@ Prueba: cambia `i <= 5` por `i < 5`. La vuelta 5 desaparece. El programa muestra
 
 ## Programa 4: una función llamada dos veces
 
-Una [función](../debuter/glossaire.md#fonction) es como una cafetera. Le metes algo
-(el [parámetro](../debuter/glossaire.md#parametre)), trabaja y te devuelve un
+Una [función](../debuter/glossaire.md#funcion) es como una cafetera. Le metes algo
+(el [parámetro](../debuter/glossaire.md#parametro)), trabaja y te devuelve un
 resultado (`return`). Mientras trabaja, tú esperas.
 
 ```go

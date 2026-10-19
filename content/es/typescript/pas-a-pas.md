@@ -41,7 +41,7 @@ Una tabla de seguimiento se parece a un cuaderno de notas:
 
 - una columna **Paso** (o **Línea**): dónde está el programa;
 - una columna por [variable](../debuter/glossaire.md#variable): su
-  [valor](../debuter/glossaire.md#valeur) en ese momento;
+  [valor](../debuter/glossaire.md#valor) en ese momento;
 - una columna **Muestra**: lo que `console.log` escribe en la pantalla.
 
 Cuatro reglas sencillas:
@@ -129,7 +129,7 @@ console.log(`Precio: ${precio} €`); // L7
 Precio: 7 €
 ```
 
-Una [condición](../debuter/glossaire.md#condition) es como un cambio de agujas de
+Una [condición](../debuter/glossaire.md#condicion) es como un cambio de agujas de
 tren: el programa toma **un solo** camino. Añade una columna **Prueba** para apuntar
 el resultado de cada pregunta: `true` (verdadero) o `false` (falso).
 
@@ -168,7 +168,7 @@ directamente al `else if`.
 
 ## Programa 3: un bucle que acumula
 
-Un [bucle](../debuter/glossaire.md#boucle) repite las mismas líneas. Aquí se suma el
+Un [bucle](../debuter/glossaire.md#bucle) repite las mismas líneas. Aquí se suma el
 doble de `i` a `total`, cuatro veces.
 
 ```typescript
@@ -235,7 +235,7 @@ vacía.
 
 ## Programa 4: una función llamada dos veces
 
-Una [función](../debuter/glossaire.md#fonction) es una máquina: le das valores y te
+Una [función](../debuter/glossaire.md#funcion) es una máquina: le das valores y te
 devuelve un resultado. Aquí, `precioRebajado` calcula un precio después de una rebaja
 en porcentaje.
 
@@ -275,8 +275,8 @@ L6 console.log(...)
 ```
 
 Cada llamada abre una **hoja nueva** de borrador para la función. Sus
-[parámetros](../debuter/glossaire.md#parametre) `precio` y `porcentaje` reciben los
-[argumentos](../debuter/glossaire.md#argument) de la llamada. En el `return`, la hoja
+[parámetros](../debuter/glossaire.md#parametro) `precio` y `porcentaje` reciben los
+[argumentos](../debuter/glossaire.md#argumento) de la llamada. En el `return`, la hoja
 se tira: `rebaja` ya no existe.
 
 | Paso | Dónde | precio | porcentaje | rebaja | libro | juego | Muestra |
@@ -443,7 +443,7 @@ fin: 18 40
 
 ## El depurador, en dos frases
 
-Un [depurador](../debuter/glossaire.md#debogage) detiene el programa en una línea
+Un [depurador](../debuter/glossaire.md#depuracion) detiene el programa en una línea
 elegida (un punto de interrupción) y te deja avanzar línea a línea, mostrando todas
 las variables: es una tabla de seguimiento automática. En VS Code, haz clic en el
 margen a la izquierda de una línea y luego lanza «Ejecutar y depurar»; todo se explica

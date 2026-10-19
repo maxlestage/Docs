@@ -147,7 +147,7 @@ its name. The keys are **strings** (`"title"`), not symbols.
 ## ActiveRecord in a nutshell
 
 In a Ruby on Rails application, you rarely write SQL by hand. **ActiveRecord**
-turns each table into a Ruby [class](../debuter/glossaire.md#classe), and writes the SQL
+turns each table into a Ruby [class](../debuter/glossaire.md#class), and writes the SQL
 for you:
 
 ```ruby norun
@@ -190,7 +190,7 @@ know whether the books are in the basement or in the attic, and you do not need 
 know.
 
 > **Note:** the French word for it, *dépôt*, also means a Git repository. Do not confuse
-> it with a [Git repository](../debuter/glossaire.md#depot), which is something else.
+> it with a [Git repository](../debuter/glossaire.md#repository), which is something else.
 
 ### An in-memory repository
 

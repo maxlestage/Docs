@@ -165,7 +165,7 @@ because 20 is not **greater** than 20. With `temperature := 5`, it prints
 
 ## Program 3: a loop that adds up
 
-A [loop](../debuter/glossaire.md#boucle) repeats lines. Think of a piggy bank: on each
+A [loop](../debuter/glossaire.md#loop) repeats lines. Think of a piggy bank: on each
 round, you slip in a coin, and the total grows. The variable `total` is the piggy
 bank.
 
@@ -224,8 +224,8 @@ Try it: replace `i <= 5` with `i < 5`. Round 5 disappears. The program prints
 
 ## Program 4: a function called twice
 
-A [function](../debuter/glossaire.md#fonction) is like a coffee machine. You put
-something in (the [parameter](../debuter/glossaire.md#parametre)), it works, and it
+A [function](../debuter/glossaire.md#function) is like a coffee machine. You put
+something in (the [parameter](../debuter/glossaire.md#parameter)), it works, and it
 gives you back a result (`return`). While it works, you wait.
 
 ```go

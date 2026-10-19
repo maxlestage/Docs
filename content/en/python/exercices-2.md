@@ -317,7 +317,7 @@ the order** of first appearance. Test it with `[3, 1, 3, 2, 1, 4]` and
 ['red', 'green']
 ```
 
-> **Hint:** keep a [set](../debuter/glossaire.md#ensemble) `seen` of the elements
+> **Hint:** keep a [set](../debuter/glossaire.md#set) `seen` of the elements
 > already met. A set answers the question `x in seen` very quickly.
 
 > **Solution**

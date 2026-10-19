@@ -30,11 +30,11 @@ Le hablas a la base en un pequeño lenguaje aparte: **SQL**. Una frase SQL se ll
 "elige los nombres en la tabla amigos".
 
 SQLite es una base de datos que cabe en un solo archivo, sin servidor que instalar.
-Python ya sabe hablarle gracias al [módulo](../debuter/glossaire.md#module) `sqlite3`.
+Python ya sabe hablarle gracias al [módulo](../debuter/glossaire.md#modulo) `sqlite3`.
 La página [las bases de datos](../debuter/bases-de-donnees.md) explica la idea general.
 
 > **Nota:** en esta página, la base se crea en
-> [memoria](../debuter/glossaire.md#memoire-vive) con `":memory:"`. Desaparece al final
+> [memoria](../debuter/glossaire.md#memoria-ram) con `":memory:"`. Desaparece al final
 > del programa. Para conservarla, da un nombre de archivo:
 > `sqlite3.connect("agenda.db")`.
 
@@ -71,7 +71,7 @@ base.
 
 Para añadir una ficha, se usa `INSERT INTO`. Los valores **no** se escriben en el texto
 de la consulta. Se pone un `?` en su lugar, y se dan los valores al lado, en una
-[tupla](../debuter/glossaire.md#tuple).
+[tupla](../debuter/glossaire.md#tupla).
 
 ```python
 import sqlite3
@@ -198,7 +198,7 @@ El segundo `fetchone()` devuelve `None`: solo había una fila.
 Con una tupla, hay que recordar que el nombre está en la posición 0 y la edad en la
 posición 1. Es frágil. Al configurar `row_factory`, cada fila se convierte en un objeto
 que se lee **por el nombre de la columna**, como un
-[diccionario](../debuter/glossaire.md#dictionnaire).
+[diccionario](../debuter/glossaire.md#diccionario).
 
 ```python
 import sqlite3
@@ -273,7 +273,7 @@ otra. Si el programa falla a mitad, el dinero no debe desaparecer.
 `with conn:` se encarga de todo:
 
 - si el bloque termina bien, los cambios se **confirman** (`commit`);
-- si ocurre una [excepción](../debuter/glossaire.md#exception), se **anulan**
+- si ocurre una [excepción](../debuter/glossaire.md#excepcion), se **anulan**
   (`rollback`).
 
 ```python

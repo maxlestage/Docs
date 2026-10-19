@@ -12,7 +12,7 @@ A symbol like `:done` or `:right` is a small name used as a value: this page sho
 
 ## A name used as a value
 
-A [symbol](../debuter/glossaire.md#symbole) is a name preceded by a
+A [symbol](../debuter/glossaire.md#symbol) is a name preceded by a
 colon: `:yes`, `:done`, `:right`. It is not a name that refers to a
 value. It is **the value itself**.
 
@@ -259,7 +259,7 @@ Try it: set the cleaning to `:done`. The last line then prints
 ## Symbols as dictionary keys
 
 A symbol also makes a good
-[dictionary](../debuter/glossaire.md#dictionnaire) key (see
+[dictionary](../debuter/glossaire.md#dictionary) key (see
 [dictionaries and sets](dictionnaires.md)):
 
 ```rythme
