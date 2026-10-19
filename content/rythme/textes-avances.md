@@ -12,18 +12,10 @@ Cette page montre comment écrire des nombres lisibles avec `format_number`, ali
 
 ## Le but : un rapport lisible
 
-Vous avez une liste de ventes. Afficher les
-[enregistrements](../debuter/glossaire.md#enregistrement) tels quels donne
-ceci :
-
-```text
-{nom: "Pommes", qte: 12, prix: 0.85}
-{nom: "Ananas", qte: 3, prix: 2.5}
-{nom: "Fraises", qte: 40, prix: 1.2}
-```
-
-C'est juste, mais difficile à lire. À la fin de cette page, vous saurez
-écrire ceci :
+Vous avez une liste de ventes, des
+[enregistrements](../debuter/glossaire.md#enregistrement) comme
+`{nom: "Pommes", qte: 12, prix: 0.85}`. Les afficher tels quels est juste,
+mais difficile à lire. À la fin de cette page, vous saurez écrire ceci :
 
 ```text
 Produit     Qté     Montant
@@ -36,11 +28,12 @@ Total               65,70 €
 ```
 
 Pensez à un ticket de caisse : chaque chose a sa colonne, les nombres sont
-alignés à droite, et le total est en bas. Nous allons y arriver en petites
-étapes. Chaque outil d'abord, le rapport ensuite.
+alignés à droite, le total est en bas. Chaque outil d'abord, le rapport
+ensuite.
 
 Les bases des textes (`split`, `join`, `pad_left`, `repeat`) sont dans
-[travailler avec du texte](texte.md). Cette page va plus loin.
+[travailler avec du texte](texte.md). Cette page va plus loin. Pour lire
+des données dans un fichier, voir [les fichiers](fichiers.md).
 
 ## Écrire un nombre pour les humains
 
@@ -67,8 +60,8 @@ Sans langue, c'est l'écriture anglaise : une virgule entre les milliers, un
 point avant les décimales. En français, c'est l'inverse : une espace entre
 les milliers, une virgule avant les décimales.
 
-Le résultat est un **texte**, pas un nombre. On ne calcule plus avec. On
-l'affiche.
+Le résultat est un **texte**, pas un nombre : on l'affiche, on ne calcule
+plus avec.
 
 ```rythme
 joli = format_number(1500, 2, "fr")
@@ -174,12 +167,8 @@ print(format_number(total / 100, 2, "fr") + " €")
 14,54 €
 ```
 
-| Étape | Valeur | Sorte |
-|-------|--------|-------|
-| `sum(prix_centimes)` | `1454` | entier, exact |
-| `total / 100` | `14.54` | nombre à virgule |
-| `format_number(..., 2, "fr")` | `"14,54"` | texte |
-| `+ " €"` | `"14,54 €"` | texte |
+L'entier `1454` est exact ; il ne devient un nombre à virgule (`14.54`),
+puis un texte (`"14,54 €"`), qu'au tout dernier moment.
 
 ## Remplir un texte pour l'aligner
 
@@ -223,22 +212,17 @@ dizaines. On compare d'un coup d'œil :
 
 ```rythme
 nombres = [5, 120, 42]
-nombres |> each(fn(n) = print(pad_right(n, 5) + "|"))
-print("")
-nombres |> each(fn(n) = print(pad_left(n, 5) + "|"))
+nombres |> each(fn(n) = print(pad_right(n, 5) + "|" + pad_left(n, 5) + "|"))
 ```
 
 ```sortie
-5    |
-120  |
-42   |
-
-    5|
-  120|
-   42|
+5    |    5|
+120  |  120|
+42   |   42|
 ```
 
-La deuxième colonne se lit comme une addition posée à l'école.
+À gauche, `pad_right` : les chiffres ne sont pas les uns sous les autres.
+À droite, `pad_left` : la colonne se lit comme une addition posée à l'école.
 
 Essayez : remplacez `5` par `2` dans `pad_left(n, 5)`. Le nombre `120` a
 déjà 3 caractères : il dépasse, et la colonne se décale. La section
@@ -303,14 +287,8 @@ Suivons le calcul de `largeur`, une étape à la fois :
 | `\|> map(len)` | `[6, 6, 7]` |
 | `\|> max` | `7` |
 
-Ajoutez un nom plus long à la liste, et la colonne s'élargit toute seule.
-
 Essayez : ajoutez `"Mirabelles"` à la liste `noms`. La largeur passe à 10,
 et les barres `|` restent alignées.
-
-> **Attention :** `len` compte les caractères : `len("Qté")` vaut 3, l'accent
-> compte pour un. Les noms très longs ou les emojis peuvent quand même
-> décaler un peu l'affichage dans certains terminaux.
 
 > **À retenir :** la largeur d'une colonne = la longueur de son plus long
 > texte : `textes |> map(len) |> max`.
@@ -359,6 +337,9 @@ Décomposons la première ligne, morceau par morceau :
 | montant aligné | `pad_left("10,20 €", 12)` | `"     10,20 €"` | 12 |
 | la ligne | les trois collés avec `+` | `"Pommes       12     10,20 €"` | 27 |
 
+`pad_left` accepte aussi un nombre, comme `12` : il le transforme d'abord en
+texte.
+
 ### Étape 2 : une ligne pour chaque vente
 
 Il n'y a pas de boucle en Rythme : `map` applique `ligne` à chaque vente et
@@ -393,21 +374,8 @@ Fraises      40     48,00 €
 ### Étape 3 : le total
 
 `sum` avec une fonction additionne ce que la fonction donne pour chaque
-vente :
-
-```rythme
-ventes = [
-  {nom: "Pommes", qte: 12, prix: 0.85},
-  {nom: "Ananas", qte: 3, prix: 2.5},
-  {nom: "Fraises", qte: 40, prix: 1.2},
-]
-total = ventes |> sum(fn(v) = v.qte * v.prix)
-print(format_number(total, 2, "fr"))
-```
-
-```sortie
-65,70
-```
+vente : `total = ventes |> sum(fn(v) = v.qte * v.prix)`. Le programme
+complet, à l'étape suivante, le calcule ainsi :
 
 | Vente | Montant | Total jusqu'ici |
 |-------|---------|-----------------|
@@ -535,49 +503,6 @@ Pour `["pommes", "kiwis", "ananas"]` :
 
 `last` donne une [Option](../debuter/glossaire.md#option) (la liste pourrait
 être vide) ; ici, on sait qu'elle ne l'est pas, alors `unwrap` l'ouvre.
-
-## Un rapport à partir d'un texte
-
-Souvent, les données arrivent sous forme de texte, une ligne par chose :
-un fichier, un copier-coller. Il faut d'abord les **lire**, puis les
-afficher. On enchaîne `lines`, `split`, `parse_float` :
-
-```rythme
-donnees = "Loyer;850\nCourses;312.4\nTransport;75.5"
-
-fn lire(l) = match split(l, ";")
-  [nom, montant] -> {nom: nom, montant: parse_float(montant) |> unwrap_or(0.0)}
-  _ -> {nom: "?", montant: 0.0}
-end
-
-depenses = donnees |> lines |> map(lire)
-largeur = depenses |> map(fn(d) = len(d.nom)) |> max
-
-depenses |> each(fn(d) =
-  print(pad_right(d.nom, largeur) + pad_left(format_number(d.montant, 2, "fr"), 10)))
-print(pad_right("Total", largeur) + pad_left(format_number(sum(depenses, fn(d) = d.montant), 2, "fr"), 10))
-```
-
-```sortie
-Loyer        850,00
-Courses      312,40
-Transport     75,50
-Total      1 237,90
-```
-
-| Étape | Ce qu'on a |
-|-------|-----------|
-| `donnees` | un seul texte, avec des `\n` |
-| `\|> lines` | `["Loyer;850", "Courses;312.4", "Transport;75.5"]` |
-| `\|> map(lire)` | trois enregistrements `{nom, montant}`, montants en nombres |
-| `largeur` | `9` (la longueur de `"Transport"`) |
-| `each` | une ligne affichée par dépense |
-
-Remarquez le total : `format_number` a ajouté l'espace des milliers, et
-`pad_left` l'a quand même bien aligné, car il compte tous les caractères.
-
-Lire un vrai fichier se fait avec `read_file` : voir
-[les fichiers](fichiers.md).
 
 ## Erreurs fréquentes
 
