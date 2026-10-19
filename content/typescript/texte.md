@@ -14,6 +14,9 @@ Cette page montre comment manipuler du texte en TypeScript : mesurer, chercher, 
 
 ## Les chaînes de caractères
 
+Un programme manipule du texte en permanence : un prénom, un message, une adresse
+e-mail. Savoir le mesurer et lire ses lettres une à une est la première étape.
+
 Un texte est une [chaîne de caractères](../debuter/glossaire.md#chaine-de-caracteres),
 de type `string`. Chaque caractère a une position, son
 [indice](../debuter/glossaire.md#indice), qui commence à **0**.
@@ -46,6 +49,10 @@ leur type.
 
 ## Changer la casse et nettoyer
 
+Un texte tapé par quelqu'un est rarement propre : des espaces en trop, des majuscules
+au hasard. Ces méthodes le remettent en ordre, comme on range un tiroir avant de s'en
+servir.
+
 ```typescript
 const saisie = "  Marie Curie  ";
 
@@ -73,7 +80,25 @@ sur place. TypeScript l'interdit d'ailleurs : `mot[0] = "b"` est refusé (voir l
 > **Astuce :** appliquez `trim()` à tout texte tapé par un utilisateur : les espaces en
 > trop sont une source classique de comparaisons ratées.
 
+**À vous :** écrivez un programme qui range `"  bonjour  "` dans une variable,
+enlève les espaces autour, puis affiche le résultat en majuscules.
+
+> **Solution**
+>
+> ```typescript
+> const saisie = "  bonjour  ";
+> const propre = saisie.trim();
+> console.log(propre.toUpperCase());
+> ```
+>
+> ```sortie
+> BONJOUR
+> ```
+
 ## Chercher dans un texte
+
+Avant d'agir, un programme a souvent besoin de vérifier quelque chose : une adresse
+contient-elle un `@` ? Un nom de fichier finit-il par `.pdf` ?
 
 Ces méthodes répondent à une question. Leur type de retour vous dit quelle forme a la
 réponse :
@@ -103,6 +128,15 @@ false
 -1
 ```
 
+Ligne par ligne :
+
+- `phrase` contient le texte dans lequel on cherche ;
+- `includes("chat")` répond `true` : le mot « chat » est bien dans la phrase ;
+- `endsWith("!")` répond `false` : la phrase finit par un point, pas par `!` ;
+- `indexOf("dort")` donne `8` : en comptant depuis 0, le « d » de « dort » est le
+  neuvième caractère ;
+- `indexOf("chien")` donne `-1` : « chien » n'apparaît nulle part.
+
 Toutes ces recherches distinguent majuscules et minuscules : `"Chat"` n'est pas
 `"chat"`. Pour chercher sans tenir compte de la casse, passez tout en minuscules
 d'abord.
@@ -117,6 +151,9 @@ true
 ```
 
 ## Extraire un morceau avec slice
+
+Souvent, seule une partie d'un texte vous intéresse : l'année dans un nom de fichier,
+l'extension à la fin. `slice` découpe ce morceau, comme une paire de ciseaux.
 
 `slice(début, fin)` découpe une partie du texte, du caractère `début` **inclus**
 jusqu'au caractère `fin` **exclu**. Sans `fin`, elle va jusqu'au bout. Un nombre
@@ -136,10 +173,38 @@ rapport
 pdf
 ```
 
+Ligne par ligne :
+
+- `fichier` contient `"rapport-2024.pdf"` : le « r » est en position 0, le tiret en
+  position 7 ;
+- `slice(0, 7)` prend les positions 0 à 6 : `rapport` ;
+- `slice(8, 12)` prend les positions 8 à 11, juste après le tiret : `2024` ;
+- `slice(-3)` prend les trois derniers caractères : `pdf`.
+
 Pensez aux positions comme aux traits d'une règle : `slice(0, 7)` prend tout ce qui
 se trouve entre le trait 0 et le trait 7.
 
+**À vous :** écrivez un programme qui range la date `"2026-10-19"` dans une variable,
+puis affiche l'année sur une ligne et le mois sur la suivante, avec `slice`.
+
+> **Solution**
+>
+> ```typescript
+> const date = "2026-10-19";
+> console.log(date.slice(0, 4));
+> console.log(date.slice(5, 7));
+> ```
+>
+> ```sortie
+> 2026
+> 10
+> ```
+
 ## Découper et recoller
+
+Des données arrivent souvent en une seule ligne : une liste de courses séparée par des
+virgules, une ligne de tableur séparée par des `;`. Pour traiter chaque élément, il
+faut d'abord couper cette ligne.
 
 `split(séparateur)` coupe un texte en morceaux. Elle renvoie un **tableau de textes**,
 de type `string[]`. `join(séparateur)` fait l'inverse : elle recolle un tableau en un
@@ -162,10 +227,22 @@ pomme, poire, kiwi
 [ 'a', 'b', 'c' ]
 ```
 
+Ligne par ligne :
+
+- `ligne` est un seul texte, avec des `;` entre les fruits ;
+- `split(";")` coupe à chaque `;` et range les trois morceaux dans le tableau
+  `fruits` ;
+- `fruits.length` compte les morceaux : 3 ;
+- `join(", ")` recolle les morceaux, en mettant `", "` entre chacun.
+
 `split("")` coupe entre chaque caractère. Les tableaux sont détaillés dans
 [le chapitre sur les tableaux](collections.md).
 
 ## Remplacer
+
+Corriger un mot, retirer les espaces d'un numéro de téléphone : c'est la fonction
+« rechercher et remplacer » d'un traitement de texte. En code, ce sont ces deux
+méthodes.
 
 `replace(a, b)` remplace la **première** apparition de `a` par `b`. `replaceAll`
 remplace toutes les apparitions.
@@ -185,6 +262,9 @@ Le chien voit le chien.
 ```
 
 ## Convertir entre texte et nombre
+
+Tout ce qu'un utilisateur tape au clavier arrive sous forme de texte, même un âge ou
+un prix. Pour calculer avec, il faut d'abord le convertir.
 
 Un texte qui contient des chiffres reste un texte : `"42"` n'est pas `42`. TypeScript
 vous empêche de les confondre. Pour convertir, utilisez :
@@ -235,6 +315,21 @@ for (const essai of essais) {
 "douze" n'est pas un nombre.
 ```
 
+**À vous :** écrivez un programme qui range les textes `"20"` et `"22"` dans deux
+variables, les convertit en nombres, puis affiche leur somme.
+
+> **Solution**
+>
+> ```typescript
+> const premier = "20";
+> const second = "22";
+> console.log(Number(premier) + Number(second));
+> ```
+>
+> ```sortie
+> 42
+> ```
+
 ## Les types littéraux : "oui" | "non"
 
 Voici un atout propre à TypeScript. Un type peut accepter **seulement certains
@@ -255,6 +350,15 @@ console.log(repondre("non"));
 Parfait !
 Dommage.
 ```
+
+Ligne par ligne :
+
+- `type Reponse = "oui" | "non";` crée un nouveau type, qui n'accepte que ces deux
+  textes ;
+- la fonction `repondre` reçoit `r`, de type `Reponse` ;
+- `r === "oui" ? "Parfait !" : "Dommage."` choisit : si `r` vaut `"oui"`, le résultat
+  est `"Parfait !"`, sinon `"Dommage."` ;
+- les deux appels affichent donc une réponse chacun.
 
 `"oui"` et `"non"` sont des **types littéraux** : chacun n'accepte qu'un seul texte.
 Leur union `"oui" | "non"` accepte l'un ou l'autre, et rien d'autre. C'est comme un
@@ -282,6 +386,8 @@ vert 3
 > direction, une taille), utilisez une union de types littéraux plutôt que `string`.
 
 ### Les types gabarits, en bref
+
+> **Note :** cette partie peut attendre. Lisez-la quand les bases seront solides.
 
 TypeScript peut même décrire la **forme** d'un texte, avec la syntaxe des gabarits.
 Ce sont les *template literal types* :
@@ -357,6 +463,9 @@ console.log(court.format(2));
 
 ## Aligner des colonnes avec padStart et padEnd
 
+Quand vous affichez une liste de prix, les chiffres doivent tomber les uns sous les
+autres, sinon on lit mal. Ces méthodes ajoutent juste ce qu'il faut de remplissage.
+
 `padStart(longueur, remplissage)` complète un texte **au début** jusqu'à la longueur
 voulue. `padEnd` complète **à la fin**. Sans remplissage, ce sont des espaces.
 
@@ -371,6 +480,13 @@ console.log("ok".padEnd(5, ".") + "|");
    42|
 ok...|
 ```
+
+Ligne par ligne :
+
+- `"7".padStart(3, "0")` ajoute des `0` au début jusqu'à 3 caractères : `007` ;
+- `"42".padStart(5)` ajoute trois espaces devant `42` ; le `|` montre où le texte
+  s'arrête ;
+- `"ok".padEnd(5, ".")` ajoute trois points après `ok`, pour arriver à 5 caractères.
 
 C'est parfait pour afficher un tableau bien aligné : les textes à gauche avec `padEnd`,
 les nombres à droite avec `padStart`.
@@ -397,6 +513,23 @@ Total         117.70
 
 `repeat(20)` répète un texte 20 fois. Les points décimaux des prix sont alignés, comme sur un
 ticket de caisse.
+
+**À vous :** écrivez un programme qui affiche les numéros `"1"`, `"25"` et `"300"` sur
+trois chiffres, en complétant avec des zéros au début.
+
+> **Solution**
+>
+> ```typescript
+> console.log("1".padStart(3, "0"));
+> console.log("25".padStart(3, "0"));
+> console.log("300".padStart(3, "0"));
+> ```
+>
+> ```sortie
+> 001
+> 025
+> 300
+> ```
 
 ## Erreurs fréquentes
 

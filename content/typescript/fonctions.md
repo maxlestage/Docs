@@ -40,6 +40,10 @@ Bonjour !
 
 ## Les paramètres et leur type
 
+Une recette de crêpes sert pour 4 ou pour 10 personnes : seules les quantités changent.
+De la même façon, une fonction peut faire le même travail avec des valeurs différentes
+à chaque appel.
+
 Les [paramètres](../debuter/glossaire.md#parametre) sont les valeurs que la fonction
 reçoit. Ce sont des cases vides, remplies au moment de l'appel par les
 [arguments](../debuter/glossaire.md#argument). En TypeScript, chaque paramètre a un
@@ -59,6 +63,14 @@ Alice a 30 ans.
 Bob a 25 ans.
 ```
 
+Ligne par ligne :
+
+- les trois premières lignes enregistrent la fonction : rien ne s'affiche encore ;
+- `presenter("Alice", 30)` lance la fonction : `prenom` reçoit `"Alice"` et `age`
+  reçoit `30`, puis le corps affiche la phrase ;
+- `presenter("Bob", 25)` la relance avec d'autres valeurs : cette fois, `prenom` vaut
+  `"Bob"` et `age` vaut `25`.
+
 Ici, `prenom` et `age` sont les paramètres ; `"Alice"` et `30` sont les arguments.
 
 Le type d'un paramètre est un contrat : « donnez-moi un nombre ». TypeScript vérifie
@@ -70,6 +82,10 @@ programme.
 > [erreurs fréquentes](#erreurs-frequentes)).
 
 ## Renvoyer une valeur avec return
+
+Une calculatrice ne se contente pas d'afficher : elle vous **donne** un résultat, que
+vous pouvez réutiliser dans un autre calcul. `return` permet à une fonction de faire
+pareil.
 
 `return` renvoie une valeur au code qui a appelé la fonction, et arrête la fonction.
 Le type de cette valeur s'écrit après les parenthèses.
@@ -89,11 +105,35 @@ console.log(total);
 11
 ```
 
+Ligne par ligne :
+
+- `aire(3, 4)` lance la fonction avec `largeur` à 3 et `hauteur` à 4 ;
+- `return largeur * hauteur` calcule 12 et le renvoie : `console.log` affiche 12 ;
+- `aire(2, 5)` renvoie 10, puis on ajoute 1 : `total` vaut 11 ;
+- la dernière ligne affiche `total`.
+
 La valeur renvoyée remplace l'appel : `aire(2, 5) + 1` devient `10 + 1`.
 
 Le type de retour `: number` peut s'omettre : TypeScript le devine à partir du
 `return`. L'écrire reste une bonne habitude : si vous vous trompez dans le corps de la
 fonction, l'erreur apparaît dans la fonction, pas plus loin chez celui qui l'appelle.
+
+**À vous :** écrivez une fonction `perimetre` qui prend la largeur et la hauteur d'un
+rectangle (deux nombres) et renvoie son périmètre. Affichez `perimetre(3, 4)`.
+
+> **Solution**
+>
+> ```typescript
+> function perimetre(largeur: number, hauteur: number): number {
+>   return 2 * (largeur + hauteur);
+> }
+>
+> console.log(perimetre(3, 4));
+> ```
+>
+> ```sortie
+> 14
+> ```
 
 ### Afficher ou renvoyer ?
 
@@ -150,6 +190,10 @@ manque un `return`, il le signale.
 
 ## Paramètres facultatifs et valeurs par défaut
 
+Certaines informations ne sont pas toujours utiles. Au café, vous pouvez commander
+« un café » sans préciser la taille : le serveur prend la taille normale. Une fonction
+peut, elle aussi, se passer de certains arguments.
+
 ### Un paramètre facultatif : ?
 
 Un `?` après le nom rend le paramètre facultatif. S'il n'est pas donné, il vaut
@@ -171,6 +215,15 @@ console.log(saluer("Martin", "docteur"));
 Bonjour, Alice !
 Bonjour, docteur Martin !
 ```
+
+Ligne par ligne :
+
+- `saluer("Alice")` ne donne qu'un argument : `prenom` vaut `"Alice"` et `titre` vaut
+  `undefined` ;
+- le test `titre === undefined` est donc vrai : la fonction renvoie la phrase sans
+  titre ;
+- `saluer("Martin", "docteur")` donne les deux : le test est faux, et la fonction
+  renvoie la phrase avec le titre.
 
 TypeScript vous oblige à traiter le cas `undefined` avant d'utiliser `titre` comme un
 texte.
@@ -197,7 +250,29 @@ console.log(prixTTC(100, 0.055));
 > **Attention :** les paramètres facultatifs se placent **après** les obligatoires.
 > `function f(a?: number, b: number)` est refusé.
 
+**À vous :** écrivez une fonction `commander` qui prend un nom de boisson et une
+taille, avec `"moyen"` comme taille par défaut. Elle renvoie par exemple
+`"Un café moyen"`. Affichez `commander("café")` et `commander("thé", "grand")`.
+
+> **Solution**
+>
+> ```typescript
+> function commander(boisson: string, taille = "moyen"): string {
+>   return `Un ${boisson} ${taille}`;
+> }
+>
+> console.log(commander("café"));
+> console.log(commander("thé", "grand"));
+> ```
+>
+> ```sortie
+> Un café moyen
+> Un thé grand
+> ```
+
 ## Un nombre variable d'arguments
+
+> **Note :** cette partie peut attendre. Lisez-la quand les bases seront solides.
 
 Trois points `...` devant le dernier paramètre le transforment en **paramètre du
 reste** : il reçoit tous les arguments restants, rangés dans un tableau. Son type est
@@ -223,9 +298,21 @@ console.log(somme());
 0
 ```
 
+Ligne par ligne :
+
+- `somme(1, 2, 3, 4)` range les quatre arguments dans le tableau `nombres` :
+  `[1, 2, 3, 4]` ;
+- `total` part de 0, puis la boucle lui ajoute chaque nombre : 1, 3, 6, 10 ;
+- `return total` renvoie 10 ;
+- `somme()` reçoit un tableau vide : la boucle ne tourne pas, et la fonction renvoie 0.
+
 Chaque argument est vérifié : `somme(1, "2")` serait refusé.
 
 ## Les fonctions fléchées
+
+Beaucoup de fonctions sont toutes petites : une seule ligne de calcul. Écrire
+`function`, des accolades et `return` pour si peu est long. La fonction fléchée est un
+raccourci pour ces cas.
 
 Une **fonction fléchée** (*arrow function*) est une écriture courte, avec `=>`. On la
 range souvent dans une constante.
@@ -247,6 +334,15 @@ console.log(presenter("léa"));
 Je suis LÉA.
 ```
 
+Ligne par ligne :
+
+- `carre` est une constante qui contient une fonction : elle prend `x` et renvoie
+  `x * x` ;
+- `presenter` contient une fonction plus longue, entre accolades : elle met le prénom
+  en majuscules, puis renvoie la phrase ;
+- `carre(4)` s'appelle comme une fonction ordinaire et renvoie 16 ;
+- `presenter("léa")` renvoie `"Je suis LÉA."`.
+
 - Avec une seule expression après `=>`, pas besoin d'accolades ni de `return` : la
   valeur est renvoyée automatiquement.
 - Avec plusieurs lignes, on met des accolades et un `return`.
@@ -255,7 +351,26 @@ Une fonction sans nom, comme celle-ci, s'appelle aussi une
 [lambda](../debuter/glossaire.md#lambda). Les fonctions fléchées sont partout en
 TypeScript, surtout comme *callbacks* (plus bas).
 
+**À vous :** écrivez une fonction fléchée `triple`, rangée dans une constante, qui
+prend un nombre et renvoie ce nombre multiplié par 3. Affichez `triple(7)`.
+
+> **Solution**
+>
+> ```typescript
+> const triple = (x: number): number => x * 3;
+>
+> console.log(triple(7));
+> ```
+>
+> ```sortie
+> 21
+> ```
+
 ## Le type d'une fonction
+
+Une prise électrique n'accepte qu'une forme de fiche. Le type d'une fonction joue le
+même rôle : il dit à l'avance quelle sorte de fonction une variable ou un paramètre
+accepte.
 
 Une fonction est une valeur, comme un nombre ou un texte : on peut la ranger dans une
 variable. Son type s'écrit comme une fonction fléchée : les paramètres, puis `=>`, puis
@@ -275,6 +390,13 @@ console.log(operation(6, 3));
 9
 18
 ```
+
+Ligne par ligne :
+
+- la première ligne crée la variable `operation`, encore vide, et dit ce qu'elle
+  pourra contenir : une fonction qui prend deux nombres et renvoie un nombre ;
+- on y range d'abord une fonction qui additionne : `operation(6, 3)` donne 9 ;
+- on la remplace ensuite par une fonction qui multiplie : le même appel donne 18.
 
 `(a: number, b: number) => number` se lit : « une fonction qui prend deux nombres et
 renvoie un nombre ». Remarquez : dans `(a, b) => a + b`, plus besoin d'écrire les
@@ -319,6 +441,14 @@ Tour numéro 2
 Tour numéro 3
 ```
 
+Ligne par ligne :
+
+- `repeter` reçoit deux choses : un nombre (`fois`) et une fonction (`action`) ;
+- à l'appel, `fois` vaut 3 et `action` est la fonction fléchée écrite entre
+  parenthèses ;
+- la boucle donne à `i` les valeurs 1, 2 puis 3, et appelle `action(i)` à chaque tour ;
+- chaque appel range `i` dans `tour` et affiche la phrase.
+
 Le paramètre `action` a un type de fonction : `(tour: number) => void`. Grâce à lui,
 TypeScript sait que `tour` est un `number` dans la fonction fléchée passée à l'appel.
 
@@ -345,7 +475,28 @@ console.log(transformer([1, 2, 3], (n) => n - 1));
 `push` ajoute un élément à la fin d'un tableau. Les tableaux ont déjà une méthode
 `map` qui fait exactement cela : vous la verrez dans [les tableaux](collections.md).
 
+**À vous :** écrivez une fonction `appliquer` qui prend un nombre et une fonction de
+type `(n: number) => number`, et renvoie le résultat de cette fonction sur le nombre.
+Affichez `appliquer(5, (n) => n + 100)`.
+
+> **Solution**
+>
+> ```typescript
+> function appliquer(x: number, f: (n: number) => number): number {
+>   return f(x);
+> }
+>
+> console.log(appliquer(5, (n) => n + 100));
+> ```
+>
+> ```sortie
+> 105
+> ```
+
 ## La portée des variables
+
+Chaque fonction a son propre plan de travail. Ce qu'elle y pose reste chez elle : cela
+évite qu'une fonction dérange par erreur les variables du reste du programme.
 
 La [portée](../debuter/glossaire.md#portee) d'une variable est la zone du code où elle
 existe. Les paramètres et les variables créées dans une fonction n'existent que dans
@@ -366,6 +517,14 @@ console.log(prixTTC(19.99));
 23.99
 ```
 
+Ligne par ligne :
+
+- `tauxTVA` est créée tout en haut, en dehors de la fonction : elle vaut 0.2 ;
+- `prixTTC(19.99)` lance la fonction : `prix` vaut 19.99 ;
+- `total` est créée **dans** la fonction et vaut environ 23.988 ;
+- `Math.round(total * 100) / 100` arrondit à deux chiffres après la virgule : la
+  fonction renvoie 23.99.
+
 - La fonction voit `tauxTVA`, créée **en dehors**, au-dessus d'elle.
 - Dehors, `total` n'existe pas : `console.log(total)` serait refusé.
 
@@ -373,6 +532,8 @@ console.log(prixTTC(19.99));
 > elle a besoin en paramètres.
 
 ## Les surcharges, en bref
+
+> **Note :** cette partie peut attendre. Lisez-la quand les bases seront solides.
 
 Parfois, une fonction accepte plusieurs formes d'appel, avec un type de retour
 différent pour chacune. TypeScript permet de les lister avant le corps : ce sont les
