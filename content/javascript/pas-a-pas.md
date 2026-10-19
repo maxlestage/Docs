@@ -426,10 +426,6 @@ console.table(etapes);
 └─────────┴───┴───────┘
 ```
 
-Essayez : sans étiquette, `console.log(note, reussies)` affiche `12 1`, `7 1`,
-`15 2`. Avec deux variables, ça va. Avec cinq, on ne sait plus qui est qui : gardez
-les étiquettes.
-
 > **À retenir :** un `console.log` avec étiquettes dans une boucle, c'est un tableau de
 > trace écrit par le programme. Retirez-le quand le bug est trouvé.
 
@@ -442,9 +438,6 @@ le tableau de trace, rempli par l'ordinateur ; tout est expliqué dans
 [déboguer](debogage.md#mettre-le-programme-en-pause).
 
 ## Erreurs fréquentes
-
-Voici les erreurs que l'on fait en suivant un programme, et ce que le vrai programme
-montre alors.
 
 ### Oublier le dernier test d'une boucle
 
@@ -529,17 +522,8 @@ let total = total + 5;
 ReferenceError: Cannot access 'total' before initialization
 ```
 
-Correction : donnez d'abord une valeur de départ, puis modifiez-la.
-
-```javascript
-let total = 0;
-total = total + 5;
-console.log(total);
-```
-
-```sortie
-5
-```
+Correction : donnez d'abord une valeur de départ (`let total = 0;`), puis modifiez-la
+sur la ligne suivante (`total = total + 5;`).
 
 ### Faire changer une boîte const
 
