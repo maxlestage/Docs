@@ -1,6 +1,6 @@
 # Arrays and tuples
 
-This page explains how to store several values in arrays, tuples, `Map`s and `Set`s, and how types keep these collections consistent.
+This page explains how to store several values in arrays and tuples, how to transform them, and how types keep these lists consistent.
 
 > **Goals:**
 >
@@ -8,8 +8,7 @@ This page explains how to store several values in arrays, tuples, `Map`s and `Se
 > - you will know how to protect an array with `readonly` and describe a tuple
 >   `[string, number]`;
 > - you will know how to transform an array with `map`, `filter` and `reduce`;
-> - you will know how to handle the `undefined` returned by `find`;
-> - you will know how to use `Map`, `Set` and `Record`.
+> - you will know how to handle the `undefined` returned by `find`.
 
 ## Creating an array
 
@@ -266,7 +265,7 @@ Very often, you want to do the same thing to a whole list: raise every price, ke
 good grades, compute a total. These methods do it in one line, without writing a loop.
 
 These three methods take a *callback* (a function, see
-[functions](fonctions.md#callbacks-passing-a-function-to-a-function)). They don't
+[functions](fonctions-avancees.md#callbacks-passing-a-function-to-a-function)). They don't
 change the original array: they return a new one, or a value.
 
 ### map: transforming each item
@@ -462,187 +461,6 @@ After the test `found !== undefined`, TypeScript knows that `found` is a `string
 > **Remember:** a `T | undefined` type is a question TypeScript asks you: "what if
 > nothing is found?". Answer it, with `if`, `?.` or `??`.
 
-## Map: linking keys to values
-
-A `Map` is a [dictionary](../debuter/glossaire.md#dictionary): it links a **key**
-to a **value**, the way a phone book links a name to a number. Its type is written
-`Map<KeyType, ValueType>`.
-
-```typescript
-const stock = new Map<string, number>();
-
-stock.set("apples", 10);
-stock.set("pears", 4);
-stock.set("apples", 12);
-
-console.log(stock.get("apples"));
-console.log(stock.has("kiwis"), stock.size);
-
-for (const [fruit, quantity] of stock) {
-  console.log(`${fruit}: ${quantity}`);
-}
-```
-
-```sortie
-12
-false 2
-apples: 12
-pears: 4
-```
-
-Line by line:
-
-- `new Map<string, number>()` creates an empty `Map`: string keys, number values;
-- the `set` calls store `apples → 10` and `pears → 4`, then replace 10 with 12;
-- `get("apples")` gives 12; the key `"kiwis"` doesn't exist, and the `Map` has 2
-  pairs;
-- the `for...of` loop gives each pair, in the order they were added.
-
-The methods to know:
-
-- `set(key, value)` adds or replaces (a key is unique);
-- `get(key)` reads the value, `has(key)` tests whether the key exists;
-- `size` gives the number of pairs; `delete(key)` removes one.
-
-`get` returns `number | undefined`: the key may not exist. Same reflex as with
-`find`:
-
-```typescript
-const stock = new Map<string, number>([["apples", 10]]);
-
-const kiwis = stock.get("kiwis") ?? 0;
-console.log(kiwis + 5);
-```
-
-```sortie
-5
-```
-
-**Your turn:** write a program that creates a `Map` of ages, stores `"Alice"` (30)
-and `"Bob"` (25) in it, then shows Bob's age and the age of `"Zoe"`, with 0 if she
-is missing.
-
-> **Solution**
->
-> ```typescript
-> const ages = new Map<string, number>();
-> ages.set("Alice", 30);
-> ages.set("Bob", 25);
-> console.log(ages.get("Bob"));
-> console.log(ages.get("Zoe") ?? 0);
-> ```
->
-> ```sortie
-> 25
-> 0
-> ```
-
-## Set: a collection without duplicates
-
-Think of a party's guest list: writing the same name twice is pointless. A `Set`
-takes care of it for you and ignores duplicates.
-
-A `Set` is a [set](../debuter/glossaire.md#set): each value appears in it only
-once. Its type is written `Set<T>`.
-
-```typescript
-const visitors = new Set<string>();
-
-visitors.add("Alice");
-visitors.add("Bob");
-visitors.add("Alice");
-
-console.log(visitors.size);
-console.log(visitors.has("Bob"));
-
-const noDuplicates = [...new Set([3, 1, 3, 2, 1])];
-console.log(noDuplicates);
-```
-
-```sortie
-2
-true
-[ 3, 1, 2 ]
-```
-
-Line by line:
-
-- `visitors` starts empty;
-- `add` adds `"Alice"`, then `"Bob"`. The second `"Alice"` is ignored: she is already
-  there;
-- so `size` is 2, and `has("Bob")` answers `true`;
-- the end creates a `Set` from the array, then turns it back into an array with `[...]`.
-
-`new Set(array)` then `[...]` is the classic trick to remove duplicates from an array,
-keeping the order in which they first appear.
-
-## Record: a key-value object
-
-A `Record` is like a score sheet: a name, a number, a name, a number. You write it in
-one go, like an ordinary object.
-
-`Record<string, number>` describes a plain object whose keys are strings and whose
-values are numbers. It's lighter than a `Map`, and you write it directly with curly
-braces.
-
-```typescript
-const scores: Record<string, number> = {
-  alice: 12,
-  bob: 8,
-};
-
-scores.chloe = 15;
-scores["bob"] += 1;
-
-console.log(scores);
-console.log(Object.keys(scores));
-
-for (const [name, points] of Object.entries(scores)) {
-  console.log(name.padEnd(6), points);
-}
-```
-
-```sortie
-{ alice: 12, bob: 9, chloe: 15 }
-[ 'alice', 'bob', 'chloe' ]
-alice  12
-bob    9
-chloe  15
-```
-
-Line by line:
-
-- `scores` starts with two pairs: `alice → 12` and `bob → 8`;
-- `scores.chloe = 15` adds a key; `scores["bob"] += 1` brings Bob up to 9;
-- `Object.keys` lists the keys, in the order they were added;
-- the loop gives each pair; `padEnd(6)` pads the name with spaces, to line up the
-  columns.
-
-`Object.keys` gives the keys, `Object.entries` the `[key, value]` pairs.
-
-With a union of literal types as keys, `Record` requires **all** the keys:
-
-```typescript
-type Day = "monday" | "tuesday" | "wednesday";
-
-const hours: Record<Day, number> = {
-  monday: 7,
-  tuesday: 8,
-  wednesday: 4,
-};
-
-console.log(hours.tuesday);
-```
-
-```sortie
-8
-```
-
-Forgetting `wednesday` would be an error.
-
-> **Tip:** use `Record` for fixed data written in the code, and `Map` when you often
-> add and remove keys.
-
 ## Common mistakes
 
 ### Storing a value of the wrong type
@@ -708,27 +526,6 @@ Found 2 errors in the same file, starting at: main.ts:1
 In a tuple, order matters: first the string, then the number.
 Write `["Alice", 42]`.
 
-### Using the result of get without checking
-
-```typescript norun
-const stock = new Map<string, number>([["apples", 10]]);
-const n = stock.get("pears");
-console.log(n + 1);
-```
-
-```text
-main.ts:3:13 - error TS18048: 'n' is possibly 'undefined'.
-
-3 console.log(n + 1);
-              ~
-
-
-Found 1 error in main.ts:3
-```
-
-The key `"pears"` may not exist. Give a default value:
-`const n = stock.get("pears") ?? 0;`.
-
 ## Test yourself
 
 **Question 1:** what is the type of `["a", "b"].map((s) => s.length)`?
@@ -773,9 +570,6 @@ const even = numbers.find((n) => n % 2 === 0);
 - A tuple `[string, number]` has a fixed length and one type per position.
 - `map`, `filter` and `reduce` return new values, whose type TypeScript guesses; sort
   numbers with `sort((a, b) => a - b)`.
-- `find` and `Map.get` return `T | undefined`: handle the case with `if`, `?.` or
-  `??`.
-- `Map<K, V>` links keys to values, `Set<T>` avoids duplicates,
-  `Record<string, number>` describes a key-value object.
+- `find` returns `T | undefined`: handle the case with `if`, `?.` or `??`.
 
-Next: [objects, interfaces and type aliases](objets.md).
+Next: [Map, Set and Record](map-set.md).
