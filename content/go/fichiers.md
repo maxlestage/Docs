@@ -516,5 +516,5 @@ Erreur : write journal.txt: bad file descriptor
 - `os.Stat` et `errors.Is(err, fs.ErrNotExist)` testent l'existence d'un fichier.
 - `filepath.Join` construit des chemins valables sur tous les systèmes.
 
-Suite : [JSON et CSV](formats.md). Comparez avec
+Suite : [embarquer des fichiers avec embed](embed.md). Comparez avec
 [les fichiers en Ruby](../ruby/fichiers.md).
