@@ -157,14 +157,6 @@ if (typeof brut === "object" && brut !== null && "prix" in brut) {
 ```typescript
 const saisie = "5";
 console.log(saisie + 3);
-console.log(saisie * 1 === 5 ? "nombre" : "texte");
-```
-
-Le second `console.log` ne compile même pas. Retirons-le :
-
-```typescript
-const saisie = "5";
-console.log(saisie + 3);
 ```
 
 ```sortie
