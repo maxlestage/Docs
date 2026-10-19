@@ -112,14 +112,14 @@ end
 F
 
   1) Failure:
-TestDouble#test_double_de_4 [test_double.rb:9]:
+TestDouble#test_double_de_4 [test_double.rb:10]:
 Expected: 8
   Actual: 6
 
 1 runs, 1 assertions, 1 failures, 0 errors, 0 skips
 ```
 
-Le message donne tout ce qu'il faut : le test (`test_double_de_4`), la ligne (`9`), la
+Le message donne tout ce qu'il faut : le test (`test_double_de_4`), la ligne (`10`), la
 valeur attendue (`Expected: 8`) et la valeur obtenue (`Actual: 6`).
 
 - `F` (*failure*, échec) : une vérification a donné un mauvais résultat.
