@@ -428,4 +428,4 @@ tard ?
 - Pour les scripts et Ruby on Rails : Ruby.
 - Chaque parcours commence par sa page d'introduction.
 
-Suite : [le glossaire](glossaire.md), à garder sous la main.
+Suite : [Contribuer à un projet open source](open-source.md)
