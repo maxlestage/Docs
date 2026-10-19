@@ -14,6 +14,10 @@ y un primer contacto con las expresiones regulares.
 
 ## Insertar un valor en un texto
 
+Un programa a menudo habla con alguien: muestra un nombre, un total, una
+puntuación. Insertar un valor es como rellenar los huecos de una carta modelo: el
+texto está listo, solo faltan los valores.
+
 Un texto, que también se llama
 [cadena de caracteres](../debuter/glossaire.md#cadena-de-caracteres), es
 una sucesión de caracteres: letras, cifras, espacios, signos.
@@ -36,10 +40,23 @@ Ada tiene 2 frutas.
 El doble de 21 es 42.
 ```
 
+Línea por línea:
+
+- `nombre` recibe el texto `"Ada"`, y `frutas` una lista de dos textos;
+- en `"¡Hola, {nombre}!"`, Rythme reemplaza `{nombre}` por su valor, `Ada`, y luego
+  muestra el texto;
+- `{len(frutas)}` se calcula primero: la lista tiene 2 elementos, así que 2 entra en
+  el texto;
+- `{21 * 2}` hace el cálculo, 42, y lo pone en su sitio.
+
 > **Consejo:** para convertir cualquier valor en texto, usa `text`:
 > `text(42)` vale `"42"`.
 
 ## Los caracteres especiales
+
+Un texto se escribe entre comillas. Pero ¿cómo escribir una comilla **dentro** del
+texto, o pasar a la línea siguiente? Hace falta una manera de decir «este carácter
+es especial».
 
 Algunos caracteres no se pueden escribir directamente en un texto. Se
 escriben con una barra invertida `\` delante: una **secuencia de escape**.
@@ -65,7 +82,16 @@ línea 2
 Unas llaves: { y }
 ```
 
+Línea por línea:
+
+- `\"` muestra una comilla: el texto no se acaba ahí;
+- `\n` corta la línea: `línea 2` aparece debajo de `línea 1`;
+- `\{` y `\}` muestran llaves, sin buscar un valor que insertar.
+
 ## Longitud y mayúsculas
+
+Un programa a menudo necesita comprobar o arreglar un texto: ¿es la contraseña lo
+bastante larga? Un nombre escrito «ángela», ¿debe mostrarse «Ángela»?
 
 `len` cuenta los caracteres. `upper` lo pone todo en mayúsculas, `lower`
 todo en minúsculas, y `capitalize` solo la primera letra:
@@ -81,9 +107,36 @@ print(upper(palabra), lower("HOLA"), capitalize(palabra))
 ÁNGELA hola Ángela
 ```
 
+Línea por línea:
+
+- `palabra` recibe el texto `"ángela"`;
+- `len(palabra)` cuenta sus caracteres: 6;
+- `upper(palabra)` da `"ÁNGELA"`, `lower("HOLA")` da `"hola"` y
+  `capitalize(palabra)` da `"Ángela"`;
+- `print` muestra esos tres textos en una línea, separados por un espacio.
+
 Las letras con tilde cuentan como un solo carácter: `len("canción")` vale 7.
 
+**Te toca:** escribe un programa que guarde `"rythme"` en una variable `lenguaje`, y
+luego muestre su longitud y, debajo, la misma palabra en mayúsculas.
+
+> **Solución**
+>
+> ```rythme
+> lenguaje = "rythme"
+> print(len(lenguaje))
+> print(upper(lenguaje))
+> ```
+>
+> ```sortie
+> 6
+> RYTHME
+> ```
+
 ## Leer un carácter por su posición
+
+A veces solo necesitas una parte de un texto: la inicial de un nombre, o las
+primeras letras de una palabra.
 
 Cada carácter tiene una posición, empezando en **0**. `palabra[0]` es el
 primer carácter, `palabra[-1]` el último. `slice(palabra, inicio, fin)`
@@ -119,6 +172,10 @@ print("[{trim(entrada)}]")
 
 ## Dividir y volver a unir
 
+Un texto a menudo contiene varios datos pegados: una lista de la compra
+«pan,leche,huevos», o una frase hecha de palabras. Para tratar cada trozo por
+separado, primero hay que separarlos.
+
 `split` divide un texto en una lista de trozos. Sin separador, corta en los
 espacios. `join` hace lo contrario: vuelve a unir una lista con un
 separador.
@@ -138,6 +195,14 @@ print(join(["rojo", "verde", "azul"], ", "))
 rojo, verde, azul
 ```
 
+Línea por línea:
+
+- `split(frase)` corta `"el gato duerme"` en los espacios: `palabras` vale
+  `["el", "gato", "duerme"]`, una lista de 3 textos;
+- `split("rojo;verde;azul", ";")` corta en cada `;`;
+- `join(…, ", ")` hace el camino inverso: pega las tres palabras poniendo `", "`
+  entre ellas.
+
 Con `|>`, se encadenan los pasos: se divide, se transforma cada palabra, se
 vuelve a unir.
 
@@ -153,7 +218,27 @@ vuelve a unir.
 El Gato Duerme
 ```
 
+**Te toca:** escribe un programa que divida la lista de la compra
+`"pan,leche,huevos"` en las comas, muestre el número de artículos y luego los vuelva
+a unir con `" - "` entre ellos.
+
+> **Solución**
+>
+> ```rythme
+> compras = split("pan,leche,huevos", ",")
+> print(len(compras))
+> print(join(compras, " - "))
+> ```
+>
+> ```sortie
+> 3
+> pan - leche - huevos
+> ```
+
 ## Buscar en un texto
+
+Antes de actuar, un programa a menudo necesita comprobar un texto: ¿es este archivo
+una foto? ¿Contiene esta dirección una `@`?
 
 Tres preguntas, tres respuestas `true` o `false`:
 
@@ -174,6 +259,13 @@ true true
 false
 ```
 
+Línea por línea:
+
+- `archivo` recibe el nombre `"vacaciones.jpg"`;
+- `contains` encuentra `"cacio"` en medio del nombre: `true`;
+- el nombre sí empieza por `"vac"` y termina por `".jpg"`: `true true`;
+- no termina por `".png"`: `false`.
+
 > **Atención:** las mayúsculas cuentan: `contains("Hola", "hol")` vale
 > `false`. Si hace falta, pasa antes el texto a minúsculas con `lower`.
 
@@ -190,6 +282,9 @@ true false true
 
 ## Reemplazar un trozo
 
+Es la función «buscar y reemplazar» de un procesador de textos: corregir una
+palabra en todas partes, o cambiar un separador.
+
 `replace(texto, viejo, nuevo)` reemplaza **cada** aparición de `viejo`:
 
 ```rythme
@@ -205,7 +300,24 @@ un gato y un perro
 Como siempre en Rythme, el texto de partida no cambia: `replace` da un
 texto nuevo.
 
+**Te toca:** escribe un programa que guarde `"mis apuntes de clase.txt"` en una
+variable, y luego muestre ese nombre de archivo con `_` en lugar de los espacios.
+
+> **Solución**
+>
+> ```rythme
+> nombre_archivo = "mis apuntes de clase.txt"
+> print(replace(nombre_archivo, " ", "_"))
+> ```
+>
+> ```sortie
+> mis_apuntes_de_clase.txt
+> ```
+
 ## Los caracteres y las líneas
+
+A veces un texto se trata carácter por carácter (contar las vocales), o línea por
+línea (leer un poema, una lista). Para eso, se convierte en una lista.
 
 `chars` da la lista de los caracteres. `lines` divide un texto en líneas
 (`\n` quiere decir «salto de línea»):
@@ -224,6 +336,13 @@ print(len(lines(poema)), "líneas")
 3 líneas
 ```
 
+Línea por línea:
+
+- `chars("abc")` da una lista de tres textos de un solo carácter;
+- `poema` contiene tres líneas, separadas por `\n`;
+- `lines(poema)` corta en cada `\n`: una lista de 3 líneas;
+- `len` cuenta los elementos de esa lista: 3.
+
 Con una lista de caracteres, funcionan todas las funciones de listas. Por
 ejemplo, contar las vocales:
 
@@ -238,6 +357,8 @@ print(cantidad)
 ```
 
 ## Repetir y alinear
+
+> **Nota:** esta parte puede esperar. Léela cuando las bases estén firmes.
 
 `repeat(texto, n)` repite un texto `n` veces. Práctico para una raya:
 
@@ -301,6 +422,13 @@ Ok(3.5)
 Err("\"doce\" no es un número entero")
 ```
 
+Línea por línea:
+
+- `parse_int("42")` funciona: da `Ok(42)`, el número guardado en una caja `Ok`;
+- `parse_int(" 7 ")` ignora los espacios de alrededor y da `Ok(7)`;
+- `parse_float("3.5")` lee un número decimal, escrito con un punto;
+- `parse_int("doce")` falla: da `Err`, con un mensaje que explica por qué.
+
 Para obtener el número, trata los dos casos con `match`, o da un valor por
 defecto con `unwrap_or`:
 
@@ -327,7 +455,25 @@ el doble es 42
 > (error E022) si el texto no es uno. Guárdalo para un texto escrito por ti;
 > para lo que escribe el usuario, mejor `parse_int`.
 
+**Te toca:** escribe un programa que guarde el texto `"15"` en `entrada`, lo lea con
+`parse_int` y `unwrap_or(0)`, y luego muestre «Dentro de 10 años, tendrás 25 años.»
+calculando 25 a partir del número leído.
+
+> **Solución**
+>
+> ```rythme
+> entrada = "15"
+> edad = parse_int(entrada) |> unwrap_or(0)
+> print("Dentro de 10 años, tendrás {edad + 10} años.")
+> ```
+>
+> ```sortie
+> Dentro de 10 años, tendrás 25 años.
+> ```
+
 ## Escribir un número grande de forma legible
+
+> **Nota:** esta parte puede esperar. Léela cuando las bases estén firmes.
 
 `format_number(número, decimales, idioma)` separa los miles y redondea. Con
 `"es"`, escribe el número a la española:
@@ -348,6 +494,9 @@ Sin idioma, es la forma inglesa. Y `text(número, decimales)` da simplemente
 un número con esa cantidad de decimales.
 
 ## Las expresiones regulares
+
+A veces no buscas un trozo preciso, sino una **forma**: «unas cifras», «una
+palabra». Por ejemplo, todos los números de una frase, sean cuales sean.
 
 Una **expresión regular** (una «regex») es un pequeño modelo que describe
 trozos de texto. Unos pocos signos bastan para empezar:
@@ -381,6 +530,13 @@ true false
 ["3", "12"]
 Mi código: ****
 ```
+
+Línea por línea:
+
+- `matches("2024", "\\d+")`: el texto entero está hecho solo de cifras, así que
+  `true`; en `"20h24"`, la `h` no es una cifra, así que `false`;
+- `find_all` busca todos los grupos de cifras y da `["3", "12"]`;
+- `replace_all` reemplaza cada cifra (`\\d`, una sola cada vez) por `*`.
 
 Por ejemplo, sumar todos los números de una frase:
 

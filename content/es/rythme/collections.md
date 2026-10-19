@@ -12,6 +12,10 @@ Esta página presenta las formas de agrupar valores: las listas, los intervalos,
 
 ## Las listas
 
+Cuando tienes muchos valores del mismo tipo (las notas de una clase, los artículos
+de una cesta), una variable por valor se volvería pronto inmanejable. Una lista los
+guarda todos bajo un solo nombre.
+
 Una [lista](../debuter/glossaire.md#lista) es una serie de valores, en un
 orden preciso, como una lista de la compra. Se escribe entre corchetes, con
 comas entre los elementos.
@@ -34,6 +38,9 @@ de elementos.
 
 ## Añadir un elemento sin modificar nada
 
+Tus datos crecen: un artículo más en la cesta, un alumno más en la clase. Por eso
+necesitas saber alargar una lista.
+
 Una lista nunca cambia. Para «añadir» un elemento, se fabrica una **nueva**
 lista, y la antigua se queda tal cual:
 
@@ -51,6 +58,15 @@ print(frutas + ["melón"], [..frutas, "ciruela"], ["cereza", ..frutas])
 ["manzana", "pera", "melón"] ["manzana", "pera", "ciruela"] ["cereza", "manzana", "pera"]
 ```
 
+Línea por línea:
+
+- `frutas = ["manzana", "pera"]` guarda una lista de dos frutas con el nombre
+  `frutas`;
+- `push(frutas, "kiwi")` fabrica una nueva lista de tres frutas, llamada `mas`;
+- los dos `print` siguientes lo demuestran: `frutas` sigue teniendo dos elementos,
+  `mas` tiene tres;
+- la última línea fabrica otras tres listas, sin tocar nunca `frutas`.
+
 - `push(lista, x)` da la lista con `x` al final;
 - `+` pone dos listas una detrás de otra;
 - `..frutas` entre corchetes inserta todos los elementos de `frutas`, al
@@ -58,6 +74,22 @@ print(frutas + ["melón"], [..frutas, "ciruela"], ["cereza", ..frutas])
 
 Es como fotocopiar la lista de la compra y escribir en la copia: el original
 no se mueve.
+
+**Te toca:** escribe un programa que guarde `["pan", "leche"]` con el nombre
+`compra`, fabrique una nueva lista con `"mantequilla"` al final, y luego muestre esa
+nueva lista y su número de elementos.
+
+> **Solución**
+>
+> ```rythme
+> compra = ["pan", "leche"]
+> nueva = push(compra, "mantequilla")
+> print(nueva, len(nueva))
+> ```
+>
+> ```sortie
+> ["pan", "leche", "mantequilla"] 3
+> ```
 
 ## Leer sin riesgo con get
 
@@ -88,6 +120,9 @@ Las opciones se explican en [gestionar los errores](erreurs.md).
 
 ## Los intervalos
 
+Escribir `[1, 2, 3, ..., 100]` a mano sería largo. Un intervalo fabrica de una vez
+una serie de números, como los números de página de un libro.
+
 `a..b` es la lista de los números enteros de `a` a `b`, ambos incluidos:
 
 ```rythme
@@ -104,6 +139,9 @@ print(0..20 |> step_by(5), reverse(1..3))
 hacia atrás, `reverse`.
 
 ## Las funciones de listas más comunes
+
+Ordenar, sumar, quedarse con algunos elementos: son tareas que aparecen sin parar.
+Rythme te da funciones ya hechas, como herramientas guardadas en una caja.
 
 ```rythme
 numeros = [3, 1, 4, 1, 5, 9, 2, 6]
@@ -133,7 +171,26 @@ print(filter(numeros, is_even), map(numeros, fn(x) = x * 10))
 > **Consejo:** `rythme help lists` muestra todas las funciones de listas, y
 > `rythme help sort_by` explica una de ellas.
 
+**Te toca:** escribe un programa que guarde las notas `[12, 8, 15, 10]` con el
+nombre `notas`, y luego muestre la mejor nota, la suma de las notas y las notas
+ordenadas.
+
+> **Solución**
+>
+> ```rythme
+> notas = [12, 8, 15, 10]
+> print(max(notas), sum(notas), sort(notas))
+> ```
+>
+> ```sortie
+> 15 45 [8, 10, 12, 15]
+> ```
+
 ## Los registros
+
+Una persona tiene un nombre, un año de nacimiento, una ciudad. En una lista, esos
+valores estarían mezclados, sin decir cuál es cuál. Un registro le da un nombre a cada
+uno.
 
 Un **registro** agrupa valores con nombre, sus **campos**. Es una ficha: una
 casilla «nombre», una casilla «nacimiento»... Se escribe entre llaves, y un
@@ -150,6 +207,12 @@ Ada 1815
 {nombre: "Ada", nacimiento: 1815, ciudad: "Londres"}
 ```
 
+Línea por línea:
+
+- la primera línea crea una ficha con tres campos y le da el nombre `ada`;
+- `ada.nombre` lee el campo `nombre`, que vale `"Ada"`; `ada.nacimiento` lee `1815`;
+- `print(ada)` muestra la ficha entera, con todos sus campos.
+
 Rythme no tiene clases: un registro basta para describir una persona, un
 producto o un punto. `keys` da los nombres de los campos, `has` dice si un
 campo existe, y `get` lee un campo que puede faltar:
@@ -164,6 +227,9 @@ print(keys(ada), has(ada, "edad"), get(ada, "ciudad"))
 ```
 
 ## Actualizar un registro
+
+Un dato cambia: una dirección, una edad, una nota corregida. Necesitas entonces una
+versión actualizada de la ficha.
 
 Un registro no se modifica: se fabrica uno nuevo.
 `{..ada, nacimiento: 1816}` copia todos los campos de `ada` y luego
@@ -186,7 +252,34 @@ print(con_ciudad)
 
 `ada` no ha cambiado.
 
+Línea por línea:
+
+- `ada` es una ficha con dos campos;
+- `corregida` copia `ada`, pero su campo `nacimiento` vale 1816;
+- `con_ciudad` copia `ada` y añade un campo `ciudad`;
+- los tres `print` muestran tres fichas distintas: la primera no se ha movido.
+
+**Te toca:** escribe un programa que cree un registro `libro` con los campos
+`titulo` (`"El principito"`) y `paginas` (96), fabrique una versión con 300 páginas, y
+luego muestre las dos.
+
+> **Solución**
+>
+> ```rythme
+> libro = {titulo: "El principito", paginas: 96}
+> grueso = {..libro, paginas: 300}
+> print(libro)
+> print(grueso)
+> ```
+>
+> ```sortie
+> {titulo: "El principito", paginas: 96}
+> {titulo: "El principito", paginas: 300}
+> ```
+
 ## Descomponer un valor
+
+> **Nota:** esta parte puede esperar. Léela cuando las bases estén firmes.
 
 Se pueden nombrar de una vez las partes de una lista o de un registro:
 
@@ -226,10 +319,21 @@ Grace
 [12, 17, 19]
 ```
 
+Línea por línea:
+
+- `alumnos` es una lista de tres fichas, una por alumno;
+- `fn(a) = a.nota` es una pequeña función: recibe un alumno `a` y da su nota;
+- `max_by` se queda con el alumno que tiene la nota más alta: la ficha de Grace;
+- `map(fn(a) = a.nombre)` sustituye cada ficha por el nombre del alumno;
+- la última línea ordena los alumnos por nota, y luego se queda solo con las notas.
+
 `max_by` y `sort_by` reciben una función que dice **qué** comparar: aquí, la
 nota de cada alumno.
 
 ## Los diccionarios
+
+Un diccionario sirve para encontrar rápido un valor a partir de un nombre: la edad
+de una persona, el precio de un artículo, como en una agenda de teléfonos.
 
 Un [diccionario](../debuter/glossaire.md#diccionario) (`dict`) asocia un
 valor a cada **clave**, igual que un diccionario de verdad asocia una
@@ -250,6 +354,15 @@ print(edades)
 dict("Ada" => 36, "Bob" => 26)
 dict("Ada" => 36, "Bob" => 25)
 ```
+
+Línea por línea:
+
+- `dict(...)` construye el diccionario a partir de dos pares: Bob tiene 25 años, Ada
+  36;
+- `edades["Ada"]` busca la clave `"Ada"` y da 36; `get(edades, "Eve")` da `None`,
+  porque Eve no está;
+- `put(edades, "Bob", 26)` fabrica un nuevo diccionario donde Bob tiene 26 años;
+- el último `print` muestra que `edades` no se ha movido: Bob sigue teniendo 25 años.
 
 `put` da un **nuevo** diccionario, y `edades` no ha cambiado. Un diccionario
 siempre está ordenado según sus claves.
@@ -275,7 +388,26 @@ end
 > un registro. Cuando las claves llegan con los datos (nombres de pila,
 > palabras), usa un diccionario.
 
+**Te toca:** escribe un programa que construya un diccionario `precios` donde
+`"manzana"` cuesta 2 y `"pan"` cuesta 1, muestre el precio del pan, y luego muestre
+una versión donde la manzana cuesta 3.
+
+> **Solución**
+>
+> ```rythme
+> precios = dict([["manzana", 2], ["pan", 1]])
+> print(precios["pan"])
+> print(put(precios, "manzana", 3))
+> ```
+>
+> ```sortie
+> 1
+> dict("manzana" => 3, "pan" => 1)
+> ```
+
 ## Los conjuntos
+
+> **Nota:** esta parte puede esperar. Léela cuando las bases estén firmes.
 
 Un **conjunto** (`set`) guarda cada valor una sola vez, como una colección de
 sellos sin repetidos:
@@ -290,6 +422,9 @@ set(1, 2, 3) 3 true
 ```
 
 ## Qué colección elegir
+
+Cada colección tiene su uso, como cada cajón de una cocina. Esta tabla te ayuda a
+elegir.
 
 | Necesidad | Elección | Ejemplo |
 |-----------|----------|---------|

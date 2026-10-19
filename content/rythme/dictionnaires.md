@@ -12,6 +12,10 @@ Cette page approfondit deux collections : le dictionnaire, qui retrouve une vale
 
 ## Créer un dictionnaire
 
+Une liste range ses valeurs par numéro : la première, la deuxième... Souvent, vous
+voulez plutôt retrouver une valeur par un **nom** : le prix d'un fruit, l'âge d'une
+personne. C'est le travail du dictionnaire.
+
 Un [dictionnaire](../debuter/glossaire.md#dictionnaire) associe une
 **valeur** à chaque **clé**. C'est comme un répertoire téléphonique : on
 cherche un nom (la clé), on trouve un numéro (la valeur).
@@ -30,6 +34,14 @@ dict("France" => "Paris", "Italie" => "Rome", "Japon" => "Tokyo")
 3
 ```
 
+Ligne par ligne :
+
+- `dict(...)` reçoit une liste de trois paires. Dans chaque paire, le premier élément
+  est la clé (le pays), le second la valeur (la capitale) ;
+- le dictionnaire obtenu est rangé sous le nom `capitales` ;
+- `print(capitales)` l'affiche en entier ;
+- `len(capitales)` compte ses paires : il y en a 3.
+
 L'affichage met une flèche `=>` entre chaque clé et sa valeur. Cette forme
 sert seulement à l'affichage : dans le code, écrivez toujours
 `dict([[clé, valeur], ...])`.
@@ -46,6 +58,8 @@ dict() dict(1 => "UN", 2 => "deux")
 ```
 
 ## Des clés de toute sorte
+
+> **Note :** cette partie peut attendre. Lisez-la quand les bases seront solides.
 
 Les clés ne sont pas forcément des textes. Ce peut être des nombres, des
 [symboles](../debuter/glossaire.md#symbole), et même des listes. Ici, une
@@ -71,6 +85,9 @@ Seules les fonctions ne peuvent pas être des clés.
 
 ## Lire une valeur
 
+Un dictionnaire sert surtout à retrouver une valeur à partir de sa clé, comme on
+cherche un mot dans un vrai dictionnaire. Mais que faire si le mot n'y est pas ?
+
 Il y a deux façons de lire, comme pour les listes :
 
 - `dico[clé]` donne la valeur, et arrête le programme si la clé manque ;
@@ -93,10 +110,38 @@ true false
 inconnue
 ```
 
+Ligne par ligne :
+
+- `capitales["Japon"]` donne directement la valeur de la clé `"Japon"` : `Tokyo` ;
+- `get` donne `Some("Tokyo")` pour le Japon, et `None` (« rien ») pour le Chili, qui
+  n'est pas dans le dictionnaire ;
+- `has` répond `true` pour la France et `false` pour le Chili ;
+- `unwrap_or(..., "inconnue")` ouvre l'option : il donne la valeur si elle existe, et
+  sinon le texte de secours `"inconnue"`.
+
 Utilisez `[...]` quand vous êtes sûr que la clé existe, et `get` sinon.
 Les options sont expliquées dans [gérer les erreurs](erreurs.md).
 
+**À vous :** écrivez un programme qui crée un dictionnaire `ages` où Ada a 36 ans et
+Alan 41 ans. Affichez l'âge d'Ada, puis l'âge de Grace, ou 0 si elle n'y est pas.
+
+> **Solution**
+>
+> ```rythme
+> ages = dict([["Ada", 36], ["Alan", 41]])
+> print(ages["Ada"])
+> print(unwrap_or(get(ages, "Grace"), 0))
+> ```
+>
+> ```sortie
+> 36
+> 0
+> ```
+
 ## Ajouter et retirer une clé
+
+Les données bougent : un nouveau pays arrive, un autre disparaît, une valeur était
+fausse. Il faut donc pouvoir ajouter, retirer ou corriger une clé.
 
 Un dictionnaire ne change jamais : il est
 [immuable](../debuter/glossaire.md#immuable). `put` et `remove` fabriquent
@@ -120,10 +165,37 @@ dict("France" => "PARIS", "Italie" => "Rome")
 dict("France" => "Paris", "Italie" => "Rome")
 ```
 
+Ligne par ligne :
+
+- `plus` est une copie de `capitales` avec une clé en plus : le Chili ;
+- `moins` est une copie sans l'Italie ;
+- `corrige` est une copie où la France a une nouvelle valeur, `"PARIS"` ;
+- le dernier `print` le prouve : `capitales` contient toujours les deux mêmes paires.
+
 `put` ajoute la clé, ou remplace sa valeur si elle existe déjà. Le
 dictionnaire `capitales` d'origine n'a pas bougé.
 
+**À vous :** partez de `panier = dict([["pomme", 2]])`. Créez un nouveau dictionnaire
+`rempli` avec 3 poires en plus, puis affichez `rempli` et `panier`.
+
+> **Solution**
+>
+> ```rythme
+> panier = dict([["pomme", 2]])
+> rempli = put(panier, "poire", 3)
+> print(rempli)
+> print(panier)
+> ```
+>
+> ```sortie
+> dict("poire" => 3, "pomme" => 2)
+> dict("pomme" => 2)
+> ```
+
 ## Clés, valeurs et paires
+
+Parfois, vous voulez seulement une partie du dictionnaire : la liste des pays, ou la
+liste des capitales, par exemple pour les trier ou les compter.
 
 ```rythme
 capitales = dict([["France", "Paris"], ["Italie", "Rome"]])
@@ -149,6 +221,9 @@ Ces trois fonctions donnent des **listes** : vous pouvez ensuite utiliser
 
 ## Parcourir un dictionnaire
 
+Pour afficher ou traiter toutes les paires, une par une, vous n'allez pas écrire une
+ligne par clé : vous demandez à Rythme de passer sur chacune.
+
 `each` appelle une fonction pour chaque paire, dans l'ordre des clés. La
 fonction reçoit **deux** valeurs : la clé et la valeur.
 
@@ -167,6 +242,14 @@ La capitale de France est Paris.
 La capitale de Japon est Tokyo.
 ```
 
+Ligne par ligne :
+
+- `each` prend la première paire : `pays` vaut `"France"` et `ville` vaut `"Paris"`.
+  La petite fonction affiche `France : Paris` ;
+- puis il passe à la paire suivante, le Japon, et recommence ;
+- les lignes `capitales.each do |pays, ville|` ... `end` font la même chose, avec une
+  autre phrase.
+
 Le style avec `do |pays, ville|` est celui de Ruby ; les deux écritures font
 la même chose.
 
@@ -183,6 +266,23 @@ print(map_values(prix, fn(p) = p * 2))
 dict("poire" => 5, "pomme" => 3)
 dict("figue" => 18, "poire" => 10, "pomme" => 6)
 ```
+
+**À vous :** avec `prix = dict([["pomme", 3], ["poire", 5]])`, affichez une ligne par
+fruit, de la forme « pomme coûte 3 € ».
+
+> **Solution**
+>
+> ```rythme
+> prix = dict([["pomme", 3], ["poire", 5]])
+> each(prix, fn(fruit, p) = print("{fruit} coûte {p} €"))
+> ```
+>
+> ```sortie
+> poire coûte 5 €
+> pomme coûte 3 €
+> ```
+>
+> La poire vient d'abord : le dictionnaire est rangé dans l'ordre alphabétique.
 
 ## Compter des mots
 
@@ -209,6 +309,15 @@ print(compte["le"])
 dict("chat" => 2, "chien" => 1, "et" => 2, "le" => 3)
 3
 ```
+
+Ligne par ligne :
+
+- `compter` reçoit le dictionnaire du moment et un mot. Il lit le compteur du mot
+  (0 s'il est absent) et donne un nouveau dictionnaire avec ce compteur plus 1 ;
+- `split(texte)` coupe la phrase en une liste de mots : `["le", "chat", "et", ...]` ;
+- `fold` part de `dict()` et appelle `compter` pour chaque mot, en passant à chaque
+  fois le dictionnaire du tour précédent ;
+- après le dernier mot, `compte` contient le résultat : « le » a été vu 3 fois.
 
 Pour trouver les mots les plus fréquents, on passe par la liste des paires :
 
@@ -243,9 +352,20 @@ set("a", "b", "e", "n")
 set() true
 ```
 
+Ligne par ligne :
+
+- la liste contient deux fois `"rouge"`, mais l'ensemble ne le garde qu'une fois :
+  il reste 3 couleurs ;
+- `chars("banane")` donne les lettres une par une ; `set` ne garde que les lettres
+  différentes ;
+- `set()` est l'ensemble vide, et `is_empty` confirme qu'il ne contient rien.
+
 Comme un dictionnaire, un ensemble est rangé dans l'ordre de ses valeurs.
 
 ## Ajouter, retirer, chercher
+
+Un ensemble sert souvent de liste d'invités : on ajoute quelqu'un, on en retire un
+autre, et surtout on vérifie si une personne est sur la liste.
 
 Les noms sont les mêmes que pour les listes et les dictionnaires :
 
@@ -273,6 +393,9 @@ Chercher dans un ensemble est très rapide, même avec des millions
 d'éléments.
 
 ## Combiner deux ensembles
+
+Comparer deux groupes est une question fréquente : qui est dans les deux ? qui
+manque dans l'un ? Les ensembles répondent à ces questions en une ligne.
 
 Pensez à deux cercles qui se chevauchent : les amis d'Ada et les amis de
 Linus.
@@ -302,6 +425,23 @@ true
 
 `union` marche aussi avec deux dictionnaires : pour une clé présente des
 deux côtés, la valeur du second l'emporte.
+
+**À vous :** Ada, Léa et Tom sont venus lundi ; Léa et Sam sont venus mardi.
+Affichez les élèves venus les deux jours, puis ceux venus seulement lundi.
+
+> **Solution**
+>
+> ```rythme
+> lundi = set(["Ada", "Léa", "Tom"])
+> mardi = set(["Léa", "Sam"])
+> print(intersection(lundi, mardi))
+> print(difference(lundi, mardi))
+> ```
+>
+> ```sortie
+> set("Léa")
+> set("Ada", "Tom")
+> ```
 
 ## Enregistrement, dictionnaire ou ensemble ?
 
