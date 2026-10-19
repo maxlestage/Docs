@@ -26,6 +26,13 @@ print(name, birth_year)
 Ada 1815
 ```
 
+Line by line:
+
+- `name = "Ada"` stores the text `"Ada"` under the name `name`;
+- `birth_year = 1815` does the same with the number 1815;
+- `print(name, birth_year)` finds both values through their names, then
+  displays them.
+
 Picture a label stuck on a box: `name` is the label, `"Ada"` is what's
 inside the box. In other languages, this is called a
 [variable](../debuter/glossaire.md#variable).
@@ -33,6 +40,10 @@ inside the box. In other languages, this is called a
 `print` displays its values separated by a space, then goes to a new line.
 
 ## Names never change
+
+A value that changes along the way is a common source of mistakes: you no
+longer know what it holds at a given point in the program. Rythme avoids this
+problem with one simple rule.
 
 In Rythme, a value never changes: it is
 [immutable](../debuter/glossaire.md#immutable). A name refers to a single
@@ -48,6 +59,13 @@ print(total, total2)
 10 15
 ```
 
+Line by line:
+
+- `total = 10`: the name `total` refers to 10;
+- `total2 = total + 5` calculates 10 + 5, then gives the result, 15, to the
+  new name `total2`;
+- `total` has not moved: so `print` displays 10, then 15.
+
 The label is stuck for good: you don't peel it off, you stick a new one on
 a new box. This makes programs easier to follow: when you read `total`, you
 know it is 10 everywhere in the program.
@@ -55,7 +73,26 @@ know it is 10 everywhere in the program.
 > **Remember:** no `x = x + 1`, no `x += 1`. A new value gets a new name.
 > Rythme refuses both (see [common mistakes](#common-mistakes)).
 
+**Your turn:** write a program that gives the name `apples` to the value 4,
+then the name `apples2` to `apples` plus 3, and prints both.
+
+> **Solution**
+>
+> ```rythme
+> apples = 4
+> apples2 = apples + 3
+> print(apples, apples2)
+> ```
+>
+> ```sortie
+> 4 7
+> ```
+
 ## Kinds of values
+
+You don't do the same thing with every value: you add two numbers, you turn
+a text into capitals, but a number in capitals makes no sense. Knowing the
+kind of a value tells you what you can do with it.
 
 Every value has a kind, its [type](../debuter/glossaire.md#type). Here are
 the four simplest ones:
@@ -84,6 +121,9 @@ A `Float` is always displayed with a point, even when it is a whole number:
 `2.0`. So you never mistake it for the `Int` `2`.
 
 ## Calculating
+
+Programs very often calculate: a shopping total, an average, a fair share.
+As on a calculator, you write the calculation and Rythme gives the result.
 
 Here are the calculation **operators**:
 
@@ -143,7 +183,26 @@ print(round(3.7), round(3.14159, 2), int(3.9), float(2))
 `round(x)` rounds to the nearest whole number, `round(x, 2)` keeps two
 decimals, `int` cuts off the decimals, `float` gives a decimal number.
 
+**Your turn:** 17 candies are shared between 5 children. Write a program
+that prints how many each child gets, then how many are left over.
+
+> **Solution**
+>
+> ```rythme
+> candies = 17
+> children = 5
+> print(candies // children, candies % children)
+> ```
+>
+> ```sortie
+> 3 2
+> ```
+
 ## Texts and insertion
+
+A program often talks to the person using it: "Hello, Ada", "Total: 15
+dollars". So it must build sentences that contain values, a bit like filling
+in the blanks of a form.
 
 A text is written between straight double quotes `"`. To put a value inside
 a text, write it between braces `{...}`: this is **insertion**.
@@ -159,6 +218,14 @@ print("In ten years: {age + 10} years old.")
 Ada is 36 years old.
 In ten years: 46 years old.
 ```
+
+Line by line:
+
+- `name` refers to `"Ada"` and `age` refers to 36;
+- in `"{name} is {age} years old."`, Rythme replaces `{name}` with Ada and
+  `{age}` with 36, then prints the sentence;
+- on the last line, it first calculates `age + 10`, which is 46, then inserts
+  it into the text.
 
 Between the braces, you can write a calculation, not just a name. As in
 Ruby, `#{...}` works too:
@@ -198,7 +265,25 @@ HI 3 ok ["a", "b", "c"]
 `upper` turns letters into capitals, `len` counts the characters, `trim`
 removes the spaces around, `split` cuts into pieces.
 
+**Your turn:** give the name `croissants` to 3 and the name `unit_price` to 2.
+Using insertion, print the sentence `3 croissants cost 6 dollars.`
+
+> **Solution**
+>
+> ```rythme
+> croissants = 3
+> unit_price = 2
+> print("{croissants} croissants cost {croissants * unit_price} dollars.")
+> ```
+>
+> ```sortie
+> 3 croissants cost 6 dollars.
+> ```
+
 ## Printing with print and puts
+
+Printing is your only way to see what a program does: without `print`, it
+calculates in silence and you see nothing.
 
 `print` and `puts` are the same function. `puts` is the Ruby name. At the
 start of a line, you can even leave out the parentheses:
@@ -214,6 +299,13 @@ with parentheses
 without parentheses
 two values: 2
 ```
+
+Line by line:
+
+- the first line prints its text, with parentheses;
+- `puts "without parentheses"` does exactly the same, without parentheses;
+- the last line gives two values: a text and the calculation `1 + 1`.
+  Rythme calculates 2, then prints both.
 
 The values given to `print` are separated by commas. They are displayed
 separated by a space.
@@ -233,11 +325,22 @@ print(price * 2)
 24
 ```
 
+Line by line:
+
+- the first line is only a comment: Rythme skips it;
+- `price = 12` runs, and the comment after it is ignored;
+- `print(price * 2)` calculates 12 × 2 and prints 24.
+
 You will also come across `##`, two hash signs: it's a comment that
 describes the function written just below it (see
 [documenting with rythme doc](projet.md)).
 
 ## Accents in names
+
+> **Note:** this part can wait. Read it once the basics feel solid.
+
+A well-chosen name makes a program easy to read again. It must still follow
+a few rules.
 
 A name starts with a letter or `_`, then contains letters, digits and `_`.
 Accents are allowed:
