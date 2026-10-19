@@ -483,5 +483,5 @@ En JSON, les noms de propriétés et les textes s'écrivent entre guillemets **d
   ne survivent pas tels quels.
 - Un CSV simple se lit avec `split` ; convertissez et vérifiez chaque colonne.
 
-Suite : [TypeScript pour le web](web.md). Comparez avec
+Suite : [les expressions régulières en TypeScript](regex.md). Comparez avec
 [les formats en Ruby](../ruby/formats.md).
