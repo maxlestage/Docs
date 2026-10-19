@@ -12,6 +12,10 @@ Cette page explique comment manipuler du texte en Python : découper, chercher, 
 
 ## Le type str
 
+Presque tous les programmes manipulent du texte : un prénom, un message, une adresse
+e-mail, une ligne lue dans un fichier. Savoir le ranger et le transformer est donc
+indispensable.
+
 Un texte en Python est une [chaîne de caractères](../debuter/glossaire.md#chaine-de-caracteres),
 de type `str`. Imaginez un collier de perles : chaque perle est un caractère (une
 lettre, un chiffre, un espace, un symbole), et les perles sont dans un ordre précis.
@@ -28,6 +32,12 @@ print(len(message))
 Bonjour Salut C'est l'heure
 7
 ```
+
+Ligne par ligne :
+
+- `message`, `autre` et `citation` reçoivent chacun un texte, écrit entre guillemets ;
+- le premier `print` affiche les trois textes à la suite, séparés par un espace ;
+- `len(message)` compte les caractères de « Bonjour » : il y en a 7.
 
 - Guillemets doubles ou simples, au choix. Prenez les doubles si le texte contient une
   apostrophe.
@@ -48,6 +58,9 @@ hahaha
 ```
 
 ## Lire un caractère : les indices
+
+Vous avez parfois besoin d'un seul caractère : l'initiale d'un prénom, le dernier
+chiffre d'un code. Les indices servent à cela, comme les numéros des cases d'un casier.
 
 Chaque caractère a une position, son [indice](../debuter/glossaire.md#indice). Le
 premier est à l'indice **0**. Les indices négatifs comptent depuis la fin : `-1` est le
@@ -74,7 +87,27 @@ n
 o
 ```
 
+**À vous :** écrivez un programme qui range `prenom = "Camille"` dans une variable,
+puis affiche sa première lettre et sa dernière lettre.
+
+> **Solution**
+>
+> ```python
+> prenom = "Camille"
+> print(prenom[0])
+> print(prenom[-1])
+> ```
+>
+> ```sortie
+> C
+> e
+> ```
+
 ## Découper : les tranches
+
+Un seul caractère ne suffit pas toujours : vous voulez parfois les trois premières
+lettres d'un mot, ou l'année à la fin d'une date. Une tranche découpe un morceau, comme
+une part dans un gâteau.
 
 Une **tranche** (*slice*) prend un morceau du texte : `texte[début:fin]`. Le début est
 inclus, la fin est **exclue**, comme pour `range`.
@@ -98,11 +131,21 @@ Pto
 nohtyP
 ```
 
+Ligne par ligne :
+
+- `mot[0:3]` prend les indices 0, 1 et 2 : « Pyt ». L'indice 3 est exclu ;
+- `mot[2:]` part de l'indice 2 et va jusqu'au bout : « thon » ;
+- `mot[-3:]` part du troisième caractère avant la fin : « hon » ;
+- `mot[::-1]` lit le mot de la fin vers le début : « nohtyP ».
+
 - sans début, on part du début ; sans fin, on va jusqu'au bout ;
 - un troisième nombre donne le **pas** : `[::2]` prend une lettre sur deux ;
 - `[::-1]` parcourt à l'envers : c'est l'astuce classique pour retourner un texte.
 
 ## Un texte ne se modifie pas
+
+Cette règle explique une surprise fréquente chez les débutants : vous appelez une
+méthode sur un texte, et pourtant votre variable ne change pas. Voici pourquoi.
 
 Un `str` est [immuable](../debuter/glossaire.md#immuable) : une fois créé, il ne
 change plus. Toutes les opérations sur un texte renvoient un **nouveau** texte.
@@ -123,10 +166,22 @@ ALICE
 Alice
 ```
 
+Ligne par ligne :
+
+- `nom` contient « alice » ;
+- `nom.upper()` fabrique un nouveau texte, « ALICE », rangé dans `majuscule`. `nom` n'a
+  pas bougé : le premier `print` affiche toujours « alice » ;
+- `nom = nom.capitalize()` fabrique « Alice » et le range dans `nom`, à la place de
+  l'ancien texte : le dernier `print` affiche « Alice ».
+
 Pour « changer » une variable texte, rangez le nouveau texte dans la variable :
 `nom = nom.capitalize()`.
 
 ## Changer la casse et nettoyer
+
+Les textes tapés par des personnes sont rarement propres : des majuscules au hasard,
+des espaces en trop. Avant de les comparer ou de les afficher, on les remet en ordre,
+comme on range un tiroir en désordre.
 
 Une [méthode](../debuter/glossaire.md#methode) est une fonction attachée à une valeur.
 On l'appelle avec un point : `texte.methode()`. Voici les plus utiles :
@@ -154,6 +209,15 @@ bonjour
 titre
 ```
 
+Ligne par ligne :
+
+- `titre` ne change jamais : chaque méthode renvoie un nouveau texte, aussitôt affiché ;
+- `saisie` contient trois espaces au début, deux à la fin et un retour à la ligne `\n` ;
+- `strip()` enlève tout cela des deux côtés. Les crochets montrent où le texte commence
+  et où il finit ;
+- `lstrip()` n'enlève que le début. Le `replace` change le retour à la ligne en `↵`,
+  pour qu'on le voie.
+
 - `upper` et `lower` : tout en majuscules, tout en minuscules ;
 - `title` : une majuscule à chaque mot ; `capitalize` : seulement à la première lettre ;
 - `strip` enlève les espaces et retours à la ligne aux deux bouts ; `lstrip` et
@@ -162,7 +226,26 @@ titre
 > **Astuce :** pensez à `strip()` dès que vous lisez un texte tapé par un utilisateur
 > ou lu dans un fichier : il y a souvent des espaces en trop.
 
+**À vous :** écrivez un programme qui range `saisie = "  bOB  "` dans une variable, puis
+affiche le prénom sans les espaces, avec une majuscule seulement au début : « Bob ».
+
+> **Solution**
+>
+> ```python
+> saisie = "  bOB  "
+> prenom = saisie.strip().capitalize()
+> print(prenom)
+> ```
+>
+> ```sortie
+> Bob
+> ```
+
 ## Découper et recoller : split et join
+
+Un texte contient souvent plusieurs informations collées : les mots d'une phrase, ou
+les champs d'une ligne de tableur séparés par des `;`. `split` les sépare pour les
+traiter une par une, et `join` les rassemble.
 
 `split` coupe un texte en morceaux et renvoie une [liste](../debuter/glossaire.md#liste).
 Sans argument, il coupe aux espaces.
@@ -183,6 +266,14 @@ print(ligne.split(";"))
 ['Alice', '30', 'Lyon']
 ```
 
+Ligne par ligne :
+
+- `phrase.split()` coupe à chaque espace et donne une liste de 6 mots, rangée dans
+  `mots` ;
+- `len(mots)` compte les éléments de la liste, pas les lettres : 6 ;
+- `ligne.split(";")` coupe à chaque `;` : le prénom, l'âge et la ville sont séparés.
+  Remarquez que `'30'` reste un texte.
+
 `join` fait l'inverse : il colle les morceaux d'une liste, avec un séparateur. On
 l'appelle **sur le séparateur**.
 
@@ -202,7 +293,27 @@ a-b-c
 > **À retenir :** `texte.split(sep)` donne une liste ; `sep.join(liste)` redonne un
 > texte.
 
+**À vous :** écrivez un programme qui range `date = "19/10/2026"` dans une variable, la
+découpe aux `/`, affiche la liste obtenue, puis recolle les morceaux avec des tirets.
+
+> **Solution**
+>
+> ```python
+> date = "19/10/2026"
+> morceaux = date.split("/")
+> print(morceaux)
+> print("-".join(morceaux))
+> ```
+>
+> ```sortie
+> ['19', '10', '2026']
+> 19-10-2026
+> ```
+
 ## Remplacer
+
+Corriger un mot partout dans un texte, enlever les espaces d'un nombre : c'est le
+« rechercher et remplacer » d'un traitement de texte, en une seule ligne.
 
 `replace(ancien, nouveau)` remplace toutes les occurrences d'un morceau de texte.
 
@@ -222,6 +333,10 @@ J'aime le café. Le thé est chaud.
 Le troisième argument limite le nombre de remplacements.
 
 ## Chercher dans un texte
+
+Avant d'utiliser un texte, on veut souvent le vérifier : une adresse e-mail
+contient-elle un `@` ? Un nom de fichier finit-il par `.txt` ? Python offre plusieurs
+façons de poser ces questions.
 
 ```python
 email = "alice@exemple.fr"
@@ -272,7 +387,27 @@ print("2026".isdigit(), "12a".isdigit(), "Été".isalpha())
 True False True
 ```
 
+**À vous :** écrivez un programme qui range `fichier = "photo_vacances.jpg"` dans une
+variable, affiche si son nom finit par `.jpg`, puis combien de fois il contient la
+lettre `a`.
+
+> **Solution**
+>
+> ```python
+> fichier = "photo_vacances.jpg"
+> print(fichier.endswith(".jpg"))
+> print(fichier.count("a"))
+> ```
+>
+> ```sortie
+> True
+> 2
+> ```
+
 ## Aligner du texte
+
+Pour afficher un ticket de caisse ou un tableau, les colonnes doivent tomber les unes
+sous les autres. Sans alignement, chaque ligne a sa propre longueur et tout est décalé.
 
 Dans une f-string, `:` suivi d'un alignement et d'une largeur place le texte dans une
 colonne :
@@ -294,11 +429,23 @@ Confiture     3.75 €
 *******FIN********
 ```
 
+Ligne par ligne :
+
+- `produits` est une liste de paires : un nom et un prix ;
+- à chaque tour, la boucle range le nom dans `nom` et le prix dans `prix` ;
+- le `print` place le nom dans une colonne de 12 caractères, puis le prix dans une
+  colonne de 6 ;
+- la dernière ligne centre « FIN » sur 18 caractères et remplit le reste avec des `*`.
+
 `{nom:<12}` réserve 12 caractères, texte à gauche. `{prix:>6.2f}` réserve 6
 caractères, nombre à droite avec 2 décimales. Les formats de nombres sont détaillés
 dans [nombres et calculs](nombres.md).
 
 ## Les textes sur plusieurs lignes
+
+Un poème, une adresse postale, un long message d'aide : certains textes ont
+naturellement plusieurs lignes. Les triples guillemets évitent de tout écrire sur une
+seule ligne interminable.
 
 Entre **triples** guillemets `"""..."""`, un texte peut s'étendre sur plusieurs lignes.
 Les retours à la ligne sont gardés.
@@ -319,6 +466,9 @@ Si bleu, si calme !
 `splitlines()` découpe le texte en une liste de lignes.
 
 ## Les caractères spéciaux
+
+Comment mettre un retour à la ligne, ou un guillemet, dans un texte qui est lui-même
+entre guillemets ? Il faut une façon spéciale de les écrire.
 
 Certains caractères s'écrivent avec une barre oblique inverse `\`, suivie d'une lettre :
 c'est une **séquence d'échappement**.
@@ -347,11 +497,19 @@ C:\dossier\fichier.txt
 C:\dossier\nouveau
 ```
 
+Ligne par ligne :
+
+- `\n` coupe la ligne : « Ligne 2 » s'affiche en dessous ;
+- `\t` insère une tabulation, un grand espace qui aide à aligner ;
+- `\"` met un guillemet dans le texte sans le fermer, et `\\` affiche une seule barre.
+
 Le `r` devant le dernier texte en fait une chaîne **brute** (*raw*) : les `\` y restent
 tels quels. Pratique pour les chemins Windows et les
 [expressions régulières](regex.md).
 
 ## Unicode : ord et chr
+
+> **Note :** cette partie peut attendre. Lisez-la quand les bases seront solides.
 
 Un ordinateur ne stocke que des nombres. [Unicode](../debuter/glossaire.md#unicode)
 donne un numéro à chaque caractère du monde : lettres accentuées, alphabets, emojis.

@@ -35,9 +35,22 @@ Bonjour !
 Bonjour !
 ```
 
+Ligne par ligne :
+
+- `fn saluer() { … }` décrit la fonction : son nom, `saluer`, et ce qu'elle fait. À ce
+  moment, rien ne s'affiche encore ;
+- le programme commence toujours par `main` ;
+- le premier `saluer();` appelle la fonction : Rust exécute son bloc, affiche
+  « Bonjour ! », puis revient dans `main` ;
+- le second `saluer();` refait exactement la même chose.
+
 L'ordre n'a pas d'importance : une fonction peut être écrite avant ou après `main`.
 
 ## Les paramètres
+
+Une fonction qui fait toujours exactement la même chose sert peu. Les paramètres lui
+donnent des informations différentes à chaque appel, comme une recette de crêpes que
+l'on fait pour 2 ou pour 6 personnes.
 
 Un [paramètre](../debuter/glossaire.md#parametre) est une variable que la fonction
 reçoit. La valeur donnée au moment de l'appel s'appelle un
@@ -61,9 +74,43 @@ Hugo a 12 ans.
 Inès a 34 ans.
 ```
 
+Ligne par ligne :
+
+- `fn presenter(nom: &str, age: u32)` annonce deux paramètres : un texte `nom` et un
+  nombre entier positif `age` ;
+- `presenter("Hugo", 12);` appelle la fonction : `nom` vaut `"Hugo"` et `age` vaut
+  `12`, puis le `println!` affiche la phrase ;
+- le second appel recommence avec d'autres valeurs : `"Inès"` et `34`.
+
 Ici, `nom` et `age` sont les paramètres ; `"Hugo"` et `12` sont les arguments.
 
+**À vous :** écrivez une fonction `afficher_prix` qui reçoit le nom d'un article
+(`&str`) et son prix en euros (`u32`), puis affiche par exemple « Pain : 2 euros ».
+Appelez-la pour le pain à 2 euros et pour le fromage à 5 euros.
+
+> **Solution**
+>
+> ```rust
+> fn afficher_prix(article: &str, prix: u32) {
+>     println!("{article} : {prix} euros");
+> }
+>
+> fn main() {
+>     afficher_prix("Pain", 2);
+>     afficher_prix("Fromage", 5);
+> }
+> ```
+>
+> ```sortie
+> Pain : 2 euros
+> Fromage : 5 euros
+> ```
+
 ## Le type de retour
+
+Une fonction peut aussi faire un calcul et vous **rendre** le résultat, comme une
+calculatrice. Vous pouvez alors ranger ce résultat dans une variable et vous en
+resservir.
 
 Le type renvoyé s'écrit après une flèche `->`. La **dernière expression**, sans
 point-virgule, est la valeur renvoyée :
@@ -82,6 +129,15 @@ fn main() {
 ```sortie
 49
 ```
+
+Ligne par ligne :
+
+- `fn carre(n: i32) -> i32` : la fonction reçoit un entier `n` et promet de rendre un
+  entier ;
+- dans `main`, `carre(7)` appelle la fonction : `n` vaut 7 ;
+- la dernière ligne de la fonction, `n * n`, calcule 49. Elle n'a pas de `;` : c'est
+  la valeur renvoyée ;
+- `let resultat = carre(7);` range donc 49 dans `resultat`, que `println!` affiche.
 
 Pour sortir plus tôt, utilisez `return` :
 
@@ -131,7 +187,30 @@ fn main() {
 3 reste 2
 ```
 
+**À vous :** écrivez une fonction `perimetre` qui reçoit le côté d'un carré (`i32`)
+et renvoie son périmètre, c'est-à-dire 4 fois le côté. Affichez le périmètre d'un
+carré de côté 5.
+
+> **Solution**
+>
+> ```rust
+> fn perimetre(cote: i32) -> i32 {
+>     4 * cote
+> }
+>
+> fn main() {
+>     println!("{}", perimetre(5));
+> }
+> ```
+>
+> ```sortie
+> 20
+> ```
+
 ## Expressions et instructions
+
+Cette différence explique une règle que vous venez de voir : la dernière ligne d'une
+fonction n'a pas de point-virgule quand c'est elle qui donne la valeur renvoyée.
 
 C'est une idée importante en Rust :
 
@@ -154,10 +233,21 @@ println!("{x}");
 12
 ```
 
+Ligne par ligne :
+
+- `let x = {` ouvre un bloc dont la valeur ira dans `x` ;
+- `let a = 3;` et `let b = 4;` sont des instructions : elles finissent par `;` et ne
+  produisent pas de valeur ;
+- `a * b` n'a pas de `;` : c'est une expression, qui vaut 12. C'est la valeur du
+  bloc ;
+- `x` reçoit donc 12, et `println!` l'affiche.
+
 > **Attention :** un point-virgule en trop transforme l'expression en instruction. La
 > fonction ne renvoie alors plus rien (voir [Erreurs fréquentes](#erreurs-frequentes)).
 
 ## Une fonction qui s'appelle elle-même
+
+> **Note :** cette partie peut attendre. Lisez-la quand les bases seront solides.
 
 Une fonction peut s'appeler elle-même : c'est la
 [récursion](../debuter/glossaire.md#recursion). Il faut toujours un cas d'arrêt, sinon
@@ -181,7 +271,19 @@ fn main() {
 120
 ```
 
+Ligne par ligne :
+
+- `factorielle(5)` calcule `5 * factorielle(4)` : il lui faut d'abord la réponse
+  pour 4 ;
+- de la même façon, `factorielle(4)` demande `factorielle(3)`, puis 2, puis 1 ;
+- `factorielle(1)` est le cas d'arrêt : il renvoie 1 sans s'appeler ;
+- les réponses remontent : 2 × 1 = 2, puis 3 × 2 = 6, 4 × 6 = 24 et 5 × 24 = 120.
+
 ## Les closures
+
+Parfois, vous avez besoin d'une toute petite fonction, juste à un endroit : par
+exemple pour dire à une autre fonction quel calcul faire. L'écrire à part avec `fn`
+serait lourd. Une closure s'écrit sur une ligne, là où vous en avez besoin.
 
 Une [closure](../debuter/glossaire.md#closure) est une petite fonction sans nom, que
 l'on range dans une variable. Ses paramètres s'écrivent entre barres `|…|`. Les types
@@ -198,6 +300,31 @@ println!("{}", ajouter(2, 3));
 10
 5
 ```
+
+Ligne par ligne :
+
+- `let double = |x: i32| x * 2;` range une closure dans `double` : elle reçoit `x` et
+  renvoie `x * 2` ;
+- `let ajouter = |a, b| a + b;` reçoit deux valeurs et renvoie leur somme. Rust
+  devine leur type ;
+- `double(5)` s'appelle comme une fonction et vaut 10 ; `ajouter(2, 3)` vaut 5.
+
+**À vous :** écrivez une closure `est_pair` qui reçoit un `i32` et renvoie `true` si
+le nombre est pair (le reste de sa division par 2 vaut 0). Affichez le résultat pour 4,
+puis pour 7.
+
+> **Solution**
+>
+> ```rust
+> let est_pair = |n: i32| n % 2 == 0;
+> println!("{}", est_pair(4));
+> println!("{}", est_pair(7));
+> ```
+>
+> ```sortie
+> true
+> false
+> ```
 
 ### Capturer l'environnement
 

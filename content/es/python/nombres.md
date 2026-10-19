@@ -12,6 +12,10 @@ Esta página explica cómo calcula Python: los operadores, los enteros y los flo
 
 ## Los operadores básicos
 
+Un programa se pasa el tiempo calculando: el total de una cesta de la compra, la edad de
+una persona, la puntuación de un jugador. Así que, antes que nada, hay que saber escribir
+un cálculo.
+
 Un [operador](../debuter/glossaire.md#operador) es un símbolo que hace un cálculo.
 Python sabe hacer todo lo que hace una calculadora.
 
@@ -36,6 +40,15 @@ print(7 ** 2, 2 ** 10)
 3.5 3 1
 49 1024
 ```
+
+Línea por línea:
+
+- cada `print` muestra varios resultados, separados por comas en el código y por
+  espacios en la pantalla;
+- la primera línea hace las tres cuentas del colegio: `9`, `5` y `14`;
+- la segunda muestra tres formas de dividir 7 entre 2: la sección siguiente las explica;
+- la tercera calcula potencias: `7 ** 2` quiere decir 7 × 7, y `2 ** 10` quiere decir 2
+  multiplicado 10 veces por sí mismo.
 
 ## Tres divisiones: /, // y %
 
@@ -62,6 +75,15 @@ print(10 / 2)
 5.0
 ```
 
+Línea por línea:
+
+- `caramelos` vale 17 y `ninos` vale 5;
+- `caramelos / ninos` hace el reparto «exacto»: `3.4` caramelos cada uno, lo que no
+  tiene mucho sentido con caramelos;
+- `caramelos // ninos` cuenta los caramelos enteros por niño: `3`;
+- `caramelos % ninos` cuenta lo que queda en la bolsa: `2`. En efecto, 3 × 5 = 15, y
+  17 - 15 = 2.
+
 Fíjate en que `10 / 2` da `5.0` y no `5`: el `/` devuelve un `float`.
 
 El resto `%` es muy útil para saber si un número es par: un número par tiene un resto
@@ -80,7 +102,27 @@ False
 > **Consejo:** para convertir segundos en minutos y segundos, combina `//` y `%`:
 > `125 // 60` da `2` minutos, `125 % 60` da `5` segundos.
 
+**Te toca:** guardas 50 huevos en cajas de 12. Escribe un programa que guarde 50 en una
+variable `huevos` y luego muestre el número de cajas llenas y el número de huevos que
+sobran.
+
+> **Solución**
+>
+> ```python
+> huevos = 50
+> print(huevos // 12)
+> print(huevos % 12)
+> ```
+>
+> ```sortie
+> 4
+> 2
+> ```
+
 ## El orden de las operaciones
+
+Un mismo cálculo se puede leer de dos formas: ¿`2 + 3 * 4` es 20 o 14? Para que nunca
+haya dudas, Python sigue reglas fijas, las mismas que en clase.
 
 Python sigue las reglas de las matemáticas: primero `**`, luego `*`, `/`, `//`, `%`, y
 después `+` y `-`. Con la misma prioridad, calcula de izquierda a derecha.
@@ -99,10 +141,19 @@ print(10 - 4 - 3)
 3
 ```
 
+Línea por línea:
+
+- `2 + 3 * 4`: la multiplicación va antes, así que 3 × 4 = 12, y luego 2 + 12 = 14;
+- `(2 + 3) * 4`: los paréntesis van primero, así que 5, y luego 5 × 4 = 20;
+- `2 * 3 ** 2`: la potencia va antes que todo, así que 3 × 3 = 9, y luego 2 × 9 = 18;
+- `10 - 4 - 3`: de izquierda a derecha, así que 10 - 4 = 6, y luego 6 - 3 = 3.
+
 > **Recuerda:** si tienes dudas, pon paréntesis. No cuestan nada y hacen que el cálculo
 > sea evidente para quien lo lee.
 
 ## Enteros sin límite
+
+> **Nota:** esta parte puede esperar. Léela cuando las bases estén firmes.
 
 En muchos lenguajes, un entero tiene un tamaño máximo. En Python no: un `int` crece
 tanto como haga falta. Solo lo limita la memoria del ordenador.
@@ -121,6 +172,9 @@ El guion bajo `_` en un número solo sirve para hacerlo legible: `1_000_000` es 
 número que `1000000`.
 
 ## Los flotantes son aproximados
+
+Un número con decimales, como un precio o una temperatura, se llama flotante. Tienes
+que conocer su pequeña debilidad; si no, un día te sorprenderá un cálculo «evidente».
 
 Un [flotante](../debuter/glossaire.md#flotante) se guarda en
 [binario](../debuter/glossaire.md#binario). Algunos números sencillos en decimal, como
@@ -155,6 +209,14 @@ print(math.isclose(total, 0.3))
 True
 ```
 
+Línea por línea:
+
+- `import math` abre la caja de herramientas `math`, que se presenta más abajo;
+- `total` recibe `0.1 + 0.2`, es decir, `0.30000000000000004`;
+- `round(total, 2)` redondea a 2 cifras después del punto: obtienes `0.3`;
+- `math.isclose(total, 0.3)` pregunta «¿estos dos números son casi iguales?»: la
+  respuesta es `True`.
+
 > **Atención:** `round` redondea «al par más cercano» cuando el valor cae justo en la
 > mitad: `round(2.5)` da `2`, y `round(3.5)` da `4`. Es el redondeo del banquero, que
 > evita redondear siempre hacia arriba.
@@ -168,6 +230,8 @@ print(round(2.5), round(3.5), round(2.567, 1))
 ```
 
 ## Decimal y Fraction: cálculos exactos
+
+> **Nota:** esta parte puede esperar. Léela cuando las bases estén firmes.
 
 Con dinero, un pequeño error de redondeo puede ser un problema. El módulo `decimal`
 calcula en **decimal**, como en papel. Crea los números a partir de **textos**:
@@ -257,6 +321,13 @@ print(random.choice(["piedra", "papel", "tijera"]))
 piedra
 ```
 
+Línea por línea:
+
+- `import random` abre la caja de herramientas del azar;
+- `random.seed(42)` fija la semilla: las tiradas que siguen serán siempre las mismas;
+- los dos `randint(1, 6)` lanzan un dado dos veces: `6`, y luego `1`;
+- `choice` saca una palabra de la lista: aquí, `"piedra"`.
+
 - `randint(1, 6)`: un entero entre 1 y 6, **ambos incluidos**;
 - `choice(lista)`: un elemento de la lista;
 - `random()`: un flotante entre 0 y 1.
@@ -265,6 +336,10 @@ piedra
 > siempre la misma secuencia. Mantenlo para las pruebas.
 
 ## Convertir entre texto y números
+
+Un número escrito entre comillas, como `"42"`, es un texto: Python no puede hacer
+cálculos con él. Suele pasar con los datos tecleados o leídos de un archivo. Entonces
+hay que convertirlos, como cuando cambias euros por dólares antes de pagar.
 
 Tres funciones convierten un valor de un tipo a otro:
 
@@ -288,10 +363,35 @@ print(int(7.9))
 7
 ```
 
+Línea por línea:
+
+- `texto` contiene el texto `"42"`, no el número 42;
+- `int(texto)` lo convierte en número: `numero` vale 42, y `numero + 1` da `43`;
+- `float("3.5")` da el número `3.5`, y `3.5 * 2` da `7.0`;
+- `str(100)` da el texto `"100"`, que puedes pegar a `" puntos"` con `+`.
+
 Cuidado con `int(7.9)`: **corta** la parte decimal, no redondea. Para redondear, usa
 `round(7.9)`, que da `8`.
 
+**Te toca:** la variable `edad` contiene el texto `"17"`. Escribe un programa que
+muestre «El año que viene tendrás 18 años.» calculando 18 a partir de `edad`.
+
+> **Solución**
+>
+> ```python
+> edad = "17"
+> print("El año que viene tendrás " + str(int(edad) + 1) + " años.")
+> ```
+>
+> ```sortie
+> El año que viene tendrás 18 años.
+> ```
+
 ## Mostrar los números de forma bonita
+
+Un precio mostrado como `3.14159 €` o una población escrita `68373433` cuestan de leer.
+Un tique de caja siempre muestra 2 cifras después del punto: para eso sirven los
+formatos.
 
 En una f-string, añade `:` y luego un **formato** después del valor:
 
@@ -324,6 +424,21 @@ print(f"{1234567.891:,.2f}")
 
 > **Nota:** el formato `,` usa la coma inglesa. Para mostrar los miles con puntos, como
 > en español (`68.373.433`), reemplázala: `f"{poblacion:,}".replace(",", ".")`.
+
+**Te toca:** un artículo cuesta `12.5` euros y compras 3. Escribe un programa que
+muestre «Total: 37.50 €», con 2 cifras después del punto.
+
+> **Solución**
+>
+> ```python
+> precio = 12.5
+> cantidad = 3
+> print(f"Total: {precio * cantidad:.2f} €")
+> ```
+>
+> ```sortie
+> Total: 37.50 €
+> ```
 
 ## Errores frecuentes
 

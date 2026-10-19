@@ -12,6 +12,9 @@ This page shows how to choose between several cases with `if`, `unless` and `mat
 
 ## True or false: comparisons
 
+A program often has to decide: do you need an umbrella? is the person an adult? To
+decide, it first asks a question, and the answer is yes or no.
+
 A [condition](../debuter/glossaire.md#condition) is a question whose answer
 is `true` or `false`, a [boolean](../debuter/glossaire.md#boolean). You ask
 it with a comparison operator:
@@ -43,6 +46,9 @@ true true false
 
 ## if gives a value
 
+In daily life, you constantly choose depending on the situation: if it rains, you
+take a coat, otherwise a jacket. `if` lets a program make the same kind of choice.
+
 `if` chooses between two values depending on a condition. In Rythme, `if`
 is not a command: it is an **expression**. It gives a value, like a
 calculation. So you can store it in a name:
@@ -56,6 +62,14 @@ print(status)
 ```sortie
 adult
 ```
+
+Line by line:
+
+- `age = 20` gives the name `age` to the value 20;
+- to the right of the `=`, `if` asks the question "is 20 at least 18?". The answer is
+  `true`, so the `if` gives the value after `then`: `"adult"`;
+- this value gets the name `status`;
+- `print(status)` prints `adult`.
 
 The form is always `if condition then value else other_value`. Read it as:
 "if the age is at least 18, then "adult", otherwise "minor"".
@@ -98,6 +112,9 @@ big small
 
 ## Chaining conditions
 
+Often there are more than two cases. A number can be negative, zero or positive, and
+you want a different word for each one, like on a school report.
+
 `else if` chains several conditions. `then` and `else` can start a new
 line:
 
@@ -114,12 +131,43 @@ print(sign(-3), sign(0), sign(8))
 negative zero positive
 ```
 
+Line by line:
+
+- `fn sign(n) =` defines a function: it receives a number, named `n`;
+- for `sign(-3)`, the first question `-3 < 0` is true: the function gives
+  `"negative"` and does not read the rest;
+- for `sign(0)`, `0 < 0` is false, so we move to the `else if`: `0 == 0` is true, so
+  `"zero"`;
+- for `sign(8)`, both questions are false: we reach the last `else`, which gives
+  `"positive"`.
+
 The conditions are tried from top to bottom, and the first true one wins.
 
 The condition must be `true` or `false`. `if 1 then ...` is an error:
 nothing is "true" by default, not a number, not a text, not a list.
 
+**Your turn:** write a function `greeting(hour)` that gives "Good morning" if the hour
+is before 12, "Good afternoon" if it is before 18, and "Good evening" otherwise. Print
+`greeting(15)`.
+
+> **Solution**
+>
+> ```rythme
+> fn greeting(hour) =
+>   if hour < 12 then "Good morning"
+>   else if hour < 18 then "Good afternoon"
+>   else "Good evening"
+>
+> print(greeting(15))
+> ```
+>
+> ```sortie
+> Good afternoon
+> ```
+
 ## unless, the opposite of if
+
+> **Note:** this part can wait. Read it once the basics feel solid.
 
 As in Ruby, `unless` is the opposite of `if`: it gives the first value when
 the condition is **false**. It also always has an `else`:
@@ -155,6 +203,15 @@ print(day(6), day(2))
 ```sortie
 Saturday a weekday
 ```
+
+Line by line:
+
+- `fn day(n) = match n`: the function compares the number `n` with the patterns that
+  follow;
+- for `day(6)`, the first pattern `6` matches: the result is `"Saturday"`;
+- for `day(2)`, neither `6` nor `7` matches. `_` accepts anything: the result is
+  `"a weekday"`;
+- `print` shows both results, separated by a space.
 
 Each line is written `pattern -> result`, and `end` closes the `match`.
 Think of sorting mail: each letter goes into the first slot that fits it.
@@ -192,6 +249,27 @@ Hello Doctor Grace / Hello Ada
 
 `match` can do much more: see [your own types and match](types.md).
 
+**Your turn:** write a function `season(month)` that gives "winter" for months 12, 1
+and 2, "spring" from 3 to 5, "summer" from 6 to 8, and "autumn" otherwise. Print
+`season(1)`, `season(7)` and `season(10)`.
+
+> **Solution**
+>
+> ```rythme
+> fn season(month) = match month
+>   12 | 1 | 2 -> "winter"
+>   3..5 -> "spring"
+>   6..8 -> "summer"
+>   _ -> "autumn"
+> end
+>
+> print(season(1), season(7), season(10))
+> ```
+>
+> ```sortie
+> winter summer autumn
+> ```
+
 ## No loops
 
 Rythme has neither `for` nor `while`. If you write one, Rythme explains
@@ -202,6 +280,9 @@ whole list". It's like saying "wash all the plates" instead of "take plate
 1, wash it, take plate 2...". Here are the tools.
 
 ## Doing something for each element with each
+
+Imagine you are asked to print each item of a shopping list. Writing one `print` per
+item would be long and tedious. `each` does this work for you.
 
 `each` calls a function for each element. It replaces the loop that prints.
 Here, `1..3` is the **range** of numbers from 1 to 3, that is the list
@@ -232,7 +313,24 @@ Hello, Ada!
 Hello, Alan!
 ```
 
+**Your turn:** write a program that prints "To buy: …" for each item of the list
+`["bread", "milk", "rice"]`, using `each`.
+
+> **Solution**
+>
+> ```rythme
+> ["bread", "milk", "rice"] |> each(fn(item) = print("To buy: {item}"))
+> ```
+>
+> ```sortie
+> To buy: bread
+> To buy: milk
+> To buy: rice
+> ```
+
 ## Counting by 2, or backwards
+
+> **Note:** this part can wait. Read it once the basics feel solid.
 
 `a..b` counts up by 1. `step_by(n)` keeps one element out of every `n`, and
 `reverse` turns the list around:
@@ -253,6 +351,9 @@ print(5..1)
 
 ## Knowing the position with each_with_index
 
+Sometimes you want to number what you go through, like the steps of a recipe or a
+numbered shopping list.
+
 `each_with_index` gives the function the element **and** its position,
 starting from 0:
 
@@ -268,7 +369,18 @@ end
 3. eggs
 ```
 
+Line by line:
+
+- the list holds three items; `each_with_index` takes them one by one;
+- on the first round, `item` is `"bread"` and `i` is 0; on the second, `"milk"` and
+  1; on the third, `"eggs"` and 2;
+- `print` shows `i + 1` so that the list starts at 1, the way people usually count.
+
 ## Transforming each element with map
+
+Sometimes you want to change a whole list at once: double every price, square every
+number. It's like a machine where each object goes in on one side and comes out
+transformed on the other.
 
 `map` builds a **new** list, with the result of the function for each
 element. It replaces the loop that fills a list:
@@ -286,6 +398,9 @@ print(squares)
 a new list.
 
 ## Repeating with recursion
+
+Some repetitions have no ready-made list: you repeat "while" the job is not done,
+like a countdown that goes down to zero.
 
 For a "while" loop, write a function that calls itself: this is
 [recursion](../debuter/glossaire.md#recursion). There must always be a case
@@ -308,10 +423,41 @@ countdown(3)
 Liftoff!
 ```
 
+Line by line:
+
+- `fn countdown(0) = ...`: if the number received is 0, the function prints
+  "Liftoff!" and stops there;
+- `fn countdown(n)`: for any other number, it prints `n`, then calls itself with
+  `n - 1`;
+- `countdown(3)` starts everything: 3 is printed, then the call goes on with 2, then
+  1, then 0, which prints "Liftoff!".
+
 Here, the function has two definitions: one for `0` (the stopping case),
 one for the other numbers. `countdown(3)` prints 3 then calls
 `countdown(2)`, and so on down to 0. See
 [functions](fonctions.md#defining-by-cases).
+
+**Your turn:** write a recursive function `applaud(n)` that prints "clap" `n` times,
+then "Bravo!". Call `applaud(3)`.
+
+> **Solution**
+>
+> ```rythme
+> fn applaud(0) = print("Bravo!")
+> fn applaud(n)
+>   print("clap")
+>   applaud(n - 1)
+> end
+>
+> applaud(3)
+> ```
+>
+> ```sortie
+> clap
+> clap
+> clap
+> Bravo!
+> ```
 
 ## Common mistakes
 

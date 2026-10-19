@@ -36,6 +36,13 @@ Rome
 {}
 ```
 
+Line by line:
+
+- `ages` links three first names (the keys) to three ages (the values);
+- `capitals` links countries to their capital; `empty` contains nothing at all;
+- `print(ages)` prints the whole dictionary, and `len(ages)` counts its pairs: 3;
+- `capitals["Italy"]` looks up the key `"Italy"` and gives its value, `"Rome"`.
+
 - Keys are often strings or numbers. Each key is **unique**.
 - Values can be anything, even lists or other dictionaries.
 - The dictionary keeps the order in which the keys were added.
@@ -52,6 +59,10 @@ print(person)
 ```
 
 ## Reading a value: [] or get
+
+Reading a value is what you do most often: looking up the price of an item, the age of
+a person. But you also need to plan for a missing key, like a word that is not in the
+dictionary.
 
 There are two ways to read a value:
 
@@ -76,12 +87,22 @@ None
 False
 ```
 
+Line by line:
+
+- `stock["apple"]` and `stock.get("apple")` give the same thing: 12;
+- `stock.get("kiwi")` does not find the key `"kiwi"`: it returns `None`, with no error;
+- `stock.get("kiwi", 0)` returns the fallback value you give, 0;
+- `"kiwi" in stock` asks "does this key exist?". The answer: `False`.
+
 `in` checks whether a **key** exists (not a value).
 
 > **Remember:** use `d[key]` when the key must exist (if it is missing, that is a
 > bug). Use `d.get(key, default)` when it may be missing.
 
 ## Adding, changing, removing
+
+A dictionary is not frozen. Like an address book, it changes: a friend arrives,
+another one gets a new number, a third one leaves.
 
 To add or change an entry, assign a value to a key. If the key exists, its value is
 replaced; otherwise, it is created.
@@ -109,11 +130,38 @@ print(chloe_age, ages)
 35 {'Alice': 31}
 ```
 
+Line by line:
+
+- at the start, `ages` only contains Alice, with 30;
+- `ages["Bob"] = 25` creates the key `"Bob"`; `ages["Alice"] = 31` replaces 30 with 31;
+- `update` changes Bob's age (26) and adds Chloe (35);
+- `del` erases Bob; `pop` erases Chloe and stores her age, 35, in `chloe_age`.
+
 - `d[key] = value` adds or replaces;
 - `update` adds or replaces several keys at once;
 - `del d[key]` removes; `pop(key)` removes and returns the value.
 
+**Your turn:** write a program that creates a dictionary `prices` with `"bread": 1`
+and `"milk": 2`, then adds `"butter": 3`, changes the price of bread to 2 and prints
+the dictionary.
+
+> **Solution**
+>
+> ```python
+> prices = {"bread": 1, "milk": 2}
+> prices["butter"] = 3
+> prices["bread"] = 2
+> print(prices)
+> ```
+>
+> ```sortie
+> {'bread': 2, 'milk': 2, 'butter': 3}
+> ```
+
 ## Keys, values and pairs
+
+Sometimes you only need part of it: the names for a register, or only the grades to
+compute an average.
 
 Three methods give a view of the contents:
 
@@ -136,7 +184,17 @@ print(sum(grades.values()) / len(grades))
 15.0
 ```
 
+Line by line:
+
+- `keys()` gives the names; `list(...)` puts them in a list so you can print them;
+- `values()` gives the grades, and `items()` the name-grade pairs;
+- the last line adds up the grades (45) and divides by the number of students (3):
+  the average is 15.0.
+
 ## Looping over a dictionary
+
+Often, you want to handle each entry in turn, the way you read a school report line by
+line: each student with their grade.
 
 A `for` loop over a dictionary goes through its **keys**. To get the key and the value
 together, loop over `items()` and unpack each pair.
@@ -160,6 +218,14 @@ Bob: 12/20
 Chloe: 18/20
 ```
 
+Line by line:
+
+- the first loop gives `name` each key, one after the other: `"Alice"`, `"Bob"`, then
+  `"Chloe"`;
+- the second loop receives a pair on each turn, for example `("Alice", 15)`;
+- `name, grade` splits this pair in two: `name` is `"Alice"` and `grade` is 15;
+- the `f"..."` replaces `{name}` and `{grade}` with their values.
+
 To loop in a different order, sort. `sorted(grades.items(), key=...)` sorts the pairs,
 for example by grade, highest first:
 
@@ -174,6 +240,24 @@ Chloe 18
 Alice 15
 Bob 12
 ```
+
+**Your turn:** write a program that loops over
+`prices = {"bread": 1, "milk": 2, "butter": 3}` and prints one line per item, in the
+form "bread: 1 €".
+
+> **Solution**
+>
+> ```python
+> prices = {"bread": 1, "milk": 2, "butter": 3}
+> for item, amount in prices.items():
+>     print(f"{item}: {amount} €")
+> ```
+>
+> ```sortie
+> bread: 1 €
+> milk: 2 €
+> butter: 3 €
+> ```
 
 ## Complex values
 
@@ -198,6 +282,12 @@ London
 [15, 12, 17, 19]
 ```
 
+Line by line:
+
+- `student["grades"]` is a list; `[0]` takes its first item, 15;
+- `student["address"]` is a dictionary; `["city"]` looks up the city in it, `"London"`;
+- `append(19)` adds a grade at the end of the list stored in the record.
+
 Read `student["address"]["city"]` from left to right: the record, then its address,
 then the city of that address.
 
@@ -218,8 +308,33 @@ print(counter)
 {'the': 3, 'cat': 1, 'and': 2, 'dog': 1, 'rabbit': 1}
 ```
 
+Line by line:
+
+- `text.split()` cuts the sentence into words: `"the"`, `"cat"`, `"and"`...;
+- `counter` starts empty;
+- at the first `"the"`, `counter.get("the", 0)` is 0: Python stores 0 + 1, so 1;
+- at the second `"the"`, it is 1: Python stores 2. At the third, 3.
+
 `counter.get(word, 0)` returns the current count, or 0 if the word is new. You add 1,
 then store the result.
+
+**Your turn:** write a program that counts how many times each fruit appears in
+`shopping = ["apple", "pear", "apple", "kiwi", "apple"]`, with a dictionary and `get`,
+then prints the dictionary.
+
+> **Solution**
+>
+> ```python
+> shopping = ["apple", "pear", "apple", "kiwi", "apple"]
+> count = {}
+> for fruit in shopping:
+>     count[fruit] = count.get(fruit, 0) + 1
+> print(count)
+> ```
+>
+> ```sortie
+> {'apple': 3, 'pear': 1, 'kiwi': 1}
+> ```
 
 ### With collections.Counter
 
@@ -249,6 +364,8 @@ frequent items.
 
 ### With defaultdict
 
+> **Note:** this part can wait. Read it once the basics feel solid.
+
 `defaultdict` automatically creates a starting value for a missing key. You give it the
 type of that value: `list` for an empty list, `int` for 0.
 
@@ -271,6 +388,9 @@ Without `defaultdict`, you would have to check each time whether the key exists 
 adding to its list.
 
 ## Sets
+
+Sometimes all that matters is whether an item is there, not how many times or where.
+Think of the guest list for a party: nobody should be counted twice.
 
 A [set](../debuter/glossaire.md#set) (`set`) is a collection **without duplicates**
 and **without order**. Think of a bag of marbles: each marble is in it only once, and
@@ -305,7 +425,28 @@ Since a set has no order, you sort it with `sorted` before printing it.
 > **Warning:** `{}` creates an empty dictionary, not a set. For an empty set, write
 > `set()`.
 
+**Your turn:** write a program that starts from the list
+`guests = ["Alice", "Bob", "Alice", "Chloe", "Bob"]`, removes the duplicates with a set,
+then prints the number of guests and their sorted names.
+
+> **Solution**
+>
+> ```python
+> guests = ["Alice", "Bob", "Alice", "Chloe", "Bob"]
+> unique = set(guests)
+> print(len(unique))
+> print(sorted(unique))
+> ```
+>
+> ```sortie
+> 3
+> ['Alice', 'Bob', 'Chloe']
+> ```
+
 ### Set operations
+
+Comparing two groups is common: which hobbies do two friends share? Which ones belong
+to only one of them?
 
 Sets can do the operations you know from math:
 
@@ -338,12 +479,21 @@ print({"tennis"} <= alice)
 True
 ```
 
+Line by line:
+
+- `alice | bob` brings together all the hobbies of both, with no duplicates;
+- `alice & bob` keeps the ones they share: reading and tennis;
+- `alice - bob` keeps Alice's hobbies that Bob does not have: piano;
+- `alice ^ bob` keeps the ones only one of the two does.
+
 `<=` checks that one set is **contained** in another.
 
 > **Tip:** `in` is very fast on a set, even with a million items. On a list, Python has
 > to go through everything. For many lookups, prefer a set.
 
 ### frozenset: a frozen set
+
+> **Note:** this part can wait. Read it once the basics feel solid.
 
 A `frozenset` is an [immutable](../debuter/glossaire.md#immutable) set: you can no
 longer add or remove anything. So it can be used as a dictionary key, which is not
@@ -366,6 +516,9 @@ Order does not matter in a set: `{"Paris", "Lyon"}` and `{"Lyon", "Paris"}` mean
 same trip.
 
 ## Which collection should you choose?
+
+You now know four ways to store data. Like storage boxes, each one suits a specific
+use.
 
 | Collection | Syntax | Ordered | Mutable | Duplicates | Typical use |
 | --- | --- | --- | --- | --- | --- |

@@ -12,6 +12,9 @@ Esta página muestra cómo elegir entre varios casos con `if`, `unless` y `match
 
 ## Verdadero o falso: las comparaciones
 
+Un programa a menudo tiene que decidir: ¿hace falta paraguas? ¿la persona es mayor
+de edad? Para decidir, primero hace una pregunta, y la respuesta es sí o no.
+
 Una [condición](../debuter/glossaire.md#condicion) es una pregunta cuya
 respuesta es `true` (verdadero) o `false` (falso), un
 [booleano](../debuter/glossaire.md#booleano). Se plantea con un operador de
@@ -43,6 +46,9 @@ true true false
 
 ## if da un valor
 
+En la vida eliges todo el rato según la situación: si llueve, coges un abrigo; si no,
+una chaqueta. `if` permite al programa hacer el mismo tipo de elección.
+
 `if` elige entre dos valores según una condición. En Rythme, `if` no es una
 orden: es una **expresión**. Da un valor, como un cálculo. Por eso se puede
 guardar en un nombre:
@@ -56,6 +62,14 @@ print(estado)
 ```sortie
 adulto
 ```
+
+Línea por línea:
+
+- `edad = 20` da el nombre `edad` al valor 20;
+- a la derecha del `=`, `if` hace la pregunta «¿20 es al menos 18?». La respuesta es
+  `true`, así que el `if` da el valor que sigue a `then`: `"adulto"`;
+- ese valor recibe el nombre `estado`;
+- `print(estado)` muestra `adulto`.
 
 La forma es siempre `if condición then valor else otro_valor`. Léelo así:
 «si la edad es al menos 18, entonces "adulto", si no, "menor"».
@@ -98,6 +112,9 @@ grande pequeño
 
 ## Encadenar condiciones
 
+A menudo no hay solo dos casos. Un número puede ser negativo, cero o positivo, y
+quieres una palabra distinta para cada uno, como en un boletín de notas.
+
 `else if` encadena varias condiciones. `then` y `else` pueden empezar una
 línea nueva:
 
@@ -114,12 +131,43 @@ print(signo(-3), signo(0), signo(8))
 negativo cero positivo
 ```
 
+Línea por línea:
+
+- `fn signo(n) =` define una función: recibe un número, llamado `n`;
+- para `signo(-3)`, la primera pregunta `-3 < 0` es verdadera: la función da
+  `"negativo"` y no lee el resto;
+- para `signo(0)`, `0 < 0` es falsa, se pasa al `else if`: `0 == 0` es verdadera, así
+  que `"cero"`;
+- para `signo(8)`, las dos preguntas son falsas: se llega al último `else`, que da
+  `"positivo"`.
+
 Las condiciones se prueban de arriba abajo, y gana la primera verdadera.
 
 La condición debe ser `true` o `false`. `if 1 then ...` es un error: nada es
 «verdadero» por defecto, ni un número, ni un texto, ni una lista.
 
+**Te toca:** escribe una función `saludo(hora)` que dé «Buenos días» si la hora es
+anterior a 12, «Buenas tardes» si es anterior a 18, y «Buenas noches» si no. Muestra
+`saludo(15)`.
+
+> **Solución**
+>
+> ```rythme
+> fn saludo(hora) =
+>   if hora < 12 then "Buenos días"
+>   else if hora < 18 then "Buenas tardes"
+>   else "Buenas noches"
+>
+> print(saludo(15))
+> ```
+>
+> ```sortie
+> Buenas tardes
+> ```
+
 ## unless, lo contrario de if
+
+> **Nota:** esta parte puede esperar. Léela cuando las bases estén firmes.
 
 Como en Ruby, `unless` («a menos que») es lo contrario de `if`: da el primer
 valor cuando la condición es **falsa**. También lleva siempre un `else`:
@@ -155,6 +203,14 @@ print(dia(6), dia(2))
 ```sortie
 sábado un día entre semana
 ```
+
+Línea por línea:
+
+- `fn dia(n) = match n`: la función compara el número `n` con los patrones que siguen;
+- para `dia(6)`, el primer patrón `6` encaja: el resultado es `"sábado"`;
+- para `dia(2)`, ni `6` ni `7` encajan. `_` acepta todo: el resultado es
+  `"un día entre semana"`;
+- `print` muestra los dos resultados, separados por un espacio.
 
 Cada línea se escribe `patrón -> resultado`, y `end` cierra el `match`.
 Piensa en la clasificación del correo: cada carta va al primer casillero que
@@ -193,6 +249,27 @@ Hola, doctora Grace / Hola, Ada
 
 `match` sabe hacer mucho más: ver [tus propios tipos y match](types.md).
 
+**Te toca:** escribe una función `estacion(mes)` que dé «invierno» para los meses 12,
+1 y 2, «primavera» del 3 al 5, «verano» del 6 al 8, y «otoño» si no. Muestra
+`estacion(1)`, `estacion(7)` y `estacion(10)`.
+
+> **Solución**
+>
+> ```rythme
+> fn estacion(mes) = match mes
+>   12 | 1 | 2 -> "invierno"
+>   3..5 -> "primavera"
+>   6..8 -> "verano"
+>   _ -> "otoño"
+> end
+>
+> print(estacion(1), estacion(7), estacion(10))
+> ```
+>
+> ```sortie
+> invierno verano otoño
+> ```
+
 ## Sin bucles
 
 Rythme no tiene ni `for` ni `while`. Si escribes uno, Rythme te explica qué
@@ -203,6 +280,9 @@ la lista». Es como decir «lava todos los platos» en lugar de «coge el plato
 1, lávalo, coge el plato 2...». Estas son las herramientas.
 
 ## Hacer algo con cada elemento usando each
+
+Imagina que te piden mostrar cada producto de una lista de la compra. Escribir un
+`print` por producto sería largo y pesado. `each` hace ese trabajo por ti.
 
 `each` llama a una función para cada elemento. Es el sustituto del bucle que
 muestra cosas. Aquí, `1..3` es el **intervalo** de los números del 1 al 3, es
@@ -233,7 +313,24 @@ end
 ¡Hola, Alan!
 ```
 
+**Te toca:** escribe un programa que muestre «Para comprar: …» para cada producto de
+la lista `["pan", "leche", "arroz"]`, con `each`.
+
+> **Solución**
+>
+> ```rythme
+> ["pan", "leche", "arroz"] |> each(fn(producto) = print("Para comprar: {producto}"))
+> ```
+>
+> ```sortie
+> Para comprar: pan
+> Para comprar: leche
+> Para comprar: arroz
+> ```
+
 ## Contar de 2 en 2, o hacia atrás
+
+> **Nota:** esta parte puede esperar. Léela cuando las bases estén firmes.
 
 `a..b` cuenta de 1 en 1, subiendo. `step_by(n)` se queda con un elemento de
 cada `n`, y `reverse` da la vuelta a la lista:
@@ -255,6 +352,9 @@ print(5..1)
 
 ## Conocer la posición con each_with_index
 
+A veces quieres numerar lo que recorres, como los pasos de una receta o una lista de
+la compra numerada.
+
 `each_with_index` da a la función el elemento **y** su posición, empezando
 por 0:
 
@@ -270,7 +370,18 @@ end
 3. huevos
 ```
 
+Línea por línea:
+
+- la lista contiene tres productos; `each_with_index` los toma uno a uno;
+- en la primera vuelta, `producto` vale `"pan"` e `i` vale 0; en la segunda,
+  `"leche"` y 1; en la tercera, `"huevos"` y 2;
+- `print` muestra `i + 1` para que la lista empiece en 1, como se cuenta normalmente.
+
 ## Transformar cada elemento con map
+
+A veces quieres cambiar toda una lista de golpe: duplicar cada precio, elevar cada
+número al cuadrado. Es como una máquina en la que cada objeto entra por un lado y
+sale transformado por el otro.
 
 `map` fabrica una lista **nueva**, con el resultado de la función para cada
 elemento. Es el sustituto del bucle que llena una lista:
@@ -288,6 +399,9 @@ print(cuadrados)
 una lista nueva.
 
 ## Repetir con la recursión
+
+Algunas repeticiones no tienen una lista ya preparada: se repite «mientras» no se haya
+terminado, como una cuenta atrás que baja hasta cero.
 
 Para un bucle «mientras», escribe una función que se llame a sí misma: es la
 [recursión](../debuter/glossaire.md#recursion). Siempre hace falta un caso
@@ -310,10 +424,41 @@ cuenta_atras(3)
 ¡Despegue!
 ```
 
+Línea por línea:
+
+- `fn cuenta_atras(0) = ...`: si el número recibido es 0, la función muestra
+  «¡Despegue!» y se detiene ahí;
+- `fn cuenta_atras(n)`: para cualquier otro número, muestra `n` y luego se llama a sí
+  misma con `n - 1`;
+- `cuenta_atras(3)` lo pone todo en marcha: muestra 3, luego la llamada sigue con 2,
+  después 1, y por último 0, que muestra «¡Despegue!».
+
 Aquí, la función tiene dos definiciones: una para `0` (el caso de parada) y
 otra para los demás números. `cuenta_atras(3)` muestra 3 y luego llama a
 `cuenta_atras(2)`, y así sucesivamente hasta 0. Ver
 [las funciones](fonctions.md#definir-por-casos).
+
+**Te toca:** escribe una función recursiva `aplaudir(n)` que muestre «clap» `n`
+veces y luego «¡Bravo!». Llama a `aplaudir(3)`.
+
+> **Solución**
+>
+> ```rythme
+> fn aplaudir(0) = print("¡Bravo!")
+> fn aplaudir(n)
+>   print("clap")
+>   aplaudir(n - 1)
+> end
+>
+> aplaudir(3)
+> ```
+>
+> ```sortie
+> clap
+> clap
+> clap
+> ¡Bravo!
+> ```
 
 ## Errores frecuentes
 

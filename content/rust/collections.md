@@ -15,6 +15,10 @@ rangement.
 
 ## Les tableaux de taille fixe
 
+Pour garder les sept jours de la semaine, créer sept variables serait pénible. Un
+tableau les range tous sous un seul nom, comme une boîte à œufs : un nombre de cases
+fixe, une case par élément.
+
 Un tableau `[T; N]` contient toujours le même nombre `N` d'éléments, tous du même type
 `T`. Les positions (les **indices**) commencent à 0 :
 
@@ -31,6 +35,13 @@ lun
 ["lun", "mar", "mer"]
 ```
 
+Ligne par ligne :
+
+- `let jours = [...]` crée un tableau de trois textes, rangé dans `jours` ;
+- `jours[0]` lit la case numéro 0, donc la **première** : `"lun"` ;
+- `jours.len()` donne le nombre de cases : 3 ;
+- `{:?}` affiche tout le tableau d'un coup, avec les crochets.
+
 Un tableau peut aussi être rempli d'une même valeur : `[0; 5]` donne cinq zéros.
 
 ```rust
@@ -43,6 +54,10 @@ println!("{:?}", zeros);
 ```
 
 ## Les vecteurs : Vec
+
+Souvent, vous ne savez pas à l'avance combien d'éléments vous aurez. Une liste de
+courses s'allonge quand vous pensez à un article, et raccourcit quand vous l'achetez.
+Le `Vec` sert à cela.
 
 Un `Vec` (un « vecteur ») est une [liste](../debuter/glossaire.md#liste) qui peut
 grandir ou rétrécir. C'est la collection la plus courante. La macro `vec![…]` en crée
@@ -64,6 +79,15 @@ Premier : 12
 Taille : 4
 Some(18) [12, 15, 9]
 ```
+
+Ligne par ligne :
+
+- `let mut notes = vec![12, 15, 9];` crée un `Vec` de trois notes. `mut` autorise à le
+  modifier ensuite ;
+- `notes.push(18)` ajoute 18 à la fin : il y a maintenant quatre notes ;
+- `notes[0]` lit la première note (12) et `notes.len()` compte les éléments (4) ;
+- `notes.pop()` retire la dernière note et la range dans `dernier` : la liste revient
+  à trois éléments.
 
 `pop` renvoie `Some(18)` : la valeur retirée, dans une `Option`, car la liste aurait pu
 être vide.
@@ -116,11 +140,33 @@ println!("{:?}", prix);
 > **Note :** le `&` devant `prix` emprunte le vecteur au lieu de le consommer. Tout est
 > expliqué dans [Possession et emprunt](possession.md).
 
+**À vous :** écrivez un programme qui crée un `Vec` avec `"pain"` et `"lait"`, ajoute
+`"oeufs"` avec `push`, puis affiche chaque article sur sa propre ligne avec `for`.
+
+> **Solution**
+>
+> ```rust
+> let mut courses = vec!["pain", "lait"];
+> courses.push("oeufs");
+> for article in &courses {
+>     println!("{article}");
+> }
+> ```
+>
+> ```sortie
+> pain
+> lait
+> oeufs
+> ```
+
 ## Les tables : HashMap
 
 Une `HashMap` est un [dictionnaire](../debuter/glossaire.md#dictionnaire) : elle
 associe des **clés** à des **valeurs**, comme un annuaire associe un nom à un numéro.
 Elle ne fait pas partie des types chargés d'office : il faut l'importer avec `use`.
+
+Avec un `Vec`, vous retrouvez un élément par sa position. Mais pour connaître l'âge
+d'Alice, chercher « Alice » est bien plus simple que se souvenir de « la case 0 ».
 
 ```rust
 use std::collections::HashMap;
@@ -142,7 +188,37 @@ Some(31)
 false
 ```
 
+Ligne par ligne :
+
+- `HashMap::new()` crée une table vide, rangée dans `ages` ;
+- les deux premiers `insert` associent 30 à `"Alice"` et 25 à `"Bob"` ;
+- le troisième `insert` réutilise la clé `"Alice"` : la valeur 31 **remplace** 30 ;
+- `get("Alice")` donne `Some(31)`, `len()` compte 2 clés, et `contains_key("Zoé")`
+  répond `false` : Zoé n'est pas dans la table.
+
+**À vous :** écrivez un programme qui associe `"France"` à `"Paris"` et `"Italie"` à
+`"Rome"` dans une `HashMap`, puis affiche la capitale de l'Italie avec `get`.
+
+> **Solution**
+>
+> ```rust
+> use std::collections::HashMap;
+>
+> fn main() {
+>     let mut capitales = HashMap::new();
+>     capitales.insert("France", "Paris");
+>     capitales.insert("Italie", "Rome");
+>     println!("{:?}", capitales.get("Italie"));
+> }
+> ```
+>
+> ```sortie
+> Some("Rome")
+> ```
+
 ### Compter avec entry
+
+> **Note :** cette partie peut attendre. Lisez-la quand les bases seront solides.
 
 `entry(...).or_insert(...)` crée la valeur si elle manque, puis donne accès à la
 valeur. L'étoile `*` permet de modifier ce qu'elle désigne :
@@ -195,6 +271,10 @@ poires : 4
 
 ## Les itérateurs
 
+Doubler toutes les notes, garder seulement les nombres pairs, faire un total : ces
+tâches reviennent sans cesse. Les itérateurs permettent de les écrire en une ligne,
+sans boucle `for` à rédiger soi-même.
+
 `iter()` crée un **itérateur** : un objet qui donne les éléments un par un, comme un
 tapis roulant de caisse. On enchaîne ensuite des opérations avec des
 [closures](fonctions.md#les-closures). Les itérateurs ont leur propre chapitre :
@@ -225,6 +305,17 @@ println!("{total} {grands}");
 21 3
 ```
 
+Ligne par ligne :
+
+- `map(|n| n * 2)` prend chaque nombre `n` et le multiplie par 2 ; `collect()` range
+  les résultats dans le nouveau `Vec` `doubles` ;
+- `filter(|n| *n % 2 == 0)` ne garde que les nombres dont le reste de la division par
+  2 vaut 0 : les pairs ;
+- `sum()` additionne tout : 1 + 2 + 3 + 4 + 5 + 6 = 21 ;
+- la dernière ligne garde les nombres plus grands que 3 (4, 5 et 6) et les compte : 3.
+
+Le vecteur `nombres` n'est pas modifié : chaque ligne fabrique un nouveau résultat.
+
 On peut enchaîner autant d'étapes que l'on veut :
 
 ```rust
@@ -244,7 +335,26 @@ println!("{:?}", resultat);
 > **Astuce :** un itérateur ne fait rien tant qu'on ne le consomme pas (avec
 > `collect`, `sum`, `for`…). On dit qu'il est **paresseux**.
 
+**À vous :** écrivez un programme qui part de `vec![5, 12, 8, 20]` (des prix) et
+range dans un nouveau `Vec` les prix plus grands que 10, puis l'affiche.
+
+> **Solution**
+>
+> ```rust
+> let prix = vec![5, 12, 8, 20];
+> let chers: Vec<&i32> = prix.iter().filter(|p| **p > 10).collect();
+> println!("{:?}", chers);
+> ```
+>
+> ```sortie
+> [12, 20]
+> ```
+
 ## Les tranches
+
+Parfois, vous ne voulez travailler que sur un morceau d'une liste : les trois premiers
+d'un classement, ou les notes du deuxième trimestre. Une tranche montre ce morceau,
+comme une fenêtre posée sur la liste.
 
 Une **tranche** (`&[T]`) est une vue sur une partie d'un tableau ou d'un vecteur, sans
 copie :
@@ -259,6 +369,14 @@ println!("{:?} {:?}", milieu, debut);
 ```sortie
 ['b', 'c', 'd'] ['a', 'b']
 ```
+
+Ligne par ligne :
+
+- `lettres` contient cinq lettres, aux positions 0 à 4 ;
+- `&lettres[1..4]` prend les positions 1, 2 et 3 : la position 4 n'est **pas**
+  comprise ;
+- `&lettres[..2]` part du début et s'arrête avant la position 2 : `'a'` et `'b'` ;
+- rien n'est copié : `milieu` et `debut` regardent directement dans `lettres`.
 
 Une fonction qui accepte `&[i32]` fonctionne avec un tableau comme avec un `Vec` :
 

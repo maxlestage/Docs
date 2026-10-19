@@ -12,6 +12,9 @@ This page shows how to create, transform, split and walk through text in Rust, w
 
 ## Two types of text: String and &str
 
+Almost every program handles text: a first name, a welcome message, a shopping
+list. Choosing the right type will save you many compiler errors.
+
 A text, or [string](../debuter/glossaire.md#string), is a sequence of
 letters. Rust has two types of text. To get started, remember this:
 
@@ -31,6 +34,13 @@ println!("{borrowed} {owned} {other}");
 ```sortie
 hello hello hi
 ```
+
+Line by line:
+
+- `borrowed` is a `&str`: it looks at the text `"hello"` written in the program;
+- `owned` is a `String` made with `String::from`: a copy that belongs to it;
+- `other` is also a `String`, made this time with `.to_string()`;
+- `println!` prints all three: on the screen, nothing tells them apart.
 
 `String::from("…")` and `.to_string()` make a `String` from a `&str`. The other way
 round, to go from a `String` to a `&str`, put `&` in front:
@@ -57,6 +67,9 @@ fn main() {
 
 ## Growing a String
 
+A text is often built bit by bit, like a shopping list you add to during the week.
+For that, you need a `String` that can change.
+
 A `String` declared with `mut` can grow. `push_str` adds a text, `push` adds a single
 character:
 
@@ -71,6 +84,15 @@ println!("{sentence}");
 Hello everyone!
 ```
 
+Line by line:
+
+- `let mut sentence` creates a `String` that holds "Hello". `mut` allows it to change;
+- `push_str(" everyone")` sticks this text at the end: `sentence` is now
+  "Hello everyone";
+- `push('!')` adds a single character. A single character is written between single
+  quotes;
+- `println!` prints the final result.
+
 The `+` operator also sticks two texts together, but the left side must be a `String`:
 
 ```rust
@@ -83,7 +105,26 @@ println!("{words}");
 Hello world
 ```
 
+**Your turn:** write a program that starts from the `String` "It is", adds
+"sunny" with `push_str`, then a full stop with `push`, and prints the result.
+
+> **Solution**
+>
+> ```rust
+> let mut weather = String::from("It is");
+> weather.push_str(" sunny");
+> weather.push('.');
+> println!("{weather}");
+> ```
+>
+> ```sortie
+> It is sunny.
+> ```
+
 ## Building with format!
+
+A program often needs to build a sentence from values: a label, a welcome message,
+a line on a bill. `format!` prepares it without printing it right away.
 
 `format!` works like `println!`, but it **returns** a `String` instead of printing it:
 
@@ -98,10 +139,21 @@ println!("{card}");
 Alice (30 years old)
 ```
 
+Line by line:
+
+- `first_name` holds the text "Alice", and `age` the number 30;
+- `format!` replaces `{first_name}` and `{age}` with their values, and returns the
+  `String` "Alice (30 years old)";
+- this `String` is stored in `card`: nothing is printed yet;
+- `println!` is what finally prints it on the screen.
+
 > **Tip:** `format!` is the simplest way to stick several pieces of text and numbers
 > together.
 
 ## The length of a text
+
+Counting letters is often useful: checking that a password is long enough, or that
+a username is not too long. In Rust, there is a small trap.
 
 `len()` counts **bytes**, not letters. A byte is the smallest box in memory. A plain
 letter takes one byte, an accented letter takes two.
@@ -118,9 +170,18 @@ println!("{}", word.chars().count());
 4
 ```
 
+Line by line:
+
+- `word` holds "café": four letters, one of them accented;
+- `word.len()` counts the bytes: 1 each for `c`, `a` and `f`, 2 for `é`, so 5;
+- `word.chars().count()` counts the characters: 4.
+
 > **Warning:** for a text that may contain accents, prefer `chars().count()`.
 
 ## Changing case and cleaning up
+
+What a person types is rarely clean: extra spaces, random capital letters. Before
+comparing or storing a text, you clean it up.
 
 ```rust
 let raw = "  Hello Rust  ";
@@ -139,7 +200,24 @@ hello rust
 - `to_uppercase()` puts the text in capital letters;
 - `to_lowercase()` puts the text in small letters.
 
+**Your turn:** write a program that starts from the text `"   alice "`, removes
+the spaces around it, puts it in capital letters and prints it between square brackets.
+
+> **Solution**
+>
+> ```rust
+> let input = "   alice ";
+> println!("[{}]", input.trim().to_uppercase());
+> ```
+>
+> ```sortie
+> [ALICE]
+> ```
+
 ## Searching in a text
+
+A program often needs to check a text: does an email address contain an `@`? Does
+a file name end with `.txt`? It is like the search box of your word processor.
 
 These methods answer with `true` or `false`:
 
@@ -158,6 +236,9 @@ false
 
 ## Replacing
 
+Replacing one word with another is how you fix a typo everywhere, or fill in a
+letter template with the right name.
+
 `replace` returns a **new** `String`. The original text does not change:
 
 ```rust
@@ -174,6 +255,10 @@ I like coffee
 
 ## Splitting with split
 
+A text often holds several pieces of information stuck together: fruits separated
+by commas, a sentence made of words. To handle them one by one, you first separate
+them, like breaking a chocolate bar into squares.
+
 `split` cuts the text at each separator. `collect` puts the pieces into a `Vec`:
 
 ```rust
@@ -187,6 +272,13 @@ println!("{}", fruits.len());
 ["apple", "pear", "kiwi"]
 3
 ```
+
+Line by line:
+
+- `list` holds three fruits separated by commas;
+- `split(',')` cuts at each comma: you get "apple", "pear" and "kiwi";
+- `collect()` puts these pieces into `fruits`, a `Vec<&str>` (a list of texts);
+- `{:?}` prints the list with its brackets, and `len()` gives the number of pieces.
 
 To cut on spaces, `split_whitespace` is more convenient:
 
@@ -213,7 +305,25 @@ println!("{}", words.join("-"));
 a-b-c
 ```
 
+**Your turn:** write a program that splits the text `"Monday Tuesday Wednesday"`
+into words, then glues them back with `" / "` between them.
+
+> **Solution**
+>
+> ```rust
+> let days: Vec<&str> = "Monday Tuesday Wednesday".split_whitespace().collect();
+> println!("{}", days.join(" / "));
+> ```
+>
+> ```sortie
+> Monday / Tuesday / Wednesday
+> ```
+
 ## Turning a text into a number
+
+For Rust, `"42"` is not a number: it is a text of two characters, and you cannot
+do maths with it. Yet what you type on the keyboard always arrives as text. So you
+have to convert it.
 
 `parse` reads a number in a text. Give the type you want with `::<i32>`. The result is
 a `Result`, because the text may not be a number:
@@ -233,6 +343,15 @@ true
 14
 ```
 
+Line by line:
+
+- `"42".parse::<i32>()` succeeds: the result is `Ok(42)`, the number inside a
+  "success" box;
+- `"abc".parse::<i32>()` fails: `is_err()` answers `true`, "yes, it is an error";
+- the line before last removes the spaces with `trim()`, reads 7, and `unwrap()` takes
+  the number out of its `Ok` box;
+- so `n` is the number 7, and `n * 2` gives 14.
+
 > **Tip:** remember to call `trim()` before `parse`: a space or a line break makes the
 > reading fail. Errors are explained in [Handling errors](erreurs.md).
 
@@ -247,7 +366,25 @@ println!("{}", text.len());
 4
 ```
 
+**Your turn:** write a program that reads the numbers in the texts `"12"` and
+`"30"` with `parse`, then prints their sum.
+
+> **Solution**
+>
+> ```rust
+> let a = "12".parse::<i32>().unwrap();
+> let b = "30".parse::<i32>().unwrap();
+> println!("{}", a + b);
+> ```
+>
+> ```sortie
+> 42
+> ```
+
 ## Walking through the characters
+
+Sometimes you need to look at a text letter by letter: count the vowels, check
+that a password contains a digit, or reverse a word.
 
 `chars()` gives the characters one by one (values of type `char`):
 
@@ -266,6 +403,15 @@ n.a.ï.v.e.
 3 vowels
 ```
 
+Line by line:
+
+- `for c in word.chars()` gives `c` the letters "n", "a", "ï", "v", then "e";
+- `print!` (without `ln`) prints each letter followed by a dot, on the same line;
+- `println!()`, empty, simply moves to the next line;
+- `filter` keeps the letters found in `"aeiouyï"`, and `count` counts them: "a", "ï"
+  and "e", so 3. The `|c| …` part is a small function without a name, explained in
+  [closures](closures.md).
+
 To reverse a text, combine `chars`, `rev` and `collect`:
 
 ```rust
@@ -278,6 +424,9 @@ radar
 ```
 
 ## Taking a piece carefully
+
+Taking a piece of a text lets you keep only part of it: the day in "Monday
+morning", the year in a date. You have to do it carefully, because of accents.
 
 You can take part of a text with `&text[start..end]`. The numbers are **bytes**:
 
@@ -313,6 +462,11 @@ ré
 ```
 
 ## Raw strings
+
+> **Note:** this part can wait. Read it once the basics feel solid.
+
+Some texts contain many `\` or quotes: a Windows file path, a quotation. A raw
+string keeps them as they are, with nothing to escape.
 
 A raw string is written `r"…"`. The backslashes `\` are kept as they are. With
 `r#"…"#`, it can even contain quotes:

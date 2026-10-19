@@ -11,6 +11,9 @@ This page shows the two kinds of numbers in Rythme, integers and decimals, and e
 
 ## Two kinds of numbers
 
+A program handles numbers all the time: an age, a score, a price. Some are
+counted one by one (3 apples), others have decimals (1.5 kg of apples).
+
 Rythme knows two kinds of numbers:
 
 - [integers](../debuter/glossaire.md#integer) (`Int`), with no decimal part:
@@ -56,6 +59,16 @@ print(factorial(30))
 265252859812191058636308480000000
 ```
 
+Line by line:
+
+- `print(2 ** 100)` multiplies 2 by itself 100 times: a number with 31
+  digits;
+- the second line multiplies one million by one million: one trillion;
+- `fn factorial(n) = …` defines a function. The factorial of `n` is
+  1 × 2 × 3 × … × `n`;
+- so `factorial(30)` multiplies all the numbers from 1 to 30: the result
+  has 33 digits, all correct.
+
 All the digits are exact. Floats, on the other hand, are **approximate**
 values: they keep about 16 digits.
 
@@ -71,6 +84,10 @@ This is not a flaw in Rythme: all languages calculate decimal numbers this
 way. To compare Floats, round them first (see below).
 
 ## The four operations
+
+A program is often used as a calculator: the total of a shopping cart, each
+person's share at a restaurant. These four signs are enough for most
+calculations.
 
 `+`, `-` and `*` work like at school. Between two Ints, the result is an
 Int; as soon as there is a Float, the result is a Float:
@@ -96,6 +113,25 @@ print(7 / 2, 6 / 3, 1 / 3)
 ```
 
 So `7 / 2` really is `3.5`, and not `3` as in some other languages.
+
+**Your turn:** write a program that stores `price = 4` and `quantity = 3`,
+then prints the total to pay, and finally what each person pays if two
+people share that total.
+
+> **Solution**
+>
+> ```rythme
+> price = 4
+> quantity = 3
+> total = price * quantity
+> print(total)
+> print(total / 2)
+> ```
+>
+> ```sortie
+> 12
+> 6.0
+> ```
 
 ## Integer division, remainder and power
 
@@ -137,7 +173,24 @@ print(2 + 3 * 4, (2 + 3) * 4, -2 ** 2)
 > **Tip:** `n % 2 == 0` tells you whether `n` is even. Rythme also has
 > `is_even(n)` and `is_odd(n)`, which are easier to read.
 
+**Your turn:** you have 23 eggs and boxes of 6. Write a program that prints
+the number of full boxes, then the number of eggs left over.
+
+> **Solution**
+>
+> ```rythme
+> eggs = 23
+> print(eggs // 6, eggs % 6)
+> ```
+>
+> ```sortie
+> 3 5
+> ```
+
 ## Even or odd
+
+Knowing whether a number is even is useful more often than you might think:
+coloring every other row of a table, making teams of two.
 
 ```rythme
 print(is_even(4), is_odd(4), is_odd(7))
@@ -153,6 +206,10 @@ true false true
 `filter` or to `count`.
 
 ## Math functions
+
+Some calculations come up all the time: finding the highest score, removing
+the sign of a number. Instead of rewriting them, you use ready-made
+functions, like the special keys of a calculator.
 
 Rythme provides the usual math functions, without importing anything:
 
@@ -177,6 +234,9 @@ print(pow(2, 8), pow(2.0, 0.5))
 - `pow(x, n)`: the power, like `x ** n`.
 
 ## Rounding
+
+A result like `0.30000000000000004` is rarely useful as it is. Rounding is
+what you do at the checkout when you say "about 13 euros".
 
 Four functions turn a Float into an Int:
 
@@ -203,7 +263,25 @@ print(round(3.14159, 2), round(0.1 + 0.2, 2) == 0.3)
 
 `round(x, digits)` keeps that many decimals and gives a Float.
 
+**Your turn:** a meal costs `12.3` €. Write a program that prints this price
+rounded to the nearest euro, then up to the next euro, then down to the
+euro below.
+
+> **Solution**
+>
+> ```rythme
+> meal_price = 12.3
+> print(round(meal_price), ceil(meal_price), floor(meal_price))
+> ```
+>
+> ```sortie
+> 12 13 12
+> ```
+
 ## Converting
+
+What the user types on the keyboard arrives as text: `"42"` is not yet the
+number 42. To calculate with it, you first have to convert it.
 
 Rythme **never** converts a value silently. `int` and `float` convert when
 you ask them to:
@@ -224,6 +302,9 @@ in [handling errors](erreurs.md).
 
 ## GCD and LCM
 
+These two calculations help you share things out or meet up again: two
+buses that come every 4 and every 6 minutes come together every 12 minutes.
+
 `gcd(a, b)` gives the greatest common divisor (GCD), and `lcm(a, b)` the
 least common multiple (LCM):
 
@@ -240,9 +321,21 @@ print("{numerator}/{denominator} = {numerator // d}/{denominator // d}")
 18/24 = 3/4
 ```
 
+Line by line:
+
+- the first line prints the GCD of 12 and 18 (6), then the LCM of 4 and 6
+  (12);
+- `numerator` and `denominator` get 18 and 24: the fraction 18/24;
+- `d` gets 6, the largest number that divides both 18 and 24;
+- the last line divides the top and the bottom by `d`: `18 // 6` is 3 and
+  `24 // 6` is 4.
+
 The GCD is useful, for example, to simplify a fraction.
 
 ## Pi and trigonometry
+
+These functions are useful as soon as there are circles or angles:
+calculating an area, drawing, turning an object in a game.
 
 `pi` is the constant π. `sin`, `cos` and `tan` take an angle in
 **radians**. For degrees, multiply by `pi / 180`:
@@ -263,10 +356,24 @@ print("area of the disc: {round(pi * radius ** 2, 2)}")
 area of the disc: 12.57
 ```
 
+Line by line:
+
+- `print(pi)` prints π, with 16 digits;
+- `angle` gets 30 degrees, converted to radians;
+- the next line prints the sine of this angle, first as it is, then
+  rounded to 2 decimals;
+- `cos(0)` is `1.0`, and the cosine of 60°, rounded, is `0.5`;
+- `radius` is 2: the area of the disc, π × 2 × 2, is about 12.57.
+
 The sine of 30° is 0.5; the approximate calculation gives
 `0.49999999999999994`, and `round` tidies it up.
 
 ## Random numbers
+
+> **Note:** this part can wait. Read it once the basics feel solid.
+
+Chance is mostly used in games: rolling a die, choosing who starts, drawing
+a card.
 
 `random(a, b)` picks an integer from `a` to `b`, inclusive, like a die.
 `random()` gives a Float between 0 and 1, and `random(list)` a random
@@ -295,6 +402,9 @@ true true
 
 ## Printing a number nicely
 
+A price is written `13.50 €`, not `13.5 €`. To make a number pleasant to
+read, you choose its number of decimals and how the thousands are written.
+
 `text(x, decimals)` writes a number with **exactly** that many decimals.
 It's perfect for prices:
 
@@ -308,6 +418,29 @@ print("Total: {text(price * 3, 2)} €")
 3.14 5.00 0.333
 Total: 13.50 €
 ```
+
+Line by line:
+
+- `text(3.14159, 2)` keeps two decimals: `3.14`. `text(5, 2)` adds some:
+  `5.00`;
+- `price` gets 4.5;
+- `price * 3` is 13.5, and `text(…, 2)` writes it `13.50`. The braces put
+  it inside the text.
+
+**Your turn:** a notebook costs `2.5` €. Write a program that prints
+`4 notebooks: 10.00 €`, calculating the price with `text`.
+
+> **Solution**
+>
+> ```rythme
+> notebook_price = 2.5
+> notebooks = 4
+> print("{notebooks} notebooks: {text(notebook_price * notebooks, 2)} €")
+> ```
+>
+> ```sortie
+> 4 notebooks: 10.00 €
+> ```
 
 `format_number(x, decimals, language)` also separates the thousands. With
 `"fr"`, you get the French style: a space for thousands, a comma for

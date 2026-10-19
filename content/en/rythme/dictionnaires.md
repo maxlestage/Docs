@@ -12,6 +12,10 @@ This page looks more closely at two collections: the dictionary, which finds a v
 
 ## Creating a dictionary
 
+A list stores its values by number: the first, the second... Often, you would rather
+find a value by a **name**: the price of a fruit, the age of a person. That is the job
+of the dictionary.
+
 A [dictionary](../debuter/glossaire.md#dictionary) links a **value** to
 each **key**. It's like a phone book: you look up a name (the key), you
 find a number (the value).
@@ -30,6 +34,14 @@ dict("France" => "Paris", "Italy" => "Rome", "Japan" => "Tokyo")
 3
 ```
 
+Line by line:
+
+- `dict(...)` receives a list of three pairs. In each pair, the first element is the
+  key (the country), the second is the value (the capital);
+- the resulting dictionary is stored under the name `capitals`;
+- `print(capitals)` displays it in full;
+- `len(capitals)` counts its pairs: there are 3.
+
 The display puts an arrow `=>` between each key and its value. This form is
 only used for display: in your code, always write
 `dict([[key, value], ...])`.
@@ -46,6 +58,8 @@ dict() dict(1 => "ONE", 2 => "two")
 ```
 
 ## All kinds of keys
+
+> **Note:** this part can wait. Read it once the basics feel solid.
 
 Keys are not always texts. They can be numbers,
 [symbols](../debuter/glossaire.md#symbol), and even lists. Here, a cell of
@@ -70,6 +84,9 @@ Only functions cannot be keys.
 
 ## Reading a value
 
+A dictionary is mostly used to find a value from its key, the way you look up a word
+in a real dictionary. But what should happen if the word is not there?
+
 There are two ways to read, as with lists:
 
 - `dict[key]` gives the value, and stops the program if the key is missing;
@@ -92,10 +109,38 @@ true false
 unknown
 ```
 
+Line by line:
+
+- `capitals["Japan"]` directly gives the value of the key `"Japan"`: `Tokyo`;
+- `get` gives `Some("Tokyo")` for Japan, and `None` ("nothing") for Chile, which is not
+  in the dictionary;
+- `has` answers `true` for France and `false` for Chile;
+- `unwrap_or(..., "unknown")` opens the option: it gives the value if there is one,
+  and otherwise the fallback text `"unknown"`.
+
 Use `[...]` when you are sure the key exists, and `get` otherwise. Options
 are explained in [handling errors](erreurs.md).
 
+**Your turn:** write a program that creates a dictionary `ages` where Ada is 36 and
+Alan is 41. Print Ada's age, then Grace's age, or 0 if she is not in it.
+
+> **Solution**
+>
+> ```rythme
+> ages = dict([["Ada", 36], ["Alan", 41]])
+> print(ages["Ada"])
+> print(unwrap_or(get(ages, "Grace"), 0))
+> ```
+>
+> ```sortie
+> 36
+> 0
+> ```
+
 ## Adding and removing a key
+
+Data moves: a new country arrives, another one disappears, a value was wrong. So you
+need to be able to add, remove or fix a key.
 
 A dictionary never changes: it is
 [immutable](../debuter/glossaire.md#immutable). `put` and `remove` build a
@@ -119,10 +164,37 @@ dict("France" => "PARIS", "Italy" => "Rome")
 dict("France" => "Paris", "Italy" => "Rome")
 ```
 
+Line by line:
+
+- `more` is a copy of `capitals` with one more key: Chile;
+- `fewer` is a copy without Italy;
+- `fixed` is a copy where France has a new value, `"PARIS"`;
+- the last `print` proves it: `capitals` still holds the same two pairs.
+
 `put` adds the key, or replaces its value if it already exists. The
 original `capitals` dictionary has not moved.
 
+**Your turn:** start from `basket = dict([["apple", 2]])`. Create a new dictionary
+`full` with 3 pears added, then print `full` and `basket`.
+
+> **Solution**
+>
+> ```rythme
+> basket = dict([["apple", 2]])
+> full = put(basket, "pear", 3)
+> print(full)
+> print(basket)
+> ```
+>
+> ```sortie
+> dict("apple" => 2, "pear" => 3)
+> dict("apple" => 2)
+> ```
+
 ## Keys, values and pairs
+
+Sometimes you only want part of the dictionary: the list of countries, or the list
+of capitals, for example to sort them or count them.
 
 ```rythme
 capitals = dict([["France", "Paris"], ["Italy", "Rome"]])
@@ -148,6 +220,9 @@ These three functions give **lists**: you can then use `map`, `sort`,
 
 ## Going through a dictionary
 
+To display or handle every pair, one by one, you won't write one line per key: you
+ask Rythme to visit each of them.
+
 `each` calls a function for each pair, in key order. The function receives
 **two** values: the key and the value.
 
@@ -166,6 +241,14 @@ The capital of France is Paris.
 The capital of Japan is Tokyo.
 ```
 
+Line by line:
+
+- `each` takes the first pair: `country` is `"France"` and `city` is `"Paris"`. The
+  small function prints `France: Paris`;
+- then it moves to the next pair, Japan, and starts again;
+- the lines `capitals.each do |country, city|` ... `end` do the same thing, with
+  another sentence.
+
 The style with `do |country, city|` is Ruby's; both ways of writing it do
 the same thing.
 
@@ -181,6 +264,23 @@ print(map_values(prices, fn(p) = p * 2))
 dict("apple" => 3, "pear" => 5)
 dict("apple" => 6, "fig" => 18, "pear" => 10)
 ```
+
+**Your turn:** with `prices = dict([["apple", 3], ["pear", 5]])`, print one line per
+fruit, in the form "apple costs 3 €".
+
+> **Solution**
+>
+> ```rythme
+> prices = dict([["apple", 3], ["pear", 5]])
+> each(prices, fn(fruit, p) = print("{fruit} costs {p} €"))
+> ```
+>
+> ```sortie
+> apple costs 3 €
+> pear costs 5 €
+> ```
+>
+> The lines come in alphabetical order: the dictionary is sorted by its keys.
 
 ## Counting words
 
@@ -207,6 +307,15 @@ print(counts["the"])
 dict("and" => 2, "cat" => 2, "dog" => 1, "the" => 3)
 3
 ```
+
+Line by line:
+
+- `count` receives the current dictionary and a word. It reads the word's counter
+  (0 if it is missing) and gives a new dictionary with that counter plus 1;
+- `split(text)` cuts the sentence into a list of words: `["the", "cat", "and", ...]`;
+- `fold` starts from `dict()` and calls `count` for each word, each time passing the
+  dictionary from the previous round;
+- after the last word, `counts` holds the result: "the" was seen 3 times.
 
 To find the most frequent words, you go through the list of pairs:
 
@@ -240,9 +349,19 @@ set("a", "b", "n")
 set() true
 ```
 
+Line by line:
+
+- the list holds `"red"` twice, but the set keeps it only once: 3 colors remain;
+- `chars("banana")` gives the letters one by one; `set` keeps only the different
+  letters;
+- `set()` is the empty set, and `is_empty` confirms that it holds nothing.
+
 Like a dictionary, a set is sorted by its values.
 
 ## Adding, removing, searching
+
+A set often works like a guest list: you add someone, you remove someone else, and
+above all you check whether a person is on the list.
 
 The names are the same as for lists and dictionaries:
 
@@ -269,6 +388,9 @@ true false
 Searching in a set is very fast, even with millions of elements.
 
 ## Combining two sets
+
+Comparing two groups is a common question: who is in both? who is missing from one?
+Sets answer these questions in one line.
 
 Think of two overlapping circles: Ada's friends and Linus's friends.
 
@@ -297,6 +419,23 @@ true
 
 `union` also works with two dictionaries: for a key present on both sides,
 the value of the second one wins.
+
+**Your turn:** Ada, Léa and Tom came on Monday; Léa and Sam came on Tuesday. Print
+the students who came on both days, then those who came only on Monday.
+
+> **Solution**
+>
+> ```rythme
+> monday = set(["Ada", "Léa", "Tom"])
+> tuesday = set(["Léa", "Sam"])
+> print(intersection(monday, tuesday))
+> print(difference(monday, tuesday))
+> ```
+>
+> ```sortie
+> set("Léa")
+> set("Ada", "Tom")
+> ```
 
 ## Record, dictionary or set?
 

@@ -12,6 +12,10 @@ Cette page présente les façons de regrouper des valeurs : les listes, les inte
 
 ## Les listes
 
+Quand vous avez beaucoup de valeurs du même genre (les notes d'une classe, les
+articles d'un panier), une variable par valeur deviendrait vite ingérable. Une liste
+les range toutes sous un seul nom.
+
 Une [liste](../debuter/glossaire.md#liste) est une suite de valeurs, dans un
 ordre précis, comme une liste de courses. Elle s'écrit entre crochets, avec
 des virgules entre les éléments.
@@ -34,6 +38,9 @@ nombre d'éléments.
 
 ## Ajouter un élément, sans rien modifier
 
+Vos données grandissent : un article de plus dans le panier, un élève de plus dans
+la classe. Il faut donc savoir allonger une liste.
+
 Une liste ne change jamais. Pour « ajouter » un élément, on fabrique une
 **nouvelle** liste, et l'ancienne reste telle quelle :
 
@@ -51,6 +58,14 @@ print(fruits + ["melon"], [..fruits, "prune"], ["cerise", ..fruits])
 ["pomme", "poire", "melon"] ["pomme", "poire", "prune"] ["cerise", "pomme", "poire"]
 ```
 
+Ligne par ligne :
+
+- `fruits = ["pomme", "poire"]` range une liste de deux fruits sous le nom `fruits` ;
+- `push(fruits, "kiwi")` fabrique une nouvelle liste de trois fruits, nommée `plus` ;
+- les deux `print` suivants le prouvent : `fruits` a toujours deux éléments, `plus`
+  en a trois ;
+- la dernière ligne fabrique trois autres listes, sans jamais toucher à `fruits`.
+
 - `push(liste, x)` donne la liste avec `x` à la fin ;
 - `+` met deux listes bout à bout ;
 - `..fruits` entre crochets insère tous les éléments de `fruits`, au début,
@@ -58,6 +73,22 @@ print(fruits + ["melon"], [..fruits, "prune"], ["cerise", ..fruits])
 
 C'est comme photocopier la liste de courses et écrire sur la copie :
 l'original ne bouge pas.
+
+**À vous :** écrivez un programme qui range `["pain", "lait"]` sous le nom
+`courses`, fabrique une nouvelle liste avec `"beurre"` à la fin, puis affiche cette
+nouvelle liste et son nombre d'éléments.
+
+> **Solution**
+>
+> ```rythme
+> courses = ["pain", "lait"]
+> nouvelles = push(courses, "beurre")
+> print(nouvelles, len(nouvelles))
+> ```
+>
+> ```sortie
+> ["pain", "lait", "beurre"] 3
+> ```
 
 ## Lire sans risque avec get
 
@@ -89,6 +120,9 @@ Les options sont expliquées dans [gérer les erreurs](erreurs.md).
 
 ## Les intervalles
 
+Écrire `[1, 2, 3, ..., 100]` à la main serait long. Un intervalle fabrique d'un
+coup une suite de nombres, comme les numéros des pages d'un livre.
+
 `a..b` est la liste des nombres entiers de `a` à `b`, les deux compris :
 
 ```rythme
@@ -105,6 +139,9 @@ print(0..20 |> step_by(5), reverse(1..3))
 rebours, `reverse`.
 
 ## Les fonctions de listes courantes
+
+Trier, additionner, garder certains éléments : ces tâches reviennent sans cesse.
+Rythme vous donne des fonctions toutes prêtes, comme des outils rangés dans une boîte.
 
 ```rythme
 nombres = [3, 1, 4, 1, 5, 9, 2, 6]
@@ -134,7 +171,25 @@ print(filter(nombres, is_even), map(nombres, fn(x) = x * 10))
 > **Astuce :** `rythme help lists` liste toutes les fonctions de listes, et
 > `rythme help sort_by` explique l'une d'elles.
 
+**À vous :** écrivez un programme qui range les notes `[12, 8, 15, 10]` sous le
+nom `notes`, puis affiche la meilleure note, la somme des notes et les notes triées.
+
+> **Solution**
+>
+> ```rythme
+> notes = [12, 8, 15, 10]
+> print(max(notes), sum(notes), sort(notes))
+> ```
+>
+> ```sortie
+> 15 45 [8, 10, 12, 15]
+> ```
+
 ## Les enregistrements
+
+Une personne a un nom, une année de naissance, une ville. Dans une liste, ces
+valeurs seraient mélangées, sans dire laquelle est laquelle. Un enregistrement donne
+un nom à chacune.
 
 Un **enregistrement** regroupe des valeurs nommées, ses **champs**. C'est
 une fiche : une case « nom », une case « naissance »... On l'écrit entre
@@ -151,6 +206,12 @@ Ada 1815
 {nom: "Ada", naissance: 1815, ville: "Londres"}
 ```
 
+Ligne par ligne :
+
+- la première ligne crée une fiche à trois champs et lui donne le nom `ada` ;
+- `ada.nom` lit le champ `nom`, qui vaut `"Ada"` ; `ada.naissance` lit `1815` ;
+- `print(ada)` affiche la fiche entière, avec tous ses champs.
+
 Rythme n'a pas de classes : un enregistrement suffit pour décrire une
 personne, un produit ou un point. `keys` donne les noms des champs, `has`
 dit si un champ existe, et `get` lit un champ qui peut manquer :
@@ -165,6 +226,9 @@ print(keys(ada), has(ada, "age"), get(ada, "ville"))
 ```
 
 ## Mettre à jour un enregistrement
+
+Une information change : une adresse, un âge, une note corrigée. Il vous faut
+alors une version à jour de la fiche.
 
 On ne modifie pas un enregistrement : on en fabrique un nouveau.
 `{..ada, naissance: 1816}` recopie tous les champs de `ada`, puis remplace
@@ -187,7 +251,34 @@ print(avec_ville)
 
 `ada` n'a pas changé.
 
+Ligne par ligne :
+
+- `ada` est une fiche avec deux champs ;
+- `corrigee` recopie `ada`, mais son champ `naissance` vaut 1816 ;
+- `avec_ville` recopie `ada` et ajoute un champ `ville` ;
+- les trois `print` montrent trois fiches différentes : la première n'a pas bougé.
+
+**À vous :** écrivez un programme qui crée un enregistrement `livre` avec les
+champs `titre` (`"Le Petit Prince"`) et `pages` (96), fabrique une version avec 300
+pages, puis affiche les deux.
+
+> **Solution**
+>
+> ```rythme
+> livre = {titre: "Le Petit Prince", pages: 96}
+> epais = {..livre, pages: 300}
+> print(livre)
+> print(epais)
+> ```
+>
+> ```sortie
+> {titre: "Le Petit Prince", pages: 96}
+> {titre: "Le Petit Prince", pages: 300}
+> ```
+
 ## Décomposer une valeur
+
+> **Note :** cette partie peut attendre. Lisez-la quand les bases seront solides.
 
 On peut nommer d'un coup les morceaux d'une liste ou d'un enregistrement :
 
@@ -228,10 +319,22 @@ Grace
 [12, 17, 19]
 ```
 
+Ligne par ligne :
+
+- `eleves` est une liste de trois fiches, une par élève ;
+- `fn(e) = e.note` est une petite fonction : elle reçoit un élève `e` et donne
+  sa note ;
+- `max_by` garde l'élève qui a la plus grande note : la fiche de Grace ;
+- `map(fn(e) = e.nom)` remplace chaque fiche par le nom de l'élève ;
+- la dernière ligne trie les élèves par note, puis ne garde que les notes.
+
 `max_by` et `sort_by` reçoivent une fonction qui dit **quoi** comparer : ici,
 la note de chaque élève.
 
 ## Les dictionnaires
+
+Un dictionnaire sert à retrouver vite une valeur à partir d'un nom : l'âge d'une
+personne, le prix d'un article, comme dans un répertoire téléphonique.
 
 Un [dictionnaire](../debuter/glossaire.md#dictionnaire) (`dict`) associe
 une valeur à chaque **clé**, comme un vrai dictionnaire associe une
@@ -252,6 +355,14 @@ print(ages)
 dict("Ada" => 36, "Bob" => 26)
 dict("Ada" => 36, "Bob" => 25)
 ```
+
+Ligne par ligne :
+
+- `dict(...)` construit le dictionnaire à partir de deux paires : Bob a 25 ans, Ada 36 ;
+- `ages["Ada"]` cherche la clé `"Ada"` et donne 36 ; `get(ages, "Eve")` donne `None`,
+  car Eve n'y est pas ;
+- `put(ages, "Bob", 26)` fabrique un nouveau dictionnaire où Bob a 26 ans ;
+- le dernier `print` montre que `ages` n'a pas bougé : Bob a toujours 25 ans.
 
 `put` donne un **nouveau** dictionnaire, et `ages` n'a pas changé. Un
 dictionnaire est toujours rangé dans l'ordre de ses clés.
@@ -277,7 +388,26 @@ end
 > un enregistrement. Quand les clés arrivent avec les données (des prénoms,
 > des mots), prenez un dictionnaire.
 
+**À vous :** écrivez un programme qui construit un dictionnaire `prix` où
+`"pomme"` coûte 2 et `"pain"` coûte 1, affiche le prix du pain, puis affiche une
+version où la pomme coûte 3.
+
+> **Solution**
+>
+> ```rythme
+> prix = dict([["pomme", 2], ["pain", 1]])
+> print(prix["pain"])
+> print(put(prix, "pomme", 3))
+> ```
+>
+> ```sortie
+> 1
+> dict("pain" => 1, "pomme" => 3)
+> ```
+
 ## Les ensembles
+
+> **Note :** cette partie peut attendre. Lisez-la quand les bases seront solides.
 
 Un **ensemble** (`set`) garde chaque valeur une seule fois, comme une
 collection de timbres sans doublons :
@@ -292,6 +422,9 @@ set(1, 2, 3) 3 true
 ```
 
 ## Quelle collection choisir
+
+Chaque collection a son usage, comme chaque tiroir d'une cuisine. Ce tableau vous
+aide à choisir.
 
 | Besoin | Choix | Exemple |
 |--------|-------|---------|

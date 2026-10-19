@@ -12,6 +12,9 @@ Esta página explica cómo manejar texto en Python: cortarlo, buscar en él, ree
 
 ## El tipo str
 
+Casi todos los programas manejan texto: un nombre, un mensaje, una dirección de
+correo, una línea leída de un archivo. Saber guardarlo y transformarlo es imprescindible.
+
 Un texto en Python es una [cadena de caracteres](../debuter/glossaire.md#cadena-de-caracteres),
 de tipo `str`. Imagina un collar de perlas: cada perla es un carácter (una letra, una
 cifra, un espacio, un símbolo), y las perlas están en un orden preciso.
@@ -28,6 +31,12 @@ print(len(mensaje))
 Hola Buenas Dijo 'ya'
 4
 ```
+
+Línea por línea:
+
+- `mensaje`, `otro` y `cita` reciben cada uno un texto, escrito entre comillas;
+- el primer `print` muestra los tres textos seguidos, separados por un espacio;
+- `len(mensaje)` cuenta los caracteres de "Hola": hay 4.
 
 - Comillas dobles o simples, como prefieras. Usa las dobles si el texto contiene una
   comilla simple.
@@ -48,6 +57,9 @@ jajaja
 ```
 
 ## Leer un carácter: los índices
+
+A veces necesitas un solo carácter: la inicial de un nombre, la última cifra de un
+código. Los índices sirven para eso, como los números de las casillas de una taquilla.
 
 Cada carácter tiene una posición, su [índice](../debuter/glossaire.md#indice). El
 primero está en el índice **0**. Los índices negativos cuentan desde el final: `-1` es
@@ -74,7 +86,27 @@ n
 o
 ```
 
+**Te toca:** escribe un programa que guarde `nombre = "Carmen"` en una variable y
+luego muestre su primera letra y su última letra.
+
+> **Solución**
+>
+> ```python
+> nombre = "Carmen"
+> print(nombre[0])
+> print(nombre[-1])
+> ```
+>
+> ```sortie
+> C
+> n
+> ```
+
 ## Cortar: las porciones
+
+Un solo carácter no siempre basta: a veces quieres las tres primeras letras de una
+palabra, o el año al final de una fecha. Una porción corta un trozo, como una porción
+de tarta.
 
 Una **porción** (*slice*) toma un trozo del texto: `texto[inicio:fin]`. El inicio se
 incluye, el fin se **excluye**, como con `range`.
@@ -98,11 +130,21 @@ Pto
 nohtyP
 ```
 
+Línea por línea:
+
+- `palabra[0:3]` toma los índices 0, 1 y 2: "Pyt". El índice 3 se excluye;
+- `palabra[2:]` empieza en el índice 2 y llega hasta el final: "thon";
+- `palabra[-3:]` empieza en el tercer carácter desde el final: "hon";
+- `palabra[::-1]` lee la palabra del final al principio: "nohtyP".
+
 - sin inicio, se empieza desde el principio; sin fin, se llega hasta el final;
 - un tercer número da el **paso**: `[::2]` toma una letra de cada dos;
 - `[::-1]` recorre al revés: es el truco clásico para dar la vuelta a un texto.
 
 ## Un texto no se modifica
+
+Esta regla explica una sorpresa frecuente al empezar: llamas a un método sobre un
+texto y, sin embargo, tu variable no cambia. Aquí tienes el porqué.
 
 Un `str` es [inmutable](../debuter/glossaire.md#inmutable): una vez creado, ya no
 cambia. Todas las operaciones sobre un texto devuelven un texto **nuevo**. El original
@@ -123,10 +165,22 @@ LUCÍA
 Lucía
 ```
 
+Línea por línea:
+
+- `nombre` contiene "lucía";
+- `nombre.upper()` fabrica un texto nuevo, "LUCÍA", guardado en `mayusculas`. `nombre`
+  no se ha movido: el primer `print` sigue mostrando "lucía";
+- `nombre = nombre.capitalize()` fabrica "Lucía" y lo guarda en `nombre`, en lugar del
+  texto antiguo: el último `print` muestra "Lucía".
+
 Para "cambiar" una variable de texto, guarda el nuevo texto en la variable:
 `nombre = nombre.capitalize()`.
 
 ## Cambiar mayúsculas y limpiar
+
+Los textos escritos por personas casi nunca están limpios: mayúsculas al azar,
+espacios de sobra. Antes de compararlos o mostrarlos, se ponen en orden, como cuando
+ordenas un cajón desordenado.
 
 Un [método](../debuter/glossaire.md#metodo) es una función ligada a un valor. Se llama
 con un punto: `texto.metodo()`. Estos son los más útiles:
@@ -154,6 +208,15 @@ hola
 titulo
 ```
 
+Línea por línea:
+
+- `titulo` nunca cambia: cada método devuelve un texto nuevo, que se muestra enseguida;
+- `entrada` tiene tres espacios al principio, dos al final y un salto de línea `\n`;
+- `strip()` quita todo eso de los dos lados. Los corchetes muestran dónde empieza y
+  dónde acaba el texto;
+- `lstrip()` solo quita el principio. El `replace` cambia el salto de línea por `↵`,
+  para que se vea.
+
 - `upper` y `lower`: todo en mayúsculas, todo en minúsculas;
 - `title`: una mayúscula en cada palabra; `capitalize`: solo en la primera letra;
 - `strip` quita los espacios y saltos de línea de los dos extremos; `lstrip` y
@@ -162,7 +225,26 @@ titulo
 > **Consejo:** piensa en `strip()` en cuanto leas un texto escrito por un usuario o
 > leído de un archivo: a menudo sobran espacios.
 
+**Te toca:** escribe un programa que guarde `entrada = "  pABLO  "` en una variable y
+luego muestre el nombre sin los espacios, con mayúscula solo al principio: "Pablo".
+
+> **Solución**
+>
+> ```python
+> entrada = "  pABLO  "
+> nombre = entrada.strip().capitalize()
+> print(nombre)
+> ```
+>
+> ```sortie
+> Pablo
+> ```
+
 ## Dividir y unir: split y join
+
+Un texto suele contener varias informaciones pegadas: las palabras de una frase, o
+los campos de una línea de hoja de cálculo separados por `;`. `split` los separa para
+tratarlos uno a uno, y `join` los vuelve a juntar.
 
 `split` corta un texto en trozos y devuelve una [lista](../debuter/glossaire.md#lista).
 Sin argumento, corta en los espacios.
@@ -183,6 +265,14 @@ print(linea.split(";"))
 ['Lucía', '30', 'Sevilla']
 ```
 
+Línea por línea:
+
+- `frase.split()` corta en cada espacio y da una lista de 6 palabras, guardada en
+  `palabras`;
+- `len(palabras)` cuenta los elementos de la lista, no las letras: 6;
+- `linea.split(";")` corta en cada `;`: el nombre, la edad y la ciudad quedan separados.
+  Fíjate en que `'30'` sigue siendo un texto.
+
 `join` hace lo contrario: une los trozos de una lista, con un separador. Se llama
 **sobre el separador**.
 
@@ -201,7 +291,27 @@ a-b-c
 
 > **Recuerda:** `texto.split(sep)` da una lista; `sep.join(lista)` devuelve un texto.
 
+**Te toca:** escribe un programa que guarde `fecha = "19/10/2026"` en una variable, la
+corte en las `/`, muestre la lista obtenida y luego vuelva a unir los trozos con guiones.
+
+> **Solución**
+>
+> ```python
+> fecha = "19/10/2026"
+> trozos = fecha.split("/")
+> print(trozos)
+> print("-".join(trozos))
+> ```
+>
+> ```sortie
+> ['19', '10', '2026']
+> 19-10-2026
+> ```
+
 ## Reemplazar
+
+Corregir una palabra en todo un texto, quitar los puntos de un número: es el "buscar
+y reemplazar" de un procesador de textos, en una sola línea.
 
 `replace(viejo, nuevo)` reemplaza todas las apariciones de un trozo de texto.
 
@@ -221,6 +331,10 @@ Me gusta el café. El té está caliente.
 El tercer argumento limita el número de reemplazos.
 
 ## Buscar en un texto
+
+Antes de usar un texto, a menudo quieres comprobarlo: ¿una dirección de correo
+contiene una `@`? ¿Un nombre de archivo termina en `.txt`? Python ofrece varias formas
+de hacer estas preguntas.
 
 ```python
 email = "lucia@ejemplo.es"
@@ -271,7 +385,27 @@ print("2026".isdigit(), "12a".isdigit(), "Año".isalpha())
 True False True
 ```
 
+**Te toca:** escribe un programa que guarde `archivo = "foto_vacaciones.jpg"` en una
+variable, muestre si su nombre termina en `.jpg` y luego cuántas veces contiene la
+letra `a`.
+
+> **Solución**
+>
+> ```python
+> archivo = "foto_vacaciones.jpg"
+> print(archivo.endswith(".jpg"))
+> print(archivo.count("a"))
+> ```
+>
+> ```sortie
+> True
+> 2
+> ```
+
 ## Alinear texto
+
+Para mostrar un tique de compra o una tabla, las columnas tienen que quedar unas
+debajo de otras. Sin alineación, cada línea tiene su propia longitud y todo se descuadra.
 
 En una f-string, `:` seguido de una alineación y de un ancho coloca el texto en una
 columna:
@@ -293,11 +427,23 @@ Mermelada     3.75 €
 *******FIN********
 ```
 
+Línea por línea:
+
+- `productos` es una lista de parejas: un nombre y un precio;
+- en cada vuelta, el bucle guarda el nombre en `nombre` y el precio en `precio`;
+- el `print` coloca el nombre en una columna de 12 caracteres y luego el precio en una
+  columna de 6;
+- la última línea centra "FIN" en 18 caracteres y rellena el resto con `*`.
+
 `{nombre:<12}` reserva 12 caracteres, texto a la izquierda. `{precio:>6.2f}` reserva 6
 caracteres, número a la derecha con 2 decimales. Los formatos de números se explican
 en [números y cálculos](nombres.md).
 
 ## Textos de varias líneas
+
+Un poema, una dirección postal, un mensaje de ayuda largo: algunos textos tienen
+varias líneas de forma natural. Las comillas triples te evitan escribirlo todo en una
+sola línea interminable.
 
 Entre comillas **triples** `"""..."""`, un texto puede ocupar varias líneas. Los saltos
 de línea se conservan.
@@ -318,6 +464,9 @@ se hace camino al andar.
 `splitlines()` corta el texto en una lista de líneas.
 
 ## Los caracteres especiales
+
+¿Cómo se pone un salto de línea, o una comilla, dentro de un texto que ya está entre
+comillas? Hace falta una forma especial de escribirlos.
 
 Algunos caracteres se escriben con una barra invertida `\`, seguida de una letra: es
 una **secuencia de escape**.
@@ -346,11 +495,19 @@ C:\carpeta\archivo.txt
 C:\carpeta\nuevo
 ```
 
+Línea por línea:
+
+- `\n` corta la línea: "Línea 2" aparece debajo;
+- `\t` inserta una tabulación, un espacio ancho que ayuda a alinear;
+- `\"` pone una comilla en el texto sin cerrarlo, y `\\` muestra una sola barra.
+
 La `r` delante del último texto lo convierte en una cadena **en bruto** (*raw*): las `\`
 se quedan tal cual. Es práctico para las rutas de Windows y las
 [expresiones regulares](regex.md).
 
 ## Unicode: ord y chr
+
+> **Nota:** esta parte puede esperar. Léela cuando las bases estén firmes.
 
 Un ordenador solo guarda números. [Unicode](../debuter/glossaire.md#unicode) da un
 número a cada carácter del mundo: letras con tilde, alfabetos, emojis. `ord` da el

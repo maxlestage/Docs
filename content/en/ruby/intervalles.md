@@ -35,6 +35,13 @@ Range
 4
 ```
 
+Line by line:
+
+- `(1..5).to_a` gives all the values from 1 to 5, and 5 is one of them;
+- `(1...5).to_a` stops just before 5: the third dot excludes the end;
+- `class` shows the type of the value: here, `Range`;
+- `size` counts the values: 5 for `1..5`, but 4 for `1...5`.
+
 `to_a` turns the range into an array. The range itself does not store its
 values: it only knows its start and its end. So `1..1_000_000` takes almost no
 memory.
@@ -43,6 +50,9 @@ memory.
 > end out.
 
 ## Looping over a range
+
+A range is often used to repeat an action a precise number of times: running three laps,
+writing out a multiplication table.
 
 `each` goes over each value, like for an array.
 
@@ -63,6 +73,13 @@ Round 3
 3 × 5 = 15
 ```
 
+Line by line:
+
+- `(1..3).each` gives `n` the value 1, then 2, then 3;
+- on each round, the block `{ … }` shows "Round" followed by the number;
+- `(1...4)` stops before 4: `i` is 1, then 2, then 3;
+- between `do` and `end`, the block computes `i * 5` and shows one line of the table.
+
 A range also knows the methods of
 [Enumerable](blocs.md): `map`, `select`, `sum`…
 
@@ -76,7 +93,29 @@ p (1..10).select(&:even?)
 [2, 4, 6, 8, 10]
 ```
 
+**Your turn:** write a program that shows the table of 2, from "2 × 1 = 2" to
+"2 × 5 = 10", with a range and `each`.
+
+> **Solution**
+>
+> ```ruby
+> (1..5).each do |i|
+>   puts "2 × #{i} = #{i * 2}"
+> end
+> ```
+>
+> ```sortie
+> 2 × 1 = 2
+> 2 × 2 = 4
+> 2 × 3 = 6
+> 2 × 4 = 8
+> 2 × 5 = 10
+> ```
+
 ## Moving in steps with step
+
+Sometimes you do not want every value, but one out of two or one out of five, like when
+you count by fives up to 100.
 
 `step` skips several values at a time. `%` does the same thing, in a shorter way.
 
@@ -95,10 +134,33 @@ puts
 10 7 4 1 
 ```
 
+Line by line:
+
+- `(0..20).step(5)` starts at 0 and adds 5 each time: 0, 5, 10, 15, 20;
+- `((0..20) % 5)` gives exactly the same result;
+- with decimal numbers, the step can be `0.25`;
+- `10.step(1, -3)` starts at 10 and takes away 3 each round, without going below 1.
+
 To count down, a range like `10..1` is **empty**. Use `step` with a negative step,
 `downto`, or `(1..10).reverse_each`.
 
+**Your turn:** write a program that shows, in an array, the multiples of 3 from 0
+to 30.
+
+> **Solution**
+>
+> ```ruby
+> p (0..30).step(3).to_a
+> ```
+>
+> ```sortie
+> [0, 3, 6, 9, 12, 15, 18, 21, 24, 27, 30]
+> ```
+
 ## Testing membership
+
+Programs ask this kind of question all the time: "does this age get the child price?",
+"is this score between 10 and 20?". A range answers it in one line.
 
 `include?` answers the question: "is this value in the range?"
 
@@ -116,6 +178,13 @@ false
 true
 false
 ```
+
+Line by line:
+
+- `teen_ages = 13..19` stores the range in a variable, like any other value;
+- 15 is between 13 and 19: `true`. 20 is beyond: `false`;
+- a range can also go from one decimal number to another: 2.1 is indeed inside;
+- `1...10` excludes 10: so the answer is `false`.
 
 `cover?` does almost the same thing: it only compares with the start and the end. The
 difference shows with strings.
@@ -135,7 +204,27 @@ true
 `"bb"` is not one of the 26 letters, but it does sit between `"a"` and `"z"` in
 alphabetical order. `cover?` also accepts a whole range.
 
+**Your turn:** write a program that stores `temperature = 22` in a variable, then
+shows "Pleasant" if it is between 18 and 25 included, and "Not pleasant" otherwise.
+
+> **Solution**
+>
+> ```ruby
+> temperature = 22
+> if (18..25).include?(temperature)
+>   puts "Pleasant"
+> else
+>   puts "Not pleasant"
+> end
+> ```
+>
+> ```sortie
+> Pleasant
+> ```
+
 ## Ranges of letters
+
+> **Note:** this part can wait. Read it once the basics feel solid.
 
 A range works with anything that has a "next" value: letters too.
 
@@ -154,6 +243,9 @@ p ("aa".."ad").to_a
 ```
 
 ## Sum, minimum and maximum
+
+A range of numbers often boils down to a single number: the total of a series, the
+smallest, the largest. Ruby computes them for you, without writing a loop.
 
 ```ruby
 puts (1..100).sum
@@ -207,6 +299,9 @@ Fail
 
 ## Slicing with a range
 
+Often you only want part of a list: the top three of a ranking, the last messages
+received, the start of a word.
+
 Inside square brackets, a range takes a piece of an array or a string. Positions
 start at 0, and `-1` is the last one.
 
@@ -235,7 +330,34 @@ shine
 sunshin
 ```
 
+Line by line:
+
+- `letters[1..3]` takes positions 1, 2 and 3: `"b"`, `"c"` and `"d"`;
+- `letters[2..]` has no end: it takes everything from position 2 on;
+- `letters[..1]` has no start: it takes everything up to position 1 included;
+- `-2..` starts at the second-to-last element and goes to the end;
+- on a string it works the same way, letter by letter: `word[0..2]` gives `"sun"`.
+
+**Your turn:** write a program that stores the seven days of the week in an array
+`days`, then shows the first five, then the last two.
+
+> **Solution**
+>
+> ```ruby
+> days = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
+> p days[0..4]
+> p days[-2..]
+> ```
+>
+> ```sortie
+> ["Mon", "Tue", "Wed", "Thu", "Fri"]
+> ["Sat", "Sun"]
+> ```
+
 ## Endless or beginless
+
+Some categories have no limit on one side: "65 and over", "under 18". An endless or
+beginless range describes them simply.
 
 You can leave one end empty:
 
@@ -266,6 +388,13 @@ minor
 adult
 senior
 ```
+
+Line by line:
+
+- `(5..).first(3)` takes the first three values from 5 on, without looking for the end;
+- `(..5)` holds everything less than or equal to 5, even -100;
+- in `category`, `...18` means "under 18" and `65..` means "65 or more";
+- 12 falls into the first `when`, 40 into the second, 80 into the third.
 
 `first(3)` takes the first 3 values: do not call `to_a` on `5..`, it would never
 finish.

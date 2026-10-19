@@ -12,6 +12,9 @@ This page presents the basic building blocks of TypeScript: variables, simple ty
 
 ## Printing with console.log
 
+A program that computes without showing anything is not much use to you: you can't
+see the result. `console.log` is the window through which it talks to you.
+
 `console.log` prints a value in the terminal, then moves to the next line. It accepts
 several values, separated by commas: it prints them with a space between them.
 
@@ -27,10 +30,21 @@ Hello!
 Total: 5 euros
 ```
 
+Line by line:
+
+- the first line prints the text between quotes, as it is;
+- the second computes `2 + 3`, then prints the result, `5`;
+- the third gets three values: a text, a calculation and another text. It prints them
+  on a single line, separated by a space.
+
 Text is written between double quotes `"..."` or single quotes `'...'`. Without quotes,
 TypeScript computes: `2 + 3` gives `5`.
 
 ## Variables: let and const
+
+A program often needs to remember things: a player's name, their score, a price. A
+variable keeps a value so you can use it again later, like a number written on a
+sticky note so you don't forget it.
 
 A [variable](../debuter/glossaire.md#variable) is a box with a label: the label is the
 name, the content is the value. Two words let you create one:
@@ -53,6 +67,14 @@ Alice 10
 Alice 20
 ```
 
+Line by line:
+
+- `const firstName = "Alice"` stores the text `"Alice"` in the box `firstName`, for good;
+- `let score = 10` creates an open box, `score`, which holds 10;
+- the first `console.log` prints what the two boxes hold: `Alice 10`;
+- `score = 15` replaces 10 with 15, then `score = score + 5` brings it to 20;
+- so the second `console.log` prints `Alice 20`.
+
 `score = score + 5` reads from right to left: first compute `score + 5` (that is `20`),
 then store the result in `score`.
 
@@ -65,7 +87,27 @@ Compound names are written in `camelCase`: `totalPrice`, `numberOfPlayers`.
 > **Note:** you will sometimes see `var` in old programs. It is the ancestor of
 > `let`, with trickier rules. Don't write it.
 
+**Your turn:** write a program that creates a constant `fruit` set to `"apple"` and a
+variable `quantity` set to 3, adds 2 to `quantity`, then prints both.
+
+> **Solution**
+>
+> ```typescript
+> const fruit = "apple";
+> let quantity = 3;
+> quantity = quantity + 2;
+> console.log(fruit, quantity);
+> ```
+>
+> ```sortie
+> apple 5
+> ```
+
 ## Simple types
+
+A number and a text are not handled the same way: you can multiply 30 by 2, but not
+"Lyon". The type says what kind of value a box holds. TypeScript uses it to stop you
+before you make a mistake.
 
 Every value has a [type](../debuter/glossaire.md#type). The three basic types are:
 
@@ -90,6 +132,14 @@ console.log(typeof age, typeof city, typeof isAdult);
 30 Lyon true
 number string boolean
 ```
+
+Line by line:
+
+- `const age: number = 30` creates a box `age` that can only hold a number, and stores
+  30 in it;
+- the next two lines do the same with a text and a boolean;
+- the first `console.log` prints the three values;
+- the second prints the type of each one, thanks to `typeof`.
 
 `typeof` gives the type of a value while the program runs, as text.
 
@@ -121,7 +171,28 @@ console.log((10 / 3).toFixed(2));
 - `Math.round` rounds, `Math.floor` rounds down.
 - `toFixed(2)` gives a text with 2 digits after the decimal point.
 
+**Your turn:** 17 candies are shared between 5 children. Write a program that stores
+these two numbers in `candies` and `children`, then prints how many candies each child
+gets (with `Math.floor`) and how many are left (with `%`).
+
+> **Solution**
+>
+> ```typescript
+> const candies = 17;
+> const children = 5;
+> console.log("Each:", Math.floor(candies / children));
+> console.log("Left:", candies % children);
+> ```
+>
+> ```sortie
+> Each: 3
+> Left: 2
+> ```
+
 ## Inference: TypeScript guesses
+
+Writing the type of every variable would soon get tiresome, especially when it is
+obvious: `10` is clearly a number. TypeScript can do that work for you.
 
 You don't have to write the type. When a variable gets a value as soon as it is
 created, TypeScript **guesses** its type: this is **inference**.
@@ -137,6 +208,12 @@ console.log(score, message);
 ```sortie
 20 You win
 ```
+
+Line by line:
+
+- `let score = 10`: TypeScript sees a number, so it notes that `score` is a `number`;
+- `const message = "You win"`: it sees a text, so `message` is a `string`;
+- `score = score * 2` stores a number in `score`: that is allowed, it now holds 20.
 
 TypeScript worked out that `score` is a `number` and `message` a `string`. In your
 editor, hover over `score`: it shows `let score: number`.
@@ -165,6 +242,8 @@ Found 1 error in main.ts:2
 
 ### const and precise types
 
+> **Note:** this part can wait. Read it once the basics feel solid.
+
 With `const`, TypeScript goes further. Since the value will never change, it keeps
 the exact value as the type:
 
@@ -184,6 +263,9 @@ other), `otherColor` has the type `string`. These precise types will be very use
 in [the chapter on text](texte.md).
 
 ## Template literals
+
+You will often want to build a sentence with values inside it: "Alice is 30 years
+old." A template literal does this simply, like a form with blanks that you fill in.
 
 Text between backticks `` ` `` is a **template literal**. It can contain `${...}`:
 the expression between the braces is computed and inserted into the text.
@@ -205,6 +287,13 @@ Line 1
 Line 2
 ```
 
+Line by line:
+
+- the first two lines store a first name and an age;
+- in the first template, `${firstName}` is replaced by `Alice` and `${age}` by `30`;
+- in the second, `${age + 5}` is computed first (35), then inserted;
+- the third template contains a real line break: it prints on two lines.
+
 A template literal can also span several lines.
 
 With normal quotes, you have to glue the pieces together with `+`:
@@ -218,7 +307,26 @@ console.log("Hello, " + firstName + "!");
 Hello, Alice!
 ```
 
+**Your turn:** a night at the hotel costs 80 euros. Write a program that stores
+`"Lyon"` in `city` and `2` in `nights`, then prints with a template literal: "Stay in
+Lyon: 2 nights, so 160 euros."
+
+> **Solution**
+>
+> ```typescript
+> const city = "Lyon";
+> const nights = 2;
+> console.log(`Stay in ${city}: ${nights} nights, so ${nights * 80} euros.`);
+> ```
+>
+> ```sortie
+> Stay in Lyon: 2 nights, so 160 euros.
+> ```
+
 ## Comments
+
+In a few weeks, you will have forgotten why you wrote a given line. A comment is a
+note you leave for your future self, or for a colleague.
 
 A [comment](../debuter/glossaire.md#comment) is a note for humans: TypeScript
 ignores it.
@@ -242,6 +350,14 @@ console.log(netPrice * (1 + vat));
 120
 ```
 
+Line by line:
+
+- everything after `//` is ignored. On the second line, `const vat = 0.2;` does run:
+  only the text after `//` is ignored;
+- everything between `/*` and `*/` is ignored, even over several lines;
+- three real instructions are left: `vat` is 0.2, `netPrice` is 100, and
+  `console.log` prints `100 * 1.2`, that is 120.
+
 The `/** ... */` comment is a documentation comment: your editor shows it when you
 hover over `netPrice`.
 
@@ -249,6 +365,9 @@ hover over `netPrice`.
 > `// French VAT` is useful; `// multiply by 0.2` is not.
 
 ## null and undefined: no value
+
+A piece of information can be missing: a customer doesn't always have a nickname, a
+form isn't filled in yet. You need a way to say "there is nothing here".
 
 Two special values represent "nothing" (see [null](../debuter/glossaire.md#null)):
 
@@ -277,11 +396,36 @@ Ali
 undefined
 ```
 
+Line by line:
+
+- `nickname` can hold a text or `null`. At the start, it is `null`: no nickname;
+- then it gets the text `"Ali"`, and the second print shows it;
+- `answer` is created without a value: it holds `undefined`.
+
 `string | null` reads "a string or null". It is a **union** of types: you will see
 many of them in [the chapter on unions](unions.md).
 
 > **Remember:** in strict TypeScript, a missing value shows in the type. You cannot
 > forget it: this is the cause of a great many bugs in other languages.
+
+**Your turn:** write a program that creates a variable `phone` of type
+`string | null`, set to `null` at the start. Print it, give it the value
+`"0601020304"`, then print it again.
+
+> **Solution**
+>
+> ```typescript
+> let phone: string | null = null;
+> console.log(phone);
+>
+> phone = "0601020304";
+> console.log(phone);
+> ```
+>
+> ```sortie
+> null
+> 0601020304
+> ```
 
 ## any and unknown: when you don't know
 
@@ -323,6 +467,12 @@ if (typeof data === "string") {
 HI
 ```
 
+Line by line:
+
+- `data` has the type `unknown`: TypeScript makes no assumption about what it holds;
+- `typeof data === "string"` asks the question "is it a text?". Here, yes;
+- inside the block, `toUpperCase()` turns the text into capitals: `HI`.
+
 Inside the `if` block, TypeScript knows that `data` is a `string`, and allows
 `toUpperCase()`. Conditions are explained in
 [the next chapter](conditions-boucles.md).
@@ -332,6 +482,9 @@ Inside the `if` block, TypeScript knows that `data` is a `string`, and allows
 > looking.
 
 ## Reading a type error, line by line
+
+A type error is not a punishment: it is TypeScript warning you about a bug before the
+program even runs. Knowing how to read it saves you a lot of time.
 
 Here is a program that adds a number and a piece of text:
 

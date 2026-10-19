@@ -20,6 +20,9 @@ ones:
 
 ## Arrays
 
+Imagine a shopping list of twenty items. Creating twenty variables `item1`, `item2`…
+would be tiresome. An array keeps all these values under a single name.
+
 An array is an ordered list of values, between square brackets `[ ]`, separated by
 commas. Each value is called an **element**.
 
@@ -33,6 +36,12 @@ puts fruits.length
 ["apple", "banana", "cherry"]
 3
 ```
+
+Line by line:
+
+- `fruits = [...]` stores an array of three strings in the variable `fruits`;
+- `p fruits` shows the whole array, with its brackets and quotes;
+- `fruits.length` asks for the number of elements: 3.
 
 An array can hold any values, even mixed ones, and even other
 arrays. `[]` is an empty array.
@@ -60,6 +69,8 @@ nil
 > **Note:** reading an index that does not exist does not crash: you get `nil`.
 
 ### Reading several elements
+
+> **Note:** this part can wait. Read it once the basics feel solid.
 
 A range, or `first(n)` and `last(n)`, give a piece of the array.
 
@@ -101,6 +112,13 @@ p numbers
 [2, 3]
 ```
 
+Line by line:
+
+- `numbers` starts with two elements: `[1, 2]`;
+- `<< 3` then `push(4)` add 3 and 4 at the end: the array is now `[1, 2, 3, 4]`;
+- `numbers.pop` removes the last element, 4, and stores it in `last`;
+- `delete(1)` removes the **value** 1 (not index 1): `[2, 3]` is left.
+
 ```ruby
 queue = ["Bob", "Chloe"]
 queue.unshift("Alice")
@@ -120,6 +138,24 @@ Your turn, Alice
 ```
 
 `queue[0] = "Zoe"` replaces the element at index 0.
+
+**Your turn:** write a program that creates an empty array `groceries`, adds "bread"
+then "milk" with `<<`, shows the array, then shows its number of elements.
+
+> **Solution**
+>
+> ```ruby
+> groceries = []
+> groceries << "bread"
+> groceries << "milk"
+> p groceries
+> puts groceries.length
+> ```
+>
+> ```sortie
+> ["bread", "milk"]
+> 2
+> ```
 
 ### Useful methods
 
@@ -173,6 +209,10 @@ true
 
 ## Going through an array
 
+Often, you want to do the same thing with each element: show each item of the shopping
+list, greet each student. Instead of writing one line per element, you let `each`
+repeat the work.
+
 `each` runs a block for each element.
 
 ```ruby
@@ -185,6 +225,14 @@ end
 I like apples
 I like bananas
 ```
+
+Line by line:
+
+- `["apple", "banana"]` is an array of two strings; `.each` goes through it in order;
+- on the first turn, Ruby stores `"apple"` in `fruit` (the name between the bars
+  `| |`), then runs the block between `do` and `end`;
+- on the second turn, `fruit` is `"banana"`;
+- there are no elements left: the loop stops.
 
 With `each_with_index`, you also get the position:
 
@@ -200,7 +248,27 @@ end
 3. bronze
 ```
 
+**Your turn:** write a program that goes through the array `[3, 7, 10]` with `each` and
+shows the double of each number.
+
+> **Solution**
+>
+> ```ruby
+> [3, 7, 10].each do |n|
+>   puts n * 2
+> end
+> ```
+>
+> ```sortie
+> 6
+> 14
+> 20
+> ```
+
 ## Hashes
+
+In an array, you find a value by its position: 0, 1, 2… But to find Alice's age, a
+slot number tells you nothing. A hash lets you look things up by a name.
 
 A hash attaches **keys** to **values**. Think of a cloakroom: you hand over
 the ticket (the key), you get your coat back (the value). Each key is unique. Keys
@@ -218,6 +286,12 @@ Alice
 30
 nil
 ```
+
+Line by line:
+
+- `person` holds two pairs: the key `:name` with `"Alice"`, the key `:age` with 30;
+- `person[:name]` gives the value stored under the key `:name`: `"Alice"`;
+- `person[:city]` asks for a key that does not exist: you get `nil`, without a crash.
 
 > **Remember:** `{ name: "Alice" }` is a shortcut for `{ :name => "Alice" }`. Both
 > ways of writing it give the same hash.
@@ -241,6 +315,29 @@ puts stock.key?("apples")
 {"apples"=>6}
 true
 ```
+
+Line by line:
+
+- `stock` starts with a single key, `"apples"`, worth 5;
+- `stock["pears"] = 3` adds a new key;
+- `stock["apples"] += 1` reads 5, adds 1 and stores 6 in its place;
+- `delete("pears")` removes the key added just before: only `"apples"` is left.
+
+**Your turn:** write a program that creates a hash `capitals` with the key `"France"`
+and the value `"Paris"`, adds the key `"Italy"` with the value `"Rome"`, then shows the
+capital of Italy.
+
+> **Solution**
+>
+> ```ruby
+> capitals = { "France" => "Paris" }
+> capitals["Italy"] = "Rome"
+> puts capitals["Italy"]
+> ```
+>
+> ```sortie
+> Rome
+> ```
 
 ### Default value with fetch
 
@@ -303,6 +400,9 @@ nil
 
 ## Going through a hash
 
+To show a whole price list or a whole address book, you want to go over each key-value
+pair, one by one. `each` does that for hashes too.
+
 `each` gives the key and the value on each turn.
 
 ```ruby
@@ -320,6 +420,31 @@ tea: 3 €
 [:coffee, :tea]
 [2, 3]
 ```
+
+Line by line:
+
+- `prices` links `:coffee` to 2 and `:tea` to 3;
+- on the first turn, `each` stores the key `:coffee` in `drink` and the value 2 in
+  `amount`; on the second turn, `:tea` and 3;
+- a symbol shown inside a string loses its colon: you read `coffee`;
+- `keys` gives the array of keys, `values` the array of values.
+
+**Your turn:** write a program that goes through the hash `{ "Alice" => 12, "Bob" => 15 }`
+and shows, for each person, a line like "Alice got 12".
+
+> **Solution**
+>
+> ```ruby
+> grades = { "Alice" => 12, "Bob" => 15 }
+> grades.each do |name, grade|
+>   puts "#{name} got #{grade}"
+> end
+> ```
+>
+> ```sortie
+> Alice got 12
+> Bob got 15
+> ```
 
 > **Tip:** to transform or filter a collection, use `map` and `select`.
 > They are explained in [the page about blocks](blocs.md).

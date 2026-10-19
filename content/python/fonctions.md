@@ -31,10 +31,22 @@ Bonjour !
 Bonjour !
 ```
 
+Ligne par ligne :
+
+- `def saluer():` crée une fonction nommée `saluer`. Rien ne s'affiche encore ;
+- `print("Bonjour !")` est décalé : il fait partie de la fonction, il attend ;
+- le premier `saluer()` lance la fonction : Python exécute son corps et affiche
+  « Bonjour ! » ;
+- le second `saluer()` recommence : la même recette, suivie une deuxième fois.
+
 Écrire `def` ne lance rien : cela enregistre la recette. Écrire `saluer()` **appelle**
 la fonction, c'est-à-dire l'exécute. Les parenthèses sont obligatoires, même vides.
 
 ## Les paramètres
+
+Une recette de crêpes peut servir pour 4 ou pour 8 personnes : seules les quantités
+changent. De même, une fonction est plus utile si elle peut travailler avec des valeurs
+différentes à chaque appel.
 
 Les [paramètres](../debuter/glossaire.md#parametre) sont les valeurs que la fonction
 reçoit. Ce sont des cases vides, remplies au moment de l'appel. Les valeurs données à
@@ -53,10 +65,39 @@ Bonjour, Alice !
 Bonjour, Bob !
 ```
 
+Ligne par ligne :
+
+- `def saluer(prenom):` crée la fonction, avec une case vide nommée `prenom` ;
+- `saluer("Alice")` appelle la fonction : `prenom` reçoit `"Alice"`, puis le `print`
+  affiche « Bonjour, Alice ! » ;
+- `saluer("Bob")` l'appelle de nouveau : cette fois, `prenom` vaut `"Bob"`.
+
 Ici, `prenom` est le paramètre ; `"Alice"` et `"Bob"` sont les arguments. Plusieurs
 paramètres se séparent par des virgules.
 
+**À vous :** écrivez une fonction `anniversaire(prenom)` qui affiche « Joyeux
+anniversaire, … ! » avec le prénom reçu. Appelez-la pour Léa, puis pour Tom.
+
+> **Solution**
+>
+> ```python
+> def anniversaire(prenom):
+>     print(f"Joyeux anniversaire, {prenom} !")
+>
+> anniversaire("Léa")
+> anniversaire("Tom")
+> ```
+>
+> ```sortie
+> Joyeux anniversaire, Léa !
+> Joyeux anniversaire, Tom !
+> ```
+
 ## Renvoyer une valeur avec return
+
+Souvent, vous voulez qu'une fonction fasse un calcul et vous **donne** le résultat,
+comme une calculatrice. Vous pouvez ensuite l'afficher, le ranger dans une variable ou
+le réutiliser dans un autre calcul.
 
 `return` renvoie un résultat au code qui a appelé la fonction, et quitte la fonction.
 
@@ -73,6 +114,14 @@ print(total)
 12
 11
 ```
+
+Ligne par ligne :
+
+- `def aire(largeur, hauteur):` crée une fonction qui reçoit deux nombres ;
+- `return largeur * hauteur` calcule le produit et le renvoie à l'appelant ;
+- `print(aire(3, 4))` : l'appel vaut 12, donc Python affiche 12 ;
+- `total = aire(2, 5) + aire(1, 1)` : les deux appels valent 10 et 1, et `total`
+  reçoit 11.
 
 La valeur renvoyée **remplace** l'appel : `aire(2, 5) + aire(1, 1)` devient `10 + 1`.
 
@@ -136,7 +185,26 @@ print(petit, grand)
 1 9
 ```
 
+**À vous :** écrivez une fonction `perimetre(largeur, hauteur)` qui **renvoie** le
+périmètre d'un rectangle (deux fois la somme des côtés). Affichez `perimetre(3, 4)`.
+
+> **Solution**
+>
+> ```python
+> def perimetre(largeur, hauteur):
+>     return 2 * (largeur + hauteur)
+>
+> print(perimetre(3, 4))
+> ```
+>
+> ```sortie
+> 14
+> ```
+
 ## Les valeurs par défaut
+
+Au café, on vous sert un café normal, sauf si vous demandez autre chose. Une valeur
+par défaut joue ce rôle : elle évite de répéter la valeur la plus courante.
 
 Un paramètre peut avoir une valeur par défaut. Elle sert si l'argument est absent.
 
@@ -153,7 +221,31 @@ Bonjour, Alice !
 Salut, Bob !
 ```
 
+Ligne par ligne :
+
+- `salutation="Bonjour"` donne une valeur de secours au paramètre `salutation` ;
+- `saluer("Alice")` ne donne qu'un argument : `salutation` prend donc `"Bonjour"` ;
+- `saluer("Bob", "Salut")` donne les deux : `"Salut"` remplace la valeur par défaut.
+
 Les paramètres avec valeur par défaut se placent **après** les autres.
+
+**À vous :** écrivez une fonction `prix(montant, devise="euros")` qui renvoie un texte
+comme « 5 euros ». Affichez `prix(5)`, puis `prix(8, "dollars")`.
+
+> **Solution**
+>
+> ```python
+> def prix(montant, devise="euros"):
+>     return f"{montant} {devise}"
+>
+> print(prix(5))
+> print(prix(8, "dollars"))
+> ```
+>
+> ```sortie
+> 5 euros
+> 8 dollars
+> ```
 
 ## Les arguments nommés
 
@@ -178,10 +270,23 @@ print(commande(quantite=3, produit="croissant"))
 3 x croissant
 ```
 
+Ligne par ligne :
+
+- `commande("café")` : seul `produit` est donné ; `quantite` vaut 1 et `urgent` vaut
+  `False` ;
+- `commande("thé", urgent=True)` : `urgent` est donné par son nom, sans toucher à
+  `quantite` ;
+- `commande(quantite=3, produit="croissant")` : les deux arguments sont nommés, donc
+  l'ordre n'a pas d'importance.
+
 > **Astuce :** nommez les arguments booléens. `commande("thé", urgent=True)` se
 > comprend tout de suite ; `commande("thé", 1, True)` beaucoup moins.
 
 ## Un nombre variable d'arguments : *args et **kwargs
+
+Parfois, vous ne savez pas à l'avance combien de valeurs vous allez recevoir. Une
+addition au restaurant peut compter deux plats ou dix. Les étoiles permettent à une
+fonction d'accepter autant d'arguments que nécessaire.
 
 Avec une étoile, `*args` reçoit tous les arguments **positionnels** en trop, rangés dans
 un tuple.
@@ -203,6 +308,14 @@ print(somme())
 10
 0
 ```
+
+Ligne par ligne :
+
+- `*nombres` range tous les arguments reçus dans un tuple : `(1, 2)`, puis
+  `(1, 2, 3, 4)`, puis `()` ;
+- `total = 0` part de zéro ;
+- la boucle `for` ajoute chaque nombre à `total` ;
+- `return total` renvoie la somme. Sans argument, la boucle ne tourne pas : 0.
 
 Avec deux étoiles, `**kwargs` (*keyword arguments*) reçoit tous les arguments **nommés**
 en trop, rangés dans un [dictionnaire](../debuter/glossaire.md#dictionnaire).
@@ -227,6 +340,8 @@ dictionnaires sont expliqués dans [dictionnaires et ensembles](dictionnaires.md
 
 ## Documenter avec une docstring
 
+> **Note :** cette partie peut attendre. Lisez-la quand les bases seront solides.
+
 Une **docstring** est un texte entre triples guillemets, placé juste sous la ligne
 `def`. Elle explique ce que fait la fonction. Les éditeurs l'affichent quand vous
 survolez le nom, et `help()` la montre.
@@ -247,6 +362,10 @@ Renvoie le prix toutes taxes comprises, arrondi au centime.
 
 ## La portée des variables
 
+Une fonction a son propre brouillon. Ce qu'elle y écrit pendant son travail ne
+déborde pas sur le reste du programme. Ainsi, deux fonctions peuvent utiliser le même
+nom de variable sans se gêner.
+
 La [portée](../debuter/glossaire.md#portee) d'une variable est la zone du code où elle
 existe. Une variable créée **dans** une fonction est **locale** : elle naît à l'appel
 et disparaît à la fin.
@@ -264,6 +383,13 @@ print("resultat" in globals())
 42
 False
 ```
+
+Ligne par ligne :
+
+- `resultat = 42` crée la variable `resultat` **dans** la fonction ;
+- `print(calculer())` appelle la fonction, qui renvoie 42 : Python l'affiche ;
+- `globals()` donne les variables du dehors. `"resultat" in globals()` demande si
+  `resultat` en fait partie : la réponse est `False`.
 
 Après l'appel, `resultat` n'existe plus en dehors de la fonction.
 
@@ -291,6 +417,8 @@ print(compteur)
 > en argument et renvoyer le résultat : `compteur = incrementer(compteur)`.
 
 ## Les fonctions sont des valeurs
+
+> **Note :** cette partie peut attendre. Lisez-la quand les bases seront solides.
 
 En Python, une fonction est une valeur comme une autre. Sans parenthèses, son nom
 désigne la fonction elle-même : vous pouvez la ranger dans une variable ou la passer à
@@ -329,6 +457,9 @@ print(sorted(mots, key=len))
 
 ## Les lambdas
 
+Parfois, une fonction ne sert qu'une fois, pour une toute petite tâche, comme dire
+à `sorted` selon quoi trier. Lui donner un nom avec `def` serait lourd.
+
 Une [lambda](../debuter/glossaire.md#lambda) est une petite fonction sans nom, écrite
 sur une ligne : `lambda paramètres: expression`. Elle renvoie automatiquement la valeur
 de l'expression.
@@ -347,13 +478,39 @@ print(par_note)
 [('Bob', 12), ('Alice', 15), ('Chloé', 18)]
 ```
 
+Ligne par ligne :
+
+- `carre = lambda x: x * x` crée une petite fonction et la range dans `carre` ;
+- `carre(5)` calcule `5 * 5` et renvoie 25 ;
+- `eleves` est une liste de paires (prénom, note) ;
+- `sorted(..., key=lambda eleve: eleve[1])` regarde la note de chaque paire, et
+  range les élèves de la plus petite note à la plus grande.
+
 `key=lambda eleve: eleve[1]` veut dire « trie selon le deuxième élément ». Le tri est
 détaillé dans [listes et tuples](collections.md).
 
 > **Astuce :** une lambda sert surtout comme argument d'une autre fonction. Pour tout
 > le reste, un vrai `def` avec un nom est plus clair.
 
+**À vous :** la liste `amis = [("Léa", 25), ("Tom", 19), ("Inès", 31)]` contient des
+prénoms et des âges. Affichez-la triée par âge, avec `sorted` et une lambda.
+
+> **Solution**
+>
+> ```python
+> amis = [("Léa", 25), ("Tom", 19), ("Inès", 31)]
+> print(sorted(amis, key=lambda ami: ami[1]))
+> ```
+>
+> ```sortie
+> [('Tom', 19), ('Léa', 25), ('Inès', 31)]
+> ```
+
 ## Une fonction qui s'appelle elle-même
+
+Certains problèmes contiennent une version plus petite d'eux-mêmes. Compter à rebours
+depuis 3, c'est dire « 3 », puis compter à rebours depuis 2. Une fonction peut suivre
+la même idée.
 
 Une fonction peut s'appeler elle-même : c'est la
 [récursion](../debuter/glossaire.md#recursion). Il faut un **cas d'arrêt**, sinon elle
@@ -376,6 +533,14 @@ compte_a_rebours(3)
 1
 Partez !
 ```
+
+Ligne par ligne :
+
+- `compte_a_rebours(3)` : `n` vaut 3, ce n'est pas 0. La fonction affiche 3, puis
+  s'appelle avec 2 ;
+- même chose avec 2, puis avec 1 : chaque appel affiche son nombre ;
+- avec 0, le `if` est vrai : la fonction affiche « Partez ! » et `return` arrête tout.
+  C'est le cas d'arrêt.
 
 Un exemple classique est la factorielle : `5!` vaut `5 × 4 × 3 × 2 × 1`. Autrement dit,
 `n!` vaut `n × (n - 1)!`, et `1!` vaut 1.

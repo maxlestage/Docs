@@ -30,9 +30,38 @@ print(doble(21), area(3, 4))
 42 12
 ```
 
+Línea por línea:
+
+- `fn doble(x) = x * 2` crea una función llamada `doble`. Todavía no se muestra nada:
+  solo has escrito la receta;
+- `fn area(ancho, alto) = …` crea una segunda función, con dos parámetros;
+- `print(doble(21), area(3, 4))` llama a las dos funciones: `x` recibe 21, así que
+  `doble(21)` vale 42; `ancho` recibe 3 y `alto` recibe 4, así que `area(3, 4)`
+  vale 12;
+- `print` muestra los dos resultados, separados por un espacio.
+
 No hay `return`: lo que sigue a `=` **es** el resultado.
 
+**Te toca:** escribe un programa que defina una función `perimetro`, que reciba el
+ancho y el alto de un rectángulo y dé su perímetro (dos veces la suma de los dos), y
+luego muestre `perimetro(3, 4)`.
+
+> **Solución**
+>
+> ```rythme
+> fn perimetro(ancho, alto) = 2 * (ancho + alto)
+>
+> print(perimetro(3, 4))
+> ```
+>
+> ```sortie
+> 14
+> ```
+
 ## Parámetros y argumentos
+
+Una función sirve para repetir el mismo cálculo con valores distintos. Piensa en un
+formulario: las casillas son siempre las mismas, pero cada uno escribe sus respuestas.
 
 Hay dos palabras que aparecen todo el tiempo:
 
@@ -50,6 +79,9 @@ donde se permita un valor: `doble(doble(5))` vale 20.
 
 ## Una función en bloque
 
+Algunos cálculos se hacen en varios pasos, como una receta: primero preparas, luego
+juntas. Una función en bloque te deja escribir esos pasos uno debajo de otro.
+
 Cuando hacen falta varias líneas, se quita el `=` y se cierra con `end`.
 **La última línea da el resultado**:
 
@@ -65,6 +97,15 @@ print(presentar("Ada", 36))
 ```sortie
 Ada nació hacia 1988.
 ```
+
+Línea por línea:
+
+- `fn presentar(nombre, edad)` abre el bloque, y `end` lo cierra: todo lo que hay entre
+  los dos forma parte de la función;
+- `print(presentar("Ada", 36))` llama a la función: `nombre` recibe `"Ada"` y `edad`
+  recibe 36;
+- dentro de la función, `anio = 2024 - edad` calcula 1988 y lo guarda en `anio`;
+- la línea de texto es la última del bloque: es el resultado, y `print` la muestra.
 
 Los nombres definidos dentro de una función, como `anio`, solo existen
 dentro de la función: es su [ámbito](../debuter/glossaire.md#ambito). Fuera,
@@ -82,7 +123,32 @@ print(hola())
 ¡hola!
 ```
 
+**Te toca:** escribe un programa que defina una función en bloque
+`precio_con_iva(neto)`: calcula un impuesto del 20 % (`neto * 20 // 100`), lo suma al
+precio y da un texto como «50 € sin IVA son 60 € con IVA.». Muestra
+`precio_con_iva(50)`.
+
+> **Solución**
+>
+> ```rythme
+> fn precio_con_iva(neto)
+>   impuesto = neto * 20 // 100
+>   total = neto + impuesto
+>   "{neto} € sin IVA son {total} € con IVA."
+> end
+>
+> print(precio_con_iva(50))
+> ```
+>
+> ```sortie
+> 50 € sin IVA son 60 € con IVA.
+> ```
+
 ## Definir por casos
+
+A menudo, la respuesta depende de lo que recibe la función: una lista vacía no se
+describe como una llena. En lugar de una sola definición llena de preguntas, escribes
+una definición por caso, como las filas de una tabla de precios.
 
 Una función puede tener varias definiciones, escritas una debajo de otra.
 Rythme las prueba **en orden** y elige la primera que encaja:
@@ -120,6 +186,10 @@ una lista vacía / un solo elemento: 7 / 3 elementos
 
 ## Las guardas
 
+Un patrón reconoce una forma (0, una lista vacía…), pero no una comparación como
+«menos de 13 años». Para elegir según una comparación, como un precio que depende de
+la edad, se usa una guarda.
+
 Una **guarda** añade una condición a una definición: `if` después de los
 parámetros, antes del `=`. La definición solo se elige si la condición es
 verdadera.
@@ -136,10 +206,40 @@ print(categoria(8), categoria(15), categoria(40))
 niño adolescente adulto
 ```
 
+Línea por línea:
+
+- `categoria(8)`: Rythme prueba el primer caso; `8 < 13` es verdadero, así que da
+  `"niño"`;
+- `categoria(15)`: `15 < 13` es falso, Rythme pasa al segundo caso; `15 < 18` es
+  verdadero, así que da `"adolescente"`;
+- `categoria(40)`: las dos guardas son falsas; el último caso lo acepta todo, así que
+  da `"adulto"`;
+- `print` muestra los tres resultados en una línea.
+
 `_` significa «cualquier valor, no lo uso». Pon siempre el caso más general
 al final: si no, lo atraparía todo.
 
+**Te toca:** escribe un programa que defina una función `tiempo`, con guardas: da
+«frío» por debajo de 10 grados, «templado» por debajo de 25, y «calor» si no. Muestra
+`tiempo(5)`, `tiempo(18)` y `tiempo(30)`.
+
+> **Solución**
+>
+> ```rythme
+> fn tiempo(grados) if grados < 10 = "frío"
+> fn tiempo(grados) if grados < 25 = "templado"
+> fn tiempo(_) = "calor"
+>
+> print(tiempo(5), tiempo(18), tiempo(30))
+> ```
+>
+> ```sortie
+> frío templado calor
+> ```
+
 ## Las llamadas sin paréntesis
+
+> **Nota:** esta parte puede esperar. Léela cuando las bases estén firmes.
 
 Al principio de una línea, puedes llamar a una función sin paréntesis, como
 en Ruby:
@@ -161,6 +261,9 @@ saludar("Alan", "Buenas")
 > obligatorios: `x = len(xs)`, no `x = len xs`.
 
 ## La llamada en estilo método
+
+Esta escritura se lee de izquierda a derecha, en el orden en que piensas: tomas un
+valor y luego le aplicas una función.
 
 `valor.f(args)` es otra forma de escribir `f(valor, args)`: el valor delante
 del punto se convierte en el primer argumento. Sin más argumentos, los
@@ -187,6 +290,8 @@ print(21.doble)
 
 ## Los nombres que terminan en ?
 
+> **Nota:** esta parte puede esperar. Léela cuando las bases estén firmes.
+
 Una función que responde sí o no puede terminar en `?`, como en Ruby:
 
 ```rythme
@@ -205,6 +310,9 @@ true true true
 
 ## Las funciones anónimas
 
+A veces, una función solo sirve una vez, en un solo lugar. Buscarle un nombre sería
+como ponerle una etiqueta a un pósit que vas a tirar enseguida.
+
 Una función sin nombre se escribe `fn(parámetros) = resultado`. Es un valor
 como cualquier otro: se puede guardar en un nombre o dar a otra función.
 
@@ -219,10 +327,35 @@ print([1, 2, 3] |> map(fn(x) = x + 10))
 [11, 12, 13]
 ```
 
+Línea por línea:
+
+- `triple = fn(x) = x * 3` guarda una función sin nombre en `triple`; todavía no se
+  calcula nada;
+- `triple(5)` la llama como a una función normal: `x` recibe 5, el resultado es 15;
+- `[1, 2, 3] |> map(fn(x) = x + 10)` da la lista a `map`, con una función escrita ahí
+  mismo; `map` la llama con 1, luego 2, luego 3, y pone 11, 12 y 13 en una lista
+  nueva.
+
 `map` aplica la función a cada elemento de la lista. A menudo se escribe una
 función anónima cuando solo sirve una vez, en ese lugar.
 
+**Te toca:** escribe un programa que sume 5 a cada precio de la lista `[10, 20, 30]`,
+con `map` y una función anónima, y luego muestre la lista nueva.
+
+> **Solución**
+>
+> ```rythme
+> print([10, 20, 30] |> map(fn(precio) = precio + 5))
+> ```
+>
+> ```sortie
+> [15, 25, 35]
+> ```
+
 ## Una función que recuerda: la closure
+
+A veces, una función necesita un valor que no es uno de sus parámetros: un factor, un
+descuento. La closure le permite llevarse ese valor consigo.
 
 Una función anónima puede usar los nombres escritos antes que ella:
 
@@ -257,6 +390,9 @@ cambia.
 
 ## Las funciones son valores
 
+Esto permite escribir una función que sabe hacer «algo» sin saber qué de antemano:
+tú le das la acción que debe hacer, como quien le da una receta a un cocinero.
+
 Una función con nombre también se puede dar a otra función, por su nombre,
 **sin paréntesis**:
 
@@ -270,6 +406,13 @@ print(aplicar_dos_veces(cuadrado, 3), map([1, 2, 3], cuadrado))
 ```sortie
 81 [1, 4, 9]
 ```
+
+Línea por línea:
+
+- `cuadrado` da el cuadrado de un número;
+- `aplicar_dos_veces(f, x)` recibe una función `f` y la llama dos veces: `f(f(x))`;
+- `aplicar_dos_veces(cuadrado, 3)`: `cuadrado(3)` vale 9, luego `cuadrado(9)` vale 81;
+- `map([1, 2, 3], cuadrado)` aplica `cuadrado` a cada elemento: `[1, 4, 9]`.
 
 `cuadrado` es la función misma; `cuadrado(3)` es su resultado, 9.
 

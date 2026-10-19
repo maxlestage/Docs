@@ -12,6 +12,10 @@ Esta página profundiza en dos colecciones: el diccionario, que encuentra un val
 
 ## Crear un diccionario
 
+Una lista guarda sus valores por número: el primero, el segundo... A menudo prefieres
+encontrar un valor por un **nombre**: el precio de una fruta, la edad de una persona.
+Ese es el trabajo del diccionario.
+
 Un [diccionario](../debuter/glossaire.md#diccionario) asocia un **valor**
 a cada **clave**. Es como una agenda de teléfonos: buscas un nombre (la
 clave) y encuentras un número (el valor).
@@ -30,6 +34,14 @@ dict("Francia" => "París", "Italia" => "Roma", "Japón" => "Tokio")
 3
 ```
 
+Línea por línea:
+
+- `dict(...)` recibe una lista de tres pares. En cada par, el primer elemento es la
+  clave (el país) y el segundo el valor (la capital);
+- el diccionario obtenido se guarda con el nombre `capitales`;
+- `print(capitales)` lo muestra entero;
+- `len(capitales)` cuenta sus pares: hay 3.
+
 Al mostrarlo, aparece una flecha `=>` entre cada clave y su valor. Esta
 forma solo sirve para mostrar: en el código, escribe siempre
 `dict([[clave, valor], ...])`.
@@ -46,6 +58,8 @@ dict() dict(1 => "UNO", 2 => "dos")
 ```
 
 ## Claves de todo tipo
+
+> **Nota:** esta parte puede esperar. Léela cuando las bases estén firmes.
 
 Las claves no son siempre textos. Pueden ser números,
 [símbolos](../debuter/glossaire.md#simbolo) e incluso listas. Aquí, una
@@ -71,6 +85,9 @@ Solo las funciones no pueden ser claves.
 
 ## Leer un valor
 
+Un diccionario sirve sobre todo para encontrar un valor a partir de su clave, como
+buscas una palabra en un diccionario de verdad. Pero ¿qué pasa si la palabra no está?
+
 Hay dos formas de leer, como con las listas:
 
 - `dic[clave]` da el valor, y detiene el programa si falta la clave;
@@ -93,10 +110,38 @@ true false
 desconocida
 ```
 
+Línea por línea:
+
+- `capitales["Japón"]` da directamente el valor de la clave `"Japón"`: `Tokio`;
+- `get` da `Some("Tokio")` para Japón, y `None` («nada») para Chile, que no está en el
+  diccionario;
+- `has` responde `true` para Francia y `false` para Chile;
+- `unwrap_or(..., "desconocida")` abre la opción: da el valor si existe, y si no, el
+  texto de reserva `"desconocida"`.
+
 Usa `[...]` cuando estés seguro de que la clave existe, y `get` si no. Las
 opciones se explican en [gestionar los errores](erreurs.md).
 
+**Te toca:** escribe un programa que cree un diccionario `edades` donde Ada tiene 36
+años y Alan 41. Muestra la edad de Ada, y después la edad de Grace, o 0 si no está.
+
+> **Solución**
+>
+> ```rythme
+> edades = dict([["Ada", 36], ["Alan", 41]])
+> print(edades["Ada"])
+> print(unwrap_or(get(edades, "Grace"), 0))
+> ```
+>
+> ```sortie
+> 36
+> 0
+> ```
+
 ## Añadir y quitar una clave
+
+Los datos cambian: llega un país nuevo, otro desaparece, un valor estaba mal. Por eso
+hay que poder añadir, quitar o corregir una clave.
 
 Un diccionario no cambia nunca: es
 [inmutable](../debuter/glossaire.md#inmutable). `put` y `remove` fabrican un
@@ -120,10 +165,37 @@ dict("Francia" => "PARÍS", "Italia" => "Roma")
 dict("Francia" => "París", "Italia" => "Roma")
 ```
 
+Línea por línea:
+
+- `mas` es una copia de `capitales` con una clave más: Chile;
+- `menos` es una copia sin Italia;
+- `corregido` es una copia donde Francia tiene un valor nuevo, `"PARÍS"`;
+- el último `print` lo demuestra: `capitales` sigue teniendo los mismos dos pares.
+
 `put` añade la clave, o reemplaza su valor si ya existe. El diccionario
 `capitales` original no ha cambiado.
 
+**Te toca:** parte de `cesta = dict([["manzana", 2]])`. Crea un diccionario nuevo
+`llena` con 3 peras más, y después muestra `llena` y `cesta`.
+
+> **Solución**
+>
+> ```rythme
+> cesta = dict([["manzana", 2]])
+> llena = put(cesta, "pera", 3)
+> print(llena)
+> print(cesta)
+> ```
+>
+> ```sortie
+> dict("manzana" => 2, "pera" => 3)
+> dict("manzana" => 2)
+> ```
+
 ## Claves, valores y pares
+
+A veces solo quieres una parte del diccionario: la lista de los países, o la de las
+capitales, por ejemplo para ordenarlas o contarlas.
 
 ```rythme
 capitales = dict([["Francia", "París"], ["Italia", "Roma"]])
@@ -149,6 +221,9 @@ Estas tres funciones dan **listas**: después puedes usar `map`, `sort`,
 
 ## Recorrer un diccionario
 
+Para mostrar o tratar todos los pares, uno por uno, no vas a escribir una línea por
+clave: le pides a Rythme que pase por cada uno.
+
 `each` llama a una función para cada par, en el orden de las claves. La
 función recibe **dos** valores: la clave y el valor.
 
@@ -167,6 +242,14 @@ La capital de Francia es París.
 La capital de Japón es Tokio.
 ```
 
+Línea por línea:
+
+- `each` toma el primer par: `pais` vale `"Francia"` y `ciudad` vale `"París"`. La
+  pequeña función muestra `Francia: París`;
+- después pasa al par siguiente, Japón, y vuelve a empezar;
+- las líneas `capitales.each do |pais, ciudad|` ... `end` hacen lo mismo, con otra
+  frase.
+
 El estilo con `do |pais, ciudad|` es el de Ruby; las dos formas hacen lo
 mismo.
 
@@ -182,6 +265,23 @@ print(map_values(precios, fn(p) = p * 2))
 dict("manzana" => 3, "pera" => 5)
 dict("higo" => 18, "manzana" => 6, "pera" => 10)
 ```
+
+**Te toca:** con `precios = dict([["manzana", 3], ["pera", 5]])`, muestra una línea
+por fruta, con la forma «manzana cuesta 3 €».
+
+> **Solución**
+>
+> ```rythme
+> precios = dict([["manzana", 3], ["pera", 5]])
+> each(precios, fn(fruta, p) = print("{fruta} cuesta {p} €"))
+> ```
+>
+> ```sortie
+> manzana cuesta 3 €
+> pera cuesta 5 €
+> ```
+>
+> Las líneas salen en orden alfabético: el diccionario está ordenado según sus claves.
 
 ## Contar palabras
 
@@ -208,6 +308,15 @@ print(cuenta["el"])
 dict("el" => 3, "gato" => 2, "perro" => 1, "y" => 2)
 3
 ```
+
+Línea por línea:
+
+- `contar` recibe el diccionario del momento y una palabra. Lee el contador de la
+  palabra (0 si no está) y da un diccionario nuevo con ese contador más 1;
+- `split(texto)` corta la frase en una lista de palabras: `["el", "gato", "y", ...]`;
+- `fold` parte de `dict()` y llama a `contar` para cada palabra, pasándole cada vez el
+  diccionario de la vuelta anterior;
+- después de la última palabra, `cuenta` tiene el resultado: «el» apareció 3 veces.
 
 Para encontrar las palabras más frecuentes, se pasa por la lista de pares:
 
@@ -242,9 +351,20 @@ set("a", "b", "n")
 set() true
 ```
 
+Línea por línea:
+
+- la lista tiene dos veces `"rojo"`, pero el conjunto lo guarda una sola vez: quedan
+  3 colores;
+- `chars("banana")` da las letras una por una; `set` solo guarda las letras
+  distintas;
+- `set()` es el conjunto vacío, e `is_empty` confirma que no contiene nada.
+
 Como un diccionario, un conjunto está ordenado según sus valores.
 
 ## Añadir, quitar, buscar
+
+Un conjunto funciona a menudo como una lista de invitados: añades a alguien, quitas a
+otro y, sobre todo, compruebas si una persona está en la lista.
 
 Los nombres son los mismos que para las listas y los diccionarios:
 
@@ -271,6 +391,9 @@ true false
 Buscar en un conjunto es muy rápido, incluso con millones de elementos.
 
 ## Combinar dos conjuntos
+
+Comparar dos grupos es una pregunta frecuente: ¿quién está en los dos? ¿quién falta
+en uno? Los conjuntos responden a estas preguntas en una línea.
 
 Piensa en dos círculos que se superponen: los amigos de Ada y los amigos de
 Linus.
@@ -300,6 +423,23 @@ true
 
 `union` también funciona con dos diccionarios: para una clave presente en
 los dos lados, gana el valor del segundo.
+
+**Te toca:** Ada, Léa y Tom vinieron el lunes; Léa y Sam vinieron el martes. Muestra
+los alumnos que vinieron los dos días, y después los que vinieron solo el lunes.
+
+> **Solución**
+>
+> ```rythme
+> lunes = set(["Ada", "Léa", "Tom"])
+> martes = set(["Léa", "Sam"])
+> print(intersection(lunes, martes))
+> print(difference(lunes, martes))
+> ```
+>
+> ```sortie
+> set("Léa")
+> set("Ada", "Tom")
+> ```
 
 ## ¿Registro, diccionario o conjunto?
 

@@ -13,6 +13,9 @@ Cette page montre comment TypeScript calcule : le type `number`, les opérateurs
 
 ## Un seul type pour tous les nombres
 
+Un programme calcule sans arrêt : un prix, un âge, un score, une distance. Avant de
+calculer, il faut savoir comment TypeScript range ces nombres.
+
 Dans beaucoup de langages, il y a un type pour les [entiers](../debuter/glossaire.md#entier)
 (`7`) et un autre pour les nombres à virgule, les [flottants](../debuter/glossaire.md#flottant)
 (`7.5`). En TypeScript, non : les deux sont des `number`.
@@ -33,12 +36,23 @@ number number
 true false
 ```
 
+Ligne par ligne :
+
+- les trois `const` rangent trois nombres : un entier, un nombre à virgule et un nombre
+  négatif. Tous les trois ont le type `number` ;
+- le premier `console.log` affiche les trois valeurs, séparées par une espace ;
+- `typeof` donne le type d'une valeur : ici, `number` pour les deux ;
+- `Number.isInteger` répond `true` pour `7` et `false` pour `2.5`.
+
 `Number.isInteger` répond à la question « est-ce un entier ? ».
 
 > **Attention :** en code, la virgule décimale s'écrit avec un **point** : `2.5`, jamais
 > `2,5`.
 
 ## Les opérateurs de calcul
+
+Calculer est le travail de base d'un ordinateur. Les opérateurs sont les touches de sa
+calculatrice : vous les combinez pour obtenir un total, une moyenne, un prix.
 
 Un [opérateur](../debuter/glossaire.md#operateur) est un symbole qui calcule. Voici
 ceux des nombres :
@@ -65,6 +79,13 @@ console.log(1 / 0, 0 / 0);
 8
 Infinity NaN
 ```
+
+Ligne par ligne :
+
+- la première ligne fait trois calculs et affiche les trois résultats côte à côte ;
+- `7 / 2` donne `3.5` : la division garde la partie après la virgule ;
+- `2 ** 3` veut dire 2 × 2 × 2, soit `8` ;
+- la dernière ligne montre deux cas étranges, expliqués juste en dessous.
 
 - `/` fait une vraie division : `7 / 2` donne `3.5`, pas `3`.
 - Diviser par zéro ne plante pas : on obtient `Infinity` (l'infini).
@@ -121,6 +142,13 @@ console.log(Math.floor(14 / 6));
 2
 ```
 
+Ligne par ligne :
+
+- `14 % 6` : dans 14, il y a 2 fois 6 (soit 12), et il reste `2` ;
+- `10 % 2` donne `0` (10 est pair) et `11 % 2` donne `1` (11 est impair) ;
+- `Math.floor(14 / 6)` donne le nombre de boîtes pleines : `14 / 6` vaut `2.33…`, et
+  `Math.floor` garde la partie entière, `2`. Vous reverrez `Math.floor` plus bas.
+
 Deux usages très courants :
 
 - **pair ou impair** : `n % 2` vaut `0` si `n` est pair, `1` sinon ;
@@ -148,7 +176,27 @@ console.log(`${heures} h ${reste} min`);
 > **À retenir :** `/` divise, `%` donne le reste. Ensemble, ils découpent un nombre en
 > morceaux (heures et minutes, boîtes et œufs restants).
 
+**À vous :** écrivez un programme qui découpe 200 secondes en minutes et secondes, et
+affiche `3 min 20 s`.
+
+> **Solution**
+>
+> ```typescript
+> const secondes = 200;
+> const min = Math.floor(secondes / 60);
+> const reste = secondes % 60;
+> console.log(`${min} min ${reste} s`);
+> ```
+>
+> ```sortie
+> 3 min 20 s
+> ```
+
 ## Modifier une variable qui contient un nombre
+
+Beaucoup de nombres changent pendant le programme : un score qui monte, un stock qui
+baisse, le solde d'une tirelire. Vous mettez à jour la même variable, au lieu d'en
+créer une nouvelle à chaque fois.
 
 Pour ajouter quelque chose à une variable, on peut écrire `total = total + 5`. Il
 existe des raccourcis :
@@ -186,6 +234,9 @@ Ces raccourcis ne marchent qu'avec `let` : une `const` ne change jamais.
 
 ## Arrondir avec Math
 
+Un calcul donne souvent un nombre plein de décimales, comme `2.4` bus ou `3.333…` euros.
+Dans la vraie vie, il faut un nombre rond : arrondir sert à cela.
+
 `Math` est une boîte à outils toujours disponible. Quatre outils arrondissent :
 
 - `Math.round` : au plus proche ;
@@ -207,6 +258,15 @@ for (const x of [2.4, 2.5, 2.6, -2.5, -2.6]) {
 -2.6 -3 -3 -2 -2
 ```
 
+Ligne par ligne :
+
+- `for (const x of [...])` prend les nombres de la liste un par un, et les range
+  tour à tour dans `x`. Les boucles sont expliquées au
+  [chapitre suivant](conditions-boucles.md) ;
+- à chaque tour, `console.log` affiche `x`, puis ses quatre arrondis, dans l'ordre :
+  `round`, `floor`, `ceil`, `trunc` ;
+- chaque ligne de la sortie correspond donc à un nombre de la liste.
+
 Regardez les nombres négatifs : `Math.floor(-2.6)` donne `-3`, car `-3` est **plus
 bas** que `-2.6`. `Math.trunc` coupe simplement : `-2`.
 
@@ -224,6 +284,20 @@ console.log(Math.ceil(eleves / 50));
 ```
 
 Il faut 3 bus : on ne peut pas commander 2,4 bus.
+
+**À vous :** des bouteilles se rangent par cartons de 12. Écrivez un programme qui
+affiche combien de cartons il faut pour 30 bouteilles.
+
+> **Solution**
+>
+> ```typescript
+> const bouteilles = 30;
+> console.log(Math.ceil(bouteilles / 12));
+> ```
+>
+> ```sortie
+> 3
+> ```
 
 ### Plus petit, plus grand, distance
 
@@ -249,6 +323,9 @@ la racine carrée.
 
 ## Afficher un nombre joliment
 
+Un calcul peut donner `3.3333333333333335`. Personne ne veut lire cela sur un ticket de
+caisse. Ces outils choisissent comment un nombre s'affiche, sans changer le calcul.
+
 ### toFixed : un nombre fixe de décimales
 
 `toFixed(2)` donne le nombre avec 2 chiffres après la virgule.
@@ -267,6 +344,13 @@ console.log(typeof prix.toFixed(2));
 3
 string
 ```
+
+Ligne par ligne :
+
+- `prix` vaut `19.9`. `prix.toFixed(2)` l'écrit avec deux décimales : `19.90` ;
+- `10 / 3` vaut `3.333…`, et `toFixed(2)` garde `3.33` ;
+- `toFixed(0)` ne garde aucune décimale : `2.5` devient `3` ;
+- `typeof` montre que le résultat de `toFixed` est un `string`, un texte.
 
 > **Attention :** `toFixed` renvoie un **texte** (`string`), pas un nombre. Utilisez-le
 > à la toute fin, juste pour afficher. Ne faites plus de calcul avec.
@@ -330,6 +414,21 @@ virgule décimale est un point.
 > **À retenir :** utilisez `Number` par défaut : il refuse les textes à moitié
 > numériques. Attention à son piège : un texte vide donne `0`, pas `NaN`.
 
+**À vous :** deux champs d'un formulaire contiennent les textes `"12"` et `"30"`.
+Écrivez un programme qui les transforme en nombres et affiche leur somme, `42`.
+
+> **Solution**
+>
+> ```typescript
+> const champ1 = "12";
+> const champ2 = "30";
+> console.log(Number(champ1) + Number(champ2));
+> ```
+>
+> ```sortie
+> 42
+> ```
+
 ### NaN : « pas un nombre »
 
 Quand la conversion échoue, on obtient `NaN`. Bizarrement, `NaN` est de type `number`.
@@ -357,6 +456,9 @@ for (const saisie of ["12", "douze", "4.5"]) {
 tout le résultat devient `NaN`. Vérifiez donc vos conversions tout de suite.
 
 ## 0.1 + 0.2 : la surprise des virgules
+
+Dès que vous calculez un prix ou une moyenne, vous utilisez des nombres à virgule. Ils
+cachent un petit piège : mieux vaut le connaître avant qu'il vous surprenne.
 
 ```typescript
 console.log(0.1 + 0.2);
@@ -394,11 +496,22 @@ console.log(prixEnCentimes / 100);
 0.3
 ```
 
+Ligne par ligne :
+
+- `total` vaut `0.30000000000000004`, avec la petite erreur ;
+- `total.toFixed(2)` l'affiche avec deux décimales : `0.30` ;
+- `Math.round(total * 100) / 100` arrondit au centime : `30.000…04` devient `30`,
+  puis divisé par 100, `0.3` ;
+- `prixEnCentimes` additionne deux entiers, `10 + 20`, sans aucune erreur. On divise
+  par 100 seulement pour afficher.
+
 > **À retenir :** ne comparez jamais deux nombres à virgule avec `===`. Pour de
 > l'argent, calculez en centimes (des entiers), et divisez par 100 seulement pour
 > afficher.
 
 ## Les très grands entiers : bigint
+
+> **Note :** cette partie peut attendre. Lisez-la quand les bases seront solides.
 
 Un `number` reste exact jusqu'à `Number.MAX_SAFE_INTEGER`, environ 9 millions de
 milliards. Au-delà, il se trompe.
@@ -433,6 +546,8 @@ Un `bigint` n'a pas de virgule : `7n / 2n` donne `3n`. Vous en aurez rarement be
 pour débuter.
 
 ## Les types littéraux de nombres
+
+> **Note :** cette partie peut attendre. Lisez-la quand les bases seront solides.
 
 Un type peut aussi être **un nombre précis** : `type Face = 1 | 2 | 3 | 4 | 5 | 6;`
 n'accepte que ces six valeurs, et `const f: Face = 7;` est refusé. Vous verrez cette

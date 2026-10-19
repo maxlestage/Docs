@@ -12,6 +12,10 @@ Cette page présente les deux façons de ranger plusieurs valeurs à la suite en
 
 ## Les tableaux
 
+Imaginez que vous voulez garder les notes d'un élève. Créer une variable par note
+(`note1`, `note2`, `note3`…) devient vite pénible. Un tableau range toutes ces valeurs
+sous un seul nom, comme une boîte à compartiments numérotés.
+
 Un tableau (*array*) range un nombre **fixe** de valeurs du même type. La taille fait
 partie du type : `[3]int` est « un tableau de 3 entiers ».
 
@@ -36,6 +40,16 @@ func main() {
 mar 3
 ```
 
+Ligne par ligne :
+
+- `var notes [3]int` crée un tableau de 3 cases, toutes à 0 : `[0 0 0]` ;
+- `notes[0] = 12` range 12 dans la première case, `notes[2] = 18` dans la troisième.
+  La case du milieu garde son 0 ;
+- `jours := [3]string{...}` crée le tableau et le remplit en une seule ligne ;
+- `jours[1]` est la deuxième case, « mar », et `len(jours)` vaut 3.
+
+Trois règles à connaître :
+
 - Les cases sont numérotées à partir de **0** : c'est l'[indice](../debuter/glossaire.md#indice).
 - Une case non remplie a la valeur zéro de son type (`0` ici).
 - `len` donne le nombre de cases.
@@ -44,6 +58,9 @@ Un tableau ne peut ni grandir ni rétrécir. C'est pourquoi on l'utilise peu : o
 préfère presque toujours la slice.
 
 ## Les slices
+
+Souvent, vous ne savez pas d'avance combien de valeurs vous aurez : une liste de
+courses s'allonge au fil de la semaine. La slice est faite pour cela.
 
 Une slice est une [liste](../debuter/glossaire.md#liste) de valeurs du même type, dont
 la taille peut changer. Son type s'écrit sans taille : `[]int`.
@@ -71,8 +88,36 @@ pomme 3
 poire
 ```
 
+Ligne par ligne :
+
+- `fruits := []string{...}` crée une slice qui contient trois textes ;
+- `fruits[0]` est le premier élément, « pomme », et `len(fruits)` vaut 3 ;
+- `fruits[1] = "mangue"` remplace « kiwi » par « mangue ». Les autres cases ne
+  bougent pas.
+
 `fruits[len(fruits)-1]` est le dernier élément : avec 3 éléments, les indices vont de 0
 à 2.
+
+**À vous :** écrivez un programme qui crée une slice `couleurs` avec « rouge », « vert »
+et « bleu », remplace « vert » par « jaune », puis affiche la slice et sa longueur.
+
+> **Solution**
+>
+> ```go
+> package main
+>
+> import "fmt"
+>
+> func main() {
+> 	couleurs := []string{"rouge", "vert", "bleu"}
+> 	couleurs[1] = "jaune"
+> 	fmt.Println(couleurs, len(couleurs))
+> }
+> ```
+>
+> ```sortie
+> [rouge jaune bleu] 3
+> ```
 
 ### Créer une slice avec make
 
@@ -103,6 +148,9 @@ quand même lui ajouter des éléments.
 
 ## Ajouter avec append
 
+Une liste de courses se remplit petit à petit : vous ajoutez un article dès que vous
+y pensez. `append` fait la même chose pour une slice.
+
 `append` ajoute des éléments à la fin d'une slice et **renvoie** la nouvelle slice. Il
 faut toujours récupérer ce résultat.
 
@@ -128,9 +176,41 @@ func main() {
 [pain lait œufs riz thé]
 ```
 
+Ligne par ligne :
+
+- `var courses []string` crée une slice vide ;
+- le premier `append` renvoie une slice qui contient « pain ». On la range de nouveau
+  dans `courses` ;
+- le deuxième `append` ajoute deux éléments d'un coup : `courses` en a maintenant 3 ;
+- le dernier `append` ajoute à la fin tous les éléments de `autres`.
+
 `autres...` déplie la slice `autres` en plusieurs arguments.
 
+**À vous :** écrivez un programme qui part d'une slice vide `invites`, y ajoute « Léa »,
+puis « Tom » et « Sami » en un seul `append`, et affiche la slice et sa longueur.
+
+> **Solution**
+>
+> ```go
+> package main
+>
+> import "fmt"
+>
+> func main() {
+> 	var invites []string
+> 	invites = append(invites, "Léa")
+> 	invites = append(invites, "Tom", "Sami")
+> 	fmt.Println(invites, len(invites))
+> }
+> ```
+>
+> ```sortie
+> [Léa Tom Sami] 3
+> ```
+
 ### La capacité
+
+> **Note :** cette partie peut attendre. Lisez-la quand les bases seront solides.
 
 Derrière chaque slice se cache un tableau, qui a une certaine place : la **capacité**
 (`cap`). Quand la place manque, `append` crée un tableau plus grand et y recopie tout.
@@ -170,6 +250,9 @@ boîte est pleine, Go en prend une plus grande.
 
 ## Découper une slice
 
+Parfois, vous n'avez besoin que d'une partie d'une liste : les trois premiers d'un
+classement, ou tout sauf le premier élément. Le découpage sert à cela.
+
 `s[début:fin]` prend les éléments de l'indice `début` **inclus** à l'indice `fin`
 **exclu**.
 
@@ -200,7 +283,32 @@ func main() {
 
 > **À retenir :** `s[1:3]` contient `3 - 1 = 2` éléments. La fin est toujours exclue.
 
+**À vous :** écrivez un programme qui range les mois `"jan"` à `"juin"` dans une slice
+`mois`, puis affiche les trois premiers, et enfin les trois derniers.
+
+> **Solution**
+>
+> ```go
+> package main
+>
+> import "fmt"
+>
+> func main() {
+> 	mois := []string{"jan", "fév", "mar", "avr", "mai", "juin"}
+> 	fmt.Println(mois[:3])
+> 	fmt.Println(mois[3:])
+> }
+> ```
+>
+> ```sortie
+> [jan fév mar]
+> [avr mai juin]
+> ```
+
 ## Le piège du tableau partagé
+
+Ce point surprend presque tous les débutants, et il cause des bugs difficiles à
+trouver. Mieux vaut le comprendre dès maintenant.
 
 Un découpage ne copie **rien** : il regarde le même tableau caché, par une autre
 fenêtre. Modifier l'un modifie l'autre.
@@ -223,6 +331,14 @@ func main() {
 [99 2 3 4]
 [99 2]
 ```
+
+Ligne par ligne :
+
+- `nombres` contient 1, 2, 3 et 4 ;
+- `debut := nombres[:2]` ne crée aucune case : `debut` montre les deux premières cases
+  de `nombres` ;
+- `debut[0] = 99` écrit donc 99 dans la première case, commune aux deux ;
+- les deux `Println` lisent les mêmes cases : 99 apparaît deux fois.
 
 `debut` et `nombres` partagent les mêmes cases : changer `debut[0]` a changé
 `nombres[0]`.
@@ -286,6 +402,8 @@ func main() {
 
 ## Les slices à deux dimensions
 
+> **Note :** cette partie peut attendre. Lisez-la quand les bases seront solides.
+
 Une slice peut contenir des slices : c'est une grille, comme un tableur ou un plateau
 de jeu.
 
@@ -326,6 +444,10 @@ ligne, une par une. Le verbe `%q` affiche les textes entre guillemets : on voit 
 les cases vides `""`.
 
 ## Trier et chercher
+
+Chercher un prénom dans une liste, ranger des notes de la plus petite à la plus grande :
+ce sont des tâches très courantes. Go les fournit toutes faites, vous n'avez pas à les
+écrire vous-même.
 
 ### Le paquet slices
 
@@ -371,6 +493,32 @@ true
 | `slices.Reverse(s)` | inverse l'ordre de `s` |
 
 > **Note :** `slices.Sort` modifie la slice elle-même, et ne renvoie rien.
+
+**À vous :** écrivez un programme qui range les températures 18, 25, 12 et 21 dans une
+slice, affiche la plus haute, puis affiche la slice triée.
+
+> **Solution**
+>
+> ```go
+> package main
+>
+> import (
+> 	"fmt"
+> 	"slices"
+> )
+>
+> func main() {
+> 	temperatures := []int{18, 25, 12, 21}
+> 	fmt.Println(slices.Max(temperatures))
+> 	slices.Sort(temperatures)
+> 	fmt.Println(temperatures)
+> }
+> ```
+>
+> ```sortie
+> 25
+> [12 18 21 25]
+> ```
 
 ### Trier selon une règle : sort.Slice
 

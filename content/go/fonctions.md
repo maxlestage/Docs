@@ -36,6 +36,14 @@ Bonjour !
 Bonjour !
 ```
 
+Ligne par ligne :
+
+- `func saluer() { ... }` enregistre la recette sous le nom `saluer`. Rien ne
+  s'affiche encore ;
+- le programme commence toujours par `main` ;
+- le premier `saluer()` exécute la recette : « Bonjour ! » s'affiche ;
+- le deuxième `saluer()` l'exécute une seconde fois.
+
 Écrire `func saluer()` ne lance rien : cela enregistre la recette. Écrire `saluer()`
 **appelle** la fonction, c'est-à-dire l'exécute.
 
@@ -43,6 +51,10 @@ Bonjour !
 > L'ordre n'a pas d'importance : `main` peut appeler une fonction écrite plus bas.
 
 ## Les paramètres
+
+Une recette de crêpes peut servir pour 4 ou pour 8 personnes : c'est la même recette,
+avec une quantité différente. Les paramètres permettent à une fonction de travailler
+avec des valeurs différentes à chaque appel.
 
 Les [paramètres](../debuter/glossaire.md#parametre) sont les valeurs que la fonction
 reçoit. Ce sont des cases vides, remplies au moment de l'appel. Les valeurs données à
@@ -69,6 +81,13 @@ func main() {
 Bonjour, Alice !
 Bonjour, Bob !
 ```
+
+Ligne par ligne :
+
+- `func saluer(prenom string)` annonce une case vide nommée `prenom`, qui recevra du
+  texte ;
+- `saluer("Alice")` remplit la case : dans la fonction, `prenom` vaut `"Alice"` ;
+- `saluer("Bob")` relance la fonction, et cette fois `prenom` vaut `"Bob"`.
 
 Plusieurs paramètres se séparent par des virgules. S'ils ont le même type, vous pouvez
 ne l'écrire qu'une fois, à la fin.
@@ -99,7 +118,37 @@ Aire : 12
 
 `largeur, hauteur int` veut dire : `largeur` et `hauteur` sont deux `int`.
 
+**À vous :** écrivez une fonction `annoncer(plat string, prix int)` qui affiche
+« Plat du jour : soupe, 6 euros. ». Appelez-la deux fois depuis `main`, avec deux plats
+différents.
+
+> **Solution**
+>
+> ```go
+> package main
+>
+> import "fmt"
+>
+> func annoncer(plat string, prix int) {
+> 	fmt.Printf("Plat du jour : %s, %d euros.\n", plat, prix)
+> }
+>
+> func main() {
+> 	annoncer("soupe", 6)
+> 	annoncer("lasagnes", 12)
+> }
+> ```
+>
+> ```sortie
+> Plat du jour : soupe, 6 euros.
+> Plat du jour : lasagnes, 12 euros.
+> ```
+
 ## Renvoyer une valeur
+
+Afficher un résultat ne suffit pas toujours. Souvent, vous voulez le **garder** pour
+vous en servir ensuite, comme le nombre que vous lisez sur une calculatrice avant de
+continuer votre calcul.
 
 Pour qu'une fonction **donne** un résultat, indiquez son type après les parenthèses, et
 utilisez `return`.
@@ -124,6 +173,13 @@ func main() {
 16
 10
 ```
+
+Ligne par ligne :
+
+- `func carre(x int) int` : la fonction reçoit un `int` et promet de rendre un `int` ;
+- `return x * x` calcule le résultat et le rend à celui qui a appelé ;
+- `carre(4)` vaut donc 16, et `fmt.Println` l'affiche ;
+- `carre(3) + 1` donne `9 + 1` : la variable `resultat` vaut 10.
 
 La valeur renvoyée remplace l'appel : `carre(3) + 1` devient `9 + 1`.
 
@@ -160,7 +216,36 @@ refusé
 > **À retenir :** une fonction qui annonce un type de retour doit **toujours** finir par
 > un `return`, quel que soit le chemin suivi. Sinon, le compilateur refuse.
 
+**À vous :** écrivez une fonction `perimetre(cote int) int` qui renvoie le périmètre
+d'un carré (4 fois le côté). Dans `main`, affichez `perimetre(5)`, puis
+`perimetre(2) + 1`.
+
+> **Solution**
+>
+> ```go
+> package main
+>
+> import "fmt"
+>
+> func perimetre(cote int) int {
+> 	return 4 * cote
+> }
+>
+> func main() {
+> 	fmt.Println(perimetre(5))
+> 	fmt.Println(perimetre(2) + 1)
+> }
+> ```
+>
+> ```sortie
+> 20
+> 9
+> ```
+
 ## Plusieurs valeurs de retour
+
+Certaines questions ont deux réponses. Partager 17 bonbons entre 5 enfants donne un
+nombre de bonbons par enfant, et un reste. Go peut rendre les deux d'un coup.
 
 Une fonction Go peut renvoyer **plusieurs** valeurs. Écrivez leurs types entre
 parenthèses.
@@ -187,6 +272,13 @@ func main() {
 3 2
 6
 ```
+
+Ligne par ligne :
+
+- `(int, int)` annonce que `diviser` rend deux entiers ;
+- `return a / b, a % b` rend le quotient puis le reste, séparés par une virgule ;
+- `quotient, reste := diviser(17, 5)` range 3 dans `quotient` et 2 dans `reste` ;
+- `q, _ := diviser(20, 3)` garde le quotient, 6, et jette le reste.
 
 Le `_` jette la valeur dont on n'a pas besoin.
 
@@ -229,6 +321,8 @@ Les erreurs ont leur propre chapitre : [la gestion des erreurs](erreurs.md).
 
 ### Les résultats nommés
 
+> **Note :** cette partie peut attendre. Lisez-la quand les bases seront solides.
+
 Vous pouvez donner un nom aux valeurs de retour. Ce sont alors des variables, créées
 avec leur valeur zéro. Un `return` seul renvoie leurs valeurs actuelles.
 
@@ -261,6 +355,10 @@ func main() {
 > fonctions courtes.
 
 ## Un nombre variable d'arguments
+
+Vous ne savez pas toujours combien de valeurs vous allez recevoir : deux notes
+aujourd'hui, dix demain. Plutôt que d'écrire une fonction par cas, vous en écrivez une
+seule, qui accepte toutes les quantités.
 
 Avec `...` devant le type, le dernier paramètre accepte autant d'arguments que vous
 voulez. Dans la fonction, il devient une slice. On parle de fonction **variadique**.
@@ -295,11 +393,49 @@ func main() {
 36
 ```
 
+Ligne par ligne :
+
+- `nombres ...int` : tous les nombres donnés à l'appel arrivent dans la slice
+  `nombres` ;
+- `total` part de 0, puis la boucle lui ajoute chaque nombre, un par un ;
+- `somme(1, 2)` rend 3, `somme(1, 2, 3, 4)` rend 10 ;
+- `somme()` ne reçoit rien : la boucle ne tourne pas, et `total` reste à 0.
+
 Pour passer une slice existante, ajoutez `...` après elle : `somme(notes...)`.
 `fmt.Println` est d'ailleurs variadique : c'est pour cela qu'elle accepte autant de
 valeurs.
 
+**À vous :** écrivez une fonction `saluerTous(prenoms ...string)` qui affiche
+« Bonjour, … ! » pour chaque prénom reçu. Appelez-la avec trois prénoms.
+
+> **Solution**
+>
+> ```go
+> package main
+>
+> import "fmt"
+>
+> func saluerTous(prenoms ...string) {
+> 	for _, prenom := range prenoms {
+> 		fmt.Println("Bonjour,", prenom, "!")
+> 	}
+> }
+>
+> func main() {
+> 	saluerTous("Alice", "Bob", "Chloé")
+> }
+> ```
+>
+> ```sortie
+> Bonjour, Alice !
+> Bonjour, Bob !
+> Bonjour, Chloé !
+> ```
+
 ## Les fonctions sont des valeurs
+
+Parfois, vous voulez écrire une fonction générale, puis lui dire **quoi faire**. C'est
+comme une perceuse : la même machine perce ou visse, selon l'embout que vous y mettez.
 
 En Go, une fonction est une valeur comme une autre. Vous pouvez la ranger dans une
 variable, ou la passer en argument à une autre fonction.
@@ -332,6 +468,15 @@ func main() {
 10
 [2 4 6]
 ```
+
+Ligne par ligne :
+
+- `operation := double` range la fonction elle-même dans une variable, sans
+  l'appeler (pas de parenthèses) ;
+- `operation(5)` appelle donc `double(5)`, qui rend 10 ;
+- `appliquer` reçoit une slice et une fonction `f`. Elle appelle `f` sur chaque
+  nombre et range les résultats dans une nouvelle slice ;
+- avec `double`, `[1 2 3]` devient `[2 4 6]`.
 
 Le type `func(int) int` se lit : « une fonction qui prend un `int` et renvoie un
 `int` ».
@@ -366,6 +511,9 @@ Exécutée tout de suite !
 Les parenthèses `()` à la fin de la deuxième fonction l'appellent aussitôt.
 
 ## Les closures
+
+Il arrive qu'une fonction doive se **souvenir** de quelque chose entre deux appels,
+comme le compteur à l'entrée d'un musée, qui ajoute 1 à chaque visiteur.
 
 Une fonction anonyme peut utiliser les variables qui l'entourent. Elle les **emporte**
 avec elle, même quand elle sort de l'endroit où elle est née. On l'appelle alors une
@@ -402,10 +550,23 @@ func main() {
 1
 ```
 
+Ligne par ligne :
+
+- `compteur()` crée une variable `n` qui vaut 0, puis rend une fonction anonyme ;
+- `suivant` reçoit cette fonction. Elle garde accès à `n`, même après la fin de
+  `compteur` ;
+- chaque appel de `suivant()` ajoute 1 à `n` et le rend : 1, puis 2, puis 3 ;
+- `autre := compteur()` relance `compteur`, qui crée un **nouveau** `n` à 0 : le
+  premier appel rend 1.
+
 Imaginez un sac à dos : la fonction renvoyée garde `n` dans son sac. Chaque appel de
 `suivant` augmente **son** `n`. `autre` a son propre sac, avec son propre `n`.
 
 ## defer : repousser à la fin
+
+Quand vous ouvrez quelque chose, il faut penser à le refermer. C'est comme un pense-bête
+« éteindre la lumière » collé sur la porte : vous l'écrivez en arrivant, et il sert
+au moment de partir.
 
 `defer` (« différer ») repousse un appel de fonction au moment où la fonction en cours
 se termine.
@@ -434,6 +595,15 @@ Travail 2
 Fermeture
 ```
 
+Ligne par ligne :
+
+- `main` appelle `travailler`, qui affiche d'abord « Ouverture » ;
+- la ligne `defer` n'affiche rien tout de suite : elle note « afficher Fermeture » pour
+  plus tard ;
+- « Travail 1 » puis « Travail 2 » s'affichent ;
+- `travailler` arrive à sa fin : l'appel mis de côté s'exécute, et « Fermeture »
+  s'affiche en dernier.
+
 C'est très utile pour « ranger » : on écrit la fermeture d'un fichier juste à côté de
 son ouverture, et on est sûr qu'elle aura lieu, même si la fonction sort plus tôt.
 
@@ -460,7 +630,37 @@ defer 1
 defer 0
 ```
 
+**À vous :** écrivez un `main` qui affiche « Au revoir » en dernier, alors que vous
+écrivez cette ligne en premier. Ajoutez ensuite deux affichages : « Bonjour » et
+« Comment allez-vous ? ».
+
+> **Solution**
+>
+> ```go
+> package main
+>
+> import "fmt"
+>
+> func main() {
+> 	defer fmt.Println("Au revoir")
+> 	fmt.Println("Bonjour")
+> 	fmt.Println("Comment allez-vous ?")
+> }
+> ```
+>
+> ```sortie
+> Bonjour
+> Comment allez-vous ?
+> Au revoir
+> ```
+
 ## Une fonction qui s'appelle elle-même
+
+> **Note :** cette partie peut attendre. Lisez-la quand les bases seront solides.
+
+Certains problèmes contiennent une version plus petite d'eux-mêmes, comme des poupées
+russes : en ouvrant une poupée, on en trouve une autre, plus petite, jusqu'à la
+dernière.
 
 Une fonction peut s'appeler elle-même : c'est la
 [récursion](../debuter/glossaire.md#recursion). Il faut un **cas d'arrêt**, sinon elle

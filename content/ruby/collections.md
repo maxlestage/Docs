@@ -20,6 +20,9 @@ principales :
 
 ## Les tableaux
 
+Imaginez une liste de courses de vingt articles. Créer vingt variables `article1`,
+`article2`… serait pénible. Un tableau range toutes ces valeurs sous un seul nom.
+
 Un tableau est une liste ordonnée de valeurs, entre crochets `[ ]`, séparées par des
 virgules. Chaque valeur s'appelle un **élément**.
 
@@ -33,6 +36,12 @@ puts fruits.length
 ["pomme", "banane", "cerise"]
 3
 ```
+
+Ligne par ligne :
+
+- `fruits = [...]` range un tableau de trois textes dans la variable `fruits` ;
+- `p fruits` affiche le tableau entier, avec ses crochets et ses guillemets ;
+- `fruits.length` demande le nombre d'éléments : 3.
 
 Un tableau peut contenir n'importe quelles valeurs, même mélangées, et même d'autres
 tableaux. `[]` est un tableau vide.
@@ -60,6 +69,8 @@ nil
 > **Note :** lire un indice qui n'existe pas ne plante pas : vous obtenez `nil`.
 
 ### Lire plusieurs éléments
+
+> **Note :** cette partie peut attendre. Lisez-la quand les bases seront solides.
 
 Un intervalle, ou `first(n)` et `last(n)`, donnent un morceau du tableau.
 
@@ -101,6 +112,13 @@ p nombres
 [2, 3]
 ```
 
+Ligne par ligne :
+
+- `nombres` commence avec deux éléments : `[1, 2]` ;
+- `<< 3` puis `push(4)` ajoutent 3 et 4 à la fin : le tableau vaut `[1, 2, 3, 4]` ;
+- `nombres.pop` retire le dernier élément, 4, et le range dans `dernier` ;
+- `delete(1)` retire la **valeur** 1 (pas l'indice 1) : il reste `[2, 3]`.
+
 ```ruby
 file = ["Bob", "Chloé"]
 file.unshift("Alice")
@@ -120,6 +138,24 @@ Au tour de Alice
 ```
 
 `file[0] = "Zoé"` remplace l'élément à l'indice 0.
+
+**À vous :** écrivez un programme qui crée un tableau vide `courses`, y ajoute « pain »
+puis « lait » avec `<<`, affiche le tableau, puis affiche son nombre d'éléments.
+
+> **Solution**
+>
+> ```ruby
+> courses = []
+> courses << "pain"
+> courses << "lait"
+> p courses
+> puts courses.length
+> ```
+>
+> ```sortie
+> ["pain", "lait"]
+> 2
+> ```
 
 ### Méthodes utiles
 
@@ -173,6 +209,10 @@ true
 
 ## Parcourir un tableau
 
+Souvent, vous voulez faire la même chose avec chaque élément : afficher chaque article
+de la liste de courses, saluer chaque élève. Plutôt que d'écrire une ligne par élément,
+vous laissez `each` répéter le travail.
+
 `each` exécute un bloc pour chaque élément.
 
 ```ruby
@@ -185,6 +225,15 @@ end
 J'aime la pomme
 J'aime la banane
 ```
+
+Ligne par ligne :
+
+- `["pomme", "banane"]` est un tableau de deux textes ; `.each` le parcourt dans
+  l'ordre ;
+- au premier tour, Ruby range `"pomme"` dans `fruit` (le nom entre les barres `| |`),
+  puis exécute le bloc entre `do` et `end` ;
+- au deuxième tour, `fruit` vaut `"banane"` ;
+- il n'y a plus d'élément : la boucle s'arrête.
 
 Avec `each_with_index`, vous obtenez aussi la position :
 
@@ -200,7 +249,28 @@ end
 3. bronze
 ```
 
+**À vous :** écrivez un programme qui parcourt le tableau `[3, 7, 10]` avec `each` et
+affiche le double de chaque nombre.
+
+> **Solution**
+>
+> ```ruby
+> [3, 7, 10].each do |n|
+>   puts n * 2
+> end
+> ```
+>
+> ```sortie
+> 6
+> 14
+> 20
+> ```
+
 ## Les hashs
+
+Dans un tableau, vous retrouvez une valeur par sa position : 0, 1, 2… Mais pour
+retrouver l'âge d'Alice, un numéro de case ne dit rien. Un hash vous laisse chercher
+par un nom.
 
 Un hash associe des **clés** à des **valeurs**. Pensez à un vestiaire : vous donnez
 le ticket (la clé), on vous rend le manteau (la valeur). Chaque clé est unique. Les
@@ -218,6 +288,14 @@ Alice
 30
 nil
 ```
+
+Ligne par ligne :
+
+- `personne` contient deux paires : la clé `:nom` avec `"Alice"`, la clé `:age` avec
+  30 ;
+- `personne[:nom]` donne la valeur rangée sous la clé `:nom` : `"Alice"` ;
+- `personne[:ville]` demande une clé qui n'existe pas : vous obtenez `nil`, sans
+  plantage.
 
 > **À retenir :** `{ nom: "Alice" }` est un raccourci pour `{ :nom => "Alice" }`. Les
 > deux écritures donnent le même hash.
@@ -241,6 +319,29 @@ puts stock.key?("pommes")
 {"pommes"=>6}
 true
 ```
+
+Ligne par ligne :
+
+- `stock` commence avec une seule clé, `"pommes"`, qui vaut 5 ;
+- `stock["poires"] = 3` ajoute une nouvelle clé ;
+- `stock["pommes"] += 1` lit 5, ajoute 1 et range 6 à la place ;
+- `delete("poires")` retire la clé ajoutée juste avant : il ne reste que `"pommes"`.
+
+**À vous :** écrivez un programme qui crée un hash `capitales` avec la clé `"France"` et
+la valeur `"Paris"`, y ajoute la clé `"Italie"` avec la valeur `"Rome"`, puis affiche
+la capitale de l'Italie.
+
+> **Solution**
+>
+> ```ruby
+> capitales = { "France" => "Paris" }
+> capitales["Italie"] = "Rome"
+> puts capitales["Italie"]
+> ```
+>
+> ```sortie
+> Rome
+> ```
 
 ### Valeur par défaut avec fetch
 
@@ -303,6 +404,9 @@ nil
 
 ## Parcourir un hash
 
+Pour afficher toute une carte des prix ou tout un carnet d'adresses, vous voulez passer
+sur chaque paire clé-valeur, une par une. `each` le fait aussi pour les hashs.
+
 `each` donne la clé et la valeur à chaque tour.
 
 ```ruby
@@ -320,6 +424,31 @@ the : 3 €
 [:cafe, :the]
 [2, 3]
 ```
+
+Ligne par ligne :
+
+- `prix` associe `:cafe` à 2 et `:the` à 3 ;
+- au premier tour, `each` range la clé `:cafe` dans `boisson` et la valeur 2 dans
+  `montant` ; au deuxième tour, `:the` et 3 ;
+- un symbole affiché dans un texte perd ses deux-points : vous lisez `cafe` ;
+- `keys` donne le tableau des clés, `values` celui des valeurs.
+
+**À vous :** écrivez un programme qui parcourt le hash `{ "Alice" => 12, "Bob" => 15 }`
+et affiche, pour chaque personne, une ligne comme « Alice a 12 ».
+
+> **Solution**
+>
+> ```ruby
+> notes = { "Alice" => 12, "Bob" => 15 }
+> notes.each do |nom, note|
+>   puts "#{nom} a #{note}"
+> end
+> ```
+>
+> ```sortie
+> Alice a 12
+> Bob a 15
+> ```
 
 > **Astuce :** pour transformer ou filtrer une collection, utilisez `map` et `select`.
 > Ils sont expliqués dans [la page sur les blocs](blocs.md#les-methodes-de-enumerable).

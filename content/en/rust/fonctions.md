@@ -35,9 +35,22 @@ Hello!
 Hello!
 ```
 
+Line by line:
+
+- `fn greet() { … }` describes the function: its name, `greet`, and what it does.
+  Nothing is displayed yet at this point;
+- the program always starts with `main`;
+- the first `greet();` calls the function: Rust runs its block, displays "Hello!",
+  then comes back into `main`;
+- the second `greet();` does exactly the same thing again.
+
 The order does not matter: a function can be written before or after `main`.
 
 ## Parameters
+
+A function that always does exactly the same thing is of little use. Parameters give
+it different information at each call, like a pancake recipe that you make for 2 or
+for 6 people.
 
 A [parameter](../debuter/glossaire.md#parameter) is a variable that the function
 receives. The value given at the moment of the call is called an
@@ -61,9 +74,42 @@ Hugo is 12 years old.
 Inès is 34 years old.
 ```
 
+Line by line:
+
+- `fn introduce(name: &str, age: u32)` announces two parameters: a text `name` and a
+  positive whole number `age`;
+- `introduce("Hugo", 12);` calls the function: `name` is `"Hugo"` and `age` is `12`,
+  then `println!` displays the sentence;
+- the second call starts again with other values: `"Inès"` and `34`.
+
 Here, `name` and `age` are the parameters; `"Hugo"` and `12` are the arguments.
 
+**Your turn:** write a function `show_price` that receives the name of an item (`&str`)
+and its price in euros (`u32`), then displays for example "Bread: 2 euros". Call it for
+bread at 2 euros and for cheese at 5 euros.
+
+> **Solution**
+>
+> ```rust
+> fn show_price(item: &str, price: u32) {
+>     println!("{item}: {price} euros");
+> }
+>
+> fn main() {
+>     show_price("Bread", 2);
+>     show_price("Cheese", 5);
+> }
+> ```
+>
+> ```sortie
+> Bread: 2 euros
+> Cheese: 5 euros
+> ```
+
 ## The return type
+
+A function can also do a calculation and **give you back** the result, like a
+calculator. You can then store this result in a variable and use it again.
 
 The returned type is written after an arrow `->`. The **last expression**, without a
 semicolon, is the returned value:
@@ -82,6 +128,15 @@ fn main() {
 ```sortie
 49
 ```
+
+Line by line:
+
+- `fn square(n: i32) -> i32`: the function receives a whole number `n` and promises to
+  give back a whole number;
+- in `main`, `square(7)` calls the function: `n` is 7;
+- the last line of the function, `n * n`, computes 49. It has no `;`: it is the
+  returned value;
+- `let result = square(7);` therefore stores 49 in `result`, which `println!` displays.
 
 To leave early, use `return`:
 
@@ -131,7 +186,30 @@ fn main() {
 3 remainder 2
 ```
 
+**Your turn:** write a function `perimeter` that receives the side of a square (`i32`)
+and returns its perimeter, that is 4 times the side. Display the perimeter of a square
+with a side of 5.
+
+> **Solution**
+>
+> ```rust
+> fn perimeter(side: i32) -> i32 {
+>     4 * side
+> }
+>
+> fn main() {
+>     println!("{}", perimeter(5));
+> }
+> ```
+>
+> ```sortie
+> 20
+> ```
+
 ## Expressions and statements
+
+This difference explains a rule you have just seen: the last line of a function has no
+semicolon when it is the one that gives the returned value.
 
 This is an important idea in Rust:
 
@@ -154,10 +232,20 @@ println!("{x}");
 12
 ```
 
+Line by line:
+
+- `let x = {` opens a block whose value will go into `x`;
+- `let a = 3;` and `let b = 4;` are statements: they end with `;` and produce no
+  value;
+- `a * b` has no `;`: it is an expression, worth 12. It is the value of the block;
+- so `x` receives 12, and `println!` displays it.
+
 > **Warning:** an extra semicolon turns the expression into a statement. The
 > function then no longer returns anything (see [Common mistakes](#common-mistakes)).
 
 ## A function that calls itself
+
+> **Note:** this part can wait. Read it once the basics feel solid.
 
 A function can call itself: this is
 [recursion](../debuter/glossaire.md#recursion). There must always be a base case, otherwise
@@ -181,7 +269,18 @@ fn main() {
 120
 ```
 
+Line by line:
+
+- `factorial(5)` computes `5 * factorial(4)`: it first needs the answer for 4;
+- in the same way, `factorial(4)` asks for `factorial(3)`, then 2, then 1;
+- `factorial(1)` is the base case: it returns 1 without calling itself;
+- the answers come back up: 2 × 1 = 2, then 3 × 2 = 6, 4 × 6 = 24 and 5 × 24 = 120.
+
 ## Closures
+
+Sometimes you need a very small function, just in one place: for example to tell
+another function which calculation to do. Writing it separately with `fn` would be
+heavy. A closure fits on one line, right where you need it.
 
 A [closure](../debuter/glossaire.md#closure) is a small function without a name, that
 you store in a variable. Its parameters are written between bars `|…|`. The types
@@ -198,6 +297,31 @@ println!("{}", add(2, 3));
 10
 5
 ```
+
+Line by line:
+
+- `let double = |x: i32| x * 2;` stores a closure in `double`: it receives `x` and
+  returns `x * 2`;
+- `let add = |a, b| a + b;` receives two values and returns their sum. Rust guesses
+  their type;
+- `double(5)` is called like a function and is worth 10; `add(2, 3)` is worth 5.
+
+**Your turn:** write a closure `is_even` that receives an `i32` and returns `true` if
+the number is even (the remainder of its division by 2 is 0). Display the result for 4,
+then for 7.
+
+> **Solution**
+>
+> ```rust
+> let is_even = |n: i32| n % 2 == 0;
+> println!("{}", is_even(4));
+> println!("{}", is_even(7));
+> ```
+>
+> ```sortie
+> true
+> false
+> ```
 
 ### Capturing the environment
 

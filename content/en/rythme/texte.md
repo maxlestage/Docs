@@ -14,6 +14,10 @@ expressions.
 
 ## Inserting a value into a text
 
+A program often talks to someone: it shows a first name, a total, a score.
+Inserting a value is like filling in the blanks of a form letter: the text is ready,
+only the values are missing.
+
 A text, also called a
 [string](../debuter/glossaire.md#string), is
 a sequence of characters: letters, digits, spaces, symbols.
@@ -36,9 +40,22 @@ Ada has 2 fruits.
 Twice 21 is 42.
 ```
 
+Line by line:
+
+- `name` gets the text `"Ada"`, and `fruits` a list of two texts;
+- in `"Hello {name}!"`, Rythme replaces `{name}` with its value, `Ada`, then shows
+  the text;
+- `{len(fruits)}` is calculated first: the list has 2 elements, so 2 goes into the
+  text;
+- `{21 * 2}` does the calculation, 42, and puts it in its place.
+
 > **Tip:** to turn any value into text, use `text`: `text(42)` is `"42"`.
 
 ## Special characters
+
+A text is written between double quotes. But how do you write a double quote
+**inside** the text, or start a new line? You need a way to say "this character is
+special".
 
 Some characters can't be typed directly in a text. You write them with a
 backslash `\` in front: an **escape sequence**.
@@ -64,7 +81,16 @@ line 2
 Some braces: { and }
 ```
 
+Line by line:
+
+- `\"` shows a double quote: the text doesn't stop there;
+- `\n` breaks the line: `line 2` shows up below `line 1`;
+- `\{` and `\}` show braces, without looking for a value to insert.
+
 ## Length and case
+
+A program often needs to check or tidy up a text: is a password long enough?
+Should a first name typed "élise" be shown as "Élise"?
 
 `len` counts the characters. `upper` puts everything in uppercase, `lower`
 everything in lowercase, and `capitalize` only the first letter:
@@ -80,9 +106,36 @@ print(upper(word), lower("HELLO"), capitalize(word))
 ÉLISE hello Élise
 ```
 
+Line by line:
+
+- `word` gets the text `"élise"`;
+- `len(word)` counts its characters: 5;
+- `upper(word)` gives `"ÉLISE"`, `lower("HELLO")` gives `"hello"` and
+  `capitalize(word)` gives `"Élise"`;
+- `print` shows these three texts on one line, separated by a space.
+
 Accented letters count as a single character: `len("été")` is 3.
 
+**Your turn:** write a program that stores `"rythme"` in a variable `language`, then
+shows its length, and below it the same word in uppercase.
+
+> **Solution**
+>
+> ```rythme
+> language = "rythme"
+> print(len(language))
+> print(upper(language))
+> ```
+>
+> ```sortie
+> 6
+> RYTHME
+> ```
+
 ## Reading a character by its position
+
+Sometimes you only need part of a text: the initial of a first name, or the first
+letters of a word.
 
 Each character has a position, starting at **0**. `word[0]` is the first
 character, `word[-1]` the last. `slice(word, start, end)` takes a piece,
@@ -118,6 +171,10 @@ print("[{trim(typed)}]")
 
 ## Splitting and joining
 
+A text often holds several pieces of information stuck together: a shopping list
+"bread,milk,eggs", or a sentence made of words. To handle each piece on its own, you
+first have to separate them.
+
 `split` cuts a text into a list of pieces. Without a separator, it cuts at
 the spaces. `join` does the opposite: it glues a list back together with a
 separator.
@@ -137,6 +194,14 @@ print(join(["red", "green", "blue"], ", "))
 red, green, blue
 ```
 
+Line by line:
+
+- `split(sentence)` cuts `"the cat sleeps"` at the spaces: `pieces` is
+  `["the", "cat", "sleeps"]`, a list of 3 texts;
+- `split("red;green;blue", ";")` cuts at each `;`;
+- `join(…, ", ")` goes the other way: it glues the three words together, putting
+  `", "` between them.
+
 With `|>`, you chain the steps: split, transform each word, join.
 
 ```rythme
@@ -151,7 +216,27 @@ With `|>`, you chain the steps: split, transform each word, join.
 The Cat Sleeps
 ```
 
+**Your turn:** write a program that splits the shopping list `"bread,milk,eggs"` at
+the commas, shows the number of items, then joins them back with `" - "` between
+them.
+
+> **Solution**
+>
+> ```rythme
+> shopping = split("bread,milk,eggs", ",")
+> print(len(shopping))
+> print(join(shopping, " - "))
+> ```
+>
+> ```sortie
+> 3
+> bread - milk - eggs
+> ```
+
 ## Searching in a text
+
+Before acting, a program often needs to check a text: is this file a photo? Does
+this address contain an `@`?
 
 Three questions, three `true` or `false` answers:
 
@@ -172,6 +257,13 @@ true true
 false
 ```
 
+Line by line:
+
+- `file` gets the name `"holidays.jpg"`;
+- `contains` finds `"liday"` in the middle of the name: `true`;
+- the name does start with `"hol"` and end with `".jpg"`: `true true`;
+- it doesn't end with `".png"`: `false`.
+
 > **Warning:** case matters: `contains("Hello", "hel")` is `false`. Put the
 > text in lowercase first with `lower` if needed.
 
@@ -188,6 +280,9 @@ true false true
 
 ## Replacing a piece
 
+It's the "find and replace" feature of a word processor: fix a word everywhere, or
+change a separator.
+
 `replace(text, old, new)` replaces **every** occurrence of `old`:
 
 ```rythme
@@ -203,7 +298,24 @@ a cat and a dog
 As always in Rythme, the starting text doesn't change: `replace` gives a
 new text.
 
+**Your turn:** write a program that stores `"my class notes.txt"` in a variable, then
+shows this file name with `_` instead of the spaces.
+
+> **Solution**
+>
+> ```rythme
+> file_name = "my class notes.txt"
+> print(replace(file_name, " ", "_"))
+> ```
+>
+> ```sortie
+> my_class_notes.txt
+> ```
+
 ## Characters and lines
+
+Sometimes a text is handled character by character (counting the vowels), or line
+by line (reading a poem, a list). To do that, you turn it into a list.
 
 `chars` gives the list of characters. `lines` cuts a text into lines (`\n`
 means "line break"):
@@ -222,6 +334,13 @@ print(len(lines(poem)), "lines")
 3 lines
 ```
 
+Line by line:
+
+- `chars("abc")` gives a list of three one-character texts;
+- `poem` holds three lines, separated by `\n`;
+- `lines(poem)` cuts at each `\n`: a list of 3 lines;
+- `len` counts the elements of that list: 3.
+
 With a list of characters, all the list functions work. For example,
 counting the vowels:
 
@@ -236,6 +355,8 @@ print(how_many)
 ```
 
 ## Repeating and aligning
+
+> **Note:** this part can wait. Read it once the basics feel solid.
 
 `repeat(text, n)` repeats a text `n` times. Handy for a line:
 
@@ -299,6 +420,13 @@ Ok(3.5)
 Err("\"twelve\" is not a whole number")
 ```
 
+Line by line:
+
+- `parse_int("42")` succeeds: it gives `Ok(42)`, the number placed in an `Ok` box;
+- `parse_int(" 7 ")` ignores the spaces around it and gives `Ok(7)`;
+- `parse_float("3.5")` reads a decimal number, written with a dot;
+- `parse_int("twelve")` fails: it gives `Err`, with a message that says why.
+
 To get the number, handle both cases with `match`, or give a default value
 with `unwrap_or`:
 
@@ -325,7 +453,25 @@ twice that is 42
 > E022) if the text isn't one. Keep it for a text you wrote yourself; for
 > user input, prefer `parse_int`.
 
+**Your turn:** write a program that stores the text `"15"` in `typed`, reads it with
+`parse_int` and `unwrap_or(0)`, then shows "In 10 years, you will be 25." by
+calculating 25 from the number it read.
+
+> **Solution**
+>
+> ```rythme
+> typed = "15"
+> age = parse_int(typed) |> unwrap_or(0)
+> print("In 10 years, you will be {age + 10}.")
+> ```
+>
+> ```sortie
+> In 10 years, you will be 25.
+> ```
+
 ## Writing a large number readably
+
+> **Note:** this part can wait. Read it once the basics feel solid.
 
 `format_number(number, decimals, language)` separates the thousands and
 rounds. With `"fr"`, it writes the number the French way:
@@ -346,6 +492,9 @@ Without a language, it's the English way. And `text(number, decimals)`
 simply gives a number with that many decimals.
 
 ## Regular expressions
+
+Sometimes you aren't looking for a precise piece, but for a **shape**: "some
+digits", "a word". For example, all the numbers in a sentence, whatever they are.
 
 A **regular expression** (a "regex") is a small pattern that describes
 pieces of text. A few symbols are enough to get started:
@@ -379,6 +528,13 @@ true false
 ["3", "12"]
 My code: ****
 ```
+
+Line by line:
+
+- `matches("2024", "\\d+")`: the whole text is made only of digits, so `true`; in
+  `"8pm24"`, `p` and `m` aren't digits, so `false`;
+- `find_all` looks for every group of digits and gives `["3", "12"]`;
+- `replace_all` replaces each digit (`\\d`, one at a time) with `*`.
 
 For example, adding up all the numbers in a sentence:
 

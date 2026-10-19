@@ -12,6 +12,9 @@ Cette page montre comment ranger des valeurs dans des variables avec `let` et `c
 
 ## Les variables avec let et const
 
+Un programme doit souvent retenir une information pour s'en servir plus loin : le
+prénom de l'utilisateur, un score, un prix. Les variables servent à cela.
+
 Une [variable](../debuter/glossaire.md#variable) est une boîte avec une étiquette : vous
 y rangez une valeur, puis vous la retrouvez par son nom. En JavaScript, on crée une
 variable avec `const` ou `let`.
@@ -28,6 +31,14 @@ console.log(age);
 Alice
 30
 ```
+
+Ligne par ligne :
+
+- `const prenom = "Alice";` crée une boîte nommée `prenom` et y range le texte
+  `"Alice"` ;
+- `let age = 30;` crée une deuxième boîte, `age`, qui contient le nombre 30 ;
+- `console.log(prenom);` va chercher ce qu'il y a dans `prenom` et l'affiche, puis
+  `console.log(age);` fait de même avec `age`.
 
 Le signe `=` ne veut pas dire « égal » : il veut dire « range cette valeur dans cette
 boîte ». On dit qu'on **affecte** une valeur.
@@ -52,13 +63,42 @@ console.log(pi);
 3.14159
 ```
 
+Ligne par ligne :
+
+- `let score = 0;` : `score` vaut 0 au départ ;
+- `score = score + 10;` : JavaScript calcule d'abord la droite, `0 + 10`, puis range
+  10 dans `score` ;
+- `score += 5;` ajoute 5 : `score` vaut maintenant 15, et c'est ce qui s'affiche ;
+- `const pi = 3.14159;` range une valeur qui ne changera jamais : `const` convient.
+
 `score += 5` est un raccourci pour `score = score + 5`.
 
 > **À retenir :** utilisez `const` par défaut. Passez à `let` seulement si la valeur
 > doit changer. En lisant `const`, le lecteur sait tout de suite que la valeur ne bougera
 > plus.
 
+**À vous :** écrivez un programme qui range le nom d'une ville dans une constante,
+et le nombre 100 dans une variable `visiteurs`. Ajoutez 20 visiteurs avec `+=`, puis
+affichez la ville et le nombre de visiteurs.
+
+> **Solution**
+>
+> ```javascript
+> const ville = "Nantes";
+> let visiteurs = 100;
+> visiteurs += 20;
+> console.log(ville);
+> console.log(visiteurs);
+> ```
+>
+> ```sortie
+> Nantes
+> 120
+> ```
+
 ### Et var ?
+
+> **Note :** cette partie peut attendre. Lisez-la quand les bases seront solides.
 
 Vous verrez souvent `var` dans du vieux code ou sur Internet. C'est l'ancienne façon de
 créer une variable, d'avant 2015. Elle a des comportements surprenants : on peut
@@ -78,6 +118,10 @@ Avec `let`, JavaScript vous aurait prévenu de l'erreur. **N'utilisez pas `var`*
 `let` et `const` font la même chose, en plus sûr.
 
 ## Les types de base
+
+On ne fait pas la même chose avec un nombre et avec un texte : on additionne des
+prix, mais on ne multiplie pas des prénoms. JavaScript a donc besoin de savoir de quelle
+sorte est chaque valeur.
 
 Chaque valeur a un [type](../debuter/glossaire.md#type) : c'est sa nature (un nombre, un
 texte…). Le type dit ce qu'on peut faire avec la valeur. L'opérateur `typeof` donne le
@@ -140,10 +184,23 @@ null
 object
 ```
 
+Ligne par ligne :
+
+- `let reponse;` crée la boîte `reponse` sans rien y mettre : elle vaut `undefined` ;
+- le premier `console.log` affiche donc `undefined` ;
+- `let gagnant = null;` crée une boîte et y met `null` exprès : « pas encore de
+  gagnant » ;
+- la dernière ligne demande le type de `null`, et reçoit une réponse étrange :
+  `object`.
+
 > **Attention :** `typeof null` répond `"object"`. C'est une erreur historique de
 > JavaScript, gardée pour ne pas casser les vieux sites. Retenez-la, simplement.
 
 ## Les gabarits de texte
+
+Un programme affiche souvent des phrases qui changent : « Bonjour, Alice ! »,
+« Bonjour, Bob ! ». Un gabarit, c'est comme une lettre type avec des blancs à remplir :
+JavaScript met la bonne valeur dans chaque blanc.
 
 Pour mettre une valeur dans un texte, écrivez le texte entre **accents graves**
 `` `...` `` (touche **AltGr + 7** sur un clavier français), et la valeur dans `${...}`.
@@ -162,13 +219,39 @@ Bonjour, Alice !
 Dans 5 ans, vous aurez 35 ans.
 ```
 
+Ligne par ligne :
+
+- les deux premières lignes rangent `"Alice"` dans `prenom` et 30 dans `age` ;
+- dans le premier gabarit, `${prenom}` est remplacé par `Alice` ;
+- dans le second, JavaScript calcule d'abord `age + 5`, soit 35, puis le place dans
+  la phrase.
+
 Dans `${...}`, vous pouvez mettre n'importe quel calcul. L'ancienne façon utilise `+`
 pour coller les morceaux : `"Bonjour, " + prenom + " !"`. Le gabarit est plus lisible.
 
 > **Attention :** le `${...}` ne marche qu'entre accents graves. Entre guillemets
 > `"..."`, il est affiché tel quel.
 
+**À vous :** écrivez un programme qui range le prénom `"Léa"` et l'âge 12 dans deux
+constantes, puis affiche « Léa aura 13 ans l'an prochain. » avec un gabarit. Le 13 doit
+être calculé.
+
+> **Solution**
+>
+> ```javascript
+> const prenom = "Léa";
+> const age = 12;
+> console.log(`${prenom} aura ${age + 1} ans l'an prochain.`);
+> ```
+>
+> ```sortie
+> Léa aura 13 ans l'an prochain.
+> ```
+
 ## Afficher plusieurs valeurs
+
+Pour comprendre ce que fait un programme, vous voulez souvent voir plusieurs
+informations d'un coup, comme sur un ticket de caisse : l'article et son prix.
 
 `console.log` accepte plusieurs valeurs, séparées par des virgules. Il les affiche sur
 une ligne, séparées par une espace.
@@ -191,6 +274,10 @@ café 2.5 true null
 
 ## Les commentaires
 
+Dans un mois, vous aurez oublié pourquoi vous avez écrit telle ligne. Un commentaire,
+c'est comme une note au crayon dans la marge d'une recette : il aide la personne qui
+relit, vous la première.
+
 Un [commentaire](../debuter/glossaire.md#commentaire) est une note pour les humains.
 JavaScript l'ignore.
 
@@ -209,9 +296,20 @@ console.log(100 * (1 + tva));
 120
 ```
 
+Ligne par ligne :
+
+- la ligne qui commence par `//` est ignorée ;
+- `const tva = 0.2;` range 0.2 dans `tva` ; la fin de la ligne, après `//`, est
+  ignorée ;
+- tout ce qui est entre `/*` et `*/` est ignoré, même sur plusieurs lignes ;
+- seul le calcul `100 * (1 + 0.2)` est fait, et il affiche 120.
+
 Un bon commentaire explique **pourquoi**, pas **quoi** : le code dit déjà ce qu'il fait.
 
 ## Bien nommer ses variables
+
+Un programme se relit bien plus souvent qu'il ne s'écrit. Un nom clair, c'est une
+étiquette lisible sur la boîte : vous savez ce qu'elle contient sans l'ouvrir.
 
 En JavaScript, on écrit les noms en **camelCase** (« en bosses de chameau ») : le
 premier mot en minuscules, puis une majuscule au début de chaque mot suivant.
@@ -239,7 +337,27 @@ Quelques règles :
 > **Note :** les accents sont permis (`const âge = 30`), mais l'usage est de les éviter
 > dans les noms de variables. Gardez-les pour le texte entre guillemets.
 
+**À vous :** écrivez un programme qui calcule le prix de 4 places de cinéma à 9 euros
+la place, avec des noms en camelCase, puis affiche « Total : 36 » avec `console.log`
+et deux valeurs.
+
+> **Solution**
+>
+> ```javascript
+> const prixPlace = 9;
+> const nombrePlaces = 4;
+> const prixTotal = prixPlace * nombrePlaces;
+> console.log("Total :", prixTotal);
+> ```
+>
+> ```sortie
+> Total : 36
+> ```
+
 ## Comparer : == ou === ?
+
+Un programme doit souvent vérifier quelque chose : le mot de passe est-il le bon ?
+la réponse est-elle juste ? Pour cela, il compare deux valeurs.
 
 Comparer deux valeurs donne un booléen. JavaScript a deux opérateurs d'égalité :
 
@@ -266,12 +384,36 @@ true
 false
 ```
 
+Ligne par ligne :
+
+- `5 === 5` : même type, même valeur, donc `true` ;
+- `5 === "5"` : un nombre et un texte, deux types différents, donc `false` ;
+- `5 == "5"` : `==` transforme d'abord le texte `"5"` en nombre 5, puis compare : `true`.
+
 Avec `==`, le texte `"5"` est converti en nombre, et `0 == ""` répond `true` : c'est
 rarement ce que vous voulez. Les règles de conversion sont longues et pleines de
 pièges.
 
 > **À retenir :** utilisez toujours `===` et son contraire `!==` (« différent de »).
 > Oubliez `==` et `!=`.
+
+**À vous :** écrivez un programme qui range le nombre 1234 dans `codeSecret` et le
+texte `"1234"` dans `codeTape`, puis affiche le résultat de `codeTape === codeSecret`,
+puis celui de `codeTape !== codeSecret`.
+
+> **Solution**
+>
+> ```javascript
+> const codeSecret = 1234;
+> const codeTape = "1234";
+> console.log(codeTape === codeSecret);
+> console.log(codeTape !== codeSecret);
+> ```
+>
+> ```sortie
+> false
+> true
+> ```
 
 ## Erreurs fréquentes
 
