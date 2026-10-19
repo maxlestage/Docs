@@ -287,14 +287,6 @@ Suivons le calcul :
 | 3 | `carre(4)` | 16 |
 | 4 | `9 + 16`, rendu par `somme_des_carres` | 25 |
 
-```text
-somme_des_carres(3, 4)
-   ├── carre(3)  →  9
-   └── carre(4)  → 16
-                    ──
-                    25
-```
-
 Essayez : remplacez `return n * n` par `return n * n * n`. Le résultat
 devient 27 + 64 = 91.
 
