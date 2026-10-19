@@ -45,7 +45,7 @@ jour la liste ci-dessous, puis publie.
 - [ ] `donnees` — Analyser des données (csv + statistics ; pandas en `norun`)
 
 ### JavaScript
-- [ ] `nombres-et-maths` → déjà couvert ; à la place : `tableaux-avances` (flatMap, groupBy, toSorted, structuredClone)
+- [ ] `tableaux-avances` — (flatMap, groupBy, toSorted, structuredClone)
 - [ ] `node-http` — Un serveur avec node:http et ses routes
 - [ ] `canvas` — Dessiner dans le navigateur (norun) et la logique à côté
 - [ ] `stockage` — localStorage, IndexedDB (norun) et JSON
