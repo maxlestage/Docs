@@ -103,7 +103,7 @@ Nous n'avons pas donné d'`id` : la base a mis `1`, puis `2`, toute seule.
 
 > **À retenir :** jamais de valeur collée dans le texte de la requête. Toujours un `?`,
 > et les valeurs dans un tuple à côté. La section
-> [pourquoi toujours ?](#pourquoi-toujours) explique pourquoi.
+> [se protéger des injections SQL](#se-proteger-des-injections-sql) explique pourquoi.
 
 > **Essayez :** ajoutez une troisième ligne pour `"Chloé"`, 41 ans. La liste affichée a
 > alors trois tuples, et Chloé a l'`id` 3.
@@ -321,7 +321,7 @@ virement("Bob", "Alice", 500)
 > fermeture. Mettez vos écritures dans un `with conn:` : il valide ou annule pour vous.
 > Le chapitre [les erreurs](erreurs.md) explique `try` et `except`.
 
-## Pourquoi toujours ?
+## Se protéger des injections SQL
 
 Imaginez une recherche par nom. On est tenté de coller le nom dans la requête avec une
 f-string. Voici ce qui arrive si quelqu'un tape un nom un peu spécial :
@@ -421,16 +421,151 @@ afficher(carnet)
 ```
 
 ```sortie
-1. Alain Petit : 06 99 00 11 22
-2. Alice Martin : 06 11 22 33 44
-3. Bob Durand : 07 55 66 77 88
+3. Alain Petit : 06 99 00 11 22
+1. Alice Martin : 06 11 22 33 44
+2. Bob Durand : 07 55 66 77 88
 --- commence par Al ---
 Alain Petit
 Alice Martin
 --- après modification ---
-1. Alain Petit : 06 99 00 11 22
-2. Alice Martin : 06 11 22 33 44
-3. Bob Durand : 07 00 00 00 00
+3. Alain Petit : 06 99 00 11 22
+1. Alice Martin : 06 11 22 33 44
+2. Bob Durand : 07 00 00 00 00
 ```
 
-Hmm, regardez les numéros : ils suivent l'ordre alphabétique, pas l'ordre d'ajout.
+Quelques détails :
+
+- les numéros `id` suivent l'ordre d'ajout, mais l'affichage suit l'ordre alphabétique
+  grâce à `ORDER BY nom` ;
+- `NOT NULL` interdit un nom vide ([`NULL`](../debuter/glossaire.md#null) est la valeur
+  « rien » de SQL, comme `None` en Python) ;
+- `LIKE ?` avec `"Al%"` cherche les noms qui **commencent** par `Al` : `%` veut dire
+  « n'importe quelle suite de lettres » ;
+- on peut parcourir le résultat de `execute` directement avec `for`, sans `fetchall`.
+
+> **Essayez :** ajoutez une fonction `supprimer(conn, nom)` avec un
+> `DELETE FROM contacts WHERE nom = ?` dans un `with conn:`. Supprimez Bob, puis
+> affichez le carnet : il reste deux contacts.
+
+## Erreurs fréquentes
+
+### Oublier la virgule d'un tuple à une valeur
+
+```python norun
+import sqlite3
+conn = sqlite3.connect(":memory:")
+conn.execute("CREATE TABLE amis (nom TEXT)")
+conn.execute("SELECT * FROM amis WHERE nom = ?", ("Alice"))
+```
+
+```text
+Traceback (most recent call last):
+  File "main.py", line 4, in <module>
+    conn.execute("SELECT * FROM amis WHERE nom = ?", ("Alice"))
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+sqlite3.ProgrammingError: Incorrect number of bindings supplied. The current statement uses 1, and there are 5 supplied.
+```
+
+`("Alice")` sans virgule n'est pas un tuple : c'est le texte `"Alice"`. Python le voit
+comme 5 lettres, donc 5 valeurs pour 1 seul `?`. Écrivez `("Alice",)` avec une virgule.
+
+### Lire une table qui n'existe pas
+
+```python norun
+import sqlite3
+conn = sqlite3.connect(":memory:")
+conn.execute("SELECT * FROM amis")
+```
+
+```text
+Traceback (most recent call last):
+  File "main.py", line 3, in <module>
+    conn.execute("SELECT * FROM amis")
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^
+sqlite3.OperationalError: no such table: amis
+```
+
+La table n'a pas été créée, ou son nom est mal écrit. Une base `":memory:"` est vide à
+chaque lancement : créez la table d'abord. Pour un fichier, `CREATE TABLE IF NOT EXISTS`
+ne crée la table que si elle manque.
+
+### Lire une colonne par son nom sans sqlite3.Row
+
+```python norun
+import sqlite3
+conn = sqlite3.connect(":memory:")
+conn.execute("CREATE TABLE amis (nom TEXT, age INTEGER)")
+conn.execute("INSERT INTO amis VALUES (?, ?)", ("Alice", 30))
+ligne = conn.execute("SELECT nom, age FROM amis").fetchone()
+print(ligne["nom"])
+```
+
+```text
+Traceback (most recent call last):
+  File "main.py", line 6, in <module>
+    print(ligne["nom"])
+          ~~~~~^^^^^^^
+TypeError: tuple indices must be integers or slices, not str
+```
+
+Par défaut, une ligne est un tuple : on la lit avec `ligne[0]`. Pour écrire
+`ligne["nom"]`, ajoutez `conn.row_factory = sqlite3.Row` après `connect`.
+
+## Testez-vous
+
+**Question 1 :** pourquoi ne faut-il jamais construire une requête avec une f-string ?
+
+> **Réponse**
+>
+> Parce qu'une valeur tapée par quelqu'un peut contenir du SQL et changer le sens de la
+> requête : c'est une injection SQL. Avec `?`, la valeur reste toujours une simple
+> valeur.
+
+**Question 2 :** qu'affiche ce programme ?
+
+```python norun
+import sqlite3
+conn = sqlite3.connect(":memory:")
+conn.execute("CREATE TABLE notes (valeur INTEGER)")
+conn.executemany("INSERT INTO notes VALUES (?)", [(12,), (8,), (15,)])
+print(conn.execute("SELECT valeur FROM notes WHERE valeur >= ? ORDER BY valeur", (10,)).fetchall())
+```
+
+> **Réponse**
+>
+> ```python
+> import sqlite3
+> conn = sqlite3.connect(":memory:")
+> conn.execute("CREATE TABLE notes (valeur INTEGER)")
+> conn.executemany("INSERT INTO notes VALUES (?)", [(12,), (8,), (15,)])
+> print(conn.execute("SELECT valeur FROM notes WHERE valeur >= ? ORDER BY valeur", (10,)).fetchall())
+> ```
+>
+> ```sortie
+> [(12,), (15,)]
+> ```
+>
+> `WHERE` garde 12 et 15, `ORDER BY` les trie. Chaque ligne est un tuple d'une valeur.
+
+**Question 3 :** dans un `with conn:`, que se passe-t-il si une exception arrive au
+milieu ?
+
+> **Réponse**
+>
+> Tous les changements faits depuis le début du bloc sont annulés (`rollback`). La base
+> revient comme avant le bloc, puis l'exception continue son chemin.
+
+## En résumé
+
+- `sqlite3.connect(":memory:")` ouvre une base en mémoire ; un nom de fichier la garde
+  sur le disque.
+- `conn.execute(requete, valeurs)` envoie du SQL ; `executemany` répète pour une liste.
+- `SELECT` puis `fetchall()` ou `fetchone()` pour lire ; `UPDATE` et `DELETE` avec un
+  `WHERE` pour modifier et supprimer.
+- `conn.row_factory = sqlite3.Row` permet d'écrire `ligne["nom"]`.
+- `with conn:` valide les changements, ou les annule tous en cas d'erreur.
+- Toujours `?` pour les valeurs, jamais de f-string : c'est ce qui protège des
+  injections SQL.
+
+Suite : [Les expressions régulières](regex.md). Comparez avec
+[la base de données en Ruby](../ruby/base-de-donnees.md).
