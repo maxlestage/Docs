@@ -12,6 +12,9 @@ This page explains how Python calculates: operators, integers and floats, conver
 
 ## The basic operators
 
+A program spends its time calculating: the total of a shopping cart, a person's age, a
+player's score. So before anything else, you need to know how to write a calculation.
+
 An [operator](../debuter/glossaire.md#operator) is a symbol that does a calculation.
 Python can do everything a calculator does.
 
@@ -36,6 +39,15 @@ print(7 ** 2, 2 ** 10)
 3.5 3 1
 49 1024
 ```
+
+Line by line:
+
+- each `print` shows several results, separated by commas in the code and by spaces on
+  the screen;
+- the first line does the three calculations from school: `9`, `5` and `14`;
+- the second shows three ways to divide 7 by 2: the next section explains them;
+- the third calculates powers: `7 ** 2` means 7 × 7, and `2 ** 10` means 2 multiplied
+  by itself 10 times.
 
 ## Three divisions: /, // and %
 
@@ -62,6 +74,15 @@ print(10 / 2)
 5.0
 ```
 
+Line by line:
+
+- `candies` is 17 and `children` is 5;
+- `candies / children` does the "exact" sharing: `3.4` candies each, which does not make
+  much sense for candies;
+- `candies // children` counts the whole candies per child: `3`;
+- `candies % children` counts what is left in the bag: `2`. Indeed, 3 × 5 = 15, and
+  17 - 15 = 2.
+
 Notice that `10 / 2` gives `5.0` and not `5`: `/` returns a `float`.
 
 The remainder `%` is very useful to check whether a number is even: an even number has
@@ -80,7 +101,27 @@ False
 > **Tip:** to convert seconds into minutes and seconds, combine `//` and `%`:
 > `125 // 60` gives `2` minutes, `125 % 60` gives `5` seconds.
 
+**Your turn:** you are packing 50 eggs into boxes of 12. Write a program that stores 50
+in a variable `eggs`, then displays the number of full boxes and the number of eggs left
+over.
+
+> **Solution**
+>
+> ```python
+> eggs = 50
+> print(eggs // 12)
+> print(eggs % 12)
+> ```
+>
+> ```sortie
+> 4
+> 2
+> ```
+
 ## Order of operations
+
+The same calculation can be read two ways: is `2 + 3 * 4` 20 or 14? So that there is
+never any doubt, Python follows fixed rules, the same ones as in school.
 
 Python follows the rules of math: first `**`, then `*`, `/`, `//`, `%`, then `+` and
 `-`. When the priority is equal, it calculates from left to right.
@@ -99,10 +140,19 @@ print(10 - 4 - 3)
 3
 ```
 
+Line by line:
+
+- `2 + 3 * 4`: multiplication comes first, so 3 × 4 = 12, then 2 + 12 = 14;
+- `(2 + 3) * 4`: parentheses come first, so 5, then 5 × 4 = 20;
+- `2 * 3 ** 2`: the power comes before everything, so 3 × 3 = 9, then 2 × 9 = 18;
+- `10 - 4 - 3`: from left to right, so 10 - 4 = 6, then 6 - 3 = 3.
+
 > **Remember:** when in doubt, use parentheses. They cost nothing and make the
 > calculation obvious to the reader.
 
 ## Integers without limits
+
+> **Note:** this part can wait. Read it once the basics feel solid.
 
 In many languages, an integer has a maximum size. Not in Python: an `int` grows as much
 as needed. Only the computer's memory limits it.
@@ -121,6 +171,9 @@ The underscore `_` in a number is only there to make it readable: `1_000_000` is
 same number as `1000000`.
 
 ## Floats are approximate
+
+A number with a decimal point, like a price or a temperature, is called a float. You
+need to know its small weakness, or one day an "obvious" calculation will surprise you.
 
 A [float](../debuter/glossaire.md#float) is stored in
 [binary](../debuter/glossaire.md#binary). Some numbers that are simple in decimal, like
@@ -155,6 +208,14 @@ print(math.isclose(total, 0.3))
 True
 ```
 
+Line by line:
+
+- `import math` opens the `math` toolbox, presented further down;
+- `total` receives `0.1 + 0.2`, that is `0.30000000000000004`;
+- `round(total, 2)` rounds to 2 digits after the decimal point: you get `0.3`;
+- `math.isclose(total, 0.3)` asks "are these two numbers almost equal?": the answer is
+  `True`.
+
 > **Warning:** `round` rounds "to the nearest even number" when the value is exactly
 > halfway: `round(2.5)` gives `2`, and `round(3.5)` gives `4`. This is banker's
 > rounding, which avoids always rounding up.
@@ -168,6 +229,8 @@ print(round(2.5), round(3.5), round(2.567, 1))
 ```
 
 ## Decimal and Fraction: exact calculations
+
+> **Note:** this part can wait. Read it once the basics feel solid.
 
 With money, a small rounding error can be a problem. The `decimal` module calculates in
 **decimal**, like on paper. Create the numbers from **text**:
@@ -257,6 +320,13 @@ print(random.choice(["rock", "paper", "scissors"]))
 rock
 ```
 
+Line by line:
+
+- `import random` opens the toolbox for randomness;
+- `random.seed(42)` sets the seed: the draws that follow will always be the same;
+- the two `randint(1, 6)` roll a die twice: `6`, then `1`;
+- `choice` picks a word from the list: here, `"rock"`.
+
 - `randint(1, 6)`: an integer between 1 and 6, **both ends included**;
 - `choice(list)`: one element of the list;
 - `random()`: a float between 0 and 1.
@@ -265,6 +335,10 @@ rock
 > the same sequence. Keep it for tests.
 
 ## Converting between text and numbers
+
+A number written between quotes, like `"42"`, is text: Python cannot calculate with
+it. This is often the case for data typed on the keyboard or read from a file. You then
+have to convert it, like changing euros into dollars before you pay.
 
 Three functions convert a value from one type to another:
 
@@ -288,10 +362,34 @@ print(int(7.9))
 7
 ```
 
+Line by line:
+
+- `text` contains the text `"42"`, not the number 42;
+- `int(text)` turns it into a number: `number` is 42, and `number + 1` gives `43`;
+- `float("3.5")` gives the number `3.5`, and `3.5 * 2` gives `7.0`;
+- `str(100)` gives the text `"100"`, which you can stick to `" points"` with `+`.
+
 Be careful with `int(7.9)`: it **cuts off** the decimal part, it does not round. To
 round, use `round(7.9)`, which gives `8`.
 
+**Your turn:** the variable `age` contains the text `"17"`. Write a program that
+displays "Next year, you will be 18." by calculating 18 from `age`.
+
+> **Solution**
+>
+> ```python
+> age = "17"
+> print("Next year, you will be " + str(int(age) + 1) + ".")
+> ```
+>
+> ```sortie
+> Next year, you will be 18.
+> ```
+
 ## Displaying numbers nicely
+
+A price shown as `3.14159` or a population written `68373433` is hard to read. A
+receipt always shows 2 digits after the decimal point: formats are there for that.
 
 In an f-string, add `:` then a **format** after the value:
 
@@ -324,6 +422,21 @@ print(f"{1234567.891:,.2f}")
 
 > **Note:** the `,` format uses a comma. For another separator, such as a space
 > (`68 373 433`), replace it: `f"{population:,}".replace(",", " ")`.
+
+**Your turn:** an item costs `12.5` dollars and you buy 3. Write a program that displays
+"Total: $37.50", with 2 digits after the decimal point.
+
+> **Solution**
+>
+> ```python
+> price = 12.5
+> quantity = 3
+> print(f"Total: ${price * quantity:.2f}")
+> ```
+>
+> ```sortie
+> Total: $37.50
+> ```
 
 ## Common mistakes
 

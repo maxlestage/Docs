@@ -29,6 +29,13 @@ Remember to drink.
 Have a nice day!
 ```
 
+Line by line:
+
+- `temperature = 30` stores 30 in the variable `temperature`;
+- `if temperature > 25:` asks a question: "is 30 greater than 25?". The answer is yes;
+- so the two indented `print` lines run, one after the other;
+- the last `print` is not indented: it runs in every case, even if it were cold.
+
 Three rules to remember:
 
 - the `if` line ends with a **colon** `:`;
@@ -41,6 +48,9 @@ Three rules to remember:
 > are part of the block. Always use 4 spaces.
 
 ## else and elif
+
+Often there is more than one case. A grade can be very good, average or bad, and you
+want a different message for each, like on a school report.
 
 `else` gives the path to follow when the condition is false. `elif` (short for
 *else if*) adds more tests.
@@ -64,7 +74,30 @@ Good
 Python tests the conditions **in order** and stops at the first true one. Here,
 `grade >= 16` is false, `grade >= 12` is true: it displays "Good" and skips the rest.
 
+**Your turn:** write a program that stores `hour = 15` in a variable, then displays
+"Good morning" if the hour is before 12, "Good afternoon" if it is before 18, and
+"Good evening" otherwise.
+
+> **Solution**
+>
+> ```python
+> hour = 15
+> if hour < 12:
+>     print("Good morning")
+> elif hour < 18:
+>     print("Good afternoon")
+> else:
+>     print("Good evening")
+> ```
+>
+> ```sortie
+> Good afternoon
+> ```
+
 ## Comparing values
+
+To decide, a program first asks a question: "is the age 18?", "is the temperature
+above 25?". Comparison operators are how you write these questions.
 
 | Operator | Meaning |
 | --- | --- |
@@ -100,6 +133,9 @@ The last line shows a Python convenience: `10 <= age < 20` means "`age` is betwe
 
 ## Combining: and, or, not
 
+A decision often depends on several things at once. To get into the cinema, you need a
+ticket **and** to be old enough. These three words join several tests into one.
+
 - `a and b` is true if `a` **and** `b` are true;
 - `a or b` is true if **at least one** of the two is true;
 - `not a` flips it: true becomes false, and false becomes true.
@@ -123,7 +159,34 @@ Access to the hall
 No access to the VIP lounge
 ```
 
+Line by line:
+
+- the first three lines prepare the data: an age and two booleans;
+- first `if`: `age >= 18` is true **and** `has_ticket` is true, so entry is allowed;
+- second `if`: `has_ticket` is true, and with `or` that is enough;
+- third `if`: `is_vip` is `False`, and `not` turns it into `True`.
+
+**Your turn:** write a program that stores `age = 70` in a variable, then displays
+"Reduced price" if the age is under 18 or 65 and over, and "Full price"
+otherwise.
+
+> **Solution**
+>
+> ```python
+> age = 70
+> if age < 18 or age >= 65:
+>     print("Reduced price")
+> else:
+>     print("Full price")
+> ```
+>
+> ```sortie
+> Reduced price
+> ```
+
 ## True or false: "truthiness"
+
+> **Note:** this part can wait. Read it once the basics feel solid.
 
 In an `if`, Python accepts any value, not just `True` or `False`. Some values count as
 **false**:
@@ -155,6 +218,8 @@ Hello, Alice!
 `if len(cart) > 0:`.
 
 ## The conditional expression
+
+> **Note:** this part can wait. Read it once the basics feel solid.
 
 To choose between two values on a single line, write
 `value_if_true if condition else value_if_false`.
@@ -231,6 +296,9 @@ Functions (`def`) are explained in [functions](fonctions.md).
 
 ## The while loop
 
+Imagine you are asked to display the numbers from 1 to 100. Writing 100 `print` lines
+would be long and tedious. A loop does this repetitive work for you.
+
 A [loop](../debuter/glossaire.md#loop) repeats code. `while` repeats its block **as
 long as** the condition is true.
 
@@ -249,6 +317,15 @@ print("Liftoff!")
 Liftoff!
 ```
 
+Line by line:
+
+- `count = 3`: the variable is 3 at the start;
+- `while count > 0:`: before each round, Python asks the question. `3 > 0` is true: it
+  enters the block;
+- the block displays `count`, then takes 1 away from it: it becomes 2, then 1, then 0;
+- when `count` is 0, `0 > 0` is false: Python leaves the loop and moves on to the last
+  `print`.
+
 On each round, Python checks `count > 0`. When `count` is 0, the condition is false:
 the loop stops.
 
@@ -256,7 +333,32 @@ the loop stops.
 > variable changes on each round. To stop a stuck program, press Ctrl+C in the
 > terminal.
 
+**Your turn:** write a program that displays the numbers from 1 to 5 with a `while`
+loop, then "Done!".
+
+> **Solution**
+>
+> ```python
+> n = 1
+> while n <= 5:
+>     print(n)
+>     n = n + 1
+> print("Done!")
+> ```
+>
+> ```sortie
+> 1
+> 2
+> 3
+> 4
+> 5
+> Done!
+> ```
+
 ## The for loop
+
+Very often, you have a list of things to handle one by one: each item on a shopping
+list, each student in a class. `for` is made for this.
 
 `for` goes through the elements of a collection, one by one. It is the most used loop
 in Python.
@@ -272,6 +374,14 @@ I like this apple.
 I like this banana.
 I like this cherry.
 ```
+
+Line by line:
+
+- `fruits` holds a list of three texts;
+- `for fruit in fruits:` takes the first element, `"apple"`, and stores it in `fruit`;
+- the block displays the sentence with `"apple"`. Then Python goes back to the `for`,
+  which stores `"banana"` in `fruit`, and so on;
+- after `"cherry"`, there are no elements left: the loop stops.
 
 On each round, the variable `fruit` receives the next element of the list. Each pass is
 called an [iteration](../debuter/glossaire.md#iteration).
@@ -321,7 +431,29 @@ negative step (`-3`) counts down.
 
 > **Remember:** the end of a `range` is always **excluded**. `range(1, 6)` stops at 5.
 
+**Your turn:** write a program that displays the 7 times table, from "7 x 1 = 7" to
+"7 x 5 = 35", one line per calculation.
+
+> **Solution**
+>
+> ```python
+> for i in range(1, 6):
+>     print("7 x", i, "=", 7 * i)
+> ```
+>
+> ```sortie
+> 7 x 1 = 7
+> 7 x 2 = 14
+> 7 x 3 = 21
+> 7 x 4 = 28
+> 7 x 5 = 35
+> ```
+
 ## break and continue
+
+Sometimes you want to change the course of a loop while it runs: stop searching as
+soon as you have found something, or ignore some elements. That is what these two words
+do.
 
 - `break` leaves the loop immediately;
 - `continue` skips the rest of the round and moves on to the next one.
@@ -341,6 +473,14 @@ for n in range(1, 10):
 5
 7
 ```
+
+Line by line:
+
+- `for n in range(1, 10):` gives `n` the values 1, 2, 3… up to 9;
+- if `n` is even (the remainder of dividing by 2 is 0), `continue` jumps straight to
+  the next round: the `print` is not reached;
+- if `n` goes past 7, `break` stops the whole loop: 9 is never displayed;
+- otherwise, `print(n)` displays the number.
 
 Even numbers are skipped (`continue`). When `n` goes past 7, the loop stops (`break`).
 
@@ -365,6 +505,9 @@ No even number.
 
 ## enumerate: the number and the element
 
+Sometimes you want to number what you go through, like a ranking or the steps of a
+recipe.
+
 To get both the position and the element, use `enumerate`. On each round, it gives two
 values: the number (the [index](../debuter/glossaire.md#index)) and the element.
 
@@ -380,9 +523,20 @@ for rank, name in enumerate(podium, start=1):
 3. Chloe
 ```
 
+Line by line:
+
+- `podium` holds three first names, in order of arrival;
+- on each round, `enumerate` gives a pair: first `1` and `"Alice"`, then `2` and
+  `"Bob"`, then `3` and `"Chloe"`;
+- `rank, name` stores the number in `rank` and the first name in `name`;
+- `start=1` makes the numbering start at 1.
+
 Without `start=1`, the numbering starts at 0.
 
 ## zip: going through two lists together
+
+Sometimes two lists go together: first names on one side, their grades on the other, in
+the same order.
 
 `zip` moves through several lists at the same time, like a zipper joining two sides,
 tooth by tooth.
@@ -399,6 +553,13 @@ Alice: 15/20
 Bob: 12/20
 Chloe: 18/20
 ```
+
+Line by line:
+
+- `first_names` and `grades` are in the same order: the first grade is Alice's;
+- `zip` takes the first element of each list, then the second, then the third;
+- on each round, `first_name` receives a first name and `grade` the grade that goes
+  with it.
 
 > **Note:** `zip` stops at the end of the shortest list.
 
