@@ -37,6 +37,9 @@ Hello!
 
 ## Parameters
 
+A function that always does exactly the same thing is not very useful. Parameters make
+it flexible: it is like a recipe "for N people", where you choose N each time.
+
 [Parameters](../debuter/glossaire.md#parameter) are the values the function receives.
 They are empty slots, filled in at the time of the call. The values given in the call
 are called [arguments](../debuter/glossaire.md#argument).
@@ -55,10 +58,38 @@ Hello, Alice!
 Hello, Bob!
 ```
 
+Line by line:
+
+- `function greet(firstName)` stores the function. Nothing is displayed yet;
+- `greet("Alice")` calls the function: `firstName` receives `"Alice"`, then
+  `console.log` displays the sentence with that name;
+- `greet("Bob")` does it again, this time with `firstName` set to `"Bob"`.
+
 Here, `firstName` is the parameter; `"Alice"` and `"Bob"` are the arguments. Several
 parameters are separated by commas, and the arguments are given in the same order.
 
+**Your turn:** write a function `introduce(firstName, age)` that displays "My name is …
+and I am … years old.", then call it with `"Lea"` and `12`.
+
+> **Solution**
+>
+> ```javascript
+> function introduce(firstName, age) {
+>   console.log(`My name is ${firstName} and I am ${age} years old.`);
+> }
+>
+> introduce("Lea", 12);
+> ```
+>
+> ```sortie
+> My name is Lea and I am 12 years old.
+> ```
+
 ## Returning a value with return
+
+Often, you do not just want to display a result: you want to keep it and use it later.
+A calculator gives you a number, which you can write down, reuse or add to another
+one. `return` does the same thing.
 
 `return` stops the function and **returns** a value to the code that called it. The
 returned value replaces the call.
@@ -77,6 +108,14 @@ console.log(total);
 12
 11
 ```
+
+Line by line:
+
+- `function area(width, height)` stores the function, without computing anything;
+- `area(3, 4)` runs the function: `width` is 3, `height` is 4, and `return` gives back
+  12. `console.log` displays that 12;
+- `area(2, 5)` returns 10, then `+ 1` gives 11, stored in `total`;
+- the last `console.log` displays `total`, so 11.
 
 `area(2, 5) + 1` becomes `10 + 1`. A function without `return` returns `undefined`.
 
@@ -126,7 +165,29 @@ undefined 10
 > **Remember:** prefer functions that return a value. You can then choose what to do
 > with it.
 
+**Your turn:** write a function `perimeter(side)` that returns the perimeter of a square
+(four times the side). Display `perimeter(5)`, then `perimeter(5) + perimeter(2)`.
+
+> **Solution**
+>
+> ```javascript
+> function perimeter(side) {
+>   return side * 4;
+> }
+>
+> console.log(perimeter(5));
+> console.log(perimeter(5) + perimeter(2));
+> ```
+>
+> ```sortie
+> 20
+> 28
+> ```
+
 ## Default parameters
+
+At a restaurant, the dish comes with fries unless you ask for something else. A default
+value works the same way: it saves you from repeating the usual value at every call.
 
 If an argument is missing, its parameter is `undefined`. A **default value**, written
 with `=`, replaces it.
@@ -145,7 +206,17 @@ Hello, Alice!
 Hi, Bob!
 ```
 
+Line by line:
+
+- `greeting = "Hello"` provides a fallback value for `greeting`;
+- `greet("Alice")` gives only one argument: `firstName` is `"Alice"` and `greeting`
+  takes its default value, `"Hello"`;
+- `greet("Bob", "Hi")` gives both: `"Hi"` replaces the default value.
+
 ## Rest parameters
+
+Sometimes you do not know in advance how many values the function will receive: you
+want to add two numbers, or ten. Rest parameters accept any number of arguments.
 
 With three dots `...` in front of the last parameter, the function receives **all the
 remaining arguments**, stored in an array.
@@ -170,10 +241,22 @@ console.log(sum());
 0
 ```
 
+Line by line:
+
+- `...numbers` stores all the arguments in an array: with `sum(1, 2)`, `numbers` is
+  `[1, 2]`;
+- `total` starts at 0;
+- the `for` loop takes each number of the array, one by one, and adds it to `total`;
+- `return total` returns the sum. With `sum()`, the array is empty: the loop does not
+  run, and the function returns 0.
+
 It is a bit like a bag: you put in as many arguments as you want. Arrays are explained
 in [arrays](collections.md).
 
 ## Arrow functions
+
+Many functions only do a small calculation. Writing `function`, curly braces and
+`return` for a single line is long. The arrow says the same thing in fewer words.
 
 An **arrow function** is a shorter way to write a function. You store it in a
 constant.
@@ -219,10 +302,33 @@ console.log(priceWithTax(50, 0.055));
 > **Tip:** use `function` for the main functions of your program, and arrows for small
 > functions passed to other ones (see below). Both are correct.
 
+**Your turn:** write an arrow function `triple` that returns three times a number, and
+an arrow function `welcome` that returns "Welcome, …!" with a name. Display `triple(7)`
+and `welcome("Sam")`.
+
+> **Solution**
+>
+> ```javascript
+> const triple = (x) => x * 3;
+> const welcome = (firstName) => `Welcome, ${firstName}!`;
+>
+> console.log(triple(7));
+> console.log(welcome("Sam"));
+> ```
+>
+> ```sortie
+> 21
+> Welcome, Sam!
+> ```
+
 ## Functions are values
 
 In JavaScript, a function is a value, like a number or a text. You can store it in a
 variable, put it in an array, or give it to another function.
+
+What is the point? You can give a function not only data, but also an action to perform
+on that data. It is like handing someone a basket of apples with the instruction "peel
+them".
 
 ```javascript
 function double(x) {
@@ -238,6 +344,14 @@ console.log(typeof double);
 42
 function
 ```
+
+Line by line:
+
+- `function double(x)` stores a function named `double`;
+- `const operation = double;` stores the function itself in `operation`, without
+  calling it (no parentheses). `operation` and `double` name the same recipe;
+- `operation(21)` therefore calls `double` with 21, which returns 42;
+- `typeof double` gives the type of the value: here, `function`.
 
 Mind the difference: `double` is the function itself (the recipe); `double(21)` is its
 result (the dish).
@@ -261,6 +375,14 @@ console.log(applyTwice((x) => x * x, 3));
 81
 ```
 
+Line by line:
+
+- `applyTwice` receives two things: a function `f` and a value;
+- `f(value)` applies `f` a first time, then the `f( )` around it applies it to the
+  result;
+- first call: `f` adds 10. 1 becomes 11, then 21;
+- second call: `f` squares. 3 becomes 9, then 81.
+
 Arrays use callbacks a lot. `map` applies a function to each element:
 
 ```javascript
@@ -275,7 +397,24 @@ console.log(pricesWithTax);
 
 You will see `map`, `filter` and their friends again in [arrays](collections.md).
 
+**Your turn:** start from the array `const grades = [8, 12, 15];` and use `map` to
+create a new array where each grade gets 2 extra points. Display it.
+
+> **Solution**
+>
+> ```javascript
+> const grades = [8, 12, 15];
+> const bonusGrades = grades.map((g) => g + 2);
+> console.log(bonusGrades);
+> ```
+>
+> ```sortie
+> [ 10, 14, 17 ]
+> ```
+
 ## Hoisting
+
+> **Note:** this part can wait. Read it once the basics feel solid.
 
 A function declared with `function` can be called **before** the place where it is
 written. JavaScript "hoists" it to the top of the file before starting.
@@ -296,6 +435,8 @@ This is **not** the case for an arrow function stored in a `const`: the constant
 exists from its line onwards. See the common mistakes below.
 
 ## A function that calls itself
+
+> **Note:** this part can wait. Read it once the basics feel solid.
 
 A function can call itself: this is
 [recursion](../debuter/glossaire.md#recursion). It needs a **stopping case**, otherwise

@@ -12,6 +12,9 @@ This page explains how JavaScript does math: operators, the `Math` object, the s
 
 ## A single number type
 
+Programs calculate all the time: the total of a shopping cart, a score, a person's
+age. Before doing any math, let's see what a number looks like in JavaScript.
+
 Many languages separate [integers](../debuter/glossaire.md#integer) (`3`) and
 [floats](../debuter/glossaire.md#float) (`3.5`). JavaScript has only one type for
 both: `number`.
@@ -30,10 +33,20 @@ true
 true
 ```
 
+Line by line:
+
+- `typeof 3` asks for the type of the value `3`: the answer is `number`;
+- `typeof 3.5` also gives `number`: same type, with or without a decimal point;
+- `3 === 3.0` compares the two values: they are equal, so `true`;
+- `Number.isInteger(5.0)` answers `true`, because `5.0` has nothing after the point.
+
 `3` and `3.0` are exactly the same value. `Number.isInteger` tells you whether a number
 has no decimal part.
 
 ## Operators
+
+A program often does the math for you, like a calculator: the price of three coffees,
+the average grade of a class. Operators are the signs that write these calculations.
 
 The calculation [operators](../debuter/glossaire.md#operator) are the ones from school,
 plus two new ones.
@@ -110,7 +123,27 @@ console.log(lives);
 21
 ```
 
+**Your turn:** write a program that shares 23 candies among 5 children. It
+displays how many candies each child gets, then how many are left.
+
+> **Solution**
+>
+> ```javascript
+> const candies = 23;
+> const children = 5;
+> console.log(Math.floor(candies / children));
+> console.log(candies % children);
+> ```
+>
+> ```sortie
+> 4
+> 3
+> ```
+
 ## The Math object
+
+Some calculations come up again and again: rounding a price, finding the best grade
+in a list. Instead of writing them yourself, you take them ready-made.
 
 `Math` is a toolbox that comes with JavaScript. It contains calculation functions and a
 few constants.
@@ -176,7 +209,25 @@ console.log(die);
 
 The result changes every time you run it: yours will probably be different.
 
+**Your turn:** write a program that displays the best of the three grades 12, 17
+and 9, then their average rounded to the nearest whole number.
+
+> **Solution**
+>
+> ```javascript
+> console.log(Math.max(12, 17, 9));
+> console.log(Math.round((12 + 17 + 9) / 3));
+> ```
+>
+> ```sortie
+> 17
+> 13
+> ```
+
 ## Decimal numbers are not exact
+
+This part saves you from a classic trap, such as a cart total with about fifteen
+digits after the decimal point. Better to know it before you run into it.
 
 Here is a famous surprise:
 
@@ -215,6 +266,10 @@ true
 
 ## Numbers and text
 
+Numbers and texts often turn into each other. What you type on the keyboard arrives as
+a text, even "42". And to display a price nicely, you turn a number into a text. This
+part builds the bridge in both directions.
+
 ### Displaying with toFixed
 
 `toFixed(n)` returns a **text** with exactly `n` digits after the decimal point.
@@ -231,6 +286,13 @@ console.log(typeof price.toFixed(2));
 10.00
 string
 ```
+
+Line by line:
+
+- `price` receives `0.1 + 0.2`, that is `0.30000000000000004`;
+- `price.toFixed(2)` keeps two digits after the decimal point and rounds: `0.30`;
+- `(10).toFixed(2)` adds the missing zeros: `10.00`;
+- `typeof` shows that the result of `toFixed` is a `string`, so a text.
 
 The result is a string: perfect for display, not for further calculations.
 
@@ -267,7 +329,25 @@ NaN
 > **Remember:** prefer `Number(...)`. It rejects doubtful texts instead of silently
 > taking a piece of them.
 
+**Your turn:** write a program that turns the text `"19.99"` into a number, adds
+5 to it, then displays the result with two digits after the decimal point.
+
+> **Solution**
+>
+> ```javascript
+> const text = "19.99";
+> const total = Number(text) + 5;
+> console.log(total.toFixed(2));
+> ```
+>
+> ```sortie
+> 24.99
+> ```
+
 ## NaN: "not a number"
+
+A user may type "thirty" instead of "30". Your program must then be able to spot
+that the conversion failed.
 
 When a calculation makes no sense, JavaScript does not stop: it returns `NaN` (*Not a
 Number*). And `NaN` contaminates every calculation that uses it.
@@ -288,6 +368,13 @@ number
 false
 true
 ```
+
+Line by line:
+
+- `Number("thirty")` cannot read this word as a number: `age` is `NaN`;
+- `age + 1` still gives `NaN`: a calculation with `NaN` always gives `NaN`;
+- `typeof age` answers `number`, which is surprising (see below);
+- `age === NaN` answers `false`, while `Number.isNaN(age)` does answer `true`.
 
 Two oddities:
 
@@ -310,6 +397,8 @@ false
 
 ## Infinity
 
+> **Note:** this part can wait. Read it once the basics feel solid.
+
 Dividing by zero does not cause an error in JavaScript: you get infinity.
 
 ```javascript
@@ -329,6 +418,8 @@ false
 `Number.isFinite(x)` checks that a number is a real number: neither `Infinity` nor `NaN`.
 
 ## Very large integers: BigInt
+
+> **Note:** this part can wait. Read it once the basics feel solid.
 
 A `number` keeps integers exact up to about 9 quadrillion. Beyond that, it loses
 precision.
@@ -396,6 +487,20 @@ $1,234.50
 > is a **narrow no-break space** (Unicode code U+202F). It prevents a line break in the
 > middle of a number. As a result, comparing the output with a string typed on your
 > keyboard answers `false`.
+
+**Your turn:** write a program that displays the price 12500 in US dollars, in the
+United States format.
+
+> **Solution**
+>
+> ```javascript
+> const dollars = new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" });
+> console.log(dollars.format(12500));
+> ```
+>
+> ```sortie
+> $12,500.00
+> ```
 
 ## Common mistakes
 

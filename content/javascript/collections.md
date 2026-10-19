@@ -12,6 +12,9 @@ Cette page explique comment ranger plusieurs valeurs dans un tableau, les ajoute
 
 ## Créer un tableau
 
+Imaginez une liste de courses de vingt articles. Créer vingt variables serait long et
+pénible. Un tableau range toutes ces valeurs sous un seul nom.
+
 Un tableau (*array*) est une [liste](../debuter/glossaire.md#liste) de valeurs rangées
 dans l'ordre, comme les wagons d'un train. On l'écrit entre crochets `[ ]`, avec des
 virgules entre les éléments.
@@ -35,10 +38,20 @@ console.log(melange);
 [ 'Alice', 30, true ]
 ```
 
+Ligne par ligne :
+
+- `fruits` contient trois textes, `notes` trois nombres, et `vide` aucun élément ;
+- `console.log(fruits)` affiche tout le tableau, entre crochets ;
+- `notes.length` vaut 3 : il y a trois notes. `vide.length` vaut 0 ;
+- `melange` montre qu'un même tableau peut contenir un texte, un nombre et un booléen.
+
 `length` donne le nombre d'éléments. Un tableau peut mélanger les types, mais en
 pratique on y range des valeurs de même nature.
 
 ## Lire et modifier un élément
+
+Une fois la liste rangée, il faut pouvoir en sortir un élément précis, comme lire la
+troisième ligne de votre liste de courses, ou en corriger un.
 
 Chaque élément a un [indice](../debuter/glossaire.md#indice) : sa position, **à partir
 de 0**. Le premier wagon est le wagon 0.
@@ -63,12 +76,23 @@ undefined
 [ 'pomme', 'mangue', 'kiwi' ]
 ```
 
+Ligne par ligne :
+
+- `fruits[0]` lit le premier élément, `"pomme"` ; `fruits[2]` lit le troisième,
+  `"kiwi"` ;
+- `fruits.at(-1)` compte depuis la fin : il donne le dernier, encore `"kiwi"` ;
+- `fruits[5]` n'existe pas : JavaScript répond `undefined` ;
+- `fruits[1] = "mangue"` remplace `"poire"`, qui était à l'indice 1.
+
 - `at(-1)` donne le dernier élément, comme pour [le texte](texte.md).
 - Un indice qui n'existe pas donne `undefined`, sans erreur.
 - `fruits` est une `const`, et pourtant on peut changer son contenu. `const` interdit de
   remplacer **le tableau entier** (`fruits = [...]`), pas de modifier ce qu'il contient.
 
 ## Ajouter et retirer
+
+Une liste change sans cesse. Pensez à une file d'attente : les gens arrivent au bout
+et partent par le début. Ces méthodes font exactement cela.
 
 Quatre méthodes ajoutent ou retirent un élément à un bout du tableau. Elles **modifient**
 le tableau.
@@ -96,6 +120,13 @@ Chloé [ 'Alice', 'Bob' ]
 Zoé [ 'Alice', 'Bob' ]
 ```
 
+Ligne par ligne :
+
+- `push("Chloé")` ajoute Chloé à la fin : la file contient trois prénoms ;
+- `pop()` retire Chloé, la dernière, et la range dans `dernier` ;
+- `unshift("Zoé")` place Zoé au début, devant Alice ;
+- `shift()` retire Zoé du début et la range dans `premier`.
+
 | Méthode | Bout | Action |
 | --- | --- | --- |
 | `push(x)` | fin | ajoute `x` |
@@ -103,7 +134,27 @@ Zoé [ 'Alice', 'Bob' ]
 | `unshift(x)` | début | ajoute `x` |
 | `shift()` | début | retire et renvoie le premier |
 
+**À vous :** écrivez un programme qui crée un tableau `courses` contenant `"pain"` et
+`"lait"`, ajoute `"œufs"` à la fin, puis affiche le tableau et sa longueur.
+
+> **Solution**
+>
+> ```javascript
+> const courses = ["pain", "lait"];
+> courses.push("œufs");
+> console.log(courses);
+> console.log(courses.length);
+> ```
+>
+> ```sortie
+> [ 'pain', 'lait', 'œufs' ]
+> 3
+> ```
+
 ## slice et splice
+
+Parfois, vous voulez seulement une partie de la liste, par exemple les trois premiers
+d'un classement. Ou bien vous voulez retirer un élément au milieu, pas à un bout.
 
 Ces deux noms se ressemblent, mais font des choses très différentes.
 
@@ -133,6 +184,13 @@ console.log(b);
 [ 1, 'x', 'y', 4, 5 ]
 ```
 
+Ligne par ligne :
+
+- `a.slice(1, 3)` copie les éléments d'indice 1 et 2 (la fin, 3, est exclue) ;
+- `console.log(a)` le prouve : `a` n'a pas changé ;
+- `b.splice(1, 2)` retire 2 et 3 de `b`, et les renvoie dans `retires` ;
+- le dernier `splice` insère deux éléments sans rien retirer.
+
 `b.splice(1, 2)` part de l'indice 1 et retire 2 éléments. `b.splice(1, 0, "x", "y")`
 n'en retire aucun et insère `"x"` et `"y"` à l'indice 1.
 
@@ -140,6 +198,9 @@ n'en retire aucun et insère `"x"` et `"y"` à l'indice 1.
 > tableau. `slice` est une simple tranche, copiée.
 
 ## Chercher dans un tableau
+
+Avant d'ajouter un article à votre liste de courses, vous regardez s'il y est déjà.
+Ces méthodes posent cette question à votre place, même dans une très longue liste.
 
 ```javascript
 const fruits = ["pomme", "poire", "kiwi"];
@@ -180,7 +241,27 @@ undefined
 La fonction donnée à `find` est un *callback* (voir [les fonctions](fonctions.md#les-callbacks)).
 `find` l'appelle sur chaque élément, jusqu'à ce qu'elle réponde `true`.
 
+**À vous :** à partir de `const ages = [12, 17, 21, 15]`, affichez si 21 est dans le
+tableau, puis le premier âge supérieur ou égal à 18.
+
+> **Solution**
+>
+> ```javascript
+> const ages = [12, 17, 21, 15];
+> console.log(ages.includes(21));
+> console.log(ages.find((age) => age >= 18));
+> ```
+>
+> ```sortie
+> true
+> 21
+> ```
+
 ## Parcourir et transformer
+
+Très souvent, vous voulez faire la même chose avec chaque élément : afficher chaque
+article, ajouter la TVA à chaque prix, garder seulement les bonnes notes. Ces méthodes
+le font pour vous, sans écrire le même code pour chaque élément.
 
 ### forEach : faire quelque chose pour chaque élément
 
@@ -196,6 +277,12 @@ fruits.forEach((fruit, i) => {
 1. pomme
 2. poire
 ```
+
+Ligne par ligne :
+
+- `forEach` appelle la fonction une fois par élément, donc deux fois ici ;
+- au premier tour, `fruit` vaut `"pomme"` et `i` vaut 0 ; au second, `"poire"` et 1 ;
+- `${i + 1}` ajoute 1 à l'indice, pour numéroter à partir de 1.
 
 Le callback reçoit l'élément, puis son indice. Une boucle `for...of` fait le même
 travail ; choisissez celle que vous trouvez la plus lisible.
@@ -283,7 +370,27 @@ console.log(total.toFixed(2));
 Lisez de haut en bas : on garde les prix au-dessus de 3 €, on applique 10 % de remise,
 puis on additionne.
 
+**À vous :** à partir de `const prix = [5, 12, 8]`, créez avec `map` un tableau des
+prix doublés et affichez-le. Puis affichez sa somme, calculée avec `reduce`.
+
+> **Solution**
+>
+> ```javascript
+> const prix = [5, 12, 8];
+> const doubles = prix.map((p) => p * 2);
+> console.log(doubles);
+> console.log(doubles.reduce((somme, p) => somme + p, 0));
+> ```
+>
+> ```sortie
+> [ 10, 24, 16 ]
+> 50
+> ```
+
 ## Trier
+
+Ranger dans l'ordre sert partout : des notes de la plus basse à la plus haute, un
+classement, une liste de noms par ordre alphabétique.
 
 `sort` trie le tableau **sur place** (il le modifie). Avec des textes simples, il marche
 comme attendu. Avec des nombres, il y a un piège.
@@ -325,7 +432,25 @@ mots français, utilisez `(a, b) => a.localeCompare(b, "fr")` (voir
 
 > **À retenir :** pour trier des nombres, écrivez **toujours** `sort((a, b) => a - b)`.
 
+**À vous :** triez le tableau `[42, 7, 19, 3]` du plus grand au plus petit, puis
+affichez-le.
+
+> **Solution**
+>
+> ```javascript
+> const scores = [42, 7, 19, 3];
+> scores.sort((a, b) => b - a);
+> console.log(scores);
+> ```
+>
+> ```sortie
+> [ 42, 19, 7, 3 ]
+> ```
+
 ## Le spread et la décomposition
+
+Ces deux écritures courtes servent à assembler plusieurs tableaux en un seul, ou à
+sortir des éléments d'un tableau pour les ranger dans des variables bien nommées.
 
 ### Le spread : étaler un tableau
 
@@ -344,6 +469,12 @@ console.log(Math.max(...[3, 8, 1]));
 [ 'pomme', 'poire', 'carotte', 'pain' ]
 8
 ```
+
+Ligne par ligne :
+
+- `...fruits` pose `"pomme"` et `"poire"`, puis `...legumes` pose `"carotte"` ;
+- `"pain"` vient ensuite : `courses` est un nouveau tableau de quatre éléments ;
+- `Math.max(...[3, 8, 1])` revient à écrire `Math.max(3, 8, 1)` : le plus grand est 8.
 
 ### La décomposition
 
@@ -375,6 +506,11 @@ La dernière ligne échange deux variables sans variable intermédiaire.
 
 ## Fabriquer des tableaux
 
+> **Note :** cette partie peut attendre. Lisez-la quand les bases seront solides.
+
+Parfois, vous ne voulez pas écrire chaque élément à la main, par exemple les carrés des
+nombres de 0 à 4. JavaScript peut fabriquer le tableau pour vous.
+
 `Array.from` fabrique un tableau à partir d'autre chose : un texte, ou une longueur et
 une fonction. `flat` aplatit un tableau de tableaux.
 
@@ -400,6 +536,9 @@ seulement `"object"`).
 
 ## Copier ou partager ?
 
+Vous voudrez souvent garder l'original intact et travailler sur une copie, comme on
+photocopie un formulaire avant de le remplir. Encore faut-il avoir une vraie copie.
+
 Une variable ne contient pas le tableau lui-même, mais une **référence** vers lui :
 une adresse, comme une étiquette attachée à une boîte. Écrire `b = a` colle une
 deuxième étiquette sur **la même boîte**.
@@ -417,6 +556,12 @@ console.log(a === b);
 [ 1, 2, 3, 4 ]
 true
 ```
+
+Ligne par ligne :
+
+- `const b = a` ne copie rien : `b` désigne le même tableau que `a` ;
+- `b.push(4)` ajoute 4 dans ce tableau unique ;
+- `a` affiche donc aussi le 4, et `a === b` répond `true` : c'est la même boîte.
 
 Modifier `b` a modifié `a` : c'est le même tableau. Pour une vraie copie, utilisez le
 spread (ou `slice()`).
