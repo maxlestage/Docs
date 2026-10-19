@@ -35,6 +35,13 @@ Range
 4
 ```
 
+Línea por línea:
+
+- `(1..5).to_a` da todos los valores del 1 al 5, y el 5 forma parte de ellos;
+- `(1...5).to_a` se detiene justo antes del 5: el tercer punto excluye el fin;
+- `class` muestra el tipo del valor: aquí, `Range`;
+- `size` cuenta los valores: 5 para `1..5`, pero 4 para `1...5`.
+
 `to_a` convierte el rango en array. El rango en sí no guarda sus valores: solo
 conoce su inicio y su fin. Por eso `1..1_000_000` casi no ocupa espacio en
 memoria.
@@ -43,6 +50,9 @@ memoria.
 > fin hacia fuera.
 
 ## Recorrer un rango
+
+Un rango sirve a menudo para repetir una acción un número preciso de veces: dar tres
+vueltas a la pista, escribir una tabla de multiplicar.
 
 `each` pasa por cada valor, como con un array.
 
@@ -63,6 +73,13 @@ Vuelta 3
 3 × 5 = 15
 ```
 
+Línea por línea:
+
+- `(1..3).each` da a `n` el valor 1, luego 2, luego 3;
+- en cada vuelta, el bloque `{ … }` muestra «Vuelta» seguido del número;
+- `(1...4)` se detiene antes del 4: `i` vale 1, luego 2, luego 3;
+- entre `do` y `end`, el bloque calcula `i * 5` y muestra una línea de la tabla.
+
 Un rango también conoce los métodos de
 [Enumerable](blocs.md): `map`, `select`, `sum`…
 
@@ -76,7 +93,29 @@ p (1..10).select(&:even?)
 [2, 4, 6, 8, 10]
 ```
 
+**Te toca:** escribe un programa que muestre la tabla del 2, de «2 × 1 = 2» a
+«2 × 5 = 10», con un rango y `each`.
+
+> **Solución**
+>
+> ```ruby
+> (1..5).each do |i|
+>   puts "2 × #{i} = #{i * 2}"
+> end
+> ```
+>
+> ```sortie
+> 2 × 1 = 2
+> 2 × 2 = 4
+> 2 × 3 = 6
+> 2 × 4 = 8
+> 2 × 5 = 10
+> ```
+
 ## Avanzar de a pasos con step
+
+A veces no quieres todos los valores, sino uno de cada dos o uno de cada cinco, como
+cuando cuentas de 5 en 5 hasta 100.
 
 `step` salta varios valores a la vez. `%` hace lo mismo, de forma más corta.
 
@@ -95,10 +134,33 @@ puts
 10 7 4 1 
 ```
 
+Línea por línea:
+
+- `(0..20).step(5)` empieza en 0 y suma 5 cada vez: 0, 5, 10, 15, 20;
+- `((0..20) % 5)` da exactamente el mismo resultado;
+- con números decimales, el paso puede ser `0.25`;
+- `10.step(1, -3)` empieza en 10 y resta 3 en cada vuelta, sin bajar de 1.
+
 Para contar hacia atrás, un rango como `10..1` está **vacío**. Usa `step` con un paso
 negativo, `downto` o `(1..10).reverse_each`.
 
+**Te toca:** escribe un programa que muestre, en un array, los múltiplos de 3 del 0
+al 30.
+
+> **Solución**
+>
+> ```ruby
+> p (0..30).step(3).to_a
+> ```
+>
+> ```sortie
+> [0, 3, 6, 9, 12, 15, 18, 21, 24, 27, 30]
+> ```
+
 ## Comprobar la pertenencia
+
+Los programas se hacen esta pregunta todo el tiempo: «¿esta edad tiene derecho a la
+tarifa infantil?», «¿esta nota está entre 10 y 20?». Un rango responde en una línea.
 
 `include?` responde a la pregunta: «¿está este valor en el rango?»
 
@@ -116,6 +178,13 @@ false
 true
 false
 ```
+
+Línea por línea:
+
+- `edades_adolescentes = 13..19` guarda el rango en una variable, como cualquier valor;
+- 15 está entre 13 y 19: `true`. 20 está más allá: `false`;
+- un rango también puede ir de un número decimal a otro: 2.1 está dentro;
+- `1...10` excluye el 10: por eso la respuesta es `false`.
 
 `cover?` hace casi lo mismo: solo compara con el inicio y el fin. La diferencia se
 ve con textos.
@@ -135,7 +204,27 @@ true
 `"bb"` no es una de las 26 letras, pero sí queda entre `"a"` y `"z"` en orden
 alfabético. `cover?` también acepta un rango entero.
 
+**Te toca:** escribe un programa que guarde `temperatura = 22` en una variable y
+luego muestre «Agradable» si está entre 18 y 25, ambos incluidos, y «No agradable» si no.
+
+> **Solución**
+>
+> ```ruby
+> temperatura = 22
+> if (18..25).include?(temperatura)
+>   puts "Agradable"
+> else
+>   puts "No agradable"
+> end
+> ```
+>
+> ```sortie
+> Agradable
+> ```
+
 ## Rangos de letras
+
+> **Nota:** esta parte puede esperar. Léela cuando las bases estén firmes.
 
 Un rango funciona con todo lo que tiene un «siguiente»: también con las letras.
 
@@ -154,6 +243,9 @@ p ("aa".."ad").to_a
 ```
 
 ## Suma, mínimo y máximo
+
+Un rango de números se resume a menudo en un solo número: el total de una serie, el
+más pequeño, el más grande. Ruby los calcula por ti, sin escribir un bucle.
 
 ```ruby
 puts (1..100).sum
@@ -207,6 +299,9 @@ Suspenso
 
 ## Cortar con un rango
 
+A menudo solo quieres una parte de una lista: los tres primeros de una clasificación,
+los últimos mensajes recibidos, el principio de una palabra.
+
 Entre corchetes, un rango toma un trozo de un array o de un texto. Las posiciones
 empiezan en 0, y `-1` es la última.
 
@@ -235,7 +330,34 @@ aguas
 paragua
 ```
 
+Línea por línea:
+
+- `letras[1..3]` toma las posiciones 1, 2 y 3: `"b"`, `"c"` y `"d"`;
+- `letras[2..]` no tiene fin: toma todo a partir de la posición 2;
+- `letras[..1]` no tiene inicio: toma todo hasta la posición 1 incluida;
+- `-2..` empieza en el penúltimo elemento y llega hasta el final;
+- con un texto es igual, letra por letra: `palabra[0..2]` da `"par"`.
+
+**Te toca:** escribe un programa que guarde los siete días de la semana en un array
+`dias` y luego muestre los cinco primeros y después los dos últimos.
+
+> **Solución**
+>
+> ```ruby
+> dias = ["lun", "mar", "mié", "jue", "vie", "sáb", "dom"]
+> p dias[0..4]
+> p dias[-2..]
+> ```
+>
+> ```sortie
+> ["lun", "mar", "mié", "jue", "vie"]
+> ["sáb", "dom"]
+> ```
+
 ## Sin fin o sin inicio
+
+Algunas categorías no tienen límite por un lado: «65 años o más», «menos de 18 años».
+Un rango sin fin o sin inicio las describe de forma sencilla.
 
 Puedes dejar un extremo vacío:
 
@@ -266,6 +388,13 @@ menor
 adulto
 mayor
 ```
+
+Línea por línea:
+
+- `(5..).first(3)` toma los tres primeros valores a partir de 5, sin buscar el fin;
+- `(..5)` contiene todo lo que es menor o igual que 5, incluso -100;
+- en `categoria`, `...18` quiere decir «menos de 18» y `65..`, «65 o más»;
+- 12 cae en el primer `when`, 40 en el segundo y 80 en el tercero.
 
 `first(3)` toma los 3 primeros valores: no llames a `to_a` sobre `5..`, nunca
 terminaría.

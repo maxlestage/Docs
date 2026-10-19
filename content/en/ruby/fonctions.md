@@ -31,6 +31,14 @@ Hello!
 Hello!
 ```
 
+Line by line:
+
+- `def greet` starts the recipe and gives it a name: `greet`;
+- `puts "Hello!"` is the content of the recipe. For now, nothing is printed;
+- `end` closes the recipe;
+- the first `greet` runs the method: "Hello!" is printed. The second one does exactly
+  the same thing again.
+
 Writing `def` does not run anything: it saves the recipe. Writing `greet` **calls** the
 method, that is, runs it.
 
@@ -39,6 +47,10 @@ method, that is, runs it.
 > called a method.
 
 ## Parameters
+
+A method that always does exactly the same thing is not very useful. To greet Alice and
+then Bob, you don't want to write two methods: you want a single recipe, with one
+ingredient that changes each time.
 
 [Parameters](../debuter/glossaire.md#parameter) are the values the method
 receives. They are empty slots, filled in at the moment of the call. The values given at
@@ -57,6 +69,13 @@ greet "Bob"
 Hello, Alice!
 Hello, Bob!
 ```
+
+Line by line:
+
+- `def greet(first_name)` creates a method with one empty slot, called `first_name`;
+- `greet("Alice")` calls the method: `first_name` receives `"Alice"`, and the sentence
+  is printed with that name;
+- `greet "Bob"` calls it a second time. This time, `first_name` is `"Bob"`.
 
 Here, `first_name` is the parameter; `"Alice"` and `"Bob"` are the arguments.
 
@@ -78,7 +97,31 @@ puts area(3, 4)
 12
 ```
 
+**Your turn:** write a method `introduce(first_name, age)` that prints a sentence like
+"My name is Léa and I am 12 years old.". Call it for Léa (12 years old), then for Tom
+(9 years old).
+
+> **Solution**
+>
+> ```ruby
+> def introduce(first_name, age)
+>   puts "My name is #{first_name} and I am #{age} years old."
+> end
+>
+> introduce("Léa", 12)
+> introduce("Tom", 9)
+> ```
+>
+> ```sortie
+> My name is Léa and I am 12 years old.
+> My name is Tom and I am 9 years old.
+> ```
+
 ## Implicit return
+
+Often, a method computes a result that you need afterwards, like a calculator that gives
+you a total. **Returning** a value means handing that result back to the code that
+called the method.
 
 A method automatically returns the value of its **last expression**. The word
 `return` is not needed in that case.
@@ -98,6 +141,14 @@ puts result
 10
 ```
 
+Line by line:
+
+- `def square(x)` saves the method. Its last line, `x * x`, gives the result;
+- `puts square(4)`: `x` is 4, the method returns 16, and `puts` prints it;
+- `result = square(3) + 1`: the method returns 9, Ruby adds 1 and stores 10 in
+  `result`;
+- `puts result` prints 10.
+
 The returned value replaces the call: `square(3) + 1` becomes `9 + 1`.
 
 `return` is mostly used to leave the method early:
@@ -116,6 +167,24 @@ puts divide(10, 0)
 5
 division impossible
 ```
+
+**Your turn:** write a method `perimeter(width, height)` that returns the perimeter of a
+rectangle (twice the width plus twice the height), without writing `return`. Print
+`perimeter(3, 4)`.
+
+> **Solution**
+>
+> ```ruby
+> def perimeter(width, height)
+>   2 * width + 2 * height
+> end
+>
+> puts perimeter(3, 4)
+> ```
+>
+> ```sortie
+> 14
+> ```
 
 ### Print or return?
 
@@ -180,6 +249,10 @@ puts largest
 
 ## Default values
 
+Some settings rarely change. At a café, if you don't say anything else, you get a
+regular coffee. A default value does the same: it saves you from repeating everything
+at each call.
+
 A parameter can have a default value. It is used if the argument is missing.
 
 ```ruby
@@ -196,7 +269,37 @@ Hello, Alice!
 Hi, Bob!
 ```
 
+Line by line:
+
+- `greeting = "Hello"`: without a second argument, `greeting` will be `"Hello"`;
+- `greet("Alice")` gives only one argument: `first_name` is `"Alice"`, and `greeting`
+  takes its default value;
+- `greet("Bob", "Hi")` gives both: `"Hi"` replaces the default value;
+- the method returns the sentence, and `puts` prints it.
+
+**Your turn:** write a method `total_price(price, quantity = 1)` that returns the price
+multiplied by the quantity. Print `total_price(5)`, then `total_price(5, 3)`.
+
+> **Solution**
+>
+> ```ruby
+> def total_price(price, quantity = 1)
+>   price * quantity
+> end
+>
+> puts total_price(5)
+> puts total_price(5, 3)
+> ```
+>
+> ```sortie
+> 5
+> 15
+> ```
+
 ## Keyword arguments
+
+When a method has several parameters, you quickly forget which one comes first. Giving
+a name to each argument is like filling in a form: each box has a label.
 
 With `name:`, an argument is given by its name. The order no longer matters.
 
@@ -222,6 +325,11 @@ puts order(quantity: 3, product: "tea")
 
 ## A variable number of arguments
 
+> **Note:** this part can wait. Read it once the basics feel solid.
+
+Sometimes, you don't know in advance how many values you will receive, like the items
+on a shopping receipt: two one day, ten the next.
+
 With `*`, a parameter receives all the remaining arguments, stored in an array.
 
 ```ruby
@@ -241,6 +349,9 @@ puts sum
 ```
 
 ## Variable scope
+
+A program quickly holds dozens of variables. If every method could touch all of them, a
+mistake in one place would break something somewhere else. Scope prevents this mix-up.
 
 The [scope](../debuter/glossaire.md#scope) of a variable is the area of the code where it
 exists. A method is a closed room: it does not see the variables created
@@ -265,10 +376,22 @@ nil
 - To give a value to a method, pass it as an argument.
 - `total` only exists inside the method: outside, `defined?(total)` answers `nil`.
 
+Line by line:
+
+- Ruby saves the method, then stores 0.2 in `tax_rate`;
+- `price_with_tax(100, tax_rate)` gives 100 to `price` and 0.2 to `rate`;
+- inside the method, `total` is `100 * 1.2`, that is 120.0. `total.round(2)` rounds it
+  to two digits after the decimal point: this is the returned value, which `puts`
+  prints;
+- after the call, `total` is gone: `defined?(total)` answers `nil`.
+
 > **Tip:** a **constant** (`TAX_RATE = 0.2`), on the other hand, is visible everywhere, even
 > inside a method.
 
 ## Names ending in ? and !
+
+These two signs warn the person reading the code, like a label on a jar: you know what
+is inside before you open it.
 
 By convention:
 
@@ -297,6 +420,11 @@ Alice
 
 ## A method that calls itself
 
+> **Note:** this part can wait. Read it once the basics feel solid.
+
+Some tasks repeat themselves in a smaller size. Counting down from 3 means saying 3,
+then counting down from 2.
+
 A method can call itself: this is
 [recursion](../debuter/glossaire.md#recursion). It needs a **base case**, otherwise it
 never stops.
@@ -322,6 +450,9 @@ Here, the base case is `n.zero?`. Each call brings `n` closer to zero.
 
 ## Passing a block with yield
 
+Sometimes, a method knows **when** to act, but not **what** to do. Imagine someone who
+says "I'll do it twice": you are the one who chooses what they do.
+
 A method can receive a **block** of code, written between `{ }` after the call.
 `yield` runs this block.
 
@@ -339,6 +470,14 @@ Hip hip hooray!
 Hip hip hooray!
 ```
 
+Line by line:
+
+- `def twice` defines a method with no parameter, which contains two `yield`;
+- `twice { puts "Hip hip hooray!" }` calls the method and gives it the block written
+  between `{ }`;
+- the first `yield` runs the block: the sentence is printed. The second `yield` runs it
+  a second time.
+
 `yield` can also pass a value to the block:
 
 ```ruby
@@ -354,6 +493,27 @@ Total: 15
 ```
 
 Blocks are explained in detail in [the page about blocks](blocs.md).
+
+**Your turn:** write a method `three_times` that runs the block it receives three times.
+Call it with a block that prints "Well done!".
+
+> **Solution**
+>
+> ```ruby
+> def three_times
+>   yield
+>   yield
+>   yield
+> end
+>
+> three_times { puts "Well done!" }
+> ```
+>
+> ```sortie
+> Well done!
+> Well done!
+> Well done!
+> ```
 
 ## Common mistakes
 

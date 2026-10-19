@@ -39,8 +39,38 @@ Passed
 - `else` runs if no question answered yes.
 - Ruby stops at the **first** true branch.
 
+Line by line:
+
+- `grade = 14` stores 14 in the variable `grade`;
+- `if grade >= 16` asks: "is 14 greater than or equal to 16?". No: Ruby skips this
+  block;
+- `elsif grade >= 10` asks: "is 14 greater than or equal to 10?". Yes: Ruby prints
+  "Passed";
+- one branch answered yes: Ruby skips the `else` and carries on after the `end`.
+
 Comparisons (`==`, `!=`, `<`, `>`, `<=`, `>=`) are introduced in
 [first steps](premiers-pas.md).
+
+**Your turn:** write a program that stores `hour = 15` in a variable, then prints
+"Good morning" if the hour is before 12, "Good afternoon" if it is before 18, and
+"Good evening" otherwise.
+
+> **Solution**
+>
+> ```ruby
+> hour = 15
+> if hour < 12
+>   puts "Good morning"
+> elsif hour < 18
+>   puts "Good afternoon"
+> else
+>   puts "Good evening"
+> end
+> ```
+>
+> ```sortie
+> Good afternoon
+> ```
 
 ### The short form
 
@@ -76,6 +106,9 @@ failed
 
 ## unless
 
+Sometimes the question comes more naturally the other way round: "if they are **not**
+logged in, ask them to log in". `unless` lets you write it the way you would say it.
+
 `unless` is the opposite of `if`: the code runs if the condition
 is **false**.
 
@@ -91,6 +124,9 @@ Please log in.
 > **Tip:** avoid `unless` with `else`: it is hard to read. Use `if` instead.
 
 ## Combining conditions
+
+A decision often depends on several things at once. To get into the museum for free,
+you must be young **and** a member. These three signs join several tests into one.
 
 `&&` means "and", `||` means "or", `!` means "not".
 
@@ -112,6 +148,14 @@ Free entry
 Full price
 ```
 
+Line by line:
+
+- `age` is 20 and `member` is `true`;
+- line 3: `age < 26` is true **and** `member` is true: "Free entry" is printed;
+- line 4: `!member` turns `true` into `false`: nothing is printed;
+- line 5: 20 is neither less than 18 nor greater than 65: the `||` is false;
+- line 6: the same condition is false, and `unless` acts precisely when it is false.
+
 `&&` comes before `||`, just as `*` comes before `+`. Add parentheses to be
 clear:
 
@@ -129,7 +173,28 @@ Discount
 > **Note:** Ruby also knows `and`, `or` and `not`. They don't have the same precedence
 > as `&&` and `||`: as a beginner, use only `&&`, `||` and `!`.
 
+**Your turn:** write a program that stores `age = 70` in a variable, then prints
+"Reduced price" if the age is less than 18 or greater than or equal to 65, and
+"Full price" otherwise.
+
+> **Solution**
+>
+> ```ruby
+> age = 70
+> if age < 18 || age >= 65
+>   puts "Reduced price"
+> else
+>   puts "Full price"
+> end
+> ```
+>
+> ```sortie
+> Reduced price
+> ```
+
 ## The ternary operator
+
+> **Note:** this part can wait. Read it once the basics feel solid.
 
 `condition ? value_if_true : value_if_false` chooses a value in one line.
 
@@ -146,6 +211,10 @@ minor
 Read it as a question: "age ≥ 18? if yes adult, otherwise minor".
 
 ## case and when
+
+Think of a drinks machine: depending on the button you press, it serves a different
+drink. When one value can take many forms (a day, a choice in a menu), you want a
+reaction for each one.
 
 `case` compares a value with several possibilities. It is easier to read than a long
 series of `elsif`.
@@ -169,6 +238,14 @@ Weekend!
 - A comma in `when` means "or".
 - `else` is used if no `when` matches.
 
+Line by line:
+
+- `day` is `"saturday"`;
+- `case day` announces the value to compare;
+- first `when`: is `day` equal to `"saturday"` or `"sunday"`? Yes: Ruby prints
+  "Weekend!";
+- the other `when`s and the `else` are skipped, just like with `elsif`.
+
 `when` also accepts ranges:
 
 ```ruby
@@ -188,6 +265,10 @@ fair
 `then` lets you write the answer on the same line as `when`.
 
 ## Ranges
+
+Grades from 10 to 14, days from 1 to 31, letters from a to e: we often talk about
+values that follow each other. A range names them all at once, without writing them
+one by one.
 
 A range (`Range`) goes from one value to another. `1..5` includes 5, `1...5` excludes it.
 
@@ -209,6 +290,9 @@ true
 
 ## The while loop
 
+Imagine you are asked to print the numbers from 1 to 100. Writing 100 `puts` would be
+long and tedious. A loop does this repetitive work for you.
+
 A [loop](../debuter/glossaire.md#loop) repeats code. Each pass is called a
 **turn** (or an [iteration](../debuter/glossaire.md#iteration)).
 
@@ -228,11 +312,45 @@ Turn 2
 Turn 3
 ```
 
+Line by line:
+
+- `counter = 1`: the variable is 1 at the start;
+- `while counter <= 3`: before each turn, Ruby asks the question. `1 <= 3` is true: it
+  enters the loop;
+- the block prints "Turn 1", then `counter += 1` adds 1: `counter` is now 2;
+- Ruby goes back up to the `while` and asks again, with 2, then with 3;
+- when `counter` is 4, `4 <= 3` is false: Ruby leaves the loop, after the `end`.
+
 > **Warning:** if the condition always stays true, the loop never stops
 > (an **infinite loop**). Here, forgetting `counter += 1` would make the program run
 > forever. Stop it with Ctrl+C.
 
+**Your turn:** write a program that prints the numbers from 1 to 5 with a `while`
+loop, then "Done!".
+
+> **Solution**
+>
+> ```ruby
+> n = 1
+> while n <= 5
+>   puts n
+>   n += 1
+> end
+> puts "Done!"
+> ```
+>
+> ```sortie
+> 1
+> 2
+> 3
+> 4
+> 5
+> Done!
+> ```
+
 ## The until loop
+
+> **Note:** this part can wait. Read it once the basics feel solid.
 
 `until` repeats **until** the condition becomes true.
 
@@ -273,6 +391,16 @@ Total: 14
 Done: 21
 ```
 
+Line by line:
+
+- `total` is 0 at the start;
+- first turn: `total += 7` gives 7. `7 > 20` is false: no `break`, and the `puts`
+  prints 7;
+- second turn: `total` is 14, same path;
+- third turn: `total` is 21. `21 > 20` is true: `break` leaves the loop before the
+  `puts`;
+- Ruby carries on after the `end` and prints "Done: 21".
+
 ## times and each
 
 In Ruby, people often prefer `times` and `each` to classic loops. You have no
@@ -292,11 +420,34 @@ i is 2
 30
 ```
 
+Line by line:
+
+- `3.times` runs the block three times: `i` is 0, then 1, then 2;
+- `(1..3).each` takes each number of the range, one by one, and stores it in `n`;
+- the block prints `n * 10`: 10, then 20, then 30.
+
 The code between `{ }` is a **block**. Between the bars `|i|`, you name the value that
 the block receives at each turn.
 
 > **Remember:** `times` counts from `0`. `each` goes through each element of a
 > collection. To learn more, read [blocks](blocs.md).
+
+**Your turn:** write a program that prints the 7 times table, from "7 x 1 = 7" to
+"7 x 5 = 35", one line per calculation, with `each` on a range.
+
+> **Solution**
+>
+> ```ruby
+> (1..5).each { |i| puts "7 x #{i} = #{7 * i}" }
+> ```
+>
+> ```sortie
+> 7 x 1 = 7
+> 7 x 2 = 14
+> 7 x 3 = 21
+> 7 x 4 = 28
+> 7 x 5 = 35
+> ```
 
 ### Counting with upto, downto and step
 
@@ -343,6 +494,10 @@ end
 
 ## break and next
 
+Sometimes you want to change the course of a loop along the way: stop searching as
+soon as you have found something, or ignore some elements. That is the job of these
+two words.
+
 `break` stops the loop. `next` goes straight to the next turn.
 
 ```ruby
@@ -362,6 +517,15 @@ end
 
 - For `2`, `4`, `6`: `next` skips the rest of the turn.
 - For `9`: `break` stops everything.
+
+Line by line:
+
+- `(1..10).each` gives `n` the values 1, 2, 3… up to 10;
+- `n.even?` asks "is `n` even?". If so, `next` moves on to the next turn: the `puts`
+  is not reached;
+- `break if n > 7`: as soon as `n` goes past 7 (here, at 9), the loop stops: 9 and 10
+  are never printed;
+- otherwise, `puts n` prints the number.
 
 ## Common mistakes
 

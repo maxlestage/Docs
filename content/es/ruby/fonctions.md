@@ -31,6 +31,14 @@ saludar
 ¡Hola!
 ```
 
+Línea por línea:
+
+- `def saludar` empieza la receta y le da un nombre: `saludar`;
+- `puts "¡Hola!"` es el contenido de la receta. Por ahora, no se muestra nada;
+- `end` cierra la receta;
+- el primer `saludar` ejecuta el método: se muestra «¡Hola!». El segundo vuelve a hacer
+  exactamente lo mismo.
+
 Escribir `def` no ejecuta nada: guarda la receta. Escribir `saludar` **llama** al
 método, es decir, lo ejecuta.
 
@@ -39,6 +47,10 @@ método, es decir, lo ejecuta.
 > de método.
 
 ## Los parámetros
+
+Un método que siempre hace exactamente lo mismo sirve de poco. Para saludar a Alicia y
+luego a Bob, no quieres escribir dos métodos: quieres una sola receta, con un
+ingrediente que cambia cada vez.
 
 Los [parámetros](../debuter/glossaire.md#parametro) son los valores que el método
 recibe. Son casillas vacías, que se rellenan en el momento de la llamada. Los valores dados en
@@ -57,6 +69,13 @@ saludar "Bob"
 ¡Hola, Alicia!
 ¡Hola, Bob!
 ```
+
+Línea por línea:
+
+- `def saludar(nombre)` crea un método con una casilla vacía, llamada `nombre`;
+- `saludar("Alicia")` llama al método: `nombre` recibe `"Alicia"`, y la frase se
+  muestra con ese nombre;
+- `saludar "Bob"` lo llama una segunda vez. Esta vez, `nombre` vale `"Bob"`.
 
 Aquí, `nombre` es el parámetro; `"Alicia"` y `"Bob"` son los argumentos.
 
@@ -78,7 +97,31 @@ puts area(3, 4)
 12
 ```
 
+**Te toca:** escribe un método `presentar(nombre, edad)` que muestre una frase
+como «Me llamo Lea y tengo 12 años.». Llámalo para Lea (12 años) y luego para Tom
+(9 años).
+
+> **Solución**
+>
+> ```ruby
+> def presentar(nombre, edad)
+>   puts "Me llamo #{nombre} y tengo #{edad} años."
+> end
+>
+> presentar("Lea", 12)
+> presentar("Tom", 9)
+> ```
+>
+> ```sortie
+> Me llamo Lea y tengo 12 años.
+> Me llamo Tom y tengo 9 años.
+> ```
+
 ## El retorno implícito
+
+A menudo, un método calcula un resultado que necesitas después, como una calculadora
+que te da un total. **Devolver** un valor es entregar ese resultado al código que llamó
+al método.
 
 Un método devuelve automáticamente el valor de su **última expresión**. La palabra
 `return` es inútil en ese caso.
@@ -98,6 +141,14 @@ puts resultado
 10
 ```
 
+Línea por línea:
+
+- `def cuadrado(x)` guarda el método. Su última línea, `x * x`, da el resultado;
+- `puts cuadrado(4)`: `x` vale 4, el método devuelve 16, y `puts` lo muestra;
+- `resultado = cuadrado(3) + 1`: el método devuelve 9, Ruby suma 1 y guarda 10 en
+  `resultado`;
+- `puts resultado` muestra 10.
+
 El valor devuelto reemplaza a la llamada: `cuadrado(3) + 1` se convierte en `9 + 1`.
 
 `return` sirve sobre todo para salir antes del método:
@@ -116,6 +167,24 @@ puts dividir(10, 0)
 5
 división imposible
 ```
+
+**Te toca:** escribe un método `perimetro(ancho, alto)` que devuelva el perímetro de un
+rectángulo (dos veces el ancho más dos veces el alto), sin escribir `return`. Muestra
+`perimetro(3, 4)`.
+
+> **Solución**
+>
+> ```ruby
+> def perimetro(ancho, alto)
+>   2 * ancho + 2 * alto
+> end
+>
+> puts perimetro(3, 4)
+> ```
+>
+> ```sortie
+> 14
+> ```
 
 ### ¿Mostrar o devolver?
 
@@ -180,6 +249,9 @@ puts mayor
 
 ## Los valores por defecto
 
+Algunos ajustes cambian poco. En una cafetería, si no dices nada más, te sirven un café
+normal. Un valor por defecto hace lo mismo: te evita repetirlo todo en cada llamada.
+
 Un parámetro puede tener un valor por defecto. Se usa si falta el argumento.
 
 ```ruby
@@ -196,7 +268,38 @@ puts saludar("Bob", "Buenas")
 ¡Buenas, Bob!
 ```
 
+Línea por línea:
+
+- `saludo = "Hola"`: sin segundo argumento, `saludo` valdrá `"Hola"`;
+- `saludar("Alicia")` solo da un argumento: `nombre` vale `"Alicia"`, y `saludo` toma
+  su valor por defecto;
+- `saludar("Bob", "Buenas")` da los dos: `"Buenas"` reemplaza el valor por defecto;
+- el método devuelve la frase, y `puts` la muestra.
+
+**Te toca:** escribe un método `precio_total(precio, cantidad = 1)` que devuelva el
+precio multiplicado por la cantidad. Muestra `precio_total(5)` y luego
+`precio_total(5, 3)`.
+
+> **Solución**
+>
+> ```ruby
+> def precio_total(precio, cantidad = 1)
+>   precio * cantidad
+> end
+>
+> puts precio_total(5)
+> puts precio_total(5, 3)
+> ```
+>
+> ```sortie
+> 5
+> 15
+> ```
+
 ## Los argumentos con nombre
+
+Cuando un método tiene varios parámetros, olvidas rápido cuál va primero. Dar un nombre
+a cada argumento es como rellenar un formulario: cada casilla lleva una etiqueta.
 
 Con `nombre:`, un argumento se da por su nombre. El orden ya no importa.
 
@@ -222,6 +325,11 @@ puts pedido(cantidad: 3, producto: "té")
 
 ## Un número variable de argumentos
 
+> **Nota:** esta parte puede esperar. Léela cuando las bases estén firmes.
+
+A veces no sabes de antemano cuántos valores vas a recibir, como los artículos de un
+ticket de compra: dos un día, diez al siguiente.
+
 Con `*`, un parámetro recibe todos los argumentos restantes, guardados en un array.
 
 ```ruby
@@ -241,6 +349,9 @@ puts suma
 ```
 
 ## El ámbito de las variables
+
+Un programa tiene enseguida decenas de variables. Si cada método pudiera tocarlas
+todas, un error en un sitio rompería algo en otro. El ámbito evita esa mezcla.
 
 El [ámbito](../debuter/glossaire.md#ambito) de una variable es la zona del código donde
 existe. Un método es una habitación cerrada: no ve las variables creadas
@@ -265,10 +376,21 @@ nil
 - Para darle un valor a un método, pásalo como argumento.
 - `total` solo existe dentro del método: fuera, `defined?(total)` responde `nil`.
 
+Línea por línea:
+
+- Ruby guarda el método y luego guarda 0.2 en `tasa_iva`;
+- `precio_con_iva(100, tasa_iva)` da 100 a `precio` y 0.2 a `tasa`;
+- dentro del método, `total` vale `100 * 1.2`, es decir 120.0. `total.round(2)`
+  redondea a dos cifras decimales: es el valor devuelto, que `puts` muestra;
+- después de la llamada, `total` ha desaparecido: `defined?(total)` responde `nil`.
+
 > **Consejo:** una **constante** (`TASA_IVA = 0.2`), en cambio, es visible en todas partes,
 > incluso dentro de un método.
 
 ## Los nombres con ? y con !
+
+Estos dos signos avisan a quien lee el código, como una etiqueta en un tarro: sabes lo
+que contiene antes de abrirlo.
 
 Por convención:
 
@@ -297,6 +419,11 @@ Alicia
 
 ## Un método que se llama a sí mismo
 
+> **Nota:** esta parte puede esperar. Léela cuando las bases estén firmes.
+
+Algunas tareas se repiten en más pequeño. Contar hacia atrás desde 3 es decir 3 y luego
+contar hacia atrás desde 2.
+
 Un método puede llamarse a sí mismo: es la
 [recursión](../debuter/glossaire.md#recursion). Hace falta un **caso base**, si no
 nunca se detiene.
@@ -322,6 +449,9 @@ Aquí, el caso base es `n.zero?`. Cada llamada acerca `n` a cero.
 
 ## Pasar un bloque con yield
 
+A veces, un método sabe **cuándo** actuar, pero no **qué** hacer. Imagina a alguien que
+dice «lo hago dos veces»: eres tú quien elige lo que hace.
+
 Un método puede recibir un **bloque** de código, escrito entre `{ }` después de la llamada.
 `yield` («ceder el paso») ejecuta ese bloque.
 
@@ -339,6 +469,14 @@ dos_veces { puts "¡Hip, hip, hurra!" }
 ¡Hip, hip, hurra!
 ```
 
+Línea por línea:
+
+- `def dos_veces` define un método sin parámetros, que contiene dos `yield`;
+- `dos_veces { puts "¡Hip, hip, hurra!" }` llama al método y le da el bloque escrito
+  entre `{ }`;
+- el primer `yield` ejecuta el bloque: se muestra la frase. El segundo `yield` lo
+  ejecuta una segunda vez.
+
 `yield` también puede pasar un valor al bloque:
 
 ```ruby
@@ -354,6 +492,27 @@ Total: 15
 ```
 
 Los bloques se explican en detalle en [la página sobre los bloques](blocs.md).
+
+**Te toca:** escribe un método `tres_veces` que ejecute tres veces el bloque que
+recibe. Llámalo con un bloque que muestre «¡Bravo!».
+
+> **Solución**
+>
+> ```ruby
+> def tres_veces
+>   yield
+>   yield
+>   yield
+> end
+>
+> tres_veces { puts "¡Bravo!" }
+> ```
+>
+> ```sortie
+> ¡Bravo!
+> ¡Bravo!
+> ¡Bravo!
+> ```
 
 ## Errores frecuentes
 
