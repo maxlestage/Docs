@@ -67,7 +67,7 @@ jour la liste ci-dessous, puis publie.
 ### Python
 - [x] `sqlite` — Une base de données avec sqlite3 (exécutable : base en mémoire)
 - [ ] `collections-avancees` — namedtuple, deque, heapq, bisect, Counter en détail
-- [ ] `contextes` — Les gestionnaires de contexte (with, contextlib)
+- [x] `contextes` — Les gestionnaires de contexte (with, contextlib)
 - [ ] `logging` — Journaliser avec logging
 - [ ] `donnees` — Analyser des données (csv + statistics ; pandas en `norun`)
 
@@ -79,16 +79,17 @@ jour la liste ci-dessous, puis publie.
 
 ### TypeScript
 - [x] `nombres` — Nombres et calculs en TypeScript
-- [ ] `regex` — Les expressions régulières typées
+- [x] `regex` — Les expressions régulières typées
 - [ ] `dates` — Dates et heures
 - [ ] `ligne-de-commande` — Un outil en ligne de commande typé
 - [ ] `decorateurs` — Les décorateurs (TypeScript 5)
 
 ### Go
+- [ ] `templates` — Générer du texte et du HTML avec text/template et html/template
 - [x] `context` — Annuler et limiter dans le temps avec context
 - [ ] `sync` — sync.Once, RWMutex, atomic, errgroup (norun)
 - [ ] `base-de-donnees` — database/sql (norun) et un stockage en mémoire testable
-- [ ] `embed` — Embarquer des fichiers avec embed
+- [x] `embed` — Embarquer des fichiers avec embed
 
 ### Ruby
 - [x] `base-de-donnees` — SQLite et ActiveRecord (norun) ; un stockage en mémoire testable
@@ -127,6 +128,7 @@ l'ordre des parcours (une ligne par lot de 3 à 5 pages, dans les deux langues) 
 - [ ] Débuter : `variables`, `logique`, `boucles`, `fonctions`, `donnees`, `lire-une-erreur`, `bloque`
 - [ ] Chaque langage : `pieges`, `exercices-faciles`
 - [ ] Débuter : `bases-de-donnees`, `securite`, `open-source`, `metiers`
+- [ ] Nouveaux chapitres : Python `contextes`, TypeScript `regex`, Go `embed`
 - [ ] Puis le reste de chaque parcours, dans l'ordre de `src/catalog.rs`
 
 ### Pour tous
@@ -144,3 +146,4 @@ l'ordre des parcours (une ligne par lot de 3 à 5 pages, dans les deux langues) 
 - 2026-10-19 — Le site en trois langues (FR, EN, ES) : interface traduite, 39 pages traduites dans chaque langue.
 - 2026-10-19 — Traductions EN et ES de Python : `nombres`, `texte`, `collections`, `dictionnaires`, `comprehensions` (10 pages, 182 exemples vérifiés).
 - 2026-10-19 — Session principale : 32 pages de plus pour les débutants qui peinent (Débuter : les notions de base ; pièges et exercices faciles dans chaque langage) et 11 chapitres de la liste.
+- 2026-10-19 — Trois chapitres : Python `contextes`, TypeScript `regex`, Go `embed` (37 exemples exécutés, et les exemples `norun` vérifiés à la main). `go/context` et `rust/traits-objets`, pris par la session principale, ont été laissés.

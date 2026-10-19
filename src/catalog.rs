@@ -90,6 +90,7 @@ pub static TRACKS: [Track; 8] = [
             "iterateurs",
             "decorateurs",
             "erreurs",
+            "contextes",
             "modules",
             "fichiers",
             "formats",
@@ -110,8 +111,8 @@ pub static TRACKS: [Track; 8] = [
         parts: &[
             (0, "Les bases"),
             (9, "Aller plus loin"),
-            (16, "Le monde réel"),
-            (24, "Bien programmer"),
+            (17, "Le monde réel"),
+            (25, "Bien programmer"),
         ],
     },
     Track {
@@ -193,6 +194,7 @@ pub static TRACKS: [Track; 8] = [
             "migrer",
             "fichiers",
             "formats",
+            "regex",
             "web",
             "tests",
             "debogage",
@@ -206,7 +208,7 @@ pub static TRACKS: [Track; 8] = [
             (0, "Les bases"),
             (7, "Les types en profondeur"),
             (14, "Le monde réel"),
-            (20, "Bien programmer"),
+            (21, "Bien programmer"),
         ],
     },
     Track {
@@ -236,6 +238,7 @@ pub static TRACKS: [Track; 8] = [
             "concurrence",
             "canaux",
             "fichiers",
+            "embed",
             "formats",
             "regex",
             "dates",
@@ -253,7 +256,7 @@ pub static TRACKS: [Track; 8] = [
             (0, "Les bases"),
             (8, "Aller plus loin"),
             (14, "Le monde réel"),
-            (22, "Bien programmer"),
+            (23, "Bien programmer"),
         ],
     },
     Track {
