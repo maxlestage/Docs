@@ -63,22 +63,15 @@ Voici l'idée en Ruby pur, sans Rails. Chaque rôle est une petite
 
 ```ruby
 class Cuisine # le modèle
-  def self.plats
-    ["Soupe", "Gratin", "Tarte"]
-  end
+  def self.plats = ["Soupe", "Gratin", "Tarte"]
 end
 
 class Carte # la vue
-  def self.afficher(plats)
-    plats.map { |p| "- #{p}" }.join("\n")
-  end
+  def self.afficher(plats) = plats.map { |p| "- #{p}" }.join("\n")
 end
 
 class Serveur # le contrôleur
-  def commande
-    plats = Cuisine.plats
-    Carte.afficher(plats)
-  end
+  def commande = Carte.afficher(Cuisine.plats)
 end
 
 puts Serveur.new.commande
@@ -104,38 +97,19 @@ d'Internet : elles ne sont pas exécutées ici.
 
 ```sh
 gem install rails
-rails --version
-```
-
-```text
-Successfully installed rails-8.0.2
-1 gem installed
-Rails 8.0.2
-```
-
-Le numéro de version peut être différent chez vous.
-
-### rails new
-
-`rails new` construit la maison : des dizaines de dossiers et de fichiers.
-
-```sh
 rails new blog
 ```
 
 ```text
-      create
+Successfully installed rails-8.0.2
       create  README.md
-      create  Rakefile
-      create  config.ru
-      create  Gemfile
       create  app/controllers/application_controller.rb
       ...
-         run  bundle install
 Bundle complete! 22 Gemfile dependencies, 108 gems now installed.
 ```
 
-Le `...` cache beaucoup de lignes. Voici les pièces qui comptent pour débuter :
+Les numéros de version peuvent être différents chez vous. `rails new` construit la maison : des dizaines de dossiers et de fichiers. Voici les
+pièces qui comptent pour débuter :
 
 ```text
 blog/
@@ -265,20 +239,8 @@ Deux choses à remarquer :
 - Il n'y a pas de `render` : par défaut, Rails affiche la vue qui porte le même nom
   que l'action, ici `app/views/articles/index.html.erb`.
 
-La commande `bin/rails generate` peut écrire ces fichiers pour vous :
-
-```sh
-bin/rails generate controller Articles index
-```
-
-```text
-      create  app/controllers/articles_controller.rb
-       route  get "articles/index"
-      invoke  erb
-      create    app/views/articles
-      create    app/views/articles/index.html.erb
-      ...
-```
+La commande `bin/rails generate controller Articles index` écrit ces deux fichiers
+pour vous.
 
 > **À retenir :** une action de contrôleur prépare les données dans des variables `@…`,
 > puis Rails affiche la vue du même nom.
@@ -364,14 +326,9 @@ range dans une [base de données](base-de-donnees.md). C'est le travail du **mod
 bin/rails generate model Article titre:string contenu:text
 ```
 
-```text
-      invoke  active_record
-      create    db/migrate/20261019120000_create_articles.rb
-      create    app/models/article.rb
-      ...
-```
-
-Le long nombre est la date et l'heure de création : il change chez vous.
+Cette commande crée `app/models/article.rb` et une migration
+`db/migrate/20261019120000_create_articles.rb`. Le long nombre est la date et l'heure de
+création : il change chez vous.
 
 ### La migration : le plan de la table
 
@@ -425,57 +382,29 @@ class Article < ApplicationRecord
 end
 ```
 
-`validates` ajoute une règle : un article sans titre est refusé. Testez dans la console
-(`bin/rails console`) :
-
-```ruby norun
-Article.create(titre: "Bonjour Rails", contenu: "Mon premier article")
-Article.count
-Article.first.titre
-Article.new(titre: "").valid?
-```
-
-```text
-=> #<Article id: 1, titre: "Bonjour Rails", contenu: "Mon premier article", ...>
-=> 1
-=> "Bonjour Rails"
-=> false
-```
+`validates` ajoute une règle : un article sans titre est refusé. Dans la console
+(`bin/rails console`), `Article.create(titre: "Bonjour")` ajoute une ligne et
+`Article.count` répond `1`.
 
 ### L'idée en Ruby ordinaire
 
 Voici un modèle de poche, sans base de données : un tableau garde les lignes.
 
 ```ruby
-class Article
-  attr_reader :id, :titre
+Article = Struct.new(:id, :titre)
+LIGNES = [] # la « table »
 
-  @lignes = []
-
-  class << self
-    def create(titre:)
-      return nil if titre.to_s.empty? # la règle « titre obligatoire »
-      article = new(@lignes.size + 1, titre)
-      @lignes << article
-      article
-    end
-
-    def all = @lignes
-    def count = @lignes.size
-  end
-
-  def initialize(id, titre)
-    @id = id
-    @titre = titre
-  end
+def creer_article(titre)
+  return nil if titre.empty? # la règle « titre obligatoire »
+  LIGNES << Article.new(LIGNES.size + 1, titre)
 end
 
-Article.create(titre: "Bonjour Rails")
-Article.create(titre: "")
-Article.create(titre: "Mes vacances")
+creer_article("Bonjour Rails")
+creer_article("")
+creer_article("Mes vacances")
 
-puts "Nombre : #{Article.count}"
-Article.all.each { |a| puts "#{a.id}. #{a.titre}" }
+puts "Nombre : #{LIGNES.size}"
+LIGNES.each { |a| puts "#{a.id}. #{a.titre}" }
 ```
 
 ```sortie
@@ -486,9 +415,9 @@ Nombre : 2
 
 | Étape | Appel | Titre vide ? | Lignes après |
 |-------|-------|--------------|--------------|
-| 1 | `create(titre: "Bonjour Rails")` | non | 1 ligne |
-| 2 | `create(titre: "")` | oui → `nil`, rien n'est ajouté | 1 ligne |
-| 3 | `create(titre: "Mes vacances")` | non | 2 lignes |
+| 1 | `creer_article("Bonjour Rails")` | non | 1 ligne |
+| 2 | `creer_article("")` | oui → `nil`, rien n'est ajouté | 1 ligne |
+| 3 | `creer_article("Mes vacances")` | non | 2 lignes |
 
 Essayez : remplacez `""` par `"Une recette"`. Le compteur passe à `3` et une troisième
 ligne s'affiche.
@@ -507,19 +436,7 @@ bin/rails generate scaffold Article titre:string contenu:text
 bin/rails db:migrate
 ```
 
-```text
-      invoke  active_record
-      create    db/migrate/20261019121500_create_articles.rb
-      create    app/models/article.rb
-      invoke  resource_route
-       route    resources :articles
-      invoke  scaffold_controller
-      create    app/controllers/articles_controller.rb
-      create      app/views/articles/index.html.erb
-      ...
-```
-
-La ligne `resources :articles` crée sept routes d'un coup :
+Dans `config/routes.rb`, la ligne `resources :articles` crée sept routes d'un coup :
 
 | Adresse | Verbe | Action | Ce qu'elle fait |
 |---------|-------|--------|-----------------|
@@ -552,16 +469,6 @@ Vous tapez `http://localhost:3000/articles` et appuyez sur Entrée. Que se passe
 | 7 | la vue | remplit le modèle ERB avec `@articles` | `app/views/articles/index.html.erb` |
 | 8 | Rails | renvoie la réponse `200` avec le HTML | — |
 | 9 | le navigateur | affiche la page | — |
-
-Le terminal du serveur raconte le même voyage :
-
-```text
-Started GET "/articles" for 127.0.0.1 at 2026-10-19 12:20:00 +0200
-Processing by ArticlesController#index as HTML
-  Article Load (0.2ms)  SELECT "articles".* FROM "articles"
-  Rendered articles/index.html.erb within layouts/application (Duration: 1.4ms)
-Completed 200 OK in 9ms
-```
 
 ### Le voyage complet en Ruby ordinaire
 
@@ -630,28 +537,6 @@ No route matches [GET] "/articlez"
 
 Aucune ligne de `config/routes.rb` ne correspond. Vérifiez l'adresse, ou ajoutez la
 route. `bin/rails routes` liste toutes les routes existantes.
-
-Notre routeur maison a le même problème s'il ne vérifie pas que la route existe :
-
-```ruby norun
-ROUTES = { "/" => :accueil, "/articles" => :index }
-
-def accueil = "Bienvenue"
-def index = "Liste des articles"
-
-chemin = "/contact"
-puts send(ROUTES[chemin])
-```
-
-```text
-main.rb:7:in `<main>': nil is not a symbol nor a string (TypeError)
-
-puts send(ROUTES[chemin])
-          ^^^^^^^^^^^^^^
-```
-
-`ROUTES["/contact"]` vaut `nil`. Testez `if action` avant d'appeler `send`, comme dans
-la section sur les routes.
 
 ### Oublier de remplir la variable de la vue
 
