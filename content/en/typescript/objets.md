@@ -466,7 +466,7 @@ Line by line:
 
 `[subject: string]: number` reads: "for any string key, a number value". The word
 `subject` is only a name for documentation. It's the same thing as
-`Record<string, number>`, seen in [arrays](collections.md#record-a-key-value-object).
+`Record<string, number>`, seen in [Map, Set and Record](map-set.md#record-a-key-value-object).
 
 > **Warning:** TypeScript announces `grades.history` as a `number`, but the key
 > doesn't exist: the value is `undefined`. With an index signature, check that a key

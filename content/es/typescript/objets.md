@@ -467,7 +467,7 @@ Línea por línea:
 
 `[asignatura: string]: number` se lee: «para cualquier clave de texto, un valor
 numérico». La palabra `asignatura` es solo un nombre para la documentación. Es lo
-mismo que `Record<string, number>`, visto en [los arrays](collections.md#record-un-objeto-clave-valor).
+mismo que `Record<string, number>`, visto en [Map, Set y Record](map-set.md#record-un-objeto-clave-valor).
 
 > **Atención:** TypeScript anuncia `notas.historia` como un `number`, pero la clave no
 > existe: el valor es `undefined`. Con una firma de índice, comprueba que una clave
