@@ -83,11 +83,9 @@ Suivons le deuxième appel, `Salutations.bonjour("Bob", langue: :en)` :
 | 2 | `FORMULES.fetch(langue)` | `"Bob"` | `:en` | `"Hello"` | — |
 | 3 | `"#{formule}, #{nom} !"` | `"Bob"` | `:en` | `"Hello"` | `"Hello, Bob !"` |
 
-- `self.bonjour` : la méthode s'appelle sur le module lui-même, `Salutations.bonjour`.
-- `langue: :fr` est un argument nommé, avec `:fr` par défaut (voir
-  [les fonctions](fonctions.md)).
-- `fetch` lève une erreur si la langue n'existe pas : mieux vaut une erreur claire
-  qu'un `nil` silencieux.
+- `self.bonjour` s'appelle sur le module lui-même : `Salutations.bonjour`.
+- `langue: :fr` est un argument nommé, `:fr` par défaut (voir [les fonctions](fonctions.md)).
+- `fetch` lève une erreur claire si la langue n'existe pas.
 
 Essayez : ajoutez `it: "Ciao"` dans `FORMULES`, puis appelez
 `Salutations.bonjour("Léa", langue: :it)`. Vous obtenez `Ciao, Léa !`.
@@ -112,16 +110,8 @@ puts "salutations version #{Salutations::VERSION}"
 salutations version 0.1.0
 ```
 
-Le fichier principal charge ce fichier avec `require_relative` :
-
-```ruby norun
-# lib/salutations.rb
-require_relative "salutations/version"
-
-module Salutations
-  # ... le code vu plus haut
-end
-```
+Le fichier principal `lib/salutations.rb` le charge en première ligne :
+`require_relative "salutations/version"`.
 
 Pourquoi un fichier à part ? Parce que le gemspec doit lire la version **sans** charger
 tout le code. C'est comme écrire le numéro du colis sur un post-it collé dehors : on le
@@ -144,20 +134,13 @@ Creating gem 'salutations'...
       create  salutations/Gemfile
       create  salutations/lib/salutations.rb
       create  salutations/lib/salutations/version.rb
-      create  salutations/sig/salutations.rbs
+      ...
       create  salutations/salutations.gemspec
-      create  salutations/Rakefile
-      create  salutations/README.md
-      create  salutations/bin/console
-      create  salutations/bin/setup
-      create  salutations/.gitignore
-      create  salutations/test/test_helper.rb
       create  salutations/test/test_salutations.rb
 Gem 'salutations' was successfully created.
 ```
 
-Bundler pose parfois des questions avant (licence, intégration continue…) : répondez
-`n` si vous hésitez. Voici le rangement obtenu :
+Bundler pose parfois des questions avant : répondez `n` si vous hésitez. Voici le rangement obtenu :
 
 ```text
 salutations/
@@ -215,8 +198,7 @@ end
 | `license` | ce que les autres ont le droit d'en faire | conseillé |
 | `require_paths` | où chercher le code pour `require` | `lib` par défaut |
 
-`Dir["lib/**/*.rb"]` veut dire : « tous les fichiers `.rb` dans `lib/` et ses
-sous-dossiers ».
+`Dir["lib/**/*.rb"]` : « tous les fichiers `.rb` de `lib/` et de ses sous-dossiers ».
 
 ### Une étiquette, c'est un objet Ruby
 
@@ -398,23 +380,18 @@ Hola, Alice !
 Publier, c'est envoyer le colis à la poste. Ces commandes ont besoin d'Internet et
 d'un compte : elles ne sont pas exécutées ici.
 
-1. Créez un compte sur [rubygems.org](https://rubygems.org/sign_up).
-2. Connectez-vous depuis le terminal, une seule fois :
+Créez d'abord un compte sur [rubygems.org](https://rubygems.org/sign_up). Ensuite,
+`gem signin` vous connecte (une seule fois) et `gem push` envoie le colis :
 
-   ```sh
-   gem signin
-   ```
+```sh
+gem signin
+gem push salutations-0.1.0.gem
+```
 
-3. Envoyez le colis :
-
-   ```sh
-   gem push salutations-0.1.0.gem
-   ```
-
-   ```text
-   Pushing gem to https://rubygems.org...
-   Successfully registered gem: salutations (0.1.0)
-   ```
+```text
+Pushing gem to https://rubygems.org...
+Successfully registered gem: salutations (0.1.0)
+```
 
 Quelques minutes plus tard, n'importe qui peut taper `gem install salutations`.
 
@@ -445,8 +422,7 @@ Les gems suivent le **versionnage sémantique** (*semver*) : trois nombres,
 | renommé `bonjour` en `saluer` | `1.5.0` | `2.0.0` |
 | la toute première version, encore instable | — | `0.1.0` |
 
-Quand un nombre monte, ceux à sa droite repassent à `0`. Une version `0.x` prévient :
-« tout peut encore changer ».
+Quand un nombre monte, ceux à sa droite repassent à `0`.
 
 ### Comparer des versions
 
@@ -542,8 +518,7 @@ Hello, Bob !
 ```
 
 `bundle exec` lance le programme avec les gems du `Gemfile`. Avec `path:`, Bundler lit
-directement le dossier : modifiez `lib/salutations.rb`, relancez, le changement est
-déjà là. Pas besoin de `gem build`.
+directement le dossier : pas besoin de `gem build`.
 
 Essayez : changez `"Hello"` en `"Hi"` dans la gem, puis relancez
 `bundle exec ruby main.rb`. Le programme affiche `Hi, Bob !`.
