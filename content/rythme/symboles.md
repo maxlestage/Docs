@@ -122,10 +122,10 @@ Rythme vous prévient, avec un avertissement :
 
 ```text
 avertissement[W006]: cette comparaison est toujours fausse : Symbol et Text ne sont jamais égaux
- --> main.ry:2:16
+ --> main.ry:2:15
   |
 2 | print(reponse == "oui")
-  |                ^^ Symbol == Text "oui"
+  |               ^^ Symbol == Text "oui"
   |
   = aide: des valeurs de natures différentes ne sont jamais égales : Rythme ne convertit jamais les valeurs en silence
 ```
@@ -429,22 +429,22 @@ Collez les deux points au nom : `etat = :fait`.
 ### Oublier l'espace dans un enregistrement
 
 ```rythme norun
-tache = {etat:fait}
+tache = {etat:termine}
 ```
 
 ```text
-erreur[E003]: nom inconnu `fait`
+erreur[E003]: nom inconnu `termine`
  --> main.ry:1:15
   |
-1 | tache = {etat:fait}
-  |               ^^^^ non défini
+1 | tache = {etat:termine}
+  |               ^^^^^^^ non défini
   |
-  = aide: définissez-le avant de l'utiliser : `fait = ...` ou `fn fait(...) = ...`
+  = aide: définissez-le avant de l'utiliser : `termine = ...` ou `fn termine(...) = ...`
   = en savoir plus : `rythme explain E003`
 ```
 
 Juste après un nom de champ, `:` sépare le champ de sa valeur. Ici, la
-valeur est le **nom** `fait`, qui n'existe pas. Écrivez `{etat: :fait}`,
+valeur est le **nom** `termine`, qui n'existe pas. Écrivez `{etat: :termine}`,
 avec deux `:` et une espace entre eux.
 
 ### Un match sans cas pour tout le reste
