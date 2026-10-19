@@ -411,56 +411,14 @@ problème, on range le message de `rusqlite` dedans.
 ## Écrire le reste du programme une seule fois
 
 Voici une fonction qui travaille avec **n'importe quel** dépôt. Elle reçoit
-`&mut impl Depot` : « quelque chose qui tient les promesses de `Depot` » (voir
+`&impl Depot` : « quelque chose qui tient les promesses de `Depot` » (voir
 [Les génériques](generiques.md)). Elle ne sait pas si c'est une `HashMap` ou SQLite.
 
-```rust
-use std::collections::HashMap;
+Ajoutez-la au programme de la section [Un dépôt en mémoire avec une
+HashMap](#un-depot-en-memoire-avec-une-hashmap), et ajoutez les lignes de test à la fin
+de `main` :
 
-#[derive(Debug, Clone, PartialEq)]
-struct Livre {
-    id: u32,
-    titre: String,
-    pages: u32,
-}
-
-#[derive(Debug, PartialEq)]
-enum ErreurDepot {
-    Introuvable(u32),
-}
-
-trait Depot {
-    fn ajouter(&mut self, titre: &str, pages: u32) -> Result<u32, ErreurDepot>;
-    fn trouver(&self, id: u32) -> Result<Livre, ErreurDepot>;
-    fn tous(&self) -> Result<Vec<Livre>, ErreurDepot>;
-    fn supprimer(&mut self, id: u32) -> Result<(), ErreurDepot>;
-}
-
-struct DepotMemoire {
-    livres: HashMap<u32, Livre>,
-    prochain_id: u32,
-}
-
-impl Depot for DepotMemoire {
-    fn ajouter(&mut self, titre: &str, pages: u32) -> Result<u32, ErreurDepot> {
-        let id = self.prochain_id;
-        self.prochain_id += 1;
-        self.livres.insert(id, Livre { id, titre: titre.to_string(), pages });
-        Ok(id)
-    }
-    fn trouver(&self, id: u32) -> Result<Livre, ErreurDepot> {
-        self.livres.get(&id).cloned().ok_or(ErreurDepot::Introuvable(id))
-    }
-    fn tous(&self) -> Result<Vec<Livre>, ErreurDepot> {
-        let mut liste: Vec<Livre> = self.livres.values().cloned().collect();
-        liste.sort_by_key(|livre| livre.id);
-        Ok(liste)
-    }
-    fn supprimer(&mut self, id: u32) -> Result<(), ErreurDepot> {
-        self.livres.remove(&id).map(|_| ()).ok_or(ErreurDepot::Introuvable(id))
-    }
-}
-
+```rust norun
 // Ne connaît que le trait : marche avec tous les dépôts.
 fn pages_totales(depot: &impl Depot) -> Result<u32, ErreurDepot> {
     let mut total = 0;
@@ -471,35 +429,33 @@ fn pages_totales(depot: &impl Depot) -> Result<u32, ErreurDepot> {
 }
 
 fn main() {
-    let mut depot = DepotMemoire { livres: HashMap::new(), prochain_id: 1 };
-    depot.ajouter("Dune", 412).unwrap();
-    depot.ajouter("Le Petit Prince", 96).unwrap();
-    depot.ajouter("Bilbo", 310).unwrap();
+    // ... le début de main, comme plus haut ...
     println!("Pages à lire : {}", pages_totales(&depot).unwrap());
 
-    // Un petit test : le dépôt doit refuser un id inconnu.
+    // De petits tests : le dépôt doit refuser un id inconnu.
     assert_eq!(depot.supprimer(7), Err(ErreurDepot::Introuvable(7)));
-    assert_eq!(depot.tous().unwrap().len(), 3);
+    assert_eq!(depot.tous().unwrap().len(), 2);
     println!("Tests réussis");
 }
 ```
 
-```sortie
-Pages à lire : 818
+Les nouvelles lignes affichées à la fin :
+
+```text
+Pages à lire : 722
 Tests réussis
 ```
 
-La boucle de `pages_totales`, pas à pas :
+La boucle de `pages_totales`, pas à pas (le livre 2 a été supprimé) :
 
 | Tour | `livre.titre` | `livre.pages` | `total` après |
 |-----:|---------------|--------------:|--------------:|
 | début | | | 0 |
 | 1 | Dune | 412 | 412 |
-| 2 | Le Petit Prince | 96 | 508 |
-| 3 | Bilbo | 310 | 818 |
+| 2 | Bilbo | 310 | 722 |
 
 Les deux `assert_eq!` sont de petits tests : si l'un est faux, le programme s'arrête
-avec un message (voir [Les tests](tests.md)). Grâce au dépôt en mémoire, ces tests
+avec un message (voir [Tester son code](tests.md)). Grâce au dépôt en mémoire, ces tests
 tournent en une fraction de seconde, sans fichier ni base.
 
 Essayez : remplacez `supprimer(7)` par `supprimer(1)`. Le livre 1 existe, la méthode
@@ -736,20 +692,6 @@ called `Result::unwrap()` on an `Err` value: SqliteFailure(Error { code: Unknown
 
 Le programme compile : le SQL n'est vérifié qu'à l'exécution. Créez la table d'abord,
 avec `CREATE TABLE IF NOT EXISTS`, au moment d'ouvrir la base.
-
-### Oublier une valeur pour un trou
-
-```rust norun
-conn.execute("INSERT INTO livres (titre, pages) VALUES (?1, ?2)", params!["Dune"])
-    .unwrap();
-```
-
-```text
-called `Result::unwrap()` on an `Err` value: InvalidParameterCount(1, 2)
-```
-
-La requête a deux trous (`?1`, `?2`) mais `params!` ne donne qu'une valeur. Donnez
-autant de valeurs que de trous : `params!["Dune", 412]`.
 
 ## Testez-vous
 
