@@ -35,10 +35,21 @@ print(melange)
 ['Alice', 30, True]
 ```
 
+Ligne par ligne :
+
+- `courses` reçoit une liste de trois textes, rangés dans cet ordre ;
+- `vide = []` crée une liste sans rien dedans, prête à être remplie plus tard ;
+- `print(courses)` affiche la liste entière, avec ses crochets et ses guillemets ;
+- `len(notes)` compte les éléments de `notes` : il y en a 4.
+
 Une liste peut contenir des valeurs de types différents. En pratique, on y range
 souvent des valeurs de même nature : des notes, des noms, des prix.
 
 ## Lire un élément
+
+Une liste ne sert à rien si vous ne pouvez pas retrouver ce qu'elle contient. Comme
+on lit « la troisième ligne » d'une liste de courses, vous demandez à Python l'élément
+rangé à une position donnée.
 
 Comme pour un texte, chaque élément a un [indice](../debuter/glossaire.md#indice), qui
 commence à **0**. Les indices négatifs partent de la fin.
@@ -56,6 +67,12 @@ bleu
 jaune
 ```
 
+Ligne par ligne :
+
+- `couleurs[0]` donne le premier élément, `"rouge"` : on compte à partir de 0 ;
+- `couleurs[2]` donne donc le troisième, `"bleu"` ;
+- `couleurs[-1]` donne le dernier, `"jaune"`, quelle que soit la longueur de la liste.
+
 Contrairement à un texte, une liste est [mutable](../debuter/glossaire.md#mutable) :
 on peut changer un élément.
 
@@ -70,6 +87,10 @@ print(couleurs)
 ```
 
 ## Les tranches
+
+Parfois, vous ne voulez pas un seul élément, mais un morceau de la liste : les trois
+premiers, les deux derniers. C'est comme couper une tranche de pain sans toucher au reste
+de la miche.
 
 Une tranche `liste[début:fin]` renvoie une **nouvelle** liste avec une partie des
 éléments. La fin est exclue, exactement comme pour [le texte](texte.md).
@@ -91,7 +112,35 @@ print(nombres[::-1])
 [60, 50, 40, 30, 20, 10]
 ```
 
+Ligne par ligne :
+
+- `nombres[1:4]` prend les indices 1, 2 et 3 : la fin, 4, est exclue ;
+- `nombres[:3]` part du début, et `nombres[-2:]` va jusqu'à la fin ;
+- `nombres[::2]` prend un élément sur deux ;
+- `nombres[::-1]` parcourt la liste à l'envers.
+
+**À vous :** écrivez un programme qui range les jours de la semaine dans une liste
+`jours`, puis affiche le premier jour, le dernier, et la tranche des cinq premiers.
+
+> **Solution**
+>
+> ```python
+> jours = ["lun", "mar", "mer", "jeu", "ven", "sam", "dim"]
+> print(jours[0])
+> print(jours[-1])
+> print(jours[:5])
+> ```
+>
+> ```sortie
+> lun
+> dim
+> ['lun', 'mar', 'mer', 'jeu', 'ven']
+> ```
+
 ## Ajouter et retirer des éléments
+
+Une liste change souvent pendant la vie d'un programme : vous ajoutez un article aux
+courses, vous rayez celui que vous avez acheté. Ces méthodes font ce travail.
 
 | Méthode | Effet |
 | --- | --- |
@@ -127,9 +176,36 @@ Zoé ['Alice']
 ['Alice', 'David', 'Emma']
 ```
 
+Ligne par ligne :
+
+- `file.append("Chloé")` ajoute Chloé à la fin : la file contient trois prénoms ;
+- `file.insert(0, "Zoé")` place Zoé à l'indice 0, tout devant ; les autres reculent ;
+- `file.remove("Bob")` cherche Bob et le retire ;
+- `file.pop()` retire le dernier prénom, Chloé, et le range dans `dernier` ;
+- `file.extend(["David", "Emma"])` ajoute deux prénoms d'un coup, à la fin.
+
 Ces méthodes modifient la liste **sur place** : elles changent la liste elle-même.
 
+**À vous :** écrivez un programme qui part de `courses = ["pain", "lait"]`, ajoute
+« beurre » à la fin, retire « pain », puis affiche la liste.
+
+> **Solution**
+>
+> ```python
+> courses = ["pain", "lait"]
+> courses.append("beurre")
+> courses.remove("pain")
+> print(courses)
+> ```
+>
+> ```sortie
+> ['lait', 'beurre']
+> ```
+
 ## Chercher et mesurer
+
+Une fois la liste remplie, vous voulez lui poser des questions : « le lait est-il sur
+la liste ? », « combien y a-t-il de notes ? », « quelle est la meilleure ? ».
 
 ```python
 notes = [12, 15, 9, 18, 15]
@@ -158,6 +234,9 @@ False
 
 ## Trier : sort et sorted
 
+Trier, c'est mettre de l'ordre : classer des notes de la plus basse à la plus haute,
+ranger des prénoms dans l'ordre alphabétique, comme dans un annuaire.
+
 Il y a deux façons de trier :
 
 - `liste.sort()` trie la liste **sur place** et ne renvoie rien (`None`) ;
@@ -182,6 +261,13 @@ print(notes)
 [9, 12, 15, 18]
 [18, 15, 12, 9]
 ```
+
+Ligne par ligne :
+
+- `sorted(notes)` fabrique une nouvelle liste triée, rangée dans `triees` ;
+- `print(notes)` montre que `notes` n'a pas bougé ;
+- `notes.sort()` trie cette fois `notes` elle-même ;
+- `notes.sort(reverse=True)` la trie à nouveau, dans l'autre sens.
 
 `reverse=True` trie du plus grand au plus petit.
 
@@ -214,6 +300,8 @@ Les `lambda` sont expliquées dans [les fonctions](fonctions.md).
 
 ### Inverser l'ordre
 
+> **Note :** cette partie peut attendre. Lisez-la quand les bases seront solides.
+
 `reverse()` retourne la liste sur place. `reversed()` ou `[::-1]` donnent une version à
 l'envers sans toucher l'originale.
 
@@ -233,6 +321,9 @@ print(etapes)
 
 ## Parcourir une liste
 
+Souvent, vous voulez faire la même chose avec chaque élément : additionner tous les prix
+d'un ticket de caisse, afficher chaque nom d'une classe.
+
 La boucle `for` parcourt les éléments un par un. Elle est expliquée dans
 [conditions et boucles](conditions-boucles.md).
 
@@ -248,7 +339,33 @@ print(f"Total : {total:.2f} €")
 Total : 19.75 €
 ```
 
+Ligne par ligne :
+
+- `total = 0` prépare une variable qui va accumuler la somme ;
+- `for p in prix:` donne à `p` la valeur 4.5, puis 12.0, puis 3.25 ;
+- à chaque tour, `total += p` ajoute le prix à `total` : 4.5, puis 16.5, puis 19.75 ;
+- après la boucle, le `print` affiche le total avec deux chiffres après la virgule.
+
+**À vous :** écrivez un programme qui parcourt `notes = [12, 15, 9]` et affiche chaque
+note sur sa propre ligne, précédée de « Note : ».
+
+> **Solution**
+>
+> ```python
+> notes = [12, 15, 9]
+> for n in notes:
+>     print("Note :", n)
+> ```
+>
+> ```sortie
+> Note : 12
+> Note : 15
+> Note : 9
+> ```
+
 ## Les listes imbriquées
+
+> **Note :** cette partie peut attendre. Lisez-la quand les bases seront solides.
 
 Une liste peut contenir d'autres listes. C'est pratique pour un tableau à deux
 dimensions : une grille, un plateau de jeu.
@@ -278,6 +395,9 @@ l'élément d'indice 2 de cette ligne (`6`).
 
 ## Copier ou partager ? Le piège classique
 
+Vous voulez parfois garder une liste intacte et travailler sur un double, comme on
+photocopie un document avant d'écrire dessus. Encore faut-il avoir vraiment deux listes.
+
 Écrire `b = a` ne copie **pas** la liste. Cela colle une deuxième étiquette sur la
 **même** liste. Si vous modifiez par `b`, `a` change aussi : c'est un **alias**.
 
@@ -295,6 +415,13 @@ print(a is b)
 [1, 2, 3, 4]
 True
 ```
+
+Ligne par ligne :
+
+- `a = [1, 2, 3]` crée une liste et lui donne le nom `a` ;
+- `b = a` ne crée aucune liste : `b` devient un deuxième nom pour la même ;
+- `b.append(4)` ajoute 4 à cette liste unique ;
+- les deux `print` montrent donc la même liste, avec le 4 ; `a is b` vaut `True`.
 
 `is` vérifie si deux noms désignent le même objet. Ici, oui : il n'y a qu'une liste.
 
@@ -357,6 +484,13 @@ print(type(seul))
 <class 'tuple'>
 ```
 
+Ligne par ligne :
+
+- `point = (3, 4)` crée un tuple de deux nombres ;
+- `seul = (42,)` crée un tuple d'un seul élément, grâce à la virgule ;
+- `point[0]` et `point[1]` se lisent comme dans une liste ;
+- `type(seul)` confirme qu'il s'agit bien d'un tuple.
+
 Un tuple d'un seul élément a besoin d'une virgule : `(42,)`. Sans elle, `(42)` est
 juste le nombre 42 entre parenthèses.
 
@@ -390,7 +524,25 @@ x = 3, y = 4
 - `a, b = b, a` échange deux variables, sans variable temporaire ;
 - `*reste` ramasse tous les éléments restants dans une liste.
 
+**À vous :** écrivez un programme qui découpe le tuple `date = (14, 7, 1789)` en trois
+variables `jour`, `mois` et `annee`, puis affiche « Année : 1789 ».
+
+> **Solution**
+>
+> ```python
+> date = (14, 7, 1789)
+> jour, mois, annee = date
+> print("Année :", annee)
+> ```
+>
+> ```sortie
+> Année : 1789
+> ```
+
 ## range et les listes
+
+Il faut parfois une liste de nombres qui se suivent : de 1 à 10, ou tous les nombres
+pairs jusqu'à 20. Les taper à la main serait long, et on risquerait d'en oublier un.
 
 `range` produit une suite de nombres à la demande, sans la stocker. Pour obtenir une
 vraie liste, passez-le à `list()`.
@@ -406,6 +558,12 @@ print(sum(range(1, 101)))
 [2, 4, 6, 8, 10]
 5050
 ```
+
+Ligne par ligne :
+
+- `range(5)` donne 0, 1, 2, 3, 4 : il commence à 0 et s'arrête avant 5 ;
+- `range(2, 11, 2)` part de 2, avance de 2 en 2 et s'arrête avant 11 ;
+- `list(...)` transforme ces nombres en vraie liste, que `print` peut afficher.
 
 `sum(range(1, 101))` additionne les nombres de 1 à 100 sans créer de liste.
 

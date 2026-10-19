@@ -35,6 +35,13 @@ Range
 4
 ```
 
+Ligne par ligne :
+
+- `(1..5).to_a` donne toutes les valeurs de 1 à 5, et 5 en fait partie ;
+- `(1...5).to_a` s'arrête juste avant 5 : le troisième point exclut la fin ;
+- `class` affiche le type de la valeur : ici, `Range` ;
+- `size` compte les valeurs : 5 pour `1..5`, mais 4 pour `1...5`.
+
 `to_a` transforme l'intervalle en tableau. L'intervalle lui-même ne range pas ses
 valeurs : il ne connaît que son début et sa fin. `1..1_000_000` ne prend donc presque
 pas de place en mémoire.
@@ -43,6 +50,9 @@ pas de place en mémoire.
 > fin dehors.
 
 ## Parcourir un intervalle
+
+Un intervalle sert souvent à répéter une action un nombre précis de fois : faire trois
+tours de piste, écrire une table de multiplication.
 
 `each` passe sur chaque valeur, comme pour un tableau.
 
@@ -63,6 +73,13 @@ Tour 3
 3 × 5 = 15
 ```
 
+Ligne par ligne :
+
+- `(1..3).each` donne à `n` la valeur 1, puis 2, puis 3 ;
+- à chaque tour, le bloc `{ … }` affiche « Tour » suivi du nombre ;
+- `(1...4)` s'arrête avant 4 : `i` vaut 1, puis 2, puis 3 ;
+- entre `do` et `end`, le bloc calcule `i * 5` et affiche une ligne de la table.
+
 Un intervalle connaît aussi les méthodes de
 [Enumerable](blocs.md#les-methodes-de-enumerable) : `map`, `select`, `sum`…
 
@@ -76,7 +93,29 @@ p (1..10).select(&:even?)
 [2, 4, 6, 8, 10]
 ```
 
+**À vous :** écrivez un programme qui affiche la table de 2, de « 2 × 1 = 2 » à
+« 2 × 5 = 10 », avec un intervalle et `each`.
+
+> **Solution**
+>
+> ```ruby
+> (1..5).each do |i|
+>   puts "2 × #{i} = #{i * 2}"
+> end
+> ```
+>
+> ```sortie
+> 2 × 1 = 2
+> 2 × 2 = 4
+> 2 × 3 = 6
+> 2 × 4 = 8
+> 2 × 5 = 10
+> ```
+
 ## Avancer par pas avec step
+
+Parfois, vous ne voulez pas toutes les valeurs, mais une sur deux ou une sur cinq, comme
+quand on compte de 5 en 5 jusqu'à 100.
 
 `step` saute de plusieurs valeurs à la fois. `%` fait la même chose, en plus court.
 
@@ -95,10 +134,34 @@ puts
 10 7 4 1 
 ```
 
+Ligne par ligne :
+
+- `(0..20).step(5)` part de 0 et ajoute 5 à chaque fois : 0, 5, 10, 15, 20 ;
+- `((0..20) % 5)` donne exactement le même résultat ;
+- avec des nombres à virgule, le pas peut être `0.25` ;
+- `10.step(1, -3)` part de 10 et retire 3 à chaque tour, sans descendre sous 1.
+
 Pour compter à rebours, un intervalle comme `10..1` est **vide**. Utilisez `step` avec
 un pas négatif, `downto`, ou `(1..10).reverse_each`.
 
+**À vous :** écrivez un programme qui affiche, dans un tableau, les multiples de 3 de 0
+à 30.
+
+> **Solution**
+>
+> ```ruby
+> p (0..30).step(3).to_a
+> ```
+>
+> ```sortie
+> [0, 3, 6, 9, 12, 15, 18, 21, 24, 27, 30]
+> ```
+
 ## Tester l'appartenance
+
+C'est une question que les programmes se posent sans arrêt : « cet âge donne-t-il droit
+au tarif enfant ? », « cette note est-elle entre 10 et 20 ? ». Un intervalle y répond
+en une ligne.
 
 `include?` répond à la question : « cette valeur est-elle dans l'intervalle ? »
 
@@ -116,6 +179,13 @@ false
 true
 false
 ```
+
+Ligne par ligne :
+
+- `ages_ado = 13..19` range l'intervalle dans une variable, comme n'importe quelle valeur ;
+- 15 est entre 13 et 19 : `true`. 20 est au-delà : `false` ;
+- un intervalle peut aussi aller d'un nombre à virgule à un autre : 2.1 est bien dedans ;
+- `1...10` exclut 10 : la réponse est donc `false`.
 
 `cover?` fait presque la même chose : il compare seulement avec le début et la fin. La
 différence se voit avec des textes.
@@ -135,7 +205,27 @@ true
 `"bb"` n'est pas une des 26 lettres, mais il se range bien entre `"a"` et `"z"` dans
 l'ordre alphabétique. `cover?` accepte aussi un intervalle entier.
 
+**À vous :** écrivez un programme qui range `temperature = 22` dans une variable, puis
+affiche « Agréable » si elle est entre 18 et 25 compris, et « Pas agréable » sinon.
+
+> **Solution**
+>
+> ```ruby
+> temperature = 22
+> if (18..25).include?(temperature)
+>   puts "Agréable"
+> else
+>   puts "Pas agréable"
+> end
+> ```
+>
+> ```sortie
+> Agréable
+> ```
+
 ## Des intervalles de lettres
+
+> **Note :** cette partie peut attendre. Lisez-la quand les bases seront solides.
 
 Un intervalle marche avec tout ce qui a un « suivant » : les lettres aussi.
 
@@ -154,6 +244,9 @@ p ("aa".."ad").to_a
 ```
 
 ## Somme, minimum et maximum
+
+Un intervalle de nombres se résume souvent en un seul nombre : le total d'une série, le
+plus petit, le plus grand. Ruby les calcule pour vous, sans écrire de boucle.
 
 ```ruby
 puts (1..100).sum
@@ -207,6 +300,9 @@ Insuffisant
 
 ## Découper avec un intervalle
 
+Souvent, vous ne voulez qu'une partie d'une liste : les trois premiers d'un classement,
+les derniers messages reçus, le début d'un mot.
+
 Entre crochets, un intervalle prend un morceau d'un tableau ou d'un texte. Les positions
 commencent à 0, et `-1` est la dernière.
 
@@ -235,7 +331,34 @@ jour
 bonjou
 ```
 
+Ligne par ligne :
+
+- `lettres[1..3]` prend les positions 1, 2 et 3 : `"b"`, `"c"` et `"d"` ;
+- `lettres[2..]` n'a pas de fin : il prend tout à partir de la position 2 ;
+- `lettres[..1]` n'a pas de début : il prend tout jusqu'à la position 1 comprise ;
+- `-2..` part de l'avant-dernier élément et va jusqu'au bout ;
+- sur un texte, c'est pareil, lettre par lettre : `mot[0..2]` donne `"bon"`.
+
+**À vous :** écrivez un programme qui range les sept jours de la semaine dans un tableau
+`jours`, puis affiche les cinq premiers, puis les deux derniers.
+
+> **Solution**
+>
+> ```ruby
+> jours = ["lun", "mar", "mer", "jeu", "ven", "sam", "dim"]
+> p jours[0..4]
+> p jours[-2..]
+> ```
+>
+> ```sortie
+> ["lun", "mar", "mer", "jeu", "ven"]
+> ["sam", "dim"]
+> ```
+
 ## Sans fin ou sans début
+
+Certaines catégories n'ont pas de limite d'un côté : « 65 ans et plus », « moins de 18
+ans ». Un intervalle sans fin ou sans début les décrit simplement.
 
 On peut laisser un bout vide :
 
@@ -266,6 +389,13 @@ mineur
 adulte
 senior
 ```
+
+Ligne par ligne :
+
+- `(5..).first(3)` prend les trois premières valeurs à partir de 5, sans chercher la fin ;
+- `(..5)` contient tout ce qui est inférieur ou égal à 5, même -100 ;
+- dans `categorie`, `...18` veut dire « moins de 18 » et `65..` « 65 ou plus » ;
+- 12 tombe dans le premier `when`, 40 dans le deuxième, 80 dans le troisième.
 
 `first(3)` prend les 3 premières valeurs : n'appelez pas `to_a` sur `5..`, il ne
 finirait jamais.

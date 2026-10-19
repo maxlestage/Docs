@@ -37,6 +37,10 @@ Bonjour !
 
 ## Les paramètres
 
+Une fonction qui fait toujours exactement la même chose sert peu. Les paramètres la
+rendent souple : c'est comme une recette « pour N personnes », où vous choisissez N à
+chaque fois.
+
 Les [paramètres](../debuter/glossaire.md#parametre) sont les valeurs que la fonction
 reçoit. Ce sont des cases vides, remplies au moment de l'appel. Les valeurs données à
 l'appel s'appellent les [arguments](../debuter/glossaire.md#argument).
@@ -55,11 +59,39 @@ Bonjour, Alice !
 Bonjour, Bob !
 ```
 
+Ligne par ligne :
+
+- `function saluer(prenom)` enregistre la fonction. Rien ne s'affiche encore ;
+- `saluer("Alice")` appelle la fonction : `prenom` reçoit `"Alice"`, puis le
+  `console.log` affiche la phrase avec ce prénom ;
+- `saluer("Bob")` recommence, cette fois avec `prenom` qui vaut `"Bob"`.
+
 Ici, `prenom` est le paramètre ; `"Alice"` et `"Bob"` sont les arguments. Plusieurs
 paramètres se séparent par des virgules, et les arguments sont donnés dans le même
 ordre.
 
+**À vous :** écrivez une fonction `presenter(prenom, age)` qui affiche « Je m'appelle …
+et j'ai … ans. », puis appelez-la avec `"Léa"` et `12`.
+
+> **Solution**
+>
+> ```javascript
+> function presenter(prenom, age) {
+>   console.log(`Je m'appelle ${prenom} et j'ai ${age} ans.`);
+> }
+>
+> presenter("Léa", 12);
+> ```
+>
+> ```sortie
+> Je m'appelle Léa et j'ai 12 ans.
+> ```
+
 ## Renvoyer une valeur avec return
+
+Souvent, vous ne voulez pas seulement afficher un résultat : vous voulez le garder pour
+vous en servir ensuite. Une calculatrice vous donne un nombre, que vous pouvez noter,
+réutiliser ou ajouter à un autre. `return` fait la même chose.
 
 `return` arrête la fonction et **renvoie** une valeur au code qui l'a appelée. La valeur
 renvoyée remplace l'appel.
@@ -78,6 +110,14 @@ console.log(total);
 12
 11
 ```
+
+Ligne par ligne :
+
+- `function aire(largeur, hauteur)` enregistre la fonction, sans rien calculer ;
+- `aire(3, 4)` lance la fonction : `largeur` vaut 3, `hauteur` vaut 4, et `return`
+  renvoie 12. `console.log` affiche ce 12 ;
+- `aire(2, 5)` renvoie 10, puis `+ 1` donne 11, rangé dans `total` ;
+- le dernier `console.log` affiche `total`, donc 11.
 
 `aire(2, 5) + 1` devient `10 + 1`. Une fonction sans `return` renvoie `undefined`.
 
@@ -127,7 +167,30 @@ undefined 10
 > **À retenir :** préférez les fonctions qui renvoient une valeur. Vous choisirez
 > ensuite quoi en faire.
 
+**À vous :** écrivez une fonction `perimetre(cote)` qui renvoie le périmètre d'un carré
+(quatre fois le côté). Affichez `perimetre(5)`, puis `perimetre(5) + perimetre(2)`.
+
+> **Solution**
+>
+> ```javascript
+> function perimetre(cote) {
+>   return cote * 4;
+> }
+>
+> console.log(perimetre(5));
+> console.log(perimetre(5) + perimetre(2));
+> ```
+>
+> ```sortie
+> 20
+> 28
+> ```
+
 ## Les paramètres par défaut
+
+Au restaurant, le plat est servi avec des frites, sauf si vous demandez autre chose.
+Une valeur par défaut fonctionne pareil : elle évite de répéter la valeur habituelle à
+chaque appel.
 
 Si un argument manque, son paramètre vaut `undefined`. Une **valeur par défaut**, écrite
 avec `=`, le remplace.
@@ -146,7 +209,18 @@ Bonjour, Alice !
 Salut, Bob !
 ```
 
+Ligne par ligne :
+
+- `salutation = "Bonjour"` prévoit une valeur de secours pour `salutation` ;
+- `saluer("Alice")` ne donne qu'un argument : `prenom` vaut `"Alice"` et `salutation`
+  prend sa valeur par défaut, `"Bonjour"` ;
+- `saluer("Bob", "Salut")` donne les deux : `"Salut"` remplace la valeur par défaut.
+
 ## Les paramètres reste
+
+Parfois, vous ne savez pas à l'avance combien de valeurs la fonction recevra : vous
+voulez additionner deux nombres, ou dix. Les paramètres reste acceptent n'importe quel
+nombre d'arguments.
 
 Avec trois points `...` devant le dernier paramètre, la fonction reçoit **tous les
 arguments restants**, rangés dans un tableau.
@@ -171,10 +245,22 @@ console.log(somme());
 0
 ```
 
+Ligne par ligne :
+
+- `...nombres` range tous les arguments dans un tableau : avec `somme(1, 2)`, `nombres`
+  vaut `[1, 2]` ;
+- `total` commence à 0 ;
+- la boucle `for` prend chaque nombre du tableau, un par un, et l'ajoute à `total` ;
+- `return total` renvoie la somme. Avec `somme()`, le tableau est vide : la boucle ne
+  tourne pas, et la fonction renvoie 0.
+
 C'est un peu comme un sac : on y met autant d'arguments qu'on veut. Les tableaux sont
 expliqués dans [les tableaux](collections.md).
 
 ## Les fonctions fléchées
+
+Beaucoup de fonctions ne font qu'un petit calcul. Écrire `function`, des accolades et
+`return` pour une seule ligne, c'est long. La flèche dit la même chose en moins de mots.
 
 Une **fonction fléchée** (*arrow function*) est une façon plus courte d'écrire une
 fonction. On la range dans une constante.
@@ -221,10 +307,33 @@ console.log(prixTTC(50, 0.055));
 > les flèches pour les petites fonctions passées à d'autres (voir plus bas). Les deux
 > sont correctes.
 
+**À vous :** écrivez une fonction fléchée `triple` qui renvoie le triple d'un nombre, et
+une fonction fléchée `bienvenue` qui renvoie « Bienvenue, … ! » avec un prénom.
+Affichez `triple(7)` et `bienvenue("Sam")`.
+
+> **Solution**
+>
+> ```javascript
+> const triple = (x) => x * 3;
+> const bienvenue = (prenom) => `Bienvenue, ${prenom} !`;
+>
+> console.log(triple(7));
+> console.log(bienvenue("Sam"));
+> ```
+>
+> ```sortie
+> 21
+> Bienvenue, Sam !
+> ```
+
 ## Les fonctions sont des valeurs
 
 En JavaScript, une fonction est une valeur, comme un nombre ou un texte. On peut la
 ranger dans une variable, la mettre dans un tableau, ou la donner à une autre fonction.
+
+À quoi bon ? Vous pouvez ainsi donner à une fonction non seulement des données, mais
+aussi une action à faire sur ces données. C'est comme tendre un panier de pommes à
+quelqu'un avec la consigne « épluche-les ».
 
 ```javascript
 function double(x) {
@@ -240,6 +349,14 @@ console.log(typeof double);
 42
 function
 ```
+
+Ligne par ligne :
+
+- `function double(x)` enregistre une fonction nommée `double` ;
+- `const operation = double;` range la fonction elle-même dans `operation`, sans
+  l'appeler (pas de parenthèses). `operation` et `double` désignent la même recette ;
+- `operation(21)` appelle donc `double` avec 21, ce qui renvoie 42 ;
+- `typeof double` donne le type de la valeur : ici, `function`.
 
 Attention à la différence : `double` est la fonction elle-même (la recette) ;
 `double(21)` est son résultat (le plat).
@@ -263,6 +380,14 @@ console.log(appliquerDeuxFois((x) => x * x, 3));
 81
 ```
 
+Ligne par ligne :
+
+- `appliquerDeuxFois` reçoit deux choses : une fonction `f` et une valeur ;
+- `f(valeur)` applique `f` une première fois, puis le `f( )` autour l'applique au
+  résultat ;
+- premier appel : `f` ajoute 10. 1 devient 11, puis 21 ;
+- deuxième appel : `f` met au carré. 3 devient 9, puis 81.
+
 Les tableaux utilisent beaucoup les callbacks. `map` applique une fonction à chaque
 élément :
 
@@ -278,7 +403,24 @@ console.log(prixTTC);
 
 Vous reverrez `map`, `filter` et leurs amis dans [les tableaux](collections.md).
 
+**À vous :** partez du tableau `const notes = [8, 12, 15];` et utilisez `map` pour créer
+un nouveau tableau où chaque note gagne 2 points. Affichez-le.
+
+> **Solution**
+>
+> ```javascript
+> const notes = [8, 12, 15];
+> const notesBonus = notes.map((n) => n + 2);
+> console.log(notesBonus);
+> ```
+>
+> ```sortie
+> [ 10, 14, 17 ]
+> ```
+
 ## Le hissage
+
+> **Note :** cette partie peut attendre. Lisez-la quand les bases seront solides.
 
 Une fonction déclarée avec `function` peut être appelée **avant** l'endroit où elle est
 écrite. JavaScript la « hisse » (*hoisting*) en haut du fichier avant de commencer.
@@ -299,6 +441,8 @@ Ce n'est **pas** le cas d'une fonction fléchée rangée dans une `const` : la c
 n'existe qu'à partir de sa ligne. Voir les erreurs fréquentes plus bas.
 
 ## Une fonction qui s'appelle elle-même
+
+> **Note :** cette partie peut attendre. Lisez-la quand les bases seront solides.
 
 Une fonction peut s'appeler elle-même : c'est la
 [récursion](../debuter/glossaire.md#recursion). Il faut un **cas d'arrêt**, sinon elle

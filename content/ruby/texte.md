@@ -12,6 +12,9 @@ Cette page montre comment créer, assembler, découper et transformer du texte e
 
 ## Créer un texte
 
+Presque tous les programmes manipulent du texte : un prénom à saluer, un message à
+afficher, une réponse tapée au clavier.
+
 Un texte s'appelle une **chaîne** (`String`), ou
 [chaîne de caractères](../debuter/glossaire.md#chaine-de-caracteres) : une suite de
 caractères (lettres, chiffres, espaces, signes) enfilés comme des perles. Vous l'écrivez
@@ -56,6 +59,9 @@ Il a dit : "Bonjour"
 ```
 
 ## Assembler des textes
+
+Un message est souvent fait de morceaux : une partie fixe et une partie qui change.
+C'est comme une lettre type où vous complétez le prénom à la main.
 
 ### Avec +
 
@@ -115,7 +121,25 @@ hahaha
 ----------
 ```
 
+**À vous :** écrivez un programme qui range `"Léo"` dans `prenom` et `8` dans `age`,
+puis affiche « Léo aura 9 ans l'an prochain. » avec l'interpolation.
+
+> **Solution**
+>
+> ```ruby
+> prenom = "Léo"
+> age = 8
+> puts "#{prenom} aura #{age + 1} ans l'an prochain."
+> ```
+>
+> ```sortie
+> Léo aura 9 ans l'an prochain.
+> ```
+
 ## La longueur d'un texte
+
+Connaître la longueur sert à vérifier ce que quelqu'un a tapé : un mot de passe trop
+court, une case laissée vide.
 
 `length` donne le nombre de caractères. Les espaces comptent aussi.
 
@@ -131,9 +155,18 @@ puts "".empty?
 true
 ```
 
+Ligne par ligne :
+
+- `"chat".length` compte c, h, a, t : 4 caractères ;
+- `"un chat".length` donne 7, car l'espace entre les deux mots compte aussi ;
+- `""` est un texte vide, sans aucun caractère : `empty?` répond donc `true`.
+
 `empty?` répond `true` quand le texte est vide.
 
 ## Majuscules et minuscules
+
+Les gens n'écrivent pas tous de la même façon : « alice », « ALICE », « Alice ». Ces
+méthodes remettent un texte en forme, pour l'afficher proprement ou le comparer.
 
 - `upcase` met tout en majuscules.
 - `downcase` met tout en minuscules.
@@ -173,6 +206,9 @@ BONJOUR
 
 ## Enlever les espaces autour
 
+Un espace en trop ne se voit pas à l'écran. Pourtant, pour Ruby, `"Alice "` et
+`"Alice"` sont deux textes différents.
+
 `strip` retire les espaces (et les retours à la ligne) au début et à la fin.
 
 ```ruby
@@ -186,10 +222,36 @@ puts "[" + saisie.strip + "]"
 [Alice]
 ```
 
+Ligne par ligne :
+
+- `saisie` contient « Alice », entouré de trois espaces de chaque côté ;
+- la deuxième ligne colle des crochets autour du texte : ils montrent où il commence
+  et où il finit, espaces compris ;
+- la troisième fait pareil avec `saisie.strip` : les espaces ont disparu, les crochets
+  touchent le prénom.
+
 > **Astuce :** utilisez `strip` sur tout texte tapé par quelqu'un : on ajoute souvent
 > des espaces sans le vouloir.
 
+**À vous :** écrivez un programme qui range `"  alice  "` dans `saisie`, puis affiche
+« Bonjour Alice ! », sans les espaces et avec une majuscule.
+
+> **Solution**
+>
+> ```ruby
+> saisie = "  alice  "
+> nom = saisie.strip
+> puts "Bonjour #{nom.capitalize} !"
+> ```
+>
+> ```sortie
+> Bonjour Alice !
+> ```
+
 ## Chercher dans un texte
+
+Chercher un morceau de texte sert partout : repérer un mot dans un message, vérifier
+qu'une adresse finit par « .fr ».
 
 - `include?` : le texte contient-il ce morceau ?
 - `start_with?` : commence-t-il par ce morceau ?
@@ -207,6 +269,15 @@ true
 true
 false
 ```
+
+Ligne par ligne :
+
+- `phrase` contient le texte à examiner ;
+- `include?("choco")` cherche « choco » n'importe où : il est dans « chocolat », donc
+  `true` ;
+- `start_with?("J'aime")` regarde seulement le début : `true` ;
+- `end_with?(".")` regarde seulement la fin : la phrase n'a pas de point final, donc
+  `false`.
 
 > **Attention :** la recherche tient compte des majuscules. `"Chat".include?("chat")`
 > vaut `false`. Passez par `downcase` pour comparer sans les majuscules.
@@ -236,6 +307,9 @@ nil
 
 ## Découper et recoller
 
+Un texte regroupe souvent plusieurs informations : les mots d'une phrase, une liste de
+courses séparée par des virgules. Pour les traiter une par une, il faut les séparer.
+
 `split` coupe un texte en morceaux et renvoie un tableau. `join` fait l'inverse : il
 recolle un tableau en un seul texte.
 
@@ -255,9 +329,34 @@ puts liste.join(" / ")
 rouge / vert / bleu
 ```
 
+Ligne par ligne :
+
+- `phrase.split(" ")` coupe à chaque espace : trois morceaux, rangés dans le tableau
+  `fruits` ;
+- `p fruits` affiche le tableau, avec ses crochets et ses guillemets ;
+- `"rouge,vert,bleu".split(",")` coupe cette fois à chaque virgule ;
+- `liste.join(" / ")` recolle les trois couleurs, avec « / » entre chacune.
+
 Les tableaux sont expliqués dans [les tableaux et hashs](collections.md).
 
+**À vous :** écrivez un programme qui découpe `"pain;lait;oeufs"` à chaque
+point-virgule, puis recolle les morceaux avec « , » entre eux.
+
+> **Solution**
+>
+> ```ruby
+> courses = "pain;lait;oeufs".split(";")
+> puts courses.join(", ")
+> ```
+>
+> ```sortie
+> pain, lait, oeufs
+> ```
+
 ## Remplacer un morceau
+
+C'est la fonction « Rechercher et remplacer » d'un traitement de texte : vous corrigez
+un mot, ou vous changez un nom partout d'un coup.
 
 `sub` remplace la **première** fois qu'un morceau apparaît. `gsub` les remplace
 **toutes**.
@@ -273,9 +372,19 @@ le chat, un chien
 le chat, le chien
 ```
 
+Ligne par ligne :
+
+- `texte` contient deux fois « un » ;
+- `sub("un", "le")` ne change que le premier « un » ;
+- `gsub("un", "le")` change les deux ;
+- `texte` lui-même ne change pas : chaque ligne repart du texte d'origine.
+
 > **À retenir :** pensez « g » comme « global » : `gsub` remplace partout.
 
 ## Prendre une partie du texte
+
+Parfois, seule une partie du texte vous intéresse : l'initiale d'un prénom, l'année
+dans une date.
 
 Comme dans un tableau, chaque caractère a une position, appelée
 [indice](../debuter/glossaire.md#indice). La première est `0`, pas `1` : l'indice
@@ -313,6 +422,9 @@ nil
 
 ## Les caractères un par un
 
+Pour examiner chaque lettre d'un mot, pour les compter ou les transformer, il faut
+d'abord les séparer.
+
 `chars` donne le tableau de tous les caractères. Pratique pour les parcourir.
 
 ```ruby
@@ -329,9 +441,21 @@ C
 cba
 ```
 
+Ligne par ligne :
+
+- `"abc".chars` donne le tableau `["a", "b", "c"]`, que `p` affiche ;
+- `each { |lettre| ... }` prend chaque caractère à tour de rôle, le range dans
+  `lettre`, puis exécute `puts lettre.upcase` : A, puis B, puis C ;
+- `reverse` lit le texte de la fin vers le début.
+
 `reverse` renvoie le texte à l'envers.
 
 ## Un texte sur plusieurs lignes
+
+> **Note :** cette partie peut attendre. Lisez-la quand les bases seront solides.
+
+Écrire une lettre entière sur une seule ligne, avec des `\n` partout, serait
+illisible. Le heredoc vous laisse écrire le texte tel qu'il s'affichera.
 
 Pour un long texte, utilisez un **heredoc** : `<<~FIN`, puis vos lignes, puis `FIN`
 seul sur sa ligne.
@@ -357,6 +481,9 @@ Merci pour votre visite.
 
 ## Texte et nombres
 
+Un « 42 » tapé au clavier est un texte, pas un nombre : Ruby refuse de calculer avec.
+Il faut d'abord le convertir. Et pour afficher un nombre proprement, on le met en forme.
+
 ### Passer de l'un à l'autre
 
 - `to_i` transforme un texte en entier, `to_f` en nombre à virgule.
@@ -373,6 +500,14 @@ puts 10.to_s + "0"
 5.0
 100
 ```
+
+Ligne par ligne :
+
+- `"42".to_i` transforme le texte en nombre 42 : on peut alors ajouter 1, ce qui
+  donne 43 ;
+- `"2.5".to_f` donne le nombre 2.5 ; fois 2, cela fait 5.0 ;
+- `10.to_s` donne le texte `"10"` ; `+ "0"` colle un zéro au bout : `"100"`. Aucun
+  calcul n'a lieu.
 
 ### Aligner du texte
 
@@ -417,7 +552,28 @@ Ticket n°007
 
 > **Astuce :** `%03d` écrit un entier sur 3 chiffres, avec des zéros devant.
 
+**À vous :** écrivez un programme qui range le texte `"2.5"` (un prix) dans `prix` et
+`3` dans `quantite`, puis affiche le total : « Total : 7.50 € ».
+
+> **Solution**
+>
+> ```ruby
+> prix = "2.5"
+> quantite = 3
+> total = prix.to_f * quantite
+> puts format("Total : %.2f €", total)
+> ```
+>
+> ```sortie
+> Total : 7.50 €
+> ```
+
 ## Les textes gelés
+
+> **Note :** cette partie peut attendre. Lisez-la quand les bases seront solides.
+
+Geler un texte le protège : une valeur qui ne doit jamais changer, comme le nom de
+votre site, ne risque plus d'être modifiée par erreur.
 
 Un texte **gelé** (`freeze`) ne peut plus être modifié : il devient
 [immuable](../debuter/glossaire.md#immuable). Pour le changer, faites-en une
@@ -435,6 +591,13 @@ puts copie
 true
 salut !
 ```
+
+Ligne par ligne :
+
+- `"salut".freeze` crée un texte gelé, rangé dans `mot` ;
+- `mot.frozen?` vérifie qu'il est bien gelé : `true` ;
+- `mot.dup` fabrique une copie, qui, elle, n'est pas gelée ;
+- `copie << " !"` ajoute « ! » au bout de la copie. `mot` vaut toujours `"salut"`.
 
 `<<` ajoute du texte à la fin d'une chaîne. Sur un texte gelé, il provoque une erreur
 `FrozenError`.

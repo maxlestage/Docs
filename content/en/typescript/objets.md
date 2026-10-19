@@ -14,6 +14,10 @@ This page explains how to group values in objects, describe their shape with `in
 
 ## Creating an object
 
+Imagine storing the information about a book in three separate variables: `title`,
+`author`, `pages`. With ten books, it would quickly become a mess. An object keeps
+everything about one thing in a single box.
+
 An [object](../debuter/glossaire.md#object) groups several values under one name.
 Each value has a label: its **property**. You write it between curly braces, with
 `name: value` pairs.
@@ -48,7 +52,33 @@ TypeScript guesses the type of this object: `{ title: string; author: string; pa
 number }`. So it knows every property and its type. `book.pages = "lots"` would be
 refused, and so would a typo like `book.titles`.
 
+**Your turn:** write a program that creates a `movie` object with a `title` ("The Lion
+King") and a `year` (1994). Display the title, change the year to 2019, then display
+the year.
+
+> **Solution**
+>
+> ```typescript
+> const movie = {
+>   title: "The Lion King",
+>   year: 1994,
+> };
+>
+> console.log(movie.title);
+> movie.year = 2019;
+> console.log(movie.year);
+> ```
+>
+> ```sortie
+> The Lion King
+> 2019
+> ```
+
 ## Describing an object: the object type
+
+A function can't see in advance the object you will give it. For it to know which
+properties the object will have, you must describe the expected object, like a list
+of what to bring.
 
 For a function that receives an object, you have to write its shape. You describe it
 between curly braces, like an object, but with types instead of values:
@@ -65,10 +95,23 @@ console.log(introduce({ name: "Alice", age: 30 }));
 Alice, 30 years old
 ```
 
+Line by line:
+
+- `person: { name: string; age: number }` says that the parameter `person` must have
+  a `name` (a string) and an `age` (a number);
+- `: string` after the parenthesis announces that the function returns a string;
+- the call `introduce({ name: "Alice", age: 30 })` creates an object on the spot and
+  gives it to the function;
+- inside the function, `person.name` is `"Alice"` and `person.age` is `30`: it
+  returns `"Alice, 30 years old"`, which `console.log` displays.
+
 Writing this shape every time would be tedious. So you give it a name, in one of two
 ways: `interface` or `type`.
 
 ## interface and type
+
+Giving a name to a shape is like creating a blank form template: you draw it once,
+then use it for every new form. If the shape changes, you fix it in one place only.
 
 ### interface
 
@@ -96,6 +139,16 @@ console.log(introduce(bob));
 Alice, 30 years old
 Bob, 25 years old
 ```
+
+Line by line:
+
+- `interface Person { … }` creates no value: it only describes a shape, with a `name`
+  and an `age`;
+- `const alice: Person = …` creates an object and asks TypeScript to check that it
+  really has this shape. Same for `bob`;
+- `function introduce(p: Person)` accepts any `Person`;
+- the two `console.log` calls use the same function, first with `alice`, then with
+  `bob`.
 
 By convention, the name of an interface starts with a capital letter.
 
@@ -132,7 +185,35 @@ To describe an object, the two are almost always equivalent. The difference:
 > everything else (unions, tuples, functions). Above all, stay consistent within a
 > project.
 
+**Your turn:** write an interface `Animal` with a `name` (a string) and a number of
+`legs` (a number). Create a cat (4 legs) and a hen (2 legs), then display "The cat has
+4 legs." and "The hen has 2 legs." by reading their properties.
+
+> **Solution**
+>
+> ```typescript
+> interface Animal {
+>   name: string;
+>   legs: number;
+> }
+>
+> const cat: Animal = { name: "cat", legs: 4 };
+> const hen: Animal = { name: "hen", legs: 2 };
+>
+> console.log(`The ${cat.name} has ${cat.legs} legs.`);
+> console.log(`The ${hen.name} has ${hen.legs} legs.`);
+> ```
+>
+> ```sortie
+> The cat has 4 legs.
+> The hen has 2 legs.
+> ```
+
 ## Optional properties
+
+In real life, you don't always know everything. On a form, some boxes are required
+(the name) and others are optional (the phone number). The `?` tells TypeScript
+exactly that.
 
 A `?` after the name makes a property optional: the object may have it or not. Its
 type becomes `string | undefined`.
@@ -156,10 +237,41 @@ Alice: alice@example.com
 Bob: no address
 ```
 
+Line by line:
+
+- `email?: string`: the `email` property may be missing;
+- `alice` has an email, `bob` doesn't: both are valid `User` objects;
+- the `for` loop takes `alice`, then `bob`, and stores each one in turn in `u`;
+- `u.email ?? "no address"` gives the email if it exists, otherwise the string "no
+  address".
+
 Before you use `u.email` as a string, TypeScript makes you handle the case where it
 is missing: with `??`, `?.` or an `if`.
 
+**Your turn:** write an interface `Contact` with a `name` (a string) and an optional
+`phone` (a string). Create the contact "Karim" without a phone, then display "Karim:
+no number".
+
+> **Solution**
+>
+> ```typescript
+> interface Contact {
+>   name: string;
+>   phone?: string;
+> }
+>
+> const karim: Contact = { name: "Karim" };
+> console.log(`${karim.name}: ${karim.phone ?? "no number"}`);
+> ```
+>
+> ```sortie
+> Karim: no number
+> ```
+
 ## Read-only properties
+
+Some information must never change once written, like the number printed on an ID
+card. `readonly` asks TypeScript to protect it against a change made by mistake.
 
 `readonly` in front of a property forbids changing it after the object is created.
 
@@ -179,6 +291,13 @@ console.log(end);
 { x: 3, y: 4 }
 ```
 
+Line by line:
+
+- `readonly x` and `readonly y`: once a point is created, its coordinates are frozen;
+- `start` is `{ x: 0, y: 0 }`;
+- `end` is a **new** point, computed from `start`: `0 + 3` and `0 + 4`;
+- `start` hasn't changed: we read its values without modifying them.
+
 To "move" a point, you create a new one. This check only exists in TypeScript: when
 the program runs, the object is a normal JavaScript object.
 
@@ -186,6 +305,12 @@ the program runs, the object is a normal JavaScript object.
 > identifier. TypeScript will keep an eye on them for you.
 
 ## Nested objects and methods
+
+> **Note:** this part can wait. Read it once the basics feel solid.
+
+A real form often contains other forms: a customer has an address, which itself has a
+city and a zip code. So an object can contain another one, like a box stored inside a
+box.
 
 A property can hold another object, an array, or a function. A function stored in an
 object is called a [method](../debuter/glossaire.md#method).
@@ -229,6 +354,9 @@ Hello, Chloe!
 
 ## Extending an interface
 
+When two shapes look very much alike, writing them twice would be long. And with every
+change, you would have to remember to fix both.
+
 `extends` creates an interface that takes all the properties of another one, and adds
 some. It's like a "Student" form that takes the "Person" form and adds the grade.
 
@@ -257,6 +385,13 @@ Lea (15 years old)
 10th grade
 ```
 
+Line by line:
+
+- `Student extends Person`: a `Student` has a `name`, an `age` **and** a `grade`;
+- so `lea` must have all three properties;
+- `introduce` expects a `Person`: it only reads the `name` and the `age` of `lea`;
+- `lea.grade` is still available, because `lea` is a `Student`.
+
 A `Student` has everything a `Person` has: so you can pass it to `introduce`.
 
 With `type`, you get the same result with `&` ("and"):
@@ -272,6 +407,29 @@ console.log(rex.name, rex.breed);
 ```sortie
 Rex shepherd
 ```
+
+**Your turn:** write an interface `Vehicle` with a `brand` (a string), then an
+interface `Car` that extends it with a number of `doors`. Create a car of brand "Ford"
+with 5 doors, then display its brand and its number of doors.
+
+> **Solution**
+>
+> ```typescript
+> interface Vehicle {
+>   brand: string;
+> }
+>
+> interface Car extends Vehicle {
+>   doors: number;
+> }
+>
+> const myCar: Car = { brand: "Ford", doors: 5 };
+> console.log(myCar.brand, myCar.doors);
+> ```
+>
+> ```sortie
+> Ford 5
+> ```
 
 ## Index signatures
 
@@ -297,6 +455,14 @@ math: 15
 french: 12
 english: 14
 ```
+
+Line by line:
+
+- `grades` starts with two subjects: `math` and `french`;
+- `grades.english = 14` adds a third key, which the index signature allows;
+- `Object.entries(grades)` gives the `[key, value]` pairs one by one;
+- on each pass, the loop stores the key in `subject`, the value in `grade`, and
+  displays both.
 
 `[subject: string]: number` reads: "for any string key, a number value". The word
 `subject` is only a name for documentation. It's the same thing as

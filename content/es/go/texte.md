@@ -12,6 +12,9 @@ Esta página explica cómo guarda Go el texto (bytes y runas), y cómo cortarlo,
 
 ## Las cadenas de caracteres
 
+Casi todos los programas manejan texto: un nombre, un mensaje, una línea leída de un
+archivo. En Go, el texto tiene su propio tipo, igual que los números tienen el suyo.
+
 Un texto se llama una [cadena de caracteres](../debuter/glossaire.md#cadena-de-caracteres),
 de tipo `string`. Se escribe entre comillas dobles.
 
@@ -32,6 +35,15 @@ func main() {
 Hola, Alicia.
 true
 ```
+
+Línea por línea:
+
+- `nombre := "Alicia"` guarda el texto «Alicia» en la variable `nombre`;
+- la línea siguiente pega tres trozos: `"Hola, "`, el contenido de `nombre` y luego
+  `"."`. Así, `saludo` vale `"Hola, Alicia."`;
+- `fmt.Println(saludo)` muestra ese texto;
+- `nombre == "Alicia"` hace una pregunta: «¿son idénticos los dos textos?». La
+  respuesta es sí, de ahí el `true`.
 
 - `+` pega dos cadenas una detrás de otra;
 - `==` compara dos cadenas.
@@ -65,7 +77,31 @@ Dijo: "Hola"
 > **Recuerda:** una cadena de Go es **inmutable**: no puedes cambiar una de sus
 > letras. Todas las funciones que «modifican» un texto en realidad crean uno nuevo.
 
+**Te toca:** escribe un programa que guarde `"Sevilla"` en una variable `ciudad` y
+luego muestre «Vivo en Sevilla.» pegando los trozos con `+`.
+
+> **Solución**
+>
+> ```go
+> package main
+>
+> import "fmt"
+>
+> func main() {
+> 	ciudad := "Sevilla"
+> 	fmt.Println("Vivo en " + ciudad + ".")
+> }
+> ```
+>
+> ```sortie
+> Vivo en Sevilla.
+> ```
+
 ## Bytes y runas
+
+¿Por qué preocuparte por esto? En cuanto una palabra lleva una tilde o una `ñ`, contar
+sus letras o tomar su primera letra ya no funciona como esperas. Saber cómo guarda Go
+el texto te evita esas sorpresas.
 
 Una cadena de Go es una secuencia de [bytes](../debuter/glossaire.md#byte) (números de
 0 a 255), codificados en UTF-8. Las letras simples (`a`, `Z`, `5`) ocupan 1 byte. Las
@@ -98,6 +134,15 @@ func main() {
 5
 3
 ```
+
+Línea por línea:
+
+- `palabra := "ñandú"` guarda una palabra de 5 letras, dos de ellas especiales (`ñ` y
+  `ú`);
+- `len(palabra)` cuenta los bytes: 2 para `ñ`, 2 para `ú` y 1 para cada una de las
+  otras tres letras, o sea 7;
+- `utf8.RuneCountInString(palabra)` cuenta los caracteres: 5;
+- `len("abc")` da 3: sin tildes, un carácter ocupa un solo byte.
 
 `"ñandú"` tiene 5 caracteres, pero 7 bytes: `ñ` y `ú` ocupan 2 cada una.
 
@@ -157,7 +202,35 @@ func main() {
 
 La posición salta de 1 a 3: `ñ` ocupa los bytes 1 y 2.
 
+**Te toca:** escribe un programa que recorra la palabra `"niño"` con `range` y muestre
+cada letra en su propia línea.
+
+> **Solución**
+>
+> ```go
+> package main
+>
+> import "fmt"
+>
+> func main() {
+> 	for _, c := range "niño" {
+> 		fmt.Printf("%c\n", c)
+> 	}
+> }
+> ```
+>
+> ```sortie
+> n
+> i
+> ñ
+> o
+> ```
+
 ## El paquete strings
+
+Cortar una frase en palabras, poner un texto en mayúsculas, comprobar que una dirección
+contiene una `@`: son necesidades que aparecen todo el tiempo. En lugar de reescribirlo
+todo, tomas la herramienta ya hecha de esta caja de herramientas.
 
 El paquete `strings` contiene las herramientas básicas para el texto.
 
@@ -188,6 +261,16 @@ false
 8
 4
 ```
+
+Línea por línea:
+
+- `frase` contiene el texto en el que buscas;
+- cada línea siguiente hace una pregunta sobre `frase` y muestra la respuesta;
+- la frase no termina en «cama», de ahí el `false`;
+- «duerme» empieza en la posición 8, porque se cuenta desde 0: `E` está en 0, `l` en 1,
+  el espacio en 2, y así sucesivamente;
+- la letra `e` aparece 4 veces: dos en «duerme», una en «en» y una en «el». La `E`
+  mayúscula de «El» no cuenta.
 
 - `Contains`: ¿el texto contiene este trozo?
 - `HasPrefix`, `HasSuffix`: ¿empieza, o termina, por este trozo?
@@ -262,7 +345,36 @@ manzana, kiwi, pera
 `strings.Fields` corta en los espacios, sea cual sea su número. Es la mejor opción
 para separar las palabras de una frase.
 
+**Te toca:** escribe un programa que corte el texto `"lunes,martes,miércoles"` en cada
+coma, muestre el número de días y luego los días en mayúsculas, separados por ` - `.
+
+> **Solución**
+>
+> ```go
+> package main
+>
+> import (
+> 	"fmt"
+> 	"strings"
+> )
+>
+> func main() {
+> 	dias := strings.Split("lunes,martes,miércoles", ",")
+> 	fmt.Println(len(dias))
+> 	fmt.Println(strings.ToUpper(strings.Join(dias, " - ")))
+> }
+> ```
+>
+> ```sortie
+> 3
+> LUNES - MARTES - MIÉRCOLES
+> ```
+
 ## Construir texto
+
+Un programa a menudo tiene que fabricar un texto con varios trozos: un nombre, una nota,
+una fecha. Es como rellenar un formulario: el modelo no cambia, solo cambian las
+casillas.
 
 ### fmt.Sprintf
 
@@ -286,6 +398,16 @@ func main() {
 Alicia  |  14.3
 15
 ```
+
+Línea por línea:
+
+- `nombre` vale `"Alicia"` y `media` vale `14.256`;
+- `%-8s` coloca el nombre en una casilla de 8 caracteres, pegado a la izquierda:
+  `Alicia` va seguido de 2 espacios. La `|` se copia tal cual;
+- `%6.1f` escribe el número con una sola cifra decimal (`14.3`), en una casilla de 6
+  caracteres, pegado a la derecha;
+- en ese momento no se muestra nada: el texto se guarda en `linea` y luego lo muestra
+  `Println`. Mide 8 + 1 + 6 = 15 caracteres.
 
 ### strings.Builder
 
@@ -325,7 +447,32 @@ Fin
 
 El `&` delante de `sb` se explica en [los punteros](pointeurs.md).
 
+**Te toca:** escribe un programa que guarde `"Alicia"` en `nombre` y `12` en `edad`,
+fabrique con `fmt.Sprintf` el texto «Alicia tiene 12 años.», lo guarde en una variable
+`frase` y luego lo muestre.
+
+> **Solución**
+>
+> ```go
+> package main
+>
+> import "fmt"
+>
+> func main() {
+> 	nombre := "Alicia"
+> 	edad := 12
+> 	frase := fmt.Sprintf("%s tiene %d años.", nombre, edad)
+> 	fmt.Println(frase)
+> }
+> ```
+>
+> ```sortie
+> Alicia tiene 12 años.
+> ```
+
 ## Texto y números: strconv
+
+> **Nota:** esta parte puede esperar. Léela cuando las bases estén firmes.
 
 Para pegar un número a un texto, primero hay que convertirlo. El paquete `strconv`
 se encarga de ello (mira también [números y cálculos](nombres.md)).
@@ -359,10 +506,22 @@ true
 "dijo \"sí\""
 ```
 
+Línea por línea:
+
+- `strconv.Itoa(edad)` convierte el número 12 en el texto `"12"`, que `+` puede pegar;
+- `strconv.Atoi("2026")` hace lo contrario: lee el texto y da el número 2026. También
+  devuelve `err`, que vale `nil` («nada») cuando todo ha ido bien;
+- `strconv.ParseBool("true")` lee el texto `"true"` y da el booleano `true`. El `_`
+  ignora el error;
+- `strconv.Quote` rodea el texto de comillas y añade las `\` necesarias.
+
 > **Atención:** `string(65)` no da `"65"`, sino `"A"` (la letra de código 65).
 > Para convertir un número en texto, usa siempre `strconv.Itoa` o `fmt.Sprint`.
 
 ## Las cadenas en bruto
+
+En una cadena normal, cada `\` debe ir doble: una ruta de Windows se vuelve difícil de
+leer enseguida, como `"C:\\Users\\alicia"`. Las cadenas en bruto evitan ese problema.
 
 Entre acentos graves `` ` ``, una cadena está **en bruto**: las `\` no se
 interpretan, y el texto puede ocupar varias líneas.
@@ -387,6 +546,12 @@ C:\Users\alicia\notas.txt
 El cielo es azul,
 	y el mar también.
 ```
+
+Línea por línea:
+
+- `ruta` contiene `\` copiadas tal cual: la `\n` de `\notas` no pasa a la línea
+  siguiente;
+- `poema` ocupa dos líneas: el salto de línea forma parte del texto.
 
 Todo se guarda tal cual, incluso la tabulación al principio de la segunda línea. Es
 práctico para una ruta de Windows, una plantilla de texto, JSON o una

@@ -31,10 +31,22 @@ saludar()
 ¡Hola!
 ```
 
+Línea por línea:
+
+- `def saludar():` crea una función llamada `saludar`. Todavía no se muestra nada;
+- `print("¡Hola!")` lleva sangría: forma parte de la función, así que espera;
+- el primer `saludar()` ejecuta la función: Python ejecuta su cuerpo y muestra
+  «¡Hola!»;
+- el segundo `saludar()` vuelve a empezar: la misma receta, seguida una segunda vez.
+
 Escribir `def` no ejecuta nada: guarda la receta. Escribir `saludar()` **llama**
 a la función, es decir, la ejecuta. Los paréntesis son obligatorios, aunque estén vacíos.
 
 ## Los parámetros
+
+Una receta de crepes puede servir para 4 o para 8 personas: solo cambian las
+cantidades. Del mismo modo, una función es más útil si puede trabajar con valores
+distintos en cada llamada.
 
 Los [parámetros](../debuter/glossaire.md#parametro) son los valores que la función
 recibe. Son casillas vacías que se rellenan en el momento de la llamada. Los valores que se dan
@@ -53,10 +65,39 @@ saludar("Bob")
 ¡Hola, Bob!
 ```
 
+Línea por línea:
+
+- `def saludar(nombre):` crea la función, con una casilla vacía llamada `nombre`;
+- `saludar("Alice")` llama a la función: `nombre` recibe `"Alice"`, y luego el `print`
+  muestra «¡Hola, Alice!»;
+- `saludar("Bob")` la llama de nuevo: esta vez, `nombre` vale `"Bob"`.
+
 Aquí, `nombre` es el parámetro; `"Alice"` y `"Bob"` son los argumentos. Varios
 parámetros se separan con comas.
 
+**Te toca:** escribe una función `cumpleanos(nombre)` que muestre «¡Feliz
+cumpleaños, …!» con el nombre recibido. Llámala para Lea y luego para Tom.
+
+> **Solución**
+>
+> ```python
+> def cumpleanos(nombre):
+>     print(f"¡Feliz cumpleaños, {nombre}!")
+>
+> cumpleanos("Lea")
+> cumpleanos("Tom")
+> ```
+>
+> ```sortie
+> ¡Feliz cumpleaños, Lea!
+> ¡Feliz cumpleaños, Tom!
+> ```
+
 ## Devolver un valor con return
+
+A menudo quieres que una función haga un cálculo y te **dé** el resultado, como una
+calculadora. Luego puedes mostrarlo, guardarlo en una variable o reutilizarlo en otro
+cálculo.
 
 `return` devuelve un resultado al código que llamó a la función, y sale de la función.
 
@@ -73,6 +114,14 @@ print(total)
 12
 11
 ```
+
+Línea por línea:
+
+- `def area(ancho, alto):` crea una función que recibe dos números;
+- `return ancho * alto` calcula el producto y lo devuelve a quien llama;
+- `print(area(3, 4))`: la llamada vale 12, así que Python muestra 12;
+- `total = area(2, 5) + area(1, 1)`: las dos llamadas valen 10 y 1, y `total`
+  recibe 11.
 
 El valor devuelto **sustituye** a la llamada: `area(2, 5) + area(1, 1)` se convierte en `10 + 1`.
 
@@ -136,7 +185,27 @@ print(pequeno, grande)
 1 9
 ```
 
+**Te toca:** escribe una función `perimetro(ancho, alto)` que **devuelva** el
+perímetro de un rectángulo (el doble de la suma de los lados). Muestra
+`perimetro(3, 4)`.
+
+> **Solución**
+>
+> ```python
+> def perimetro(ancho, alto):
+>     return 2 * (ancho + alto)
+>
+> print(perimetro(3, 4))
+> ```
+>
+> ```sortie
+> 14
+> ```
+
 ## Los valores por defecto
+
+En la cafetería te sirven un café normal, salvo que pidas otra cosa. Un valor por
+defecto cumple ese papel: evita repetir el valor más habitual.
 
 Un parámetro puede tener un valor por defecto. Se usa si falta el argumento.
 
@@ -153,7 +222,31 @@ print(saludar("Bob", "Buenas"))
 ¡Buenas, Bob!
 ```
 
+Línea por línea:
+
+- `saludo="Hola"` da al parámetro `saludo` un valor de reserva;
+- `saludar("Alice")` da un solo argumento: `saludo` toma entonces `"Hola"`;
+- `saludar("Bob", "Buenas")` da los dos: `"Buenas"` sustituye al valor por defecto.
+
 Los parámetros con valor por defecto se colocan **después** de los demás.
+
+**Te toca:** escribe una función `precio(importe, moneda="euros")` que devuelva un
+texto como «5 euros». Muestra `precio(5)` y luego `precio(8, "dólares")`.
+
+> **Solución**
+>
+> ```python
+> def precio(importe, moneda="euros"):
+>     return f"{importe} {moneda}"
+>
+> print(precio(5))
+> print(precio(8, "dólares"))
+> ```
+>
+> ```sortie
+> 5 euros
+> 8 dólares
+> ```
 
 ## Los argumentos con nombre
 
@@ -178,10 +271,22 @@ print(pedido(cantidad=3, producto="cruasán"))
 3 x cruasán
 ```
 
+Línea por línea:
+
+- `pedido("café")`: solo se da `producto`; `cantidad` vale 1 y `urgente` vale
+  `False`;
+- `pedido("té", urgente=True)`: `urgente` se da por su nombre, sin tocar `cantidad`;
+- `pedido(cantidad=3, producto="cruasán")`: los dos argumentos llevan nombre, así que
+  el orden no importa.
+
 > **Consejo:** da nombre a los argumentos booleanos. `pedido("té", urgente=True)` se
 > entiende enseguida; `pedido("té", 1, True)`, mucho menos.
 
 ## Un número variable de argumentos: *args y **kwargs
+
+A veces no sabes de antemano cuántos valores vas a recibir. Una cuenta de restaurante
+puede tener dos platos o diez. Los asteriscos permiten que una función acepte tantos
+argumentos como haga falta.
 
 Con un asterisco, `*args` recibe todos los argumentos **posicionales** de más, guardados en
 una tupla.
@@ -203,6 +308,14 @@ print(suma())
 10
 0
 ```
+
+Línea por línea:
+
+- `*numeros` guarda todos los argumentos recibidos en una tupla: `(1, 2)`, luego
+  `(1, 2, 3, 4)`, luego `()`;
+- `total = 0` empieza desde cero;
+- el bucle `for` suma cada número a `total`;
+- `return total` devuelve la suma. Sin argumentos, el bucle no da ninguna vuelta: 0.
 
 Con dos asteriscos, `**kwargs` (*keyword arguments*) recibe todos los argumentos **con nombre**
 de más, guardados en un [diccionario](../debuter/glossaire.md#diccionario).
@@ -227,6 +340,8 @@ diccionarios se explican en [diccionarios y conjuntos](dictionnaires.md).
 
 ## Documentar con un docstring
 
+> **Nota:** esta parte puede esperar. Léela cuando las bases estén firmes.
+
 Un **docstring** es un texto entre comillas triples, colocado justo debajo de la línea
 `def`. Explica lo que hace la función. Los editores lo muestran cuando pasas el ratón
 por encima del nombre, y `help()` lo enseña.
@@ -247,6 +362,10 @@ Devuelve el precio con impuestos incluidos, redondeado al céntimo.
 
 ## El alcance de las variables
 
+Una función tiene su propio borrador. Lo que escribe en él mientras trabaja no se
+desborda al resto del programa. Así, dos funciones pueden usar el mismo nombre de
+variable sin molestarse.
+
 El [alcance](../debuter/glossaire.md#ambito) de una variable es la zona del código donde
 existe. Una variable creada **dentro** de una función es **local**: nace con la llamada
 y desaparece al final.
@@ -264,6 +383,13 @@ print("resultado" in globals())
 42
 False
 ```
+
+Línea por línea:
+
+- `resultado = 42` crea la variable `resultado` **dentro** de la función;
+- `print(calcular())` llama a la función, que devuelve 42: Python lo muestra;
+- `globals()` da las variables de fuera. `"resultado" in globals()` pregunta si
+  `resultado` está entre ellas: la respuesta es `False`.
 
 Después de la llamada, `resultado` ya no existe fuera de la función.
 
@@ -291,6 +417,8 @@ print(contador)
 > como argumento y devolver el resultado: `contador = incrementar(contador)`.
 
 ## Las funciones son valores
+
+> **Nota:** esta parte puede esperar. Léela cuando las bases estén firmes.
 
 En Python, una función es un valor como cualquier otro. Sin paréntesis, su nombre
 designa la función misma: puedes guardarla en una variable o pasarla a
@@ -329,6 +457,9 @@ print(sorted(palabras, key=len))
 
 ## Las lambdas
 
+A veces una función solo sirve una vez, para una tarea muy pequeña, como decirle a
+`sorted` según qué ordenar. Darle un nombre con `def` sería pesado.
+
 Una [lambda](../debuter/glossaire.md#lambda) es una pequeña función sin nombre, escrita
 en una línea: `lambda parámetros: expresión`. Devuelve automáticamente el valor
 de la expresión.
@@ -347,13 +478,39 @@ print(por_nota)
 [('Bob', 6), ('Alice', 7), ('Chloé', 9)]
 ```
 
+Línea por línea:
+
+- `cuadrado = lambda x: x * x` crea una pequeña función y la guarda en `cuadrado`;
+- `cuadrado(5)` calcula `5 * 5` y devuelve 25;
+- `alumnos` es una lista de parejas (nombre, nota);
+- `sorted(..., key=lambda alumno: alumno[1])` mira la nota de cada pareja y ordena
+  a los alumnos de la nota más baja a la más alta.
+
 `key=lambda alumno: alumno[1]` significa «ordena según el segundo elemento». La ordenación
 se explica en detalle en [listas y tuplas](collections.md).
 
 > **Consejo:** una lambda sirve sobre todo como argumento de otra función. Para todo
 > lo demás, un `def` normal con nombre es más claro.
 
+**Te toca:** la lista `amigos = [("Lea", 25), ("Tom", 19), ("Inés", 31)]` contiene
+nombres y edades. Muéstrala ordenada por edad, con `sorted` y una lambda.
+
+> **Solución**
+>
+> ```python
+> amigos = [("Lea", 25), ("Tom", 19), ("Inés", 31)]
+> print(sorted(amigos, key=lambda amigo: amigo[1]))
+> ```
+>
+> ```sortie
+> [('Tom', 19), ('Lea', 25), ('Inés', 31)]
+> ```
+
 ## Una función que se llama a sí misma
+
+Algunos problemas contienen una versión más pequeña de sí mismos. Contar hacia atrás
+desde 3 es decir «3» y luego contar hacia atrás desde 2. Una función puede seguir la
+misma idea.
 
 Una función puede llamarse a sí misma: es la
 [recursión](../debuter/glossaire.md#recursion). Hace falta un **caso base**, si no,
@@ -376,6 +533,14 @@ cuenta_atras(3)
 1
 ¡Ya!
 ```
+
+Línea por línea:
+
+- `cuenta_atras(3)`: `n` vale 3, no es 0. La función muestra 3 y luego se llama a
+  sí misma con 2;
+- lo mismo con 2 y luego con 1: cada llamada muestra su número;
+- con 0, el `if` es verdadero: la función muestra «¡Ya!» y `return` lo detiene todo.
+  Es el caso base.
 
 Un ejemplo clásico es el factorial: `5!` vale `5 × 4 × 3 × 2 × 1`. Dicho de otro modo,
 `n!` vale `n × (n - 1)!`, y `1!` vale 1.

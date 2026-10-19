@@ -12,6 +12,9 @@ Go propose des entiers et des nombres à virgule : ce chapitre montre comment ca
 
 ## Les entiers
 
+Les entiers servent à compter : des élèves, des années, des points dans un jeu. Dès
+qu'une quantité ne se coupe pas en morceaux, c'est un entier.
+
 Un [entier](../debuter/glossaire.md#entier) est un nombre sans virgule : `3`, `-12`,
 `2026`. Le type le plus courant est `int`.
 
@@ -31,7 +34,16 @@ func main() {
 26 56
 ```
 
+Ligne par ligne :
+
+- `annee := 2026` crée une variable `annee` et y range 2026 ;
+- `eleves := 28` fait de même avec 28 ;
+- `fmt.Println` calcule d'abord `annee-2000` (26) et `eleves*2` (56), puis affiche les
+  deux résultats, séparés par une espace.
+
 ### Les tailles d'entiers
+
+> **Note :** cette partie peut attendre. Lisez-la quand les bases seront solides.
 
 Go a plusieurs types d'entiers. Leur nom dit deux choses :
 
@@ -72,6 +84,9 @@ func main() {
 
 ## Les nombres à virgule
 
+Tout ne se compte pas en nombres entiers : un prix (19,99 €), une taille (1,75 m), une
+température (36,6 °C). Pour ces valeurs, il faut des nombres à virgule.
+
 Un nombre à virgule s'appelle un [flottant](../debuter/glossaire.md#flottant). En Go,
 on utilise `float64`. Attention : la virgule s'écrit avec un **point**.
 
@@ -96,6 +111,15 @@ func main() {
 0.30000000000000004
 ```
 
+Ligne par ligne :
+
+- `prix := 19.99` range un nombre à virgule dans `prix` : Go lui donne le type
+  `float64` ;
+- `quantite := 3.0` est aussi un `float64`, grâce au `.0` ;
+- le premier `Println` affiche le produit des deux : 59.97 ;
+- `a` et `b` valent 0.1 et 0.2, et leur somme donne une petite surprise, expliquée
+  juste en dessous.
+
 Le résultat de `a + b` n'est pas tout à fait `0.3`. L'ordinateur range les nombres
 à virgule en binaire, et certains nombres n'y tombent pas juste, comme 1/3 en décimal
 (0,3333…). Ce n'est pas un bug de Go : tous les langages font pareil.
@@ -108,6 +132,9 @@ Le résultat de `a + b` n'est pas tout à fait `0.3`. L'ordinateur range les nom
 > centimes au lieu de `19.99` euros. Les calculs restent exacts.
 
 ## Les opérateurs
+
+Un programme calcule sans arrêt : un total à payer, un score, un temps restant. Les
+opérateurs sont les touches de sa calculatrice.
 
 | Opérateur | Rôle | Exemple | Résultat |
 |-----------|------|---------|----------|
@@ -147,10 +174,38 @@ func main() {
 2 h 15 min
 ```
 
+Ligne par ligne :
+
+- `7 / 2` : deux entiers, donc une division entière. Le résultat est 3 ;
+- `7 % 2` : le reste de cette division, 1 ;
+- `7.0 / 2` : `7.0` est un nombre à virgule, donc la division est normale : 3.5 ;
+- `minutes/60` donne les heures entières (2), et `minutes%60` les minutes qui restent
+  (15).
+
 Imaginez 7 bonbons partagés entre 2 enfants : chacun en a 3 (`7 / 2`), et il en reste
 1 (`7 % 2`).
 
 > **Astuce :** `n % 2 == 0` teste si `n` est pair. Le reste est très utile !
+
+**À vous :** écrivez un programme qui range `200` secondes dans une variable, puis
+affiche ce temps en minutes et secondes : « 3 min 20 s ».
+
+> **Solution**
+>
+> ```go
+> package main
+>
+> import "fmt"
+>
+> func main() {
+> 	secondes := 200
+> 	fmt.Println(secondes/60, "min", secondes%60, "s")
+> }
+> ```
+>
+> ```sortie
+> 3 min 20 s
+> ```
 
 ### Raccourcis
 
@@ -179,6 +234,8 @@ func main() {
 > écrire `x := points++`.
 
 ## Le dépassement
+
+> **Note :** cette partie peut attendre. Lisez-la quand les bases seront solides.
 
 Un entier a une taille limitée. Si un calcul dépasse la plus grande valeur, le nombre
 « fait le tour », comme un compteur kilométrique qui repasse à zéro.
@@ -212,6 +269,10 @@ limite est si grande que le problème est rare, mais il existe.
 > l'exécution.
 
 ## Les conversions sont explicites
+
+Un programme mélange souvent des quantités entières (3 articles) et des prix à virgule
+(2,50 €). Go veut que vous disiez clairement comment les combiner : ainsi, aucun calcul
+n'est faussé en silence.
 
 Go ne mélange jamais deux types de nombres tout seul. Pour multiplier un `int` par un
 `float64`, vous devez **convertir** l'un des deux, en écrivant le type comme une
@@ -263,6 +324,26 @@ func main() {
 11.75
 ```
 
+**À vous :** écrivez un programme qui calcule la moyenne exacte de quatre notes
+entières : 12, 15, 16 et 18.
+
+> **Solution**
+>
+> ```go
+> package main
+>
+> import "fmt"
+>
+> func main() {
+> 	somme := 12 + 15 + 16 + 18
+> 	fmt.Println(float64(somme) / 4)
+> }
+> ```
+>
+> ```sortie
+> 15.25
+> ```
+
 ## Du texte vers un nombre : strconv
 
 Un nombre tapé par l'utilisateur ou lu dans un fichier arrive sous forme de **texte**.
@@ -298,6 +379,15 @@ Année 2026
 7.5 <nil>
 ```
 
+Ligne par ligne :
+
+- `strconv.Atoi("42")` transforme le texte `"42"` en nombre : `n` reçoit 42, et `err`
+  reçoit `nil` ;
+- `n+1` est donc un vrai calcul, qui donne 43 ;
+- `strconv.Itoa(2026)` fait le chemin inverse : `texte` contient le texte `"2026"`, que
+  `+` colle à `"Année "` ;
+- `ParseFloat` lit `"3.75"` comme le nombre 3.75, et `f*2` donne 7.5.
+
 `Atoi` et `ParseFloat` renvoient **deux** valeurs : le nombre, et une erreur. Quand
 tout va bien, l'erreur vaut `nil` (« rien »). Le `64` de `ParseFloat` demande un
 `float64`.
@@ -329,7 +419,38 @@ Erreur : strconv.Atoi: parsing "douze": invalid syntax
 > **À retenir :** testez toujours `err != nil` après une conversion. Les erreurs sont
 > détaillées dans [la gestion des erreurs](erreurs.md).
 
+**À vous :** écrivez un programme qui convertit le texte `"17"` en nombre, puis affiche
+l'âge de l'année suivante : « L'an prochain : 18 ans ». N'oubliez pas de tester `err`.
+
+> **Solution**
+>
+> ```go
+> package main
+>
+> import (
+> 	"fmt"
+> 	"strconv"
+> )
+>
+> func main() {
+> 	age, err := strconv.Atoi("17")
+> 	if err != nil {
+> 		fmt.Println("Erreur :", err)
+> 		return
+> 	}
+> 	fmt.Println("L'an prochain :", age+1, "ans")
+> }
+> ```
+>
+> ```sortie
+> L'an prochain : 18 ans
+> ```
+
 ## Le paquet math
+
+Certains calculs sont longs à écrire vous-même : une racine carrée, une puissance, un
+arrondi. Le paquet `math` est une boîte à outils déjà remplie : vous prenez l'outil,
+sans avoir à le fabriquer.
 
 Le paquet `math` contient les fonctions mathématiques courantes.
 
@@ -388,6 +509,9 @@ func main() {
 
 ## Des nombres au hasard
 
+Un jeu a souvent besoin de surprise : lancer un dé, mélanger des cartes, placer un
+ennemi n'importe où. Pour cela, il faut des nombres tirés au hasard.
+
 Le paquet `math/rand` tire des nombres au hasard. `rand.Intn(6)` donne un entier entre
 0 et 5 : on ajoute 1 pour simuler un dé.
 
@@ -427,6 +551,10 @@ func main() {
 
 ## Afficher un nombre
 
+Un calcul donne parfois trop de décimales : `3.14159` euros n'a pas de sens sur un
+ticket de caisse, où un prix a toujours deux décimales. Vous choisissez donc comment le
+nombre s'affiche.
+
 `fmt.Printf` contrôle l'affichage avec ses verbes :
 
 ```go
@@ -465,6 +593,28 @@ func main() {
 
 Pour obtenir le texte sans l'afficher, utilisez `fmt.Sprintf` avec les mêmes verbes :
 `s := fmt.Sprintf("%.2f", prix)`.
+
+**À vous :** écrivez un programme qui calcule le prix de 3 cahiers à 4.5 euros
+chacun, puis affiche « Total : 13.50 euros », avec deux décimales.
+
+> **Solution**
+>
+> ```go
+> package main
+>
+> import "fmt"
+>
+> func main() {
+> 	quantite := 3
+> 	prix := 4.5
+> 	total := float64(quantite) * prix
+> 	fmt.Printf("Total : %.2f euros\n", total)
+> }
+> ```
+>
+> ```sortie
+> Total : 13.50 euros
+> ```
 
 ## Erreurs fréquentes
 

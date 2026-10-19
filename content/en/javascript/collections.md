@@ -12,6 +12,9 @@ This page explains how to store several values in an array, add them, remove the
 
 ## Creating an array
 
+Imagine a shopping list of twenty items. Creating twenty variables would be long and
+tedious. An array stores all these values under a single name.
+
 An array is a [list](../debuter/glossaire.md#list) of values stored in order, like the
 cars of a train. You write it between square brackets `[ ]`, with commas between the
 elements.
@@ -35,10 +38,20 @@ console.log(mixed);
 [ 'Alice', 30, true ]
 ```
 
+Line by line:
+
+- `fruits` holds three texts, `grades` three numbers, and `empty` no element at all;
+- `console.log(fruits)` displays the whole array, between square brackets;
+- `grades.length` is 3: there are three grades. `empty.length` is 0;
+- `mixed` shows that one array can hold a text, a number and a boolean.
+
 `length` gives the number of elements. An array can mix types, but in practice you store
 values of the same kind in it.
 
 ## Reading and changing an element
+
+Once the list is stored, you need to get one specific element out of it, like reading
+the third line of your shopping list, or to fix one.
 
 Each element has an [index](../debuter/glossaire.md#index): its position, **starting
 from 0**. The first car is car 0.
@@ -63,12 +76,22 @@ undefined
 [ 'apple', 'mango', 'kiwi' ]
 ```
 
+Line by line:
+
+- `fruits[0]` reads the first element, `"apple"`; `fruits[2]` reads the third, `"kiwi"`;
+- `fruits.at(-1)` counts from the end: it gives the last one, `"kiwi"` again;
+- `fruits[5]` does not exist: JavaScript answers `undefined`;
+- `fruits[1] = "mango"` replaces `"pear"`, which was at index 1.
+
 - `at(-1)` gives the last element, just like with [text](texte.md).
 - An index that does not exist gives `undefined`, without an error.
 - `fruits` is a `const`, and yet you can change its contents. `const` forbids replacing
   **the whole array** (`fruits = [...]`), not changing what it contains.
 
 ## Adding and removing
+
+A list keeps changing. Think of a queue: people join at the back and leave from the
+front. These methods do exactly that.
 
 Four methods add or remove an element at one end of the array. They **change** the
 array.
@@ -96,6 +119,13 @@ Chloe [ 'Alice', 'Bob' ]
 Zoe [ 'Alice', 'Bob' ]
 ```
 
+Line by line:
+
+- `push("Chloe")` adds Chloe at the end: the queue holds three names;
+- `pop()` removes Chloe, the last one, and stores her in `last`;
+- `unshift("Zoe")` puts Zoe at the start, in front of Alice;
+- `shift()` removes Zoe from the start and stores her in `first`.
+
 | Method | End | Action |
 | --- | --- | --- |
 | `push(x)` | end | adds `x` |
@@ -103,7 +133,27 @@ Zoe [ 'Alice', 'Bob' ]
 | `unshift(x)` | start | adds `x` |
 | `shift()` | start | removes and returns the first one |
 
+**Your turn:** write a program that creates an array `groceries` holding `"bread"` and
+`"milk"`, adds `"eggs"` at the end, then displays the array and its length.
+
+> **Solution**
+>
+> ```javascript
+> const groceries = ["bread", "milk"];
+> groceries.push("eggs");
+> console.log(groceries);
+> console.log(groceries.length);
+> ```
+>
+> ```sortie
+> [ 'bread', 'milk', 'eggs' ]
+> 3
+> ```
+
 ## slice and splice
+
+Sometimes you only want part of the list, for example the top three of a ranking. Or
+you want to remove an element in the middle, not at one end.
 
 These two names look alike, but they do very different things.
 
@@ -133,6 +183,13 @@ console.log(b);
 [ 1, 'x', 'y', 4, 5 ]
 ```
 
+Line by line:
+
+- `a.slice(1, 3)` copies the elements at indexes 1 and 2 (the end, 3, is left out);
+- `console.log(a)` proves it: `a` has not changed;
+- `b.splice(1, 2)` removes 2 and 3 from `b`, and returns them in `removed`;
+- the last `splice` inserts two elements without removing anything.
+
 `b.splice(1, 2)` starts at index 1 and removes 2 elements. `b.splice(1, 0, "x", "y")`
 removes none and inserts `"x"` and `"y"` at index 1.
 
@@ -140,6 +197,9 @@ removes none and inserts `"x"` and `"y"` at index 1.
 > so `splice` changes the array. `slice` is just a slice, copied.
 
 ## Searching an array
+
+Before adding an item to your shopping list, you check whether it is already there.
+These methods ask that question for you, even in a very long list.
 
 ```javascript
 const fruits = ["apple", "pear", "kiwi"];
@@ -180,7 +240,27 @@ undefined
 The function given to `find` is a *callback* (see [functions](fonctions.md#callbacks)).
 `find` calls it on each element, until it answers `true`.
 
+**Your turn:** starting from `const ages = [12, 17, 21, 15]`, display whether 21 is in
+the array, then the first age greater than or equal to 18.
+
+> **Solution**
+>
+> ```javascript
+> const ages = [12, 17, 21, 15];
+> console.log(ages.includes(21));
+> console.log(ages.find((age) => age >= 18));
+> ```
+>
+> ```sortie
+> true
+> 21
+> ```
+
 ## Looping and transforming
+
+Very often, you want to do the same thing with each element: display each item, add
+tax to each price, keep only the good grades. These methods do it for you, without
+writing the same code for each element.
 
 ### forEach: doing something for each element
 
@@ -196,6 +276,12 @@ fruits.forEach((fruit, i) => {
 1. apple
 2. pear
 ```
+
+Line by line:
+
+- `forEach` calls the function once per element, so twice here;
+- on the first round, `fruit` is `"apple"` and `i` is 0; on the second, `"pear"` and 1;
+- `${i + 1}` adds 1 to the index, to number from 1.
 
 The callback receives the element, then its index. A `for...of` loop does the same job;
 pick the one you find easier to read.
@@ -283,7 +369,27 @@ console.log(total.toFixed(2));
 Read from top to bottom: keep the prices above €3, apply a 10% discount, then add them
 up.
 
+**Your turn:** starting from `const prices = [5, 12, 8]`, use `map` to create an array
+of the doubled prices and display it. Then display its sum, computed with `reduce`.
+
+> **Solution**
+>
+> ```javascript
+> const prices = [5, 12, 8];
+> const doubled = prices.map((p) => p * 2);
+> console.log(doubled);
+> console.log(doubled.reduce((sum, p) => sum + p, 0));
+> ```
+>
+> ```sortie
+> [ 10, 24, 16 ]
+> 50
+> ```
+
 ## Sorting
+
+Putting things in order is useful everywhere: grades from lowest to highest, a ranking,
+a list of names in alphabetical order.
 
 `sort` sorts the array **in place** (it changes it). With simple texts, it works as
 expected. With numbers, there is a trap.
@@ -325,7 +431,25 @@ with accents, use `(a, b) => a.localeCompare(b)` (see [text](texte.md#sorting-wo
 
 > **Remember:** to sort numbers, **always** write `sort((a, b) => a - b)`.
 
+**Your turn:** sort the array `[42, 7, 19, 3]` from largest to smallest, then display
+it.
+
+> **Solution**
+>
+> ```javascript
+> const scores = [42, 7, 19, 3];
+> scores.sort((a, b) => b - a);
+> console.log(scores);
+> ```
+>
+> ```sortie
+> [ 42, 19, 7, 3 ]
+> ```
+
 ## Spread and destructuring
+
+These two short notations let you join several arrays into one, or take elements out of
+an array and store them in well-named variables.
 
 ### Spread: spreading an array out
 
@@ -345,6 +469,12 @@ console.log(Math.max(...[3, 8, 1]));
 [ 'apple', 'pear', 'carrot', 'bread' ]
 8
 ```
+
+Line by line:
+
+- `...fruits` lays down `"apple"` and `"pear"`, then `...vegetables` lays down `"carrot"`;
+- `"bread"` comes next: `groceries` is a new array of four elements;
+- `Math.max(...[3, 8, 1])` is the same as writing `Math.max(3, 8, 1)`: the largest is 8.
 
 ### Destructuring
 
@@ -375,6 +505,11 @@ The last line swaps two variables without a temporary variable.
 
 ## Building arrays
 
+> **Note:** this part can wait. Read it once the basics feel solid.
+
+Sometimes you do not want to write each element by hand, for example the squares of the
+numbers from 0 to 4. JavaScript can build the array for you.
+
 `Array.from` builds an array from something else: a text, or a length and a function.
 `flat` flattens an array of arrays.
 
@@ -399,6 +534,9 @@ In `(_, i) => i * i`, the `_` is a parameter you do not use: only the index `i` 
 
 ## Copying or sharing?
 
+You will often want to keep the original intact and work on a copy, just as you
+photocopy a form before filling it in. You still need a real copy, though.
+
 A variable does not hold the array itself, but a **reference** to it: an address, like a
 label attached to a box. Writing `b = a` sticks a second label on **the same box**.
 
@@ -415,6 +553,12 @@ console.log(a === b);
 [ 1, 2, 3, 4 ]
 true
 ```
+
+Line by line:
+
+- `const b = a` copies nothing: `b` points to the same array as `a`;
+- `b.push(4)` adds 4 to this single array;
+- so `a` shows the 4 too, and `a === b` answers `true`: it is the same box.
 
 Changing `b` changed `a`: it is the same array. For a real copy, use spread (or
 `slice()`).

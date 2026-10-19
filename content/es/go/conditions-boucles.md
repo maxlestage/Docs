@@ -12,6 +12,10 @@ Esta página muestra cómo tomar decisiones con `if` y `switch`, y cómo repetir
 
 ## Comparar valores
 
+Un programa a menudo tiene que decidir: abrir la puerta o no, mostrar «ganaste» o
+«perdiste». Para decidir, primero hace una pregunta, igual que tú te preguntas
+«¿tengo suficiente dinero para este pastel?».
+
 Una [condición](../debuter/glossaire.md#condicion) es una pregunta que se
 responde con verdadero (`true`) o falso (`false`). Se construye con operadores de
 comparación.
@@ -51,9 +55,23 @@ true
 false
 ```
 
+Línea por línea:
+
+- `edad := 15` guarda 15 en `edad`, y `conPadres := true` guarda «verdadero» en
+  `conPadres`;
+- `edad >= 18` pregunta «¿15 es mayor o igual que 18?». No: `false`;
+- con `||`, basta una respuesta verdadera: `conPadres` vale `true`, así que `true`;
+- con `&&`, hacen falta las dos: 15 es mayor que 12 **y** menor que 18, así que
+  `true`;
+- `!conPadres` invierte `true`: se obtiene `false`.
+
 > **Atención:** `=` guarda un valor, `==` compara dos valores. No los confundas.
 
 ## if y else
+
+En la vida tomas decisiones todo el tiempo: si llueve, coges un paraguas; si no, lo
+dejas en casa. `if` le da ese poder a tu programa: hacer una cosa u otra según la
+situación.
 
 `if` («si») ejecuta un bloque solo si la condición es verdadera. `else` («si no»)
 da el bloque que se ejecuta en caso contrario.
@@ -76,6 +94,14 @@ func main() {
 ```sortie
 Hace calor.
 ```
+
+Línea por línea:
+
+- `temperatura := 28` guarda 28 en la variable `temperatura`;
+- `if temperatura > 25 {` hace la pregunta «¿28 es mayor que 25?». La respuesta
+  es sí;
+- así que Go ejecuta el primer bloque y muestra «Hace calor.»;
+- el bloque del `else` se salta: solo sirve si la respuesta es no.
 
 En Go:
 
@@ -114,7 +140,36 @@ Notable
 `nota >= 10` también es verdadera, pero Go ni siquiera la prueba: ya ha encontrado
 `nota >= 12`.
 
+**Te toca:** escribe un programa que guarde `10` en una variable `edad` y luego
+muestre «Niño» si la edad es menor que 13, «Adolescente» si es menor que 18, y
+«Adulto» en otro caso.
+
+> **Solución**
+>
+> ```go
+> package main
+>
+> import "fmt"
+>
+> func main() {
+> 	edad := 10
+> 	if edad < 13 {
+> 		fmt.Println("Niño")
+> 	} else if edad < 18 {
+> 		fmt.Println("Adolescente")
+> 	} else {
+> 		fmt.Println("Adulto")
+> 	}
+> }
+> ```
+>
+> ```sortie
+> Niño
+> ```
+
 ### if con una instrucción de inicialización
+
+> **Nota:** esta parte puede esperar. Léela cuando las bases estén firmes.
 
 Go permite colocar una pequeña instrucción **antes** de la condición, separada por un `;`.
 La variable creada ahí solo existe dentro del `if` y sus `else`.
@@ -145,6 +200,9 @@ variables temporales allí donde se usan.
 
 ## switch
 
+Piensa en una máquina de bebidas: según el botón que pulses, sirve una bebida
+distinta. `switch` funciona igual: según el valor, elige un bloque.
+
 Cuando un mismo valor puede tomar varias formas, `switch` es más legible que una
 larga serie de `else if`.
 
@@ -170,6 +228,16 @@ func main() {
 ¡Es fin de semana!
 ```
 
+Línea por línea:
+
+- `dia` contiene el texto `"sábado"`;
+- `switch dia {` compara el valor de `dia` con cada `case`, de arriba abajo;
+- el primer `case` lista `"sábado"` y `"domingo"`: `"sábado"` coincide, así que
+  Go muestra «¡Es fin de semana!»;
+- los demás casos, y `default`, se ignoran.
+
+Recuerda tres cosas sobre `switch`:
+
 - Cada `case` da uno o varios valores, separados por comas.
 - `default` («por defecto») se ejecuta si ningún caso coincide.
 - Go se detiene en el **primer** caso que coincide y luego sale del `switch`.
@@ -177,6 +245,34 @@ func main() {
 > **Nota:** a diferencia de C o Java, no hace falta `break` al final de cada
 > caso: Go no «cae» en el caso siguiente. Para forzarlo, existe la palabra
 > `fallthrough`, pero casi nunca se usa.
+
+**Te toca:** escribe un programa que guarde `"limón"` en una variable `fruta` y
+luego, con un `switch`, muestre «Fruta de huerto» para una manzana o una pera,
+«Cítrico» para un limón o una naranja, y «Fruta desconocida» en otro caso.
+
+> **Solución**
+>
+> ```go
+> package main
+>
+> import "fmt"
+>
+> func main() {
+> 	fruta := "limón"
+> 	switch fruta {
+> 	case "manzana", "pera":
+> 		fmt.Println("Fruta de huerto")
+> 	case "limón", "naranja":
+> 		fmt.Println("Cítrico")
+> 	default:
+> 		fmt.Println("Fruta desconocida")
+> 	}
+> }
+> ```
+>
+> ```sortie
+> Cítrico
+> ```
 
 ### switch sin valor
 
@@ -206,6 +302,10 @@ Buenas tardes
 ```
 
 ## El bucle for
+
+Imagina que te piden mostrar los números del 1 al 100. Escribir 100 `fmt.Println`
+sería largo y pesado. Un bucle hace ese trabajo repetitivo por ti, como el estribillo
+de una canción que se repite varias veces.
 
 Un [bucle](../debuter/glossaire.md#bucle) repite un bloque de código. Go solo tiene **un
 único** bucle: `for`. No hay `while`, ni `do`. Pero `for` se escribe de tres formas.
@@ -262,8 +362,48 @@ func main() {
 5 años, hay 160 euros
 ```
 
+Línea por línea:
+
+- al principio, `dinero` vale 100 y `anios` vale 0;
+- `for dinero < 150 {` hace la pregunta antes de cada vuelta. 100 es menor que 150:
+  Go entra en el bloque;
+- `dinero * 110 / 100` suma un 10 %: 100 pasa a 110, luego 121, 133, 146 y 160 (Go
+  calcula con números enteros y descarta los decimales);
+- `anios++` suma 1 a `anios` en cada vuelta: cuenta las vueltas;
+- cuando `dinero` vale 160, la respuesta es no: el bucle se detiene y la última
+  línea muestra el resultado.
+
 No se sabe de antemano cuántas vueltas harán falta: el bucle gira mientras
 `dinero < 150`.
+
+**Te toca:** escribe un programa que empiece con `n := 1` y que, mientras `n` sea
+menor que 100, muestre `n` y luego lo duplique.
+
+> **Solución**
+>
+> ```go
+> package main
+>
+> import "fmt"
+>
+> func main() {
+> 	n := 1
+> 	for n < 100 {
+> 		fmt.Println(n)
+> 		n = n * 2
+> 	}
+> }
+> ```
+>
+> ```sortie
+> 1
+> 2
+> 4
+> 8
+> 16
+> 32
+> 64
+> ```
 
 ### Forma 3: el bucle infinito
 
@@ -296,6 +436,10 @@ func main() {
 
 ## Recorrer con range
 
+Muy a menudo tienes una lista de cosas que tratar una a una: cada artículo de una
+lista de la compra, cada nota de un boletín. `range` te las da en orden, sin que
+tengas que contar tú.
+
 `range` recorre los elementos de una colección, uno a uno. En cada vuelta, da
 el **índice** (la posición) y el valor.
 
@@ -320,6 +464,15 @@ func main() {
 2 pera
 ```
 
+Línea por línea:
+
+- `frutas` contiene una lista de tres textos;
+- en la primera vuelta, `range` guarda la posición 0 en `i` y `"manzana"` en
+  `fruta`;
+- el bloque muestra los dos. Luego Go vuelve al `for`, que da 1 y `"kiwi"`, y
+  después 2 y `"pera"`;
+- después de `"pera"` no quedan elementos: el bucle se detiene.
+
 `[]string{...}` es una **slice**, una lista de valores: la descubrirás en
 [arrays y slices](collections.md). Las posiciones empiezan en 0.
 
@@ -343,6 +496,30 @@ func main() {
 ```sortie
 Total: 36
 ```
+
+**Te toca:** escribe un programa que recorra la lista de la compra
+`[]string{"pan", "leche", "huevos"}` y muestre cada artículo precedido de un guion.
+
+> **Solución**
+>
+> ```go
+> package main
+>
+> import "fmt"
+>
+> func main() {
+> 	compra := []string{"pan", "leche", "huevos"}
+> 	for _, articulo := range compra {
+> 		fmt.Println("-", articulo)
+> 	}
+> }
+> ```
+>
+> ```sortie
+> - pan
+> - leche
+> - huevos
+> ```
 
 ### Un texto
 
@@ -396,6 +573,10 @@ Bip 2
 
 ## break y continue
 
+A veces quieres cambiar el rumbo de un bucle sobre la marcha: dejar de buscar en
+cuanto encuentras tus llaves, o ignorar algunos elementos. Para eso sirven estas dos
+palabras.
+
 - `break` sale del bucle de inmediato;
 - `continue` se salta el final de la vuelta y pasa a la siguiente.
 
@@ -424,9 +605,19 @@ func main() {
 7
 ```
 
+Línea por línea:
+
+- `for i := range 10 {` da a `i` los valores 0, 1, 2… hasta 9;
+- si `i` es par (el resto de dividir entre 2, `i%2`, vale 0), `continue` pasa
+  directamente a la vuelta siguiente: no se llega al `fmt.Println`;
+- si `i` es mayor que 7, `break` detiene todo el bucle;
+- si no, `fmt.Println(i)` muestra el número.
+
 Los números pares se saltan con `continue`. Cuando `i` vale 9, `break` lo detiene todo.
 
 ### Las etiquetas
+
+> **Nota:** esta parte puede esperar. Léela cuando las bases estén firmes.
 
 Con dos bucles uno dentro del otro, `break` solo sale del bucle interior. Para
 salir de los dos, dale un nombre (una **etiqueta**) al bucle exterior.

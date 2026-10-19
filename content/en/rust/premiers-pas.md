@@ -12,6 +12,9 @@ This page covers variables, basic types, printing with `println!`, comments and 
 
 ## Variables with let
 
+A program often needs to remember a value to use it again later: a name, a score, a
+price. That is what variables are for.
+
 A [variable](../debuter/glossaire.md#variable) is a label put on a
 value. It is created with `let`. By default, it can **not** change: it is
 [immutable](../debuter/glossaire.md#immutable).
@@ -30,6 +33,9 @@ If you try to change it, the compiler refuses (see
 
 ## Changeable variables with mut
 
+Some values have to change while the program runs: a score that goes up with each
+point, the money in a wallet. For those, Rust asks for one more word.
+
 Add `mut` to make the variable [mutable](../debuter/glossaire.md#mutable),
 that is, changeable:
 
@@ -44,13 +50,38 @@ println!("{counter}");
 2
 ```
 
+Line by line:
+
+- `let mut counter = 0;` creates a changeable variable that holds 0;
+- `counter = counter + 1;` reads the current value (0), adds 1, and stores the
+  result, 1, in `counter`;
+- `counter += 1;` does the same thing, shorter: `counter` now holds 2;
+- `println!` prints the final value, 2.
+
 `counter += 1` is a shortcut for `counter = counter + 1`. There are also `-=`,
 `*=` and `/=`.
 
 > **Remember:** in Rust, everything is constant by default. Write `mut` only when
 > the value has to change.
 
+**Your turn:** write a program that creates a changeable variable `money` holding 10,
+adds 5 to it with `+=`, then prints its value.
+
+> **Solution**
+>
+> ```rust
+> let mut money = 10;
+> money += 5;
+> println!("{money}");
+> ```
+>
+> ```sortie
+> 15
+> ```
+
 ## Shadowing
+
+> **Note:** this part can wait. Read it once the basics feel solid.
 
 You can declare a new variable with the same name. The old one is **shadowed**:
 it still exists, but the name now refers to the
@@ -74,6 +105,10 @@ Here, `text` is first a text, then a number. `parse` reads a number from a text
 > variable; with `mut`, you change the value of the same variable.
 
 ## Simple types
+
+A number and a text are not stored the same way, and you do not do the same things
+with them: you add up prices, not first names. The type lets Rust know what it is
+holding, and warn you if you mix things up.
 
 A [type](../debuter/glossaire.md#type) says what kind of value a
 variable holds. Rust often guesses the type by itself. You can also write it after `:`.
@@ -104,6 +139,14 @@ println!("{}", 7 % 2);
 3.5
 1
 ```
+
+Line by line:
+
+- the five `let` lines create one variable of each type; the type is written after `:`;
+- `7 / 2` divides two integers: the result is an integer too, `3`. What comes after
+  the decimal point is lost;
+- `7.0 / 2.0` divides two decimal numbers: the result is `3.5`;
+- `7 % 2` gives the remainder of 7 divided by 2: `1`.
 
 > **Warning:** a division between integers gives an integer: `7 / 2` is `3`. The
 > `%` gives the remainder of the division: `7 % 2` is `1`.
@@ -136,6 +179,8 @@ println!("{}", i32::MAX);
 > decimal number. These are Rust's default choices.
 
 ### Overflow
+
+> **Note:** this part can wait. Read it once the basics feel solid.
 
 What happens if a calculation goes past the limits? This is an **overflow**.
 During development, the program stops with an error.
@@ -180,7 +225,25 @@ println!("{}", big as u8);
 > (`3.99` becomes `3`, without rounding). To a type that is too small, the result is
 > surprising: `300` converted to `u8` is `44`.
 
+**Your turn:** a bag holds `candies: i32 = 9`. Write a program that shares these
+candies between 2 children and prints each one's share, with the decimal part.
+
+> **Solution**
+>
+> ```rust
+> let candies: i32 = 9;
+> let share = candies as f64 / 2.0;
+> println!("{share}");
+> ```
+>
+> ```sortie
+> 4.5
+> ```
+
 ## Tuples
+
+Some values always go together: the two coordinates of a point on a map, or the name
+and age of a person. A tuple puts them in a single package, like an index card.
 
 A **tuple** groups a few values, of types that can be different, between
 parentheses. You read each value with `.0`, `.1`, `.2`…:
@@ -200,10 +263,22 @@ println!("{name} is {age} years old");
 Léa is 17 years old
 ```
 
+Line by line:
+
+- `point` groups two numbers; `student` groups a text, a number and a boolean;
+- `point.0` reads the first value (3) and `point.1` the second one (4): counting
+  starts at 0;
+- `{:?}` prints the whole tuple, with its parentheses;
+- the last `println!` uses `name` and `age`, taken out of the tuple as explained
+  just below.
+
 The line `let (name, age, _) = student;` **destructures** the tuple: each value goes into
 its own variable. The `_` ignores the third one.
 
 ## Text: String and &str
+
+A program handles a lot of text: first names, messages, answers to print. Rust stores
+this text in two ways, depending on whether it must be able to change or not.
 
 Rust has two types of text (of [strings of
 characters](../debuter/glossaire.md#string)):
@@ -225,9 +300,21 @@ Hello, world!
 13
 ```
 
+Line by line:
+
+- `hello` is a `&str`: a fixed text, written directly in the code;
+- `String::from(hello)` turns it into a `String`, stored in `message`. The `mut` lets
+  you change it afterwards;
+- `push_str` adds a piece of text at the end; `push` adds a single character, written
+  between single quotes;
+- `message.len()` gives the length of the text: 13.
+
 Text has its own page: [Working with text](texte.md).
 
 ## Printing with println! and format!
+
+Printing is how your program talks to you: it shows a result, a message, a value to
+check. Often, you want to slip values into the middle of a sentence.
 
 `println!` prints, `format!` builds a `String` without printing it. The `{}` are
 placeholders, replaced by the values:
@@ -253,6 +340,16 @@ Léa got 17.5
 Léa!
 ```
 
+Line by line:
+
+- the first `println!` fills the two `{}` in order: first `name`, then `grade`;
+- the second one writes the variable names between the braces, and `:.1` rounds
+  `grade` to one digit after the decimal point;
+- `{:>5}` and `{:<5}` reserve 5 places and push `42` to the right or to the left; the
+  brackets show the spaces;
+- `format!` builds the text `"Léa!"` and stores it in `sentence`, without printing
+  anything: the last `println!` is what prints it.
+
 | Placeholder | Effect |
 |-------------|-------|
 | `{}` | normal display |
@@ -263,7 +360,26 @@ Léa!
 
 `print!` (without `ln`) prints without going to the next line.
 
+**Your turn:** write a program that stores `"bread"` in `product` and `1.456` in
+`price`, then prints "The bread costs 1.46 euros", with two digits after the decimal
+point.
+
+> **Solution**
+>
+> ```rust
+> let product = "bread";
+> let price = 1.456;
+> println!("The {product} costs {price:.2} euros");
+> ```
+>
+> ```sortie
+> The bread costs 1.46 euros
+> ```
+
 ## Comments
+
+A program is often read again: by you in a month, or by someone else. A comment
+explains what the code does, like a note in the margin of a recipe.
 
 A [comment](../debuter/glossaire.md#comment) is a note for humans:
 the compiler ignores it.
@@ -286,7 +402,18 @@ fn main() {
 8
 ```
 
+Line by line:
+
+- the lines that start with `//`, and everything between `/*` and `*/`, are ignored;
+- `///` describes the function `double` that follows: tools use it to build the
+  documentation;
+- in `main`, the comment `// prints 8` is at the end of the line: the code before it
+  runs normally.
+
 ## Constants
+
+Some values never change and are used in several places, like a tax rate. With a
+name, the code reads better, and you fix the value in one place only.
 
 A [constant](../debuter/glossaire.md#constant) is a value set once and
 for all. It is written with `const`, in CAPITAL LETTERS, and its type is required:
@@ -305,6 +432,30 @@ fn main() {
 20
 28
 ```
+
+Line by line:
+
+- the two `const` lines are written at the very top, outside `main`: the whole program
+  can use them;
+- `100.0 * TAX_RATE` computes 100 × 0.2, which is `20`;
+- `DAYS_PER_WEEK * 4` gives the number of days in 4 weeks: `28`.
+
+**Your turn:** write a program with a constant `TICKET_PRICE`, of type `f64`, that
+holds `2.5`. Print the price of 4 tickets.
+
+> **Solution**
+>
+> ```rust
+> const TICKET_PRICE: f64 = 2.5;
+>
+> fn main() {
+>     println!("{}", TICKET_PRICE * 4.0);
+> }
+> ```
+>
+> ```sortie
+> 10
+> ```
 
 ## Common mistakes
 

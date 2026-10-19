@@ -12,6 +12,10 @@ Esta página muestra cómo calcula Ruby con números enteros y decimales, cómo 
 
 ## Dos tipos de números
 
+Un programa cuenta sin parar: una edad, un precio, una puntuación, una temperatura. A
+veces hace falta un número entero (3 niños), a veces un número decimal (1,5 litros de
+leche).
+
 Ruby tiene dos tipos principales de números:
 
 - los [enteros](../debuter/glossaire.md#entero) (`Integer`): `3`, `-12`, `1_000_000`;
@@ -32,10 +36,21 @@ Float
 1267650600228229401496703205376
 ```
 
+Línea por línea:
+
+- `42.class` le pregunta a Ruby qué tipo de número es 42: es un `Integer`;
+- `3.14` tiene un punto, así que es un `Float`;
+- `1_000_000` se muestra sin los `_`: solo están para ti, para leerlo mejor;
+- `2**100` multiplica 2 por sí mismo 100 veces: el resultado es enorme, y Ruby lo da
+  entero, cifra por cifra.
+
 El `_` solo sirve para que el número se lea mejor, como el espacio en «1 000 000».
 Un entero de Ruby no tiene límite de tamaño: `2**100` funciona sin problema.
 
 ## Los operadores
+
+Un ordenador es, ante todo, una máquina de calcular. Como en una calculadora, escribes
+la operación y Ruby da el resultado.
 
 Los [operadores](../debuter/glossaire.md#operador) hacen los cálculos básicos.
 
@@ -56,6 +71,13 @@ puts 7**2
 1
 49
 ```
+
+Línea por línea:
+
+- las tres primeras líneas hacen una suma, una resta y una multiplicación, como en el
+  colegio;
+- `7 / 2` da `3`, y no `3.5`: la sección siguiente explica por qué;
+- `7 % 2` da lo que sobra de la división, y `7**2` multiplica 7 por sí mismo.
 
 - `%` da el **resto** de la división: 7 = 2 × 3 + **1**.
 - `**` es la potencia: `7**2` vale 7 × 7.
@@ -85,6 +107,21 @@ puts -2**2
 El último resultado sorprende: `-2**2` se lee `-(2**2)`. Escribe `(-2)**2` para obtener
 `4`. Ante la duda, pon paréntesis: no cuestan nada.
 
+**Te toca:** tienes 25 días de vacaciones. Escribe un programa que muestre el número de
+semanas completas (7 días) y luego el número de días que sobran.
+
+> **Solución**
+>
+> ```ruby
+> puts 25 / 7
+> puts 25 % 7
+> ```
+>
+> ```sortie
+> 3
+> 4
+> ```
+
 ## División entera y división decimal
 
 Si los dos números son enteros, `/` da un entero: la parte después de la coma se
@@ -106,12 +143,23 @@ p 7.divmod(2)
 [3, 1]
 ```
 
+Línea por línea:
+
+- `7 / 2`: los dos números son enteros, así que se descarta la coma: `3`;
+- `7.0 / 2` y `7 / 2.0`: uno de los dos números es un `Float`, y el resultado conserva
+  sus decimales: `3.5`;
+- `7.fdiv(2)` pide una división decimal, incluso entre dos enteros;
+- `7.divmod(2)` da dos números de una vez: el cociente `3` y el resto `1`.
+
 En cuanto uno de los dos números es un `Float`, el resultado es un `Float`. `fdiv` fuerza
 una división decimal, y `divmod` da el cociente y el resto de una vez.
 
 > **Atención:** `-7 / 2` vale `-4`, no `-3`: Ruby siempre redondea hacia abajo.
 
 ## Redondear
+
+Un cálculo suele dar demasiadas cifras después de la coma. Nadie puede pagar un precio
+de 3,756 €: redondear conserva solo las cifras útiles.
 
 ```ruby
 x = 3.756
@@ -132,12 +180,40 @@ puts 1234.round(-2)
 1200
 ```
 
+Línea por línea:
+
+- `x = 3.756` guarda el número en la variable `x`;
+- `x.round` da el entero más cercano: 3,756 está más cerca de 4 que de 3;
+- `x.round(1)` conserva una sola cifra después de la coma: `3.8`;
+- `floor`, `ceil` y `truncate` dan `3`, `4` y `3` (mira la lista de abajo);
+- `1234.round(-2)` redondea a la centena más cercana: `1200`.
+
 - `round` redondea al más cercano; `round(1)` conserva una cifra después de la coma.
 - `floor` redondea hacia abajo (el «suelo»), `ceil` hacia arriba (el «techo»).
 - `truncate` corta la parte después de la coma.
 - Un número negativo en `round` redondea a las decenas, centenas…
 
+**Te toca:** un viaje cuesta `12.456` €. Escribe un programa que guarde este precio en
+una variable y luego muestre el precio redondeado a 2 cifras después de la coma, y
+después el entero superior.
+
+> **Solución**
+>
+> ```ruby
+> precio = 12.456
+> puts precio.round(2)
+> puts precio.ceil
+> ```
+>
+> ```sortie
+> 12.46
+> 13
+> ```
+
 ## La trampa de los flotantes
+
+Esta parte explica por qué un cálculo muy sencillo puede dar un resultado un poquito
+falso, y cómo evitarlo, sobre todo cuando se trata de dinero.
 
 Un `Float` se guarda en binario en el ordenador. Algunos números sencillos para
 nosotros, como `0.1`, no salen exactos en binario, igual que `1/3` no sale exacto en
@@ -154,6 +230,14 @@ puts (0.1 + 0.2 - 0.3).abs < 1e-9
 false
 true
 ```
+
+Línea por línea:
+
+- `0.1 + 0.2` da `0.30000000000000004`: un poquito más que `0.3`;
+- `0.1 + 0.2 == 0.3` compara los dos números: no son exactamente iguales, así que
+  `false`;
+- la última línea calcula la diferencia entre los dos, sin su signo (`abs`), y comprueba
+  que es menor que `1e-9`, es decir, 0,000000001: es verdad.
 
 Para comparar dos flotantes, mira si su diferencia es minúscula en lugar de usar `==`.
 
@@ -203,6 +287,11 @@ Otra solución sencilla: contar en céntimos, con enteros (`1999` en lugar de `1
 
 ## El módulo Math
 
+> **Nota:** esta parte puede esperar. Léela cuando las bases estén firmes.
+
+Para cálculos más avanzados, como una raíz cuadrada, no hace falta escribirlo todo tú:
+Ruby ya los trae, reunidos en una misma caja de herramientas.
+
 `Math` agrupa las funciones matemáticas.
 
 ```ruby
@@ -228,6 +317,9 @@ rectángulo. `abs` da el valor sin el signo.
 
 ## El azar con rand
 
+Un juego de dados, un concurso que mezcla sus preguntas, un sorteo: todos necesitan
+azar.
+
 `rand(1..6)` saca un número entre 1 y 6, como un dado. El resultado cambia cada vez que
 ejecutas el programa. Para obtener siempre la misma secuencia (útil para hacer pruebas),
 da una **semilla** con `srand` o crea un generador `Random`.
@@ -245,10 +337,21 @@ p 5.times.map { dado.rand(1..6) }
 [4, 5, 3, 5, 5]
 ```
 
+Línea por línea:
+
+- `Random.new(42)` crea un generador de azar con la semilla 42, guardado en `dado`;
+- `5.times.map { dado.rand(1..6) }` lanza el dado 5 veces y reúne los 5 resultados en
+  una lista, que `p` muestra;
+- las dos últimas líneas vuelven a empezar con la misma semilla 42: la lista es
+  idéntica.
+
 Misma semilla, misma secuencia. `srand(42)` hace lo mismo para `rand` a secas. Sin
 semilla, cada ejecución da otros números.
 
 ## Convertir
+
+Lo que una persona escribe con el teclado, o lo que se lee de un archivo, llega siempre
+como texto. Pero `"42"` no es un número: hay que convertirlo antes de calcular con él.
 
 ```ruby
 puts "42".to_i + 1
@@ -270,6 +373,13 @@ puts Integer("42")
 42
 ```
 
+Línea por línea:
+
+- `"42".to_i` convierte el texto `"42"` en el número 42, y luego `+ 1` da `43`;
+- `"3.5".to_f` da el flotante 3.5, y `* 2` da `7.0`;
+- `"12abc".to_i` lee `12` y se detiene; `"abc".to_i` no encuentra ninguna cifra: `0`;
+- `7.to_f` da `7.0`, y `7.9.to_i` corta los decimales sin redondear: `7`.
+
 `to_i` es tolerante: lee el principio del texto y devuelve `0` si no encuentra nada.
 `Integer("...")` es estricto: lanza un error si el texto no es un número. Es mejor para
 comprobar lo que escribe el usuario.
@@ -286,7 +396,24 @@ end
 Entrada no válida: invalid value for Integer(): "12abc"
 ```
 
+**Te toca:** escribe un programa que guarde los textos `"12"` y `"30"` en dos
+variables y luego muestre su suma, calculada como números.
+
+> **Solución**
+>
+> ```ruby
+> a = "12"
+> b = "30"
+> puts a.to_i + b.to_i
+> ```
+>
+> ```sortie
+> 42
+> ```
+
 ### Las cifras de un número
+
+> **Nota:** esta parte puede esperar. Léela cuando las bases estén firmes.
 
 `digits` da las cifras, **empezando por el final**.
 
@@ -308,6 +435,9 @@ puts "ff".to_i(16)
 
 ## Dar formato a un número
 
+Un resultado como `3.14159` es demasiado largo para un tique de caja o una tabla. Dar
+formato es elegir cómo se muestra el número, sin cambiar su valor.
+
 `format` construye un texto a partir de un modelo. `%.2f` quiere decir «un flotante con
 2 cifras después de la coma», `%05d` «un entero de 5 cifras, completado con ceros».
 
@@ -324,6 +454,29 @@ puts format("%d %% de aciertos", 87)
 ab    |
 87 % de aciertos
 ```
+
+Línea por línea:
+
+- `%.2f` conserva 2 cifras después de la coma: `3.14`;
+- `%05d` escribe 42 con 5 cifras, con ceros delante;
+- `%-6s` escribe el texto `"ab"` en 6 caracteres, pegado a la izquierda: los espacios
+  se ven antes de la `|`;
+- `%%` muestra un signo `%` de verdad.
+
+**Te toca:** escribe un programa que muestre el precio `7.5` con 2 cifras después de la
+coma, y luego el número `7` con 3 cifras, completado con ceros.
+
+> **Solución**
+>
+> ```ruby
+> puts format("%.2f", 7.5)
+> puts format("%03d", 7)
+> ```
+>
+> ```sortie
+> 7.50
+> 007
+> ```
 
 ### Separar los miles
 

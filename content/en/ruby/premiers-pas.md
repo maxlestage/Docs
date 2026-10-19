@@ -12,6 +12,10 @@ This page covers the basics of Ruby: variables, numbers, text, symbols, booleans
 
 ## Variables
 
+A program needs to remember things: a name, a score, a price. Without variables, every
+value would be lost right away, like a phone number you forget because you did not
+write it down.
+
 A [variable](../debuter/glossaire.md#variable) is a name that refers to a
 [value](../debuter/glossaire.md#value). Think of a label stuck on a box:
 the label is the name, what is inside the box is the value. You create it with `=`.
@@ -27,6 +31,13 @@ puts age
 Alice
 30
 ```
+
+Line by line:
+
+- `age = 30` stores the number 30 in a box named `age`;
+- `first_name = "Alice"` stores the text `"Alice"` in another box, named `first_name`;
+- the two `puts` read what is in each box and print it, in the order they are
+  written: first `first_name`, then `age`.
 
 Here, `=` does not mean "is equal to". It means "store this value under this
 name". This is called an **assignment**.
@@ -69,7 +80,28 @@ puts score
 `score += 1` is a shortcut for `score = score + 1`. There are also `-=`, `*=` and
 `/=`.
 
+**Your turn:** write a program that stores `5` in a variable `apples`, prints its value,
+adds 3 to it with `+=`, then prints the new value.
+
+> **Solution**
+>
+> ```ruby
+> apples = 5
+> puts apples
+> apples += 3
+> puts apples
+> ```
+>
+> ```sortie
+> 5
+> 8
+> ```
+
 ## Numbers
+
+Almost every program calculates: the total of a shopping cart, an average of grades,
+the time left before a meeting. Ruby calculates like a calculator, with a few rules to
+know.
 
 Ruby tells apart whole numbers (`Integer`, no decimal point) and decimal numbers (`Float`,
 called **floats**). The decimal point is written with a dot: `2.5`.
@@ -102,6 +134,15 @@ puts 2 ** 10
 1
 1024
 ```
+
+Line by line:
+
+- `puts 7 + 3`: Ruby first does the calculation, then `puts` prints the result, 10;
+- `puts 7 / 2` prints 3, not 3.5: both numbers are whole numbers (the next section
+  explains why);
+- `puts 7.0 / 2`: with a float, the result keeps its part after the decimal point;
+- `7 % 2` is 1, because 7 = 2 x 3 + 1: 1 is left over;
+- `2 ** 10` multiplies 2 by itself 10 times: 1024.
 
 ### Whole division and decimal division
 
@@ -172,7 +213,28 @@ puts -5.abs
 - `floor` rounds down, `ceil` rounds up.
 - `abs` gives the value without its sign (the **absolute value**).
 
+**Your turn:** 17 candies are shared between 5 children. Write a program that stores
+these two numbers in variables, then prints how many candies each child gets, and how
+many are left over.
+
+> **Solution**
+>
+> ```ruby
+> candies = 17
+> children = 5
+> puts candies / children
+> puts candies % children
+> ```
+>
+> ```sortie
+> 3
+> 2
+> ```
+
 ## Strings
+
+A program talks with words: it prints a name, a welcome message, an address. Anything
+that is text is stored in a string.
 
 A text is written between quotes. It is called a
 [string of characters](../debuter/glossaire.md#string), or a **string**
@@ -237,7 +299,24 @@ puts 5.to_s + "5"
 
 The chapter [working with text](texte.md) goes much further.
 
+**Your turn:** write a program that stores a price of `4` euros and a quantity of `3`
+in two variables, then prints `3 croissants cost 12 euros.` using interpolation.
+
+> **Solution**
+>
+> ```ruby
+> price = 4
+> quantity = 3
+> puts "#{quantity} croissants cost #{price * quantity} euros."
+> ```
+>
+> ```sortie
+> 3 croissants cost 12 euros.
+> ```
+
 ## Symbols
+
+> **Note:** this part can wait. Read it once the basics feel solid.
 
 A symbol starts with `:`. It is a fixed name, often used as a label.
 Unlike a text, you don't change it: it is only there to name something.
@@ -253,9 +332,20 @@ red
 :red
 ```
 
+Line by line:
+
+- `color = :red` stores the symbol `:red` in the variable `color`;
+- `puts color` prints it like a word, without the colon;
+- `p color` shows it the way Ruby sees it, with its colon: it really is a symbol, not
+  a text.
+
 You will see them again as hash keys in [arrays and hashes](collections.md).
 
 ## Booleans and nil
+
+A program often has to answer yes or no: is this person an adult? Is the password
+right? Booleans are these answers. And sometimes there is nothing to store yet at all:
+that is what `nil` is for.
 
 `true` and `false` are the [booleans](../debuter/glossaire.md#boolean).
 `nil` means "nothing, no value": it is an empty box.
@@ -289,12 +379,22 @@ nil
 true
 ```
 
+Line by line:
+
+- `3 > 2` asks the question "is 3 greater than 2?". Yes: Ruby answers `true`;
+- `3 == 4` answers `false`, and `3 != 4` answers `true`: 3 and 4 really are different;
+- `"a" == "a"` shows that you can compare texts too;
+- `p nil` prints `nil`, and `nil.nil?` asks "is this `nil`?": the answer is `true`.
+
 > **Warning:** `=` stores a value, `==` compares two values. Don't mix them up.
 
 > **Remember:** in Ruby, only `false` and `nil` are "false". Everything else is true,
 > even `0` and `""`.
 
 ## Printing with puts, print and p
+
+A program works in silence. To see a result, you have to ask for it, like asking
+someone to read a result out loud. Ruby gives you three ways to do it.
 
 - `puts` prints then goes to the next line.
 - `print` prints without going to the next line.
@@ -316,6 +416,14 @@ text
 42
 ```
 
+Line by line:
+
+- `print "a"` prints `a` and stays on the same line; `print "b"` writes `b` right next
+  to it;
+- `puts` on its own prints nothing: it only goes to the next line;
+- `puts "text"` prints the text without quotes, `p "text"` shows it with them;
+- `p 42` prints `42` without quotes: it is a number, not a text.
+
 `p` shows the quotes: you see right away that `"42"` is a text and `42`
 a number.
 
@@ -333,6 +441,25 @@ puts 42
 42
 ```
 
+**Your turn:** write a program that prints `Hello, Alice` on a single line, with a
+`print` for `"Hello, "` then a `puts` for `"Alice"`. Then print the number `7` and the
+text `"7"` with `p`.
+
+> **Solution**
+>
+> ```ruby
+> print "Hello, "
+> puts "Alice"
+> p 7
+> p "7"
+> ```
+>
+> ```sortie
+> Hello, Alice
+> 7
+> "7"
+> ```
+
 ## Comments
 
 A comment starts with `#`. Ruby ignores it. It is there to explain the code to
@@ -348,6 +475,11 @@ visible
 ```
 
 ## Naming conventions
+
+> **Note:** this part can wait. Read it once the basics feel solid.
+
+A program is read far more often than it is written. A good name is like a clear label
+on a jar: you know what is inside without opening it.
 
 - Variables and methods: `snake_case` (`total_price`), in lowercase with `_`.
 - Classes and modules: `CamelCase` (`BankAccount`).
@@ -366,6 +498,15 @@ puts price_with_tax
 ```sortie
 120.0
 ```
+
+Line by line:
+
+- `TAX_RATE = 0.2` creates a constant: its name in capital letters says "do not
+  change";
+- `price_before_tax` is 100;
+- Ruby first calculates the parentheses, `1 + 0.2`, which is `1.2`, then `100 * 1.2`.
+  It stores `120.0` in `price_with_tax`;
+- `puts` prints this value.
 
 The result is `120.0` and not `120`: a calculation that mixes a whole number and a float
 gives a float.

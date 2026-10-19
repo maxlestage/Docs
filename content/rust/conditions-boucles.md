@@ -13,6 +13,9 @@ Cette page montre comment choisir entre plusieurs chemins avec `if` et `match`, 
 
 ## La condition if
 
+Un programme doit souvent décider. S'il fait chaud, il conseille de boire ; s'il fait
+froid, de prendre un manteau. `if` (« si ») sert à faire ce choix.
+
 `if` exécute un bloc seulement si la condition est vraie. Pas besoin de parenthèses,
 mais les accolades sont obligatoires.
 
@@ -30,6 +33,14 @@ if temperature > 30 {
 ```sortie
 Il fait bon.
 ```
+
+Ligne par ligne :
+
+- `let temperature = 25;` range 25 dans la variable `temperature` ;
+- premier test : « 25 est-il plus grand que 30 ? ». Non : Rust saute ce bloc ;
+- deuxième test, avec `else if` : « 25 est-il plus grand que 15 ? ». Oui : Rust
+  affiche « Il fait bon. » ;
+- le bloc `else` n'est pas exécuté, car un test a déjà réussi.
 
 Rust teste les conditions dans l'ordre et s'arrête à la première vraie. `else`
 attrape tous les autres cas.
@@ -63,7 +74,30 @@ Entrée autorisée
 Adolescent
 ```
 
+**À vous :** écrivez un programme qui range `heure = 15` dans une variable, puis
+affiche « Bonjour » si l'heure est avant 12, « Bon après-midi » si elle est avant 18,
+et « Bonsoir » sinon.
+
+> **Solution**
+>
+> ```rust
+> let heure = 15;
+> if heure < 12 {
+>     println!("Bonjour");
+> } else if heure < 18 {
+>     println!("Bon après-midi");
+> } else {
+>     println!("Bonsoir");
+> }
+> ```
+>
+> ```sortie
+> Bon après-midi
+> ```
+
 ## if est une expression
+
+> **Note :** cette partie peut attendre. Lisez-la quand les bases seront solides.
 
 En Rust, `if` **renvoie une valeur**. Vous pouvez la ranger dans une variable :
 
@@ -80,6 +114,9 @@ majeur
 > **Attention :** les deux branches doivent donner le même type.
 
 ## Le choix avec match
+
+Quand une valeur peut prendre beaucoup de formes, une longue suite de `else if`
+devient pénible à lire. `match` range tous ces cas proprement, l'un sous l'autre.
 
 `match` compare une valeur à plusieurs **motifs** (des formes possibles). Le premier
 qui correspond gagne. Pensez à un tri postal : chaque lettre va dans la première case
@@ -101,6 +138,14 @@ println!("{nom}");
 week-end
 ```
 
+Ligne par ligne :
+
+- `jour` vaut 6 ;
+- `match jour` compare 6 à chaque motif, de haut en bas : 1 ? non. 2, 3 ou 4 ? non.
+  5 ? non ;
+- `6 | 7` correspond : le `match` donne le texte `"week-end"`, rangé dans `nom` ;
+- le motif `_` ne sert pas ici : il ne compte que si aucun autre motif ne correspond.
+
 `|` signifie « ou ». Les motifs peuvent aussi être des intervalles :
 
 ```rust
@@ -119,7 +164,29 @@ Bien
 > **À retenir :** `match` doit couvrir **tous** les cas. Le motif `_` attrape tout le
 > reste.
 
+**À vous :** écrivez un programme qui range `pieces = 3` dans une variable, puis
+utilise `match` pour afficher « un » pour 1, « deux » pour 2, « trois » pour 3, et
+« beaucoup » pour tout le reste.
+
+> **Solution**
+>
+> ```rust
+> let pieces = 3;
+> match pieces {
+>     1 => println!("un"),
+>     2 => println!("deux"),
+>     3 => println!("trois"),
+>     _ => println!("beaucoup"),
+> }
+> ```
+>
+> ```sortie
+> trois
+> ```
+
 ### Les gardes
+
+> **Note :** cette partie peut attendre. Lisez-la quand les bases seront solides.
 
 Un motif peut être suivi de `if` et d'une condition : c'est une **garde**. Le nom `n`
 reçoit la valeur testée :
@@ -159,6 +226,9 @@ false
 
 ## La boucle loop
 
+Imaginez qu'on vous demande d'afficher les nombres de 1 à 100. Écrire 100 `println!`
+serait long et pénible. Une boucle fait ce travail répétitif à votre place.
+
 Une [boucle](../debuter/glossaire.md#boucle) répète un bloc de code. `loop` répète
 sans fin, jusqu'à un `break`. Le `break` peut renvoyer une valeur :
 
@@ -177,7 +247,18 @@ println!("{resultat}");
 128
 ```
 
+Ligne par ligne :
+
+- `n` vaut 1 au départ ; `mut` permet de le modifier ensuite ;
+- à chaque tour, `n` est multiplié par 2 : il vaut 2, puis 4, 8, 16, 32, 64, 128 ;
+- tant que `n` ne dépasse pas 100, le `if` ne fait rien et la boucle recommence ;
+- quand `n` vaut 128, `break n;` arrête la boucle et donne 128, rangé dans
+  `resultat`.
+
 ## La boucle while
+
+Parfois, vous ne savez pas à l'avance combien de tours il faudra. Vous répétez tant
+qu'une situation dure, comme on remue une soupe tant qu'elle n'est pas chaude.
 
 `while` répète tant que la condition est vraie. Elle est testée avant chaque tour :
 
@@ -197,7 +278,42 @@ println!("Partez !");
 Partez !
 ```
 
+Ligne par ligne :
+
+- `compte` vaut 3 au départ ;
+- avant chaque tour, Rust pose la question `compte > 0`. `3 > 0` est vrai : il entre
+  dans le bloc ;
+- le bloc affiche `compte`, puis lui retire 1 (`-= 1`) : il vaut 2, puis 1, puis 0 ;
+- quand `compte` vaut 0, `0 > 0` est faux : Rust sort de la boucle et affiche
+  « Partez ! ».
+
+**À vous :** écrivez un programme qui affiche les nombres de 1 à 5 avec une boucle
+`while`, puis « Fini ! ».
+
+> **Solution**
+>
+> ```rust
+> let mut n = 1;
+> while n <= 5 {
+>     println!("{n}");
+>     n += 1;
+> }
+> println!("Fini !");
+> ```
+>
+> ```sortie
+> 1
+> 2
+> 3
+> 4
+> 5
+> Fini !
+> ```
+
 ## La boucle for
+
+Très souvent, vous avez une suite de choses à traiter une par une : chaque article
+d'une liste de courses, chaque nombre de 1 à 10. `for` est fait pour cela.
 
 `for` parcourt un intervalle ou une collection, élément par élément. C'est la boucle
 la plus utilisée.
@@ -223,6 +339,13 @@ println!();
 4 3 2 1 
 ```
 
+Ligne par ligne :
+
+- `for i in 1..4` donne à `i` la valeur 1, puis 2, puis 3 ;
+- `print!` affiche sans aller à la ligne : les nombres restent côte à côte ;
+- `println!()`, vide, sert seulement à passer à la ligne ;
+- la deuxième boucle fait pareil de 1 à 4, mais à l'envers grâce à `rev()`.
+
 ### Sur une collection
 
 ```rust
@@ -246,7 +369,30 @@ J'aime la kiwi
 
 `enumerate()` donne, en plus de chaque élément, sa position (à partir de 0).
 
+**À vous :** écrivez un programme qui affiche la table de 7, de « 7 x 1 = 7 » à
+« 7 x 5 = 35 », une ligne par calcul.
+
+> **Solution**
+>
+> ```rust
+> for i in 1..=5 {
+>     let resultat = 7 * i;
+>     println!("7 x {i} = {resultat}");
+> }
+> ```
+>
+> ```sortie
+> 7 x 1 = 7
+> 7 x 2 = 14
+> 7 x 3 = 21
+> 7 x 4 = 28
+> 7 x 5 = 35
+> ```
+
 ## continue et break
+
+Parfois, vous voulez changer le cours d'une boucle en route : arrêter de chercher dès
+que vous avez trouvé, ou ignorer certains éléments. C'est le rôle de ces deux mots.
 
 `continue` passe au tour suivant, `break` arrête la boucle :
 
@@ -266,6 +412,14 @@ println!();
 ```sortie
 1 3 5 7 
 ```
+
+Ligne par ligne :
+
+- `n` prend les valeurs 1, 2, 3… jusqu'à 9 ;
+- si `n` est pair (le reste de la division par 2 vaut 0), `continue` passe tout de
+  suite au tour suivant : le `print!` n'est pas atteint ;
+- si `n` dépasse 7, `break` arrête toute la boucle : 9 n'est jamais affiché ;
+- sinon, `print!` affiche le nombre.
 
 ### Sortir de deux boucles : les étiquettes
 
@@ -294,6 +448,10 @@ Fin
 étiquetée.
 
 ## if let et while let
+
+Pensez à une boîte aux lettres : parfois il y a une lettre, parfois rien. Avant de
+lire la lettre, il faut vérifier qu'elle est là. `if let` et `while let` font cette
+vérification pour vous.
 
 Certaines valeurs sont **facultatives** : elles valent `Some(x)` s'il y a quelque chose,
 ou `None` s'il n'y a rien. C'est le type `Option`, présenté en détail dans

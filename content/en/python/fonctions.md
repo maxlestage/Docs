@@ -31,10 +31,21 @@ Hello!
 Hello!
 ```
 
+Line by line:
+
+- `def greet():` creates a function named `greet`. Nothing is displayed yet;
+- `print("Hello!")` is indented: it belongs to the function, so it waits;
+- the first `greet()` runs the function: Python executes its body and displays
+  "Hello!";
+- the second `greet()` does it again: the same recipe, followed a second time.
+
 Writing `def` does not run anything: it saves the recipe. Writing `greet()` **calls**
 the function, that is, runs it. The parentheses are required, even when empty.
 
 ## Parameters
+
+A pancake recipe can serve 4 or 8 people: only the quantities change. In the same
+way, a function is more useful when it can work with different values at each call.
 
 [Parameters](../debuter/glossaire.md#parameter) are the values the function receives.
 They are empty slots, filled in at the time of the call. The values given in the call
@@ -53,10 +64,40 @@ Hello, Alice!
 Hello, Bob!
 ```
 
+Line by line:
+
+- `def greet(first_name):` creates the function, with an empty slot named
+  `first_name`;
+- `greet("Alice")` calls the function: `first_name` receives `"Alice"`, then `print`
+  displays "Hello, Alice!";
+- `greet("Bob")` calls it again: this time, `first_name` is `"Bob"`.
+
 Here, `first_name` is the parameter; `"Alice"` and `"Bob"` are the arguments. Several
 parameters are separated by commas.
 
+**Your turn:** write a function `birthday(first_name)` that displays "Happy birthday,
+…!" with the name it receives. Call it for Lea, then for Tom.
+
+> **Solution**
+>
+> ```python
+> def birthday(first_name):
+>     print(f"Happy birthday, {first_name}!")
+>
+> birthday("Lea")
+> birthday("Tom")
+> ```
+>
+> ```sortie
+> Happy birthday, Lea!
+> Happy birthday, Tom!
+> ```
+
 ## Returning a value with return
+
+Often, you want a function to do a calculation and **give** you the result, like a
+calculator. You can then display it, store it in a variable or reuse it in another
+calculation.
 
 `return` sends a result back to the code that called the function, and leaves the
 function.
@@ -74,6 +115,14 @@ print(total)
 12
 11
 ```
+
+Line by line:
+
+- `def area(width, height):` creates a function that receives two numbers;
+- `return width * height` computes the product and sends it back to the caller;
+- `print(area(3, 4))`: the call is worth 12, so Python displays 12;
+- `total = area(2, 5) + area(1, 1)`: the two calls are worth 10 and 1, and `total`
+  receives 11.
 
 The returned value **replaces** the call: `area(2, 5) + area(1, 1)` becomes `10 + 1`.
 
@@ -136,7 +185,26 @@ print(small, big)
 1 9
 ```
 
+**Your turn:** write a function `perimeter(width, height)` that **returns** the
+perimeter of a rectangle (twice the sum of the sides). Display `perimeter(3, 4)`.
+
+> **Solution**
+>
+> ```python
+> def perimeter(width, height):
+>     return 2 * (width + height)
+>
+> print(perimeter(3, 4))
+> ```
+>
+> ```sortie
+> 14
+> ```
+
 ## Default values
+
+At a café, you get a regular coffee unless you ask for something else. A default value
+plays that role: it saves you from repeating the most common value.
 
 A parameter can have a default value. It is used if the argument is missing.
 
@@ -153,7 +221,31 @@ Hello, Alice!
 Hi, Bob!
 ```
 
+Line by line:
+
+- `greeting="Hello"` gives the parameter `greeting` a fallback value;
+- `greet("Alice")` gives only one argument: `greeting` therefore takes `"Hello"`;
+- `greet("Bob", "Hi")` gives both: `"Hi"` replaces the default value.
+
 Parameters with a default value go **after** the others.
+
+**Your turn:** write a function `price(amount, currency="euros")` that returns a text
+like "5 euros". Display `price(5)`, then `price(8, "dollars")`.
+
+> **Solution**
+>
+> ```python
+> def price(amount, currency="euros"):
+>     return f"{amount} {currency}"
+>
+> print(price(5))
+> print(price(8, "dollars"))
+> ```
+>
+> ```sortie
+> 5 euros
+> 8 dollars
+> ```
 
 ## Keyword arguments
 
@@ -178,10 +270,23 @@ print(order(quantity=3, product="croissant"))
 3 x croissant
 ```
 
+Line by line:
+
+- `order("coffee")`: only `product` is given; `quantity` is 1 and `urgent` is
+  `False`;
+- `order("tea", urgent=True)`: `urgent` is given by its name, without touching
+  `quantity`;
+- `order(quantity=3, product="croissant")`: both arguments are named, so the order
+  does not matter.
+
 > **Tip:** name boolean arguments. `order("tea", urgent=True)` is clear right away;
 > `order("tea", 1, True)` much less so.
 
 ## A variable number of arguments: *args and **kwargs
+
+Sometimes you do not know in advance how many values you will receive. A restaurant
+bill can list two dishes or ten. The stars let a function accept as many arguments as
+needed.
 
 With one star, `*args` receives all the extra **positional** arguments, stored in a
 tuple.
@@ -203,6 +308,14 @@ print(total())
 10
 0
 ```
+
+Line by line:
+
+- `*numbers` stores all the arguments received in a tuple: `(1, 2)`, then
+  `(1, 2, 3, 4)`, then `()`;
+- `result = 0` starts from zero;
+- the `for` loop adds each number to `result`;
+- `return result` sends back the sum. With no argument, the loop does not run: 0.
 
 With two stars, `**kwargs` (*keyword arguments*) receives all the extra **named**
 arguments, stored in a [dictionary](../debuter/glossaire.md#dictionary).
@@ -227,6 +340,8 @@ explained in [dictionaries and sets](dictionnaires.md).
 
 ## Documenting with a docstring
 
+> **Note:** this part can wait. Read it once the basics feel solid.
+
 A **docstring** is a text between triple quotes, placed right below the `def` line. It
 explains what the function does. Editors show it when you hover over the name, and
 `help()` displays it.
@@ -247,6 +362,10 @@ Returns the price including tax, rounded to the cent.
 
 ## Variable scope
 
+A function has its own scratch paper. What it writes there while it works does not
+spill over into the rest of the program. This way, two functions can use the same
+variable name without getting in each other's way.
+
 The [scope](../debuter/glossaire.md#scope) of a variable is the area of the code where
 it exists. A variable created **inside** a function is **local**: it is born when the
 function is called and disappears at the end.
@@ -264,6 +383,13 @@ print("result" in globals())
 42
 False
 ```
+
+Line by line:
+
+- `result = 42` creates the variable `result` **inside** the function;
+- `print(calculate())` calls the function, which returns 42: Python displays it;
+- `globals()` gives the variables from outside. `"result" in globals()` asks whether
+  `result` is one of them: the answer is `False`.
 
 After the call, `result` no longer exists outside the function.
 
@@ -291,6 +417,8 @@ print(counter)
 > argument and returning the result: `counter = increment(counter)`.
 
 ## Functions are values
+
+> **Note:** this part can wait. Read it once the basics feel solid.
 
 In Python, a function is a value like any other. Without parentheses, its name refers
 to the function itself: you can store it in a variable or pass it to another function.
@@ -328,6 +456,9 @@ print(sorted(words, key=len))
 
 ## Lambdas
 
+Sometimes a function is used only once, for a tiny task, like telling `sorted` what
+to sort by. Giving it a name with `def` would be heavy.
+
 A [lambda](../debuter/glossaire.md#lambda) is a small function without a name, written
 on one line: `lambda parameters: expression`. It automatically returns the value of the
 expression.
@@ -346,13 +477,38 @@ print(by_grade)
 [('Bob', 12), ('Alice', 15), ('Chloe', 18)]
 ```
 
+Line by line:
+
+- `square = lambda x: x * x` creates a small function and stores it in `square`;
+- `square(5)` computes `5 * 5` and returns 25;
+- `students` is a list of pairs (name, grade);
+- `sorted(..., key=lambda student: student[1])` looks at the grade of each pair, and
+  orders the students from the lowest grade to the highest.
+
 `key=lambda student: student[1]` means "sort by the second element". Sorting is
 explained in detail in [lists and tuples](collections.md).
 
 > **Tip:** a lambda is mostly used as an argument to another function. For everything
 > else, a real `def` with a name is clearer.
 
+**Your turn:** the list `friends = [("Lea", 25), ("Tom", 19), ("Ines", 31)]` holds
+names and ages. Display it sorted by age, with `sorted` and a lambda.
+
+> **Solution**
+>
+> ```python
+> friends = [("Lea", 25), ("Tom", 19), ("Ines", 31)]
+> print(sorted(friends, key=lambda friend: friend[1]))
+> ```
+>
+> ```sortie
+> [('Tom', 19), ('Lea', 25), ('Ines', 31)]
+> ```
+
 ## A function that calls itself
+
+Some problems contain a smaller version of themselves. Counting down from 3 means
+saying "3", then counting down from 2. A function can follow the same idea.
 
 A function can call itself: this is
 [recursion](../debuter/glossaire.md#recursion). It needs a **stopping case**, otherwise
@@ -375,6 +531,14 @@ countdown(3)
 1
 Go!
 ```
+
+Line by line:
+
+- `countdown(3)`: `n` is 3, not 0. The function displays 3, then calls itself
+  with 2;
+- same thing with 2, then with 1: each call displays its number;
+- with 0, the `if` is true: the function displays "Go!" and `return` stops
+  everything. This is the stopping case.
 
 A classic example is the factorial: `5!` equals `5 × 4 × 3 × 2 × 1`. In other words,
 `n!` equals `n × (n - 1)!`, and `1!` equals 1.

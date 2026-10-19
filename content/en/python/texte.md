@@ -12,6 +12,9 @@ This page explains how to handle text in Python: cut it up, search it, replace p
 
 ## The str type
 
+Almost every program handles text: a first name, a message, an email address, a line
+read from a file. Knowing how to store it and transform it is essential.
+
 A text in Python is a [string](../debuter/glossaire.md#string), of type
 `str`. Picture a pearl necklace: each pearl is a character (a letter, a digit, a space,
 a symbol), and the pearls are in a precise order.
@@ -28,6 +31,12 @@ print(len(message))
 Hello Hi It's time
 5
 ```
+
+Line by line:
+
+- `message`, `other` and `quote` each receive a text, written between quotes;
+- the first `print` shows the three texts one after the other, separated by a space;
+- `len(message)` counts the characters of "Hello": there are 5.
 
 - Double or single quotes, as you like. Use double quotes if the text contains an
   apostrophe.
@@ -48,6 +57,9 @@ hahaha
 ```
 
 ## Reading one character: indexes
+
+Sometimes you need a single character: the initial of a first name, the last digit of
+a code. Indexes do that job, like the numbers on the boxes of a locker.
 
 Each character has a position, its [index](../debuter/glossaire.md#index). The first
 one is at index **0**. Negative indexes count from the end: `-1` is the last one.
@@ -73,7 +85,26 @@ n
 o
 ```
 
+**Your turn:** write a program that stores `name = "Emily"` in a variable, then shows
+its first letter and its last letter.
+
+> **Solution**
+>
+> ```python
+> name = "Emily"
+> print(name[0])
+> print(name[-1])
+> ```
+>
+> ```sortie
+> E
+> y
+> ```
+
 ## Cutting: slices
+
+One character is not always enough: sometimes you want the first three letters of a
+word, or the year at the end of a date. A slice cuts out a piece, like a slice of cake.
 
 A **slice** takes a piece of the text: `text[start:end]`. The start is included, the
 end is **excluded**, just like with `range`.
@@ -97,11 +128,21 @@ Pto
 nohtyP
 ```
 
+Line by line:
+
+- `word[0:3]` takes indexes 0, 1 and 2: "Pyt". Index 3 is excluded;
+- `word[2:]` starts at index 2 and goes to the end: "thon";
+- `word[-3:]` starts at the third character from the end: "hon";
+- `word[::-1]` reads the word from the end to the start: "nohtyP".
+
 - without a start, you begin at the start; without an end, you go to the end;
 - a third number gives the **step**: `[::2]` takes every other letter;
 - `[::-1]` goes backwards: it is the classic trick to reverse a text.
 
 ## A text cannot be changed
+
+This rule explains a common surprise for beginners: you call a method on a text, and
+yet your variable does not change. Here is why.
 
 A `str` is [immutable](../debuter/glossaire.md#immutable): once created, it never
 changes. Every operation on a text returns a **new** text. The original stays intact.
@@ -121,10 +162,21 @@ ALICE
 Alice
 ```
 
+Line by line:
+
+- `name` holds "alice";
+- `name.upper()` builds a new text, "ALICE", stored in `uppercase`. `name` has not
+  moved: the first `print` still shows "alice";
+- `name = name.capitalize()` builds "Alice" and stores it in `name`, in place of the
+  old text: the last `print` shows "Alice".
+
 To "change" a text variable, store the new text in the variable:
 `name = name.capitalize()`.
 
 ## Changing case and cleaning up
+
+Texts typed by people are rarely clean: random capital letters, extra spaces. Before
+you compare them or show them, you tidy them up, like sorting out a messy drawer.
 
 A [method](../debuter/glossaire.md#method) is a function attached to a value. You call
 it with a dot: `text.method()`. Here are the most useful ones:
@@ -152,6 +204,15 @@ hello
 title
 ```
 
+Line by line:
+
+- `title` never changes: each method returns a new text, which is shown right away;
+- `entry` has three spaces at the start, two at the end and a line break `\n`;
+- `strip()` removes all of that on both sides. The brackets show where the text starts
+  and where it ends;
+- `lstrip()` only removes the start. The `replace` turns the line break into `↵`, so
+  you can see it.
+
 - `upper` and `lower`: all uppercase, all lowercase;
 - `title`: a capital letter on each word; `capitalize`: only on the first letter;
 - `strip` removes spaces and line breaks at both ends; `lstrip` and `rstrip` on one
@@ -160,7 +221,26 @@ title
 > **Tip:** think of `strip()` as soon as you read a text typed by a user or read from a
 > file: there are often extra spaces.
 
+**Your turn:** write a program that stores `entry = "  bOB  "` in a variable, then
+shows the first name without the spaces, with a capital letter only at the start: "Bob".
+
+> **Solution**
+>
+> ```python
+> entry = "  bOB  "
+> name = entry.strip().capitalize()
+> print(name)
+> ```
+>
+> ```sortie
+> Bob
+> ```
+
 ## Splitting and joining: split and join
+
+A text often holds several pieces of information stuck together: the words of a
+sentence, or the fields of a spreadsheet line separated by `;`. `split` separates them
+so you can handle them one by one, and `join` puts them back together.
 
 `split` cuts a text into pieces and returns a [list](../debuter/glossaire.md#list).
 Without an argument, it cuts at spaces.
@@ -181,6 +261,13 @@ print(line.split(";"))
 ['Alice', '30', 'Boston']
 ```
 
+Line by line:
+
+- `sentence.split()` cuts at each space and gives a list of 6 words, stored in `words`;
+- `len(words)` counts the items of the list, not the letters: 6;
+- `line.split(";")` cuts at each `;`: the name, the age and the city are separated.
+  Notice that `'30'` is still a text.
+
 `join` does the opposite: it glues the pieces of a list together, with a separator. You
 call it **on the separator**.
 
@@ -199,7 +286,27 @@ a-b-c
 
 > **Remember:** `text.split(sep)` gives a list; `sep.join(list)` gives a text back.
 
+**Your turn:** write a program that stores `date = "2026/10/19"` in a variable, cuts
+it at the `/`, shows the resulting list, then glues the pieces back with dashes.
+
+> **Solution**
+>
+> ```python
+> date = "2026/10/19"
+> pieces = date.split("/")
+> print(pieces)
+> print("-".join(pieces))
+> ```
+>
+> ```sortie
+> ['2026', '10', '19']
+> 2026-10-19
+> ```
+
 ## Replacing
+
+Fixing a word everywhere in a text, removing the commas from a number: this is the
+"find and replace" of a word processor, in a single line.
 
 `replace(old, new)` replaces every occurrence of a piece of text.
 
@@ -219,6 +326,10 @@ I like coffee. The tea is hot.
 The third argument limits the number of replacements.
 
 ## Searching a text
+
+Before you use a text, you often want to check it: does an email address contain an
+`@`? Does a file name end with `.txt`? Python gives you several ways to ask these
+questions.
 
 ```python
 email = "alice@example.com"
@@ -269,7 +380,26 @@ print("2026".isdigit(), "12a".isdigit(), "Café".isalpha())
 True False True
 ```
 
+**Your turn:** write a program that stores `file = "holiday_photo.jpg"` in a variable,
+shows whether its name ends with `.jpg`, then how many times it contains the letter `o`.
+
+> **Solution**
+>
+> ```python
+> file = "holiday_photo.jpg"
+> print(file.endswith(".jpg"))
+> print(file.count("o"))
+> ```
+>
+> ```sortie
+> True
+> 3
+> ```
+
 ## Aligning text
+
+To show a receipt or a table, the columns must line up under each other. Without
+alignment, each line has its own length and everything is shifted.
 
 In an f-string, `:` followed by an alignment and a width places the text in a column:
 
@@ -290,11 +420,22 @@ Marmalade     3.75 €
 *******END********
 ```
 
+Line by line:
+
+- `products` is a list of pairs: a name and a price;
+- on each turn, the loop stores the name in `name` and the price in `price`;
+- the `print` puts the name in a column 12 characters wide, then the price in a column
+  6 characters wide;
+- the last line centers "END" on 18 characters and fills the rest with `*`.
+
 `{name:<12}` reserves 12 characters, text on the left. `{price:>6.2f}` reserves 6
 characters, number on the right with 2 decimals. Number formats are explained in
 [numbers and calculations](nombres.md).
 
 ## Texts on several lines
+
+A poem, a postal address, a long help message: some texts naturally have several
+lines. Triple quotes save you from writing everything on one endless line.
 
 Between **triple** quotes `"""..."""`, a text can span several lines. Line breaks are
 kept.
@@ -315,6 +456,9 @@ So blue, so calm!
 `splitlines()` cuts the text into a list of lines.
 
 ## Special characters
+
+How do you put a line break, or a quote, inside a text that is itself between quotes?
+You need a special way to write them.
 
 Some characters are written with a backslash `\`, followed by a letter: this is an
 **escape sequence**.
@@ -343,10 +487,18 @@ C:\folder\file.txt
 C:\folder\new
 ```
 
+Line by line:
+
+- `\n` breaks the line: "Line 2" appears below;
+- `\t` inserts a tab, a wide space that helps line things up;
+- `\"` puts a quote in the text without closing it, and `\\` shows a single backslash.
+
 The `r` in front of the last text makes it a **raw** string: the `\` stay as they are.
 Handy for Windows paths and [regular expressions](regex.md).
 
 ## Unicode: ord and chr
+
+> **Note:** this part can wait. Read it once the basics feel solid.
 
 A computer only stores numbers. [Unicode](../debuter/glossaire.md#unicode) gives a
 number to every character in the world: accented letters, alphabets, emojis. `ord`

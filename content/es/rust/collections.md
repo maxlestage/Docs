@@ -15,6 +15,10 @@ almacenaje.
 
 ## Los arrays de tamaño fijo
 
+Para guardar los siete días de la semana, crear siete variables sería pesado. Un array
+los guarda todos bajo un solo nombre, como una huevera: un número fijo de huecos, un
+hueco por elemento.
+
 Un array `[T; N]` contiene siempre el mismo número `N` de elementos, todos del mismo
 tipo `T`. Las posiciones (los **índices**) empiezan en 0:
 
@@ -31,6 +35,13 @@ lun
 ["lun", "mar", "mié"]
 ```
 
+Línea por línea:
+
+- `let dias = [...]` crea un array de tres textos, guardado en `dias`;
+- `dias[0]` lee el hueco número 0, es decir, el **primero**: `"lun"`;
+- `dias.len()` da el número de huecos: 3;
+- `{:?}` muestra todo el array de una vez, con los corchetes.
+
 Un array también puede llenarse con un mismo valor: `[0; 5]` da cinco ceros.
 
 ```rust
@@ -43,6 +54,9 @@ println!("{:?}", ceros);
 ```
 
 ## Los vectores: Vec
+
+A menudo no sabes de antemano cuántos elementos tendrás. Una lista de la compra crece
+cuando piensas en un artículo, y se acorta cuando lo compras. Para eso sirve el `Vec`.
 
 Un `Vec` (un «vector») es una [lista](../debuter/glossaire.md#lista) que puede crecer
 o encogerse. Es la colección más habitual. La macro `vec![…]` crea uno; `push` añade
@@ -64,6 +78,15 @@ Primera: 12
 Tamaño: 4
 Some(18) [12, 15, 9]
 ```
+
+Línea por línea:
+
+- `let mut notas = vec![12, 15, 9];` crea un `Vec` de tres notas. `mut` permite
+  modificarlo después;
+- `notas.push(18)` añade 18 al final: ahora hay cuatro notas;
+- `notas[0]` lee la primera nota (12) y `notas.len()` cuenta los elementos (4);
+- `notas.pop()` quita la última nota y la guarda en `ultima`: la lista vuelve a tener
+  tres elementos.
 
 `pop` devuelve `Some(18)`: el valor quitado, dentro de un `Option`, porque la lista
 podría haber estado vacía.
@@ -116,11 +139,33 @@ println!("{:?}", precios);
 > **Nota:** el `&` delante de `precios` toma prestado el vector en lugar de
 > consumirlo. Todo se explica en [Propiedad y préstamo](possession.md).
 
+**Te toca:** escribe un programa que cree un `Vec` con `"pan"` y `"leche"`, añada
+`"huevos"` con `push` y luego muestre cada artículo en su propia línea con `for`.
+
+> **Solución**
+>
+> ```rust
+> let mut compra = vec!["pan", "leche"];
+> compra.push("huevos");
+> for articulo in &compra {
+>     println!("{articulo}");
+> }
+> ```
+>
+> ```sortie
+> pan
+> leche
+> huevos
+> ```
+
 ## Las tablas: HashMap
 
 Un `HashMap` es un [diccionario](../debuter/glossaire.md#diccionario): asocia
 **claves** a **valores**, como una guía telefónica asocia un nombre a un número.
 No forma parte de los tipos cargados por defecto: hay que importarlo con `use`.
+
+Con un `Vec`, encuentras un elemento por su posición. Pero para saber la edad de
+Alicia, buscar «Alicia» es mucho más sencillo que recordar «el hueco 0».
 
 ```rust
 use std::collections::HashMap;
@@ -142,7 +187,37 @@ Some(31)
 false
 ```
 
+Línea por línea:
+
+- `HashMap::new()` crea una tabla vacía, guardada en `edades`;
+- los dos primeros `insert` asocian 30 a `"Alicia"` y 25 a `"Bruno"`;
+- el tercer `insert` reutiliza la clave `"Alicia"`: el valor 31 **reemplaza** a 30;
+- `get("Alicia")` da `Some(31)`, `len()` cuenta 2 claves, y `contains_key("Zoe")`
+  responde `false`: Zoe no está en la tabla.
+
+**Te toca:** escribe un programa que asocie `"Francia"` a `"París"` e `"Italia"` a
+`"Roma"` en un `HashMap`, y luego muestre la capital de Italia con `get`.
+
+> **Solución**
+>
+> ```rust
+> use std::collections::HashMap;
+>
+> fn main() {
+>     let mut capitales = HashMap::new();
+>     capitales.insert("Francia", "París");
+>     capitales.insert("Italia", "Roma");
+>     println!("{:?}", capitales.get("Italia"));
+> }
+> ```
+>
+> ```sortie
+> Some("Roma")
+> ```
+
 ### Contar con entry
+
+> **Nota:** esta parte puede esperar. Léela cuando las bases estén firmes.
 
 `entry(...).or_insert(...)` crea el valor si falta y luego da acceso al valor. La
 estrella `*` permite modificar lo que designa:
@@ -195,6 +270,10 @@ peras: 4
 
 ## Los iteradores
 
+Duplicar todas las notas, quedarse solo con los números pares, calcular un total:
+estas tareas aparecen sin parar. Los iteradores permiten escribirlas en una línea, sin
+tener que escribir tú mismo un bucle `for`.
+
 `iter()` crea un **iterador**: un objeto que da los elementos uno a uno, como la cinta
 transportadora de una caja de supermercado. Después se encadenan operaciones con
 [closures](fonctions.md#las-closures). Los iteradores tienen su propio capítulo:
@@ -225,6 +304,17 @@ println!("{total} {grandes}");
 21 3
 ```
 
+Línea por línea:
+
+- `map(|n| n * 2)` toma cada número `n` y lo multiplica por 2; `collect()` guarda los
+  resultados en el nuevo `Vec` `dobles`;
+- `filter(|n| *n % 2 == 0)` conserva solo los números cuyo resto al dividir por 2 es
+  0: los pares;
+- `sum()` lo suma todo: 1 + 2 + 3 + 4 + 5 + 6 = 21;
+- la última línea conserva los números mayores que 3 (4, 5 y 6) y los cuenta: 3.
+
+El vector `numeros` no cambia: cada línea fabrica un resultado nuevo.
+
 Se pueden encadenar tantos pasos como se quiera:
 
 ```rust
@@ -244,7 +334,26 @@ println!("{:?}", resultado);
 > **Consejo:** un iterador no hace nada mientras no lo consumas (con `collect`, `sum`,
 > `for`…). Se dice que es **perezoso**.
 
+**Te toca:** escribe un programa que parta de `vec![5, 12, 8, 20]` (unos precios),
+guarde en un nuevo `Vec` los precios mayores que 10 y luego lo muestre.
+
+> **Solución**
+>
+> ```rust
+> let precios = vec![5, 12, 8, 20];
+> let caros: Vec<&i32> = precios.iter().filter(|p| **p > 10).collect();
+> println!("{:?}", caros);
+> ```
+>
+> ```sortie
+> [12, 20]
+> ```
+
 ## Los slices
+
+A veces solo quieres trabajar con un trozo de una lista: los tres primeros de una
+clasificación, o las notas del segundo trimestre. Un slice muestra ese trozo, como una
+ventana colocada sobre la lista.
 
 Un **slice** (`&[T]`) es una vista sobre una parte de un array o de un vector, sin
 copia:
@@ -259,6 +368,13 @@ println!("{:?} {:?}", centro, inicio);
 ```sortie
 ['b', 'c', 'd'] ['a', 'b']
 ```
+
+Línea por línea:
+
+- `letras` contiene cinco letras, en las posiciones 0 a 4;
+- `&letras[1..4]` toma las posiciones 1, 2 y 3: la posición 4 **no** se incluye;
+- `&letras[..2]` empieza al principio y se para antes de la posición 2: `'a'` y `'b'`;
+- no se copia nada: `centro` e `inicio` miran directamente dentro de `letras`.
 
 Una función que acepta `&[i32]` funciona tanto con un array como con un `Vec`:
 

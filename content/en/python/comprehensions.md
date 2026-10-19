@@ -12,6 +12,10 @@ This page shows how to build a list, a dictionary or a set in a single line with
 
 ## From loop to comprehension
 
+Changing every element of a list is a very common need: prices to convert, names to
+write in capitals, grades to double. It is like a recipe that says "for each apple, peel
+it": the same action, on each element.
+
 You already know how to build a new [list](../debuter/glossaire.md#list) with a `for`
 loop: you start from an empty list, then add one element on each pass.
 
@@ -26,6 +30,13 @@ print(squares)
 ```sortie
 [1, 4, 9, 16]
 ```
+
+Line by line:
+
+- `squares = []` creates an empty list: it is the bowl where the results will go;
+- `for n in numbers:` gives `n` the values 1, then 2, then 3, then 4;
+- on each pass, `squares.append(n * n)` adds the square of `n` to the end of `squares`;
+- after the last pass, `print(squares)` displays the filled list.
 
 This pattern is so common that Python has a shorter way to write it: the **list
 comprehension**. You build it in three steps, starting from the loop:
@@ -69,6 +80,21 @@ print([f"Hello {name}!" for name in names])
 ['Hello alice!', 'Hello bob!', 'Hello chloé!']
 ```
 
+**Your turn:** write a program that starts from `prices = [2, 5, 8]` (prices in euros)
+and builds, with a comprehension, the list of the same prices in cents, then displays it.
+
+> **Solution**
+>
+> ```python
+> prices = [2, 5, 8]
+> cents = [p * 100 for p in prices]
+> print(cents)
+> ```
+>
+> ```sortie
+> [200, 500, 800]
+> ```
+
 ## Filtering with if
 
 Often, you only keep some of the elements. With a loop, you write an `if` inside the
@@ -87,6 +113,13 @@ print(passed)
 [12, 15, 18]
 ```
 
+Line by line:
+
+- `passed = []` starts from an empty list;
+- `for grade in grades:` takes the grades one by one: 12, 7, 15, 9, then 18;
+- `if grade >= 10:` only lets through grades of 10 or more;
+- so 12, 15 and 18 are added with `append`; 7 and 9 are skipped.
+
 In a comprehension, the `if` goes **at the end**, after the `for`:
 
 ```python
@@ -100,6 +133,21 @@ print(passed)
 ```
 
 It is a sieve: only the elements that pass the test end up in the new list.
+
+**Your turn:** write a program that starts from `ages = [12, 25, 17, 40]` and builds,
+with a comprehension, the list of ages of 18 or more, then displays it.
+
+> **Solution**
+>
+> ```python
+> ages = [12, 25, 17, 40]
+> adults = [age for age in ages if age >= 18]
+> print(adults)
+> ```
+>
+> ```sortie
+> [25, 40]
+> ```
 
 ### Transforming based on a condition
 
@@ -122,6 +170,9 @@ print(results)
 
 ## Dictionary comprehensions
 
+A dictionary is like an address book: each name goes with a piece of information. A
+dictionary comprehension fills that book in a single line.
+
 The same idea works for a
 [dictionary](../debuter/glossaire.md#dictionary). You use curly braces `{ }` and write
 `key: value` before the `for`.
@@ -135,6 +186,13 @@ print(lengths)
 ```sortie
 {'alice': 5, 'bob': 3, 'chloé': 5}
 ```
+
+Line by line:
+
+- `names` holds three names;
+- for each name, the comprehension creates a pair: the key `name` and the value
+  `len(name)`, the number of letters;
+- `"alice"` gives the pair `'alice': 5`, then `"bob"` gives `'bob': 3`, and so on.
 
 To go through an existing dictionary, use `.items()`, which gives the `(key, value)`
 pairs:
@@ -156,6 +214,22 @@ print(cheap)
 > decimal numbers are rounded (see [numbers](nombres.md)). Use `round(p * 0.8, 2)` for a
 > clean display.
 
+**Your turn:** write a program that starts from `prices = {"bread": 1, "milk": 2}` and
+builds, with a comprehension, a dictionary of the same prices in cents, then displays
+it.
+
+> **Solution**
+>
+> ```python
+> prices = {"bread": 1, "milk": 2}
+> cents = {name: p * 100 for name, p in prices.items()}
+> print(cents)
+> ```
+>
+> ```sortie
+> {'bread': 100, 'milk': 200}
+> ```
+
 ### Inverting a dictionary
 
 A classic use: swapping keys and values.
@@ -172,6 +246,9 @@ print(country_to_code)
 
 ## Set comprehensions
 
+Think of a guest list where some names were written twice. You want each person only
+once: that is exactly what a set does.
+
 With curly braces but **without** a colon, you get a
 [set](../debuter/glossaire.md#set): each value appears in it only once.
 
@@ -185,6 +262,13 @@ print(sorted(unique))
 ['cat', 'dog', 'fish']
 ```
 
+Line by line:
+
+- `words` holds five words, with duplicates written in different ways;
+- `w.lower()` puts each word in lowercase: `"Cat"` and `"CAT"` both become `"cat"`;
+- the curly braces put these words in a set, which keeps each value only once;
+- `sorted(unique)` gives a list sorted in alphabetical order, for the display.
+
 A set has no order: you sort it with `sorted` to get a stable display.
 
 | Syntax | Result |
@@ -195,6 +279,11 @@ A set has no order: you sort it with `sorted` to get a stable display.
 | `(x for x in ...)` | a generator expression (see below) |
 
 ## Nested comprehensions
+
+> **Note:** this part can wait. Read it once the basics feel solid.
+
+Sometimes you need to combine two lists: each color with each size, as in a clothes
+shop.
 
 A comprehension can contain **several `for`**. They read in the same order as nested
 loops: the first `for` is the outer loop.
@@ -209,6 +298,13 @@ print(items)
 ```sortie
 ['red-S', 'red-M', 'blue-S', 'blue-M']
 ```
+
+Line by line:
+
+- the first `for` takes `"red"`;
+- the second `for` then goes through all the sizes: you get `"red-S"`, then `"red-M"`;
+- the first `for` then moves on to `"blue"`, and the second starts again: `"blue-S"`,
+  then `"blue-M"`.
 
 It is the same as:
 
@@ -277,6 +373,12 @@ print(max(len(w) for w in ["one", "three", "four"]))
 5
 ```
 
+Line by line:
+
+- `n * 2 for n in grades` produces the doubled grades, one by one: 24, 14, 30, 18, 36;
+- `sum` adds them up as they come: the total is 122;
+- `len(w) for w in [...]` produces the lengths 3, 5 and 4; `max` keeps the largest.
+
 ### any and all
 
 - `any(...)` is `True` if **at least one** value is true;
@@ -312,6 +414,23 @@ print(sum(squares))
 14
 0
 ```
+
+**Your turn:** write a program that starts from `temperatures = [18, 22, 25, 19]`, then
+displays whether at least one temperature is above 24 (with `any`), and whether all of
+them are at least 15 (with `all`).
+
+> **Solution**
+>
+> ```python
+> temperatures = [18, 22, 25, 19]
+> print(any(t > 24 for t in temperatures))
+> print(all(t >= 15 for t in temperatures))
+> ```
+>
+> ```sortie
+> True
+> True
+> ```
 
 ## Knowing when to stop
 

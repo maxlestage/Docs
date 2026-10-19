@@ -29,6 +29,14 @@ Acuérdate de beber agua.
 ¡Que tengas un buen día!
 ```
 
+Línea por línea:
+
+- `temperatura = 30` guarda 30 en la variable `temperatura`;
+- `if temperatura > 25:` hace una pregunta: «¿30 es mayor que 25?». La respuesta es sí;
+- por eso se ejecutan los dos `print` desplazados, uno detrás de otro;
+- el último `print` no está desplazado: se ejecuta en todos los casos, aunque hiciera
+  frío.
+
 Tres reglas que recordar:
 
 - la línea `if` termina con **dos puntos** `:`;
@@ -41,6 +49,9 @@ Tres reglas que recordar:
 > qué líneas forman parte del bloque. Usa siempre 4 espacios.
 
 ## else y elif
+
+A menudo no hay un solo caso. Una nota puede ser muy buena, regular o mala, y quieres
+un mensaje distinto para cada una, como en un boletín de notas.
 
 `else` («si no») da el camino que seguir cuando la condición es falsa. `elif`
 (contracción de *else if*, «si no, si») añade otras pruebas.
@@ -64,7 +75,31 @@ Notable
 Python prueba las condiciones **en orden** y se detiene en la primera verdadera. Aquí,
 `nota >= 9` es falso y `nota >= 7` es verdadero: muestra «Notable» y se salta el resto.
 
+**Te toca:** escribe un programa que guarde `hora = 15` en una variable y luego
+muestre «Buenos días» si la hora es antes de las 12, «Buenas tardes» si es antes de
+las 20, y «Buenas noches» si no.
+
+> **Solución**
+>
+> ```python
+> hora = 15
+> if hora < 12:
+>     print("Buenos días")
+> elif hora < 20:
+>     print("Buenas tardes")
+> else:
+>     print("Buenas noches")
+> ```
+>
+> ```sortie
+> Buenas tardes
+> ```
+
 ## Comparar valores
+
+Para decidir, un programa primero hace una pregunta: «¿la edad es 18?», «¿la
+temperatura pasa de 25?». Los operadores de comparación sirven para escribir esas
+preguntas.
 
 | Operador | Significado |
 | --- | --- |
@@ -101,6 +136,9 @@ entre 10 (incluido) y 20 (no incluido)», como en matemáticas.
 
 ## Combinar: and, or, not
 
+Una decisión depende a menudo de varias cosas a la vez. Para entrar al cine, necesitas
+una entrada **y** tener la edad. Estas tres palabras unen varias pruebas en una sola.
+
 - `a and b` es verdadero si `a` **y** `b` son verdaderos;
 - `a or b` es verdadero si **al menos uno** de los dos es verdadero;
 - `not a` invierte: verdadero pasa a falso, y falso pasa a verdadero.
@@ -124,7 +162,35 @@ Acceso a la sala
 Sin acceso a la zona VIP
 ```
 
+Línea por línea:
+
+- las tres primeras líneas preparan los datos: una edad y dos booleanos;
+- primer `if`: `edad >= 18` es verdadero **y** `tiene_entrada` es verdadero, así que la
+  entrada está permitida;
+- segundo `if`: `tiene_entrada` es verdadero, y con `or` eso basta;
+- tercer `if`: `es_vip` vale `False`, y `not` lo convierte en `True`.
+
+**Te toca:** escribe un programa que guarde `edad = 70` en una variable y luego
+muestre «Tarifa reducida» si la edad es menor que 18 o mayor o igual que 65, y
+«Tarifa completa» si no.
+
+> **Solución**
+>
+> ```python
+> edad = 70
+> if edad < 18 or edad >= 65:
+>     print("Tarifa reducida")
+> else:
+>     print("Tarifa completa")
+> ```
+>
+> ```sortie
+> Tarifa reducida
+> ```
+
 ## Verdadero o falso: la «veracidad»
+
+> **Nota:** esta parte puede esperar. Léela cuando las bases estén firmes.
 
 En un `if`, Python acepta cualquier valor, no solo `True` o `False`.
 Algunos valores cuentan como **falsos**:
@@ -156,6 +222,8 @@ Tu carrito está vacío.
 `if len(carrito) > 0:`.
 
 ## La expresión condicional
+
+> **Nota:** esta parte puede esperar. Léela cuando las bases estén firmes.
 
 Para elegir entre dos valores en una sola línea, escribe
 `valor_si_verdadero if condicion else valor_si_falso`.
@@ -233,6 +301,9 @@ Las funciones (`def`) se explican en [las funciones](fonctions.md).
 
 ## El bucle while
 
+Imagina que te piden mostrar los números del 1 al 100. Escribir 100 `print` sería largo
+y pesado. Un bucle hace ese trabajo repetitivo por ti.
+
 Un [bucle](../debuter/glossaire.md#bucle) repite código. `while` («mientras»)
 repite su bloque **mientras** la condición sea verdadera.
 
@@ -251,6 +322,15 @@ print("¡Despegue!")
 ¡Despegue!
 ```
 
+Línea por línea:
+
+- `cuenta = 3`: la variable vale 3 al principio;
+- `while cuenta > 0:`: antes de cada vuelta, Python hace la pregunta. `3 > 0` es
+  verdadero: entra en el bloque;
+- el bloque muestra `cuenta` y luego le resta 1: pasa a valer 2, luego 1, luego 0;
+- cuando `cuenta` vale 0, `0 > 0` es falso: Python sale del bucle y pasa al último
+  `print`.
+
 En cada vuelta, Python comprueba `cuenta > 0`. Cuando `cuenta` vale 0, la condición es
 falsa: el bucle se detiene.
 
@@ -258,7 +338,32 @@ falsa: el bucle se detiene.
 > siempre. Comprueba que alguna variable cambia en cada vuelta. Para detener un programa
 > bloqueado, pulsa Ctrl+C en el terminal.
 
+**Te toca:** escribe un programa que muestre los números del 1 al 5 con un bucle
+`while` y luego «¡Listo!».
+
+> **Solución**
+>
+> ```python
+> n = 1
+> while n <= 5:
+>     print(n)
+>     n = n + 1
+> print("¡Listo!")
+> ```
+>
+> ```sortie
+> 1
+> 2
+> 3
+> 4
+> 5
+> ¡Listo!
+> ```
+
 ## El bucle for
+
+Muy a menudo tienes una lista de cosas que tratar una a una: cada artículo de la lista
+de la compra, cada alumno de una clase. `for` está hecho para eso.
 
 `for` recorre los elementos de una colección, uno a uno. Es el bucle más
 usado en Python.
@@ -274,6 +379,14 @@ Me gusta la fruta: manzana.
 Me gusta la fruta: plátano.
 Me gusta la fruta: cereza.
 ```
+
+Línea por línea:
+
+- `frutas` contiene una lista de tres textos;
+- `for fruta in frutas:` toma el primer elemento, `"manzana"`, y lo guarda en `fruta`;
+- el bloque muestra la frase con `"manzana"`. Luego Python vuelve al `for`, que guarda
+  `"plátano"` en `fruta`, y así sucesivamente;
+- después de `"cereza"` no quedan elementos: el bucle se detiene.
 
 En cada vuelta, la variable `fruta` recibe el siguiente elemento de la lista. Cada pasada
 se llama [iteración](../debuter/glossaire.md#iteracion).
@@ -323,7 +436,28 @@ negativo (`-3`) cuenta hacia atrás.
 > **Recuerda:** el final de un `range` siempre queda **excluido**. `range(1, 6)` se detiene
 > en 5.
 
+**Te toca:** escribe un programa que muestre la tabla del 7, de «7 x 1 = 7» a
+«7 x 5 = 35», una línea por cálculo.
+
+> **Solución**
+>
+> ```python
+> for i in range(1, 6):
+>     print("7 x", i, "=", 7 * i)
+> ```
+>
+> ```sortie
+> 7 x 1 = 7
+> 7 x 2 = 14
+> 7 x 3 = 21
+> 7 x 4 = 28
+> 7 x 5 = 35
+> ```
+
 ## break y continue
+
+A veces quieres cambiar el rumbo de un bucle sobre la marcha: dejar de buscar en cuanto
+encuentras algo, o ignorar algunos elementos. Para eso sirven estas dos palabras.
 
 - `break` sale del bucle inmediatamente;
 - `continue` se salta el resto de la vuelta y pasa a la siguiente.
@@ -343,6 +477,14 @@ for n in range(1, 10):
 5
 7
 ```
+
+Línea por línea:
+
+- `for n in range(1, 10):` da a `n` los valores 1, 2, 3… hasta 9;
+- si `n` es par (el resto de dividir entre 2 es 0), `continue` pasa directamente a la
+  vuelta siguiente: no se llega al `print`;
+- si `n` pasa de 7, `break` detiene todo el bucle: el 9 nunca se muestra;
+- si no, `print(n)` muestra el número.
 
 Los números pares se saltan (`continue`). Cuando `n` pasa de 7, el bucle se detiene
 (`break`).
@@ -368,6 +510,9 @@ Ningún número par.
 
 ## enumerate: el número y el elemento
 
+A veces quieres numerar lo que recorres, como una clasificación o los pasos de una
+receta.
+
 Para tener a la vez la posición y el elemento, usa `enumerate`. En cada vuelta,
 da dos valores: el número (el [índice](../debuter/glossaire.md#indice)) y
 el elemento.
@@ -384,9 +529,20 @@ for puesto, nombre in enumerate(podio, start=1):
 3. Chloé
 ```
 
+Línea por línea:
+
+- `podio` contiene tres nombres, en orden de llegada;
+- en cada vuelta, `enumerate` da una pareja: primero `1` y `"Alice"`, luego `2` y
+  `"Bob"`, luego `3` y `"Chloé"`;
+- `puesto, nombre` guarda el número en `puesto` y el nombre en `nombre`;
+- `start=1` hace que la numeración empiece en 1.
+
 Sin `start=1`, la numeración empieza en 0.
 
 ## zip: recorrer dos listas a la vez
+
+A veces dos listas van juntas: los nombres por un lado y sus notas por otro, en el
+mismo orden.
 
 `zip` avanza por varias listas al mismo tiempo, como una cremallera que
 une dos lados, diente a diente.
@@ -403,6 +559,12 @@ Alice: 8/10
 Bob: 6/10
 Chloé: 9/10
 ```
+
+Línea por línea:
+
+- `nombres` y `notas` están en el mismo orden: la primera nota es la de Alice;
+- `zip` toma el primer elemento de cada lista, luego el segundo, luego el tercero;
+- en cada vuelta, `nombre` recibe un nombre y `nota` la nota que le corresponde.
 
 > **Nota:** `zip` se detiene al final de la lista más corta.
 

@@ -14,6 +14,10 @@ Cette page explique comment regrouper des valeurs dans des objets, décrire leur
 
 ## Créer un objet
 
+Imaginez que vous rangiez les informations d'un livre dans trois variables séparées :
+`titre`, `auteur`, `pages`. Avec dix livres, ce serait vite le désordre. Un objet
+range tout ce qui concerne une même chose dans une seule boîte.
+
 Un [objet](../debuter/glossaire.md#objet) regroupe plusieurs valeurs sous un même nom.
 Chaque valeur a une étiquette : sa **propriété**. On l'écrit entre accolades, avec des
 paires `nom: valeur`.
@@ -48,7 +52,33 @@ TypeScript devine le type de cet objet : `{ titre: string; auteur: string; pages
 number }`. Il connaît donc chaque propriété et son type. `livre.pages = "beaucoup"`
 serait refusé, et une faute de frappe comme `livre.titres` aussi.
 
+**À vous :** écrivez un programme qui crée un objet `film` avec un `titre` (« Le Roi
+lion ») et une `annee` (1994). Affichez le titre, changez l'année en 2019, puis
+affichez l'année.
+
+> **Solution**
+>
+> ```typescript
+> const film = {
+>   titre: "Le Roi lion",
+>   annee: 1994,
+> };
+>
+> console.log(film.titre);
+> film.annee = 2019;
+> console.log(film.annee);
+> ```
+>
+> ```sortie
+> Le Roi lion
+> 2019
+> ```
+
 ## Décrire un objet : le type objet
+
+Une fonction ne voit pas à l'avance l'objet que vous lui donnerez. Pour qu'elle sache
+quelles propriétés il aura, vous devez lui décrire l'objet attendu, comme une liste de
+ce qu'il faut apporter.
 
 Pour une fonction qui reçoit un objet, il faut écrire sa forme. On la décrit entre
 accolades, comme un objet, mais avec des types à la place des valeurs :
@@ -65,10 +95,24 @@ console.log(presenter({ nom: "Alice", age: 30 }));
 Alice, 30 ans
 ```
 
+Ligne par ligne :
+
+- `personne: { nom: string; age: number }` dit que le paramètre `personne` doit avoir
+  un `nom` (texte) et un `age` (nombre) ;
+- `: string` après la parenthèse annonce que la fonction renvoie un texte ;
+- l'appel `presenter({ nom: "Alice", age: 30 })` crée un objet sur place et le donne
+  à la fonction ;
+- dans la fonction, `personne.nom` vaut `"Alice"` et `personne.age` vaut `30` : elle
+  renvoie `"Alice, 30 ans"`, que `console.log` affiche.
+
 Écrire cette forme à chaque fois serait pénible. On lui donne donc un nom, de deux
 façons possibles : `interface` ou `type`.
 
 ## interface et type
+
+Donner un nom à une forme, c'est comme créer un modèle de formulaire : vous le dessinez
+une fois, puis vous l'utilisez pour chaque nouvelle fiche. Si la forme change, vous la
+corrigez à un seul endroit.
 
 ### interface
 
@@ -96,6 +140,16 @@ console.log(presenter(bob));
 Alice, 30 ans
 Bob, 25 ans
 ```
+
+Ligne par ligne :
+
+- `interface Personne { … }` ne crée aucune valeur : il décrit seulement une forme,
+  avec un `nom` et un `age` ;
+- `const alice: Personne = …` crée un objet et demande à TypeScript de vérifier qu'il a
+  bien cette forme. Même chose pour `bob` ;
+- `function presenter(p: Personne)` accepte n'importe quelle `Personne` ;
+- les deux `console.log` appellent la même fonction, d'abord avec `alice`, puis avec
+  `bob`.
 
 Par convention, le nom d'une interface commence par une majuscule.
 
@@ -132,7 +186,35 @@ Pour décrire un objet, les deux se valent presque toujours. La différence :
 > pour tout le reste (unions, tuples, fonctions). Surtout, restez cohérent dans un même
 > projet.
 
+**À vous :** écrivez une interface `Animal` avec un `nom` (texte) et un nombre de
+`pattes` (nombre). Créez un chat (4 pattes) et une poule (2 pattes), puis affichez
+« Le chat a 4 pattes. » et « La poule a 2 pattes. » en lisant leurs propriétés.
+
+> **Solution**
+>
+> ```typescript
+> interface Animal {
+>   nom: string;
+>   pattes: number;
+> }
+>
+> const chat: Animal = { nom: "chat", pattes: 4 };
+> const poule: Animal = { nom: "poule", pattes: 2 };
+>
+> console.log(`Le ${chat.nom} a ${chat.pattes} pattes.`);
+> console.log(`La ${poule.nom} a ${poule.pattes} pattes.`);
+> ```
+>
+> ```sortie
+> Le chat a 4 pattes.
+> La poule a 2 pattes.
+> ```
+
 ## Les propriétés facultatives
+
+Dans la vraie vie, on ne connaît pas toujours tout. Sur un formulaire, certaines cases
+sont obligatoires (le nom) et d'autres facultatives (le téléphone). Le `?` sert à dire
+cela à TypeScript.
 
 Un `?` après le nom rend une propriété facultative : l'objet peut l'avoir ou non. Son
 type devient `string | undefined`.
@@ -156,10 +238,42 @@ Alice : alice@exemple.fr
 Bob : pas d'adresse
 ```
 
+Ligne par ligne :
+
+- `email?: string` : la propriété `email` peut manquer ;
+- `alice` a un email, `bob` n'en a pas : les deux sont des `Utilisateur` valides ;
+- la boucle `for` prend `alice`, puis `bob`, et les range tour à tour dans `u` ;
+- `u.email ?? "pas d'adresse"` donne l'email s'il existe, sinon le texte « pas
+  d'adresse ».
+
 Avant d'utiliser `u.email` comme un texte, TypeScript vous oblige à traiter le cas où
 elle manque : avec `??`, `?.` ou un `if`.
 
+**À vous :** écrivez une interface `Contact` avec un `nom` (texte) et un `telephone`
+facultatif (texte). Créez le contact « Karim » sans téléphone, puis affichez
+« Karim : pas de numéro ».
+
+> **Solution**
+>
+> ```typescript
+> interface Contact {
+>   nom: string;
+>   telephone?: string;
+> }
+>
+> const karim: Contact = { nom: "Karim" };
+> console.log(`${karim.nom} : ${karim.telephone ?? "pas de numéro"}`);
+> ```
+>
+> ```sortie
+> Karim : pas de numéro
+> ```
+
 ## Les propriétés en lecture seule
+
+Certaines informations ne doivent jamais changer une fois écrites, comme le numéro
+imprimé sur une carte d'identité. `readonly` demande à TypeScript de les protéger
+contre une modification faite par erreur.
 
 `readonly` devant une propriété interdit de la modifier après la création de l'objet.
 
@@ -179,6 +293,14 @@ console.log(arrivee);
 { x: 3, y: 4 }
 ```
 
+Ligne par ligne :
+
+- `readonly x` et `readonly y` : une fois un point créé, ses coordonnées sont figées ;
+- `depart` vaut `{ x: 0, y: 0 }` ;
+- `arrivee` est un **nouveau** point, calculé à partir de `depart` : `0 + 3` et
+  `0 + 4` ;
+- `depart` n'a pas changé : on a lu ses valeurs, sans les modifier.
+
 Pour « déplacer » un point, on en crée un nouveau. Cette vérification n'existe que
 dans TypeScript : au moment de l'exécution, l'objet est un objet JavaScript normal.
 
@@ -186,6 +308,12 @@ dans TypeScript : au moment de l'exécution, l'objet est un objet JavaScript nor
 > un identifiant. TypeScript surveillera pour vous.
 
 ## Les objets imbriqués et les méthodes
+
+> **Note :** cette partie peut attendre. Lisez-la quand les bases seront solides.
+
+Une vraie fiche contient souvent d'autres fiches : un client a une adresse, qui a
+elle-même une ville et un code postal. Un objet peut donc en contenir un autre, comme
+une boîte rangée dans une boîte.
 
 Une propriété peut contenir un autre objet, un tableau, ou une fonction. Une fonction
 rangée dans un objet s'appelle une [méthode](../debuter/glossaire.md#methode).
@@ -228,6 +356,9 @@ Bonjour, Chloé !
 
 ## Étendre une interface
 
+Quand deux formes se ressemblent beaucoup, les écrire deux fois serait long. Et à chaque
+changement, il faudrait penser à corriger les deux.
+
 `extends` (« étend ») crée une interface qui reprend toutes les propriétés d'une autre,
 et en ajoute. C'est comme une fiche « Élève » qui reprend la fiche « Personne » et
 ajoute la classe.
@@ -257,6 +388,13 @@ Léa (15 ans)
 2nde B
 ```
 
+Ligne par ligne :
+
+- `Eleve extends Personne` : un `Eleve` a un `nom`, un `age` **et** une `classe` ;
+- `lea` doit donc avoir les trois propriétés ;
+- `presenter` attend une `Personne` : elle ne lit que le `nom` et l'`age` de `lea` ;
+- `lea.classe` reste disponible, car `lea` est un `Eleve`.
+
 Un `Eleve` a tout ce qu'a une `Personne` : on peut donc le passer à `presenter`.
 
 Avec `type`, on obtient le même résultat avec `&` (« et ») :
@@ -272,6 +410,29 @@ console.log(rex.nom, rex.race);
 ```sortie
 Rex berger
 ```
+
+**À vous :** écrivez une interface `Vehicule` avec une `marque` (texte), puis une
+interface `Voiture` qui l'étend avec un nombre de `portes`. Créez une voiture de marque
+« Renault » à 5 portes, puis affichez sa marque et son nombre de portes.
+
+> **Solution**
+>
+> ```typescript
+> interface Vehicule {
+>   marque: string;
+> }
+>
+> interface Voiture extends Vehicule {
+>   portes: number;
+> }
+>
+> const maVoiture: Voiture = { marque: "Renault", portes: 5 };
+> console.log(maVoiture.marque, maVoiture.portes);
+> ```
+>
+> ```sortie
+> Renault 5
+> ```
 
 ## Les signatures d'index
 
@@ -297,6 +458,14 @@ maths : 15
 francais : 12
 anglais : 14
 ```
+
+Ligne par ligne :
+
+- `notes` commence avec deux matières : `maths` et `francais` ;
+- `notes.anglais = 14` ajoute une troisième clé, ce que la signature d'index permet ;
+- `Object.entries(notes)` donne les paires `[clé, valeur]` une par une ;
+- à chaque tour, la boucle range la clé dans `matiere`, la valeur dans `note`, et
+  affiche les deux.
 
 `[matiere: string]: number` se lit : « pour toute clé texte, une valeur nombre ». Le mot
 `matiere` n'est qu'un nom pour la documentation. C'est la même chose que

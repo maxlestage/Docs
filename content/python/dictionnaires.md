@@ -36,6 +36,13 @@ Rome
 {}
 ```
 
+Ligne par ligne :
+
+- `ages` associe trois prénoms (les clés) à trois âges (les valeurs) ;
+- `capitales` associe des pays à leur capitale ; `vide` ne contient rien du tout ;
+- `print(ages)` affiche tout le dictionnaire, et `len(ages)` compte ses paires : 3 ;
+- `capitales["Italie"]` cherche la clé `"Italie"` et donne sa valeur, `"Rome"`.
+
 - Les clés sont souvent des textes ou des nombres. Chaque clé est **unique**.
 - Les valeurs peuvent être n'importe quoi, même des listes ou d'autres dictionnaires.
 - Le dictionnaire garde l'ordre dans lequel les clés ont été ajoutées.
@@ -52,6 +59,10 @@ print(personne)
 ```
 
 ## Lire une valeur : [] ou get
+
+Lire une valeur, c'est le geste le plus courant : chercher le prix d'un article, l'âge
+d'une personne. Mais il faut aussi prévoir le cas où la clé n'y est pas, comme un mot
+absent du dictionnaire.
 
 Il y a deux façons de lire une valeur :
 
@@ -76,12 +87,22 @@ None
 False
 ```
 
+Ligne par ligne :
+
+- `stock["pomme"]` et `stock.get("pomme")` donnent la même chose : 12 ;
+- `stock.get("kiwi")` ne trouve pas la clé `"kiwi"` : il renvoie `None`, sans erreur ;
+- `stock.get("kiwi", 0)` renvoie la valeur de secours que vous donnez, 0 ;
+- `"kiwi" in stock` pose la question « la clé existe-t-elle ? ». Réponse : `False`.
+
 `in` vérifie si une **clé** existe (pas une valeur).
 
 > **À retenir :** utilisez `d[cle]` quand la clé doit forcément exister (son absence
 > serait un bug). Utilisez `d.get(cle, defaut)` quand elle peut manquer.
 
 ## Ajouter, modifier, supprimer
+
+Un dictionnaire n'est pas figé. Comme un carnet d'adresses, il change : un ami arrive,
+un autre change de numéro, un troisième s'en va.
 
 Pour ajouter ou modifier, on affecte une valeur à une clé. Si la clé existe, sa valeur
 est remplacée ; sinon, elle est créée.
@@ -109,11 +130,38 @@ print(age_chloe, ages)
 35 {'Alice': 31}
 ```
 
+Ligne par ligne :
+
+- au départ, `ages` ne contient qu'Alice, avec 30 ;
+- `ages["Bob"] = 25` crée la clé `"Bob"` ; `ages["Alice"] = 31` remplace 30 par 31 ;
+- `update` change l'âge de Bob (26) et ajoute Chloé (35) ;
+- `del` efface Bob ; `pop` efface Chloé et range son âge, 35, dans `age_chloe`.
+
 - `d[cle] = valeur` ajoute ou remplace ;
 - `update` ajoute ou remplace plusieurs clés d'un coup ;
 - `del d[cle]` supprime ; `pop(cle)` supprime et renvoie la valeur.
 
+**À vous :** écrivez un programme qui crée un dictionnaire `prix` avec `"pain": 1` et
+`"lait": 2`, puis ajoute `"beurre": 3`, passe le prix du pain à 2 et affiche le
+dictionnaire.
+
+> **Solution**
+>
+> ```python
+> prix = {"pain": 1, "lait": 2}
+> prix["beurre"] = 3
+> prix["pain"] = 2
+> print(prix)
+> ```
+>
+> ```sortie
+> {'pain': 2, 'lait': 2, 'beurre': 3}
+> ```
+
 ## Clés, valeurs et paires
+
+Parfois, vous n'avez besoin que d'une partie : les prénoms pour une feuille d'appel, ou
+seulement les notes pour calculer une moyenne.
 
 Trois méthodes donnent une vue sur le contenu :
 
@@ -136,7 +184,17 @@ print(sum(notes.values()) / len(notes))
 15.0
 ```
 
+Ligne par ligne :
+
+- `keys()` donne les prénoms ; `list(...)` les range dans une liste pour les afficher ;
+- `values()` donne les notes, et `items()` les paires prénom-note ;
+- la dernière ligne additionne les notes (45) et divise par le nombre d'élèves (3) :
+  la moyenne vaut 15.0.
+
 ## Parcourir un dictionnaire
+
+Souvent, vous voulez traiter chaque entrée à son tour, comme on lit un bulletin ligne
+par ligne : chaque élève avec sa note.
 
 Une boucle `for` sur un dictionnaire parcourt ses **clés**. Pour avoir la clé et la
 valeur ensemble, parcourez `items()` et découpez chaque paire.
@@ -160,6 +218,14 @@ Bob : 12/20
 Chloé : 18/20
 ```
 
+Ligne par ligne :
+
+- la première boucle donne à `nom` chaque clé, l'une après l'autre : `"Alice"`, `"Bob"`,
+  puis `"Chloé"` ;
+- la seconde boucle reçoit à chaque tour une paire, par exemple `("Alice", 15)` ;
+- `nom, note` coupe cette paire en deux : `nom` vaut `"Alice"` et `note` vaut 15 ;
+- le `f"..."` remplace `{nom}` et `{note}` par leurs valeurs.
+
 Pour parcourir dans un autre ordre, triez. `sorted(notes.items(), key=...)` trie les
 paires, par exemple par note décroissante :
 
@@ -174,6 +240,24 @@ Chloé 18
 Alice 15
 Bob 12
 ```
+
+**À vous :** écrivez un programme qui parcourt
+`prix = {"pain": 1, "lait": 2, "beurre": 3}` et affiche une ligne par article, sous la
+forme « pain : 1 € ».
+
+> **Solution**
+>
+> ```python
+> prix = {"pain": 1, "lait": 2, "beurre": 3}
+> for article, montant in prix.items():
+>     print(f"{article} : {montant} €")
+> ```
+>
+> ```sortie
+> pain : 1 €
+> lait : 2 €
+> beurre : 3 €
+> ```
 
 ## Des valeurs complexes
 
@@ -198,6 +282,12 @@ Lyon
 [15, 12, 17, 19]
 ```
 
+Ligne par ligne :
+
+- `eleve["notes"]` est une liste ; `[0]` prend son premier élément, 15 ;
+- `eleve["adresse"]` est un dictionnaire ; `["ville"]` y cherche la ville, `"Lyon"` ;
+- `append(19)` ajoute une note à la fin de la liste rangée dans la fiche.
+
 Lisez `eleve["adresse"]["ville"]` de gauche à droite : la fiche, puis son adresse,
 puis la ville de cette adresse.
 
@@ -218,8 +308,33 @@ print(compteur)
 {'le': 3, 'chat': 1, 'et': 2, 'chien': 1, 'lapin': 1}
 ```
 
+Ligne par ligne :
+
+- `texte.split()` coupe la phrase en mots : `"le"`, `"chat"`, `"et"`… ;
+- `compteur` commence vide ;
+- au premier `"le"`, `compteur.get("le", 0)` vaut 0 : Python range 0 + 1, soit 1 ;
+- au deuxième `"le"`, il vaut 1 : Python range 2. Au troisième, 3.
+
 `compteur.get(mot, 0)` renvoie le compte actuel, ou 0 si le mot est nouveau. On ajoute
 1, puis on range le résultat.
+
+**À vous :** écrivez un programme qui compte combien de fois chaque fruit apparaît
+dans `achats = ["pomme", "poire", "pomme", "kiwi", "pomme"]`, avec un dictionnaire et
+`get`, puis affiche le dictionnaire.
+
+> **Solution**
+>
+> ```python
+> achats = ["pomme", "poire", "pomme", "kiwi", "pomme"]
+> compte = {}
+> for fruit in achats:
+>     compte[fruit] = compte.get(fruit, 0) + 1
+> print(compte)
+> ```
+>
+> ```sortie
+> {'pomme': 3, 'poire': 1, 'kiwi': 1}
+> ```
 
 ### Avec collections.Counter
 
@@ -249,6 +364,8 @@ fréquents.
 
 ### Avec defaultdict
 
+> **Note :** cette partie peut attendre. Lisez-la quand les bases seront solides.
+
 `defaultdict` crée automatiquement une valeur de départ pour une clé absente. On lui
 donne le type de cette valeur : `list` pour une liste vide, `int` pour 0.
 
@@ -271,6 +388,9 @@ Sans `defaultdict`, il faudrait vérifier à chaque fois si la clé existe avant
 d'ajouter à sa liste.
 
 ## Les ensembles
+
+Parfois, seule compte la présence d'un élément, pas son nombre ni sa place. Pensez à la
+liste des invités d'une fête : personne ne doit y être compté deux fois.
 
 Un [ensemble](../debuter/glossaire.md#ensemble) (`set`) est une collection **sans
 doublons** et **sans ordre**. Pensez à un sac de billes : chaque bille n'y est qu'une
@@ -305,7 +425,28 @@ Comme un ensemble n'a pas d'ordre, on le trie avec `sorted` avant de l'afficher.
 > **Attention :** `{}` crée un dictionnaire vide, pas un ensemble. Pour un ensemble
 > vide, écrivez `set()`.
 
+**À vous :** écrivez un programme qui part de la liste
+`invites = ["Alice", "Bob", "Alice", "Chloé", "Bob"]`, retire les doublons avec un
+ensemble, puis affiche le nombre d'invités et leurs noms triés.
+
+> **Solution**
+>
+> ```python
+> invites = ["Alice", "Bob", "Alice", "Chloé", "Bob"]
+> uniques = set(invites)
+> print(len(uniques))
+> print(sorted(uniques))
+> ```
+>
+> ```sortie
+> 3
+> ['Alice', 'Bob', 'Chloé']
+> ```
+
 ### Les opérations d'ensembles
+
+Comparer deux groupes est fréquent : quels loisirs deux amis ont-ils en commun ? Lesquels
+n'appartiennent qu'à l'un des deux ?
 
 Les ensembles savent faire les opérations des maths :
 
@@ -338,6 +479,13 @@ print({"tennis"} <= alice)
 True
 ```
 
+Ligne par ligne :
+
+- `alice | bob` réunit tous les loisirs des deux, sans doublon ;
+- `alice & bob` garde ceux qu'ils ont en commun : la lecture et le tennis ;
+- `alice - bob` garde ceux d'Alice que Bob n'a pas : le piano ;
+- `alice ^ bob` garde ceux qu'un seul des deux pratique.
+
 `<=` vérifie qu'un ensemble est **inclus** dans un autre.
 
 > **Astuce :** `in` est très rapide sur un ensemble, même avec un million d'éléments.
@@ -345,6 +493,8 @@ True
 > ensemble.
 
 ### frozenset : un ensemble figé
+
+> **Note :** cette partie peut attendre. Lisez-la quand les bases seront solides.
 
 Un `frozenset` est un ensemble [immuable](../debuter/glossaire.md#immuable) : on ne
 peut plus rien ajouter ni retirer. Il peut donc servir de clé de dictionnaire, ce qui
@@ -367,6 +517,9 @@ L'ordre ne compte pas dans un ensemble : `{"Paris", "Lyon"}` et `{"Lyon", "Paris
 désignent le même trajet.
 
 ## Quelle collection choisir ?
+
+Vous connaissez maintenant quatre façons de ranger des données. Comme des boîtes de
+rangement, chacune convient à un usage précis.
 
 | Collection | Écriture | Ordonnée | Modifiable | Doublons | Usage typique |
 | --- | --- | --- | --- | --- | --- |

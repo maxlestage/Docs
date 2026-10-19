@@ -12,6 +12,10 @@ Cette page présente les briques de base de Python : les variables, les types de
 
 ## Les variables
 
+Un programme a besoin de se souvenir de choses : un prénom, un score, un prix. Sans
+variable, chaque valeur serait perdue aussitôt, comme un numéro de téléphone qu'on
+oublie faute de l'avoir noté.
+
 Une [variable](../debuter/glossaire.md#variable) est un nom posé sur une
 [valeur](../debuter/glossaire.md#valeur). Imaginez une étiquette collée sur une boîte :
 l'étiquette, c'est le nom ; le contenu de la boîte, c'est la valeur.
@@ -29,6 +33,12 @@ print(age)
 Alice
 30
 ```
+
+Ligne par ligne :
+
+- `prenom = "Alice"` range le texte `"Alice"` dans une boîte nommée `prenom` ;
+- `age = 30` range le nombre 30 dans une autre boîte, nommée `age` ;
+- les deux `print` lisent le contenu de chaque boîte et l'affichent, dans l'ordre.
 
 Une variable peut recevoir une nouvelle valeur. L'ancienne est oubliée.
 
@@ -53,7 +63,27 @@ La ligne `score = score + 5` se lit de droite à gauche : Python calcule `score 
 > **Astuce :** `score += 5` est un raccourci pour `score = score + 5`. Il existe aussi
 > `-=`, `*=` et `/=`.
 
+**À vous :** écrivez un programme qui range `5` dans une variable `pommes`, affiche sa
+valeur, lui ajoute 3, puis affiche la nouvelle valeur.
+
+> **Solution**
+>
+> ```python
+> pommes = 5
+> print(pommes)
+> pommes = pommes + 3
+> print(pommes)
+> ```
+>
+> ```sortie
+> 5
+> 8
+> ```
+
 ## Les types de valeurs
+
+Python doit savoir ce que contient chaque boîte : on peut multiplier deux prix, mais
+pas deux prénoms. Le type lui dit ce qu'il a le droit de faire avec une valeur.
 
 Chaque valeur a un [type](../debuter/glossaire.md#type) : sa nature. Un nombre ne se
 manipule pas comme un texte. Voici les cinq types de base.
@@ -79,6 +109,16 @@ print(nombre, prix, nom, est_actif, resultat)
 ```sortie
 42 9.99 Python True None
 ```
+
+Ligne par ligne :
+
+- les cinq premières lignes créent une variable de chaque type : un entier, un
+  flottant, un texte, un booléen et `None` ;
+- la ligne vide ne change rien : elle aère le code ;
+- `print` reçoit les cinq variables, séparées par des virgules, et affiche leurs
+  valeurs sur une seule ligne ;
+- les guillemets de `"Python"` ne s'affichent pas : ils servent seulement à dire à
+  Python que c'est un texte.
 
 Quelques précisions :
 
@@ -118,7 +158,26 @@ print(type("42"))
 Regardez la dernière ligne : `"42"` est un **texte**, pas un nombre. Les guillemets
 changent tout.
 
+**À vous :** écrivez un programme qui affiche le type de `7`, puis celui de `7.0`, puis
+celui de `"7"`.
+
+> **Solution**
+>
+> ```python
+> print(type(7))
+> print(type(7.0))
+> print(type("7"))
+> ```
+>
+> ```sortie
+> <class 'int'>
+> <class 'float'>
+> <class 'str'>
+> ```
+
 ## Le typage dynamique
+
+> **Note :** cette partie peut attendre. Lisez-la quand les bases seront solides.
 
 En Python, une variable n'a pas de type fixé. C'est la **valeur** qui a un type. La
 même étiquette peut passer d'un nombre à un texte : on dit que le typage est
@@ -144,6 +203,9 @@ par erreur. Gardez un seul type par variable, c'est plus clair.
 
 ## Afficher avec print
 
+Un programme travaille en silence. Pour voir un résultat, il faut le lui demander :
+`print` écrit à l'écran, comme on lit un résultat à voix haute.
+
 `print` affiche une ou plusieurs valeurs. Séparées par des virgules, elles sont
 affichées avec un espace entre elles, puis un retour à la ligne.
 
@@ -159,9 +221,19 @@ Il y a 3 chats
 fin
 ```
 
+Ligne par ligne :
+
+- `print("Il y a", 3, "chats")` reçoit trois valeurs : deux textes et un nombre. Il
+  les affiche avec un espace entre elles ;
+- `print()` n'a rien à afficher : il passe seulement à la ligne ;
+- `print("fin")` affiche son texte sur la ligne suivante.
+
 `print()` sans rien affiche une ligne vide.
 
 ### Les options sep et end
+
+Parfois, l'espace et le retour à la ligne ne conviennent pas : pour écrire une date
+avec des tirets, ou pour finir une phrase sur la même ligne.
 
 Deux options changent ce comportement :
 
@@ -183,7 +255,24 @@ Chargement...terminé
 
 Avec `end="..."`, le `print` suivant continue sur la même ligne.
 
+**À vous :** écrivez un programme qui affiche l'heure `12:45` avec un seul `print`,
+qui reçoit les deux textes `"12"` et `"45"`.
+
+> **Solution**
+>
+> ```python
+> print("12", "45", sep=":")
+> ```
+>
+> ```sortie
+> 12:45
+> ```
+
 ## Les f-strings
+
+Vous voulez souvent une phrase qui contient des valeurs : « Alice a 30 ans. ».
+Coller des morceaux de texte et des nombres un par un est pénible. La f-string fait
+tout en une ligne.
 
 Pour mettre des valeurs **dans** un texte, utilisez une **f-string** : un texte précédé
 de la lettre `f`. Entre accolades `{ }`, vous écrivez une variable ou un calcul.
@@ -202,6 +291,14 @@ Alice a 30 ans.
 Dans 10 ans, elle aura 40 ans.
 ```
 
+Ligne par ligne :
+
+- les deux premières lignes rangent `"Alice"` dans `prenom` et `30` dans `age` ;
+- dans le premier `print`, Python remplace `{prenom}` par `Alice` ;
+- dans le troisième, il calcule d'abord `age + 10`, soit 40, puis place le résultat
+  dans le texte ;
+- `age` vaut toujours 30 : un calcul entre accolades ne change pas la variable.
+
 C'est comme un formulaire à trous : Python remplit chaque `{ }` avec la valeur.
 
 > **Astuce :** écrivez `{variable=}` pour afficher le nom **et** la valeur. Très pratique
@@ -216,7 +313,25 @@ print(f"{age=}")
 age=30
 ```
 
+**À vous :** écrivez un programme qui range un prix de `4` euros et une quantité de `3`
+dans deux variables, puis affiche `3 croissants coûtent 12 euros.` avec une f-string.
+
+> **Solution**
+>
+> ```python
+> prix = 4
+> quantite = 3
+> print(f"{quantite} croissants coûtent {prix * quantite} euros.")
+> ```
+>
+> ```sortie
+> 3 croissants coûtent 12 euros.
+> ```
+
 ## Les commentaires
+
+Dans un mois, vous aurez oublié pourquoi vous avez écrit telle ligne. Un commentaire
+est un pense-bête laissé dans le code, pour vous et pour les autres.
 
 Un [commentaire](../debuter/glossaire.md#commentaire) est une note pour les humains.
 Python l'ignore. Il commence par `#` et va jusqu'à la fin de la ligne.
@@ -232,10 +347,19 @@ print(prix * quantite)  # affiche le total
 36
 ```
 
+Ligne par ligne :
+
+- la première ligne est entièrement un commentaire : Python la saute ;
+- `prix = 12` est exécuté ; la fin de la ligne, après `#`, est ignorée ;
+- le dernier `print` calcule `12 * 3` et affiche 36. Son commentaire ne s'affiche pas.
+
 > **À retenir :** un bon commentaire explique **pourquoi**, pas **quoi**. Le code dit
 > déjà ce qu'il fait.
 
 ## Bien nommer ses variables
+
+Un programme se relit bien plus souvent qu'il ne s'écrit. Un bon nom est comme une
+étiquette lisible sur un bocal : on sait ce qu'il contient sans l'ouvrir.
 
 Un nom de variable :
 
@@ -265,6 +389,8 @@ bien plus clair que `n` ou `x`.
 
 ## Les constantes
 
+> **Note :** cette partie peut attendre. Lisez-la quand les bases seront solides.
+
 Une [constante](../debuter/glossaire.md#constante) est une valeur qui ne doit pas
 changer : un taux, une limite, un nom d'application. Python n'a pas de vraies
 constantes. Par **convention**, on les écrit en MAJUSCULES : c'est un message aux
@@ -284,7 +410,19 @@ print(f"Score maximum : {SCORE_MAX}")
 Score maximum : 100
 ```
 
+Ligne par ligne :
+
+- `TAUX_TVA` et `SCORE_MAX` sont créées en haut du programme, en majuscules : on les
+  repère tout de suite ;
+- `prix_ht * (1 + TAUX_TVA)` calcule d'abord la parenthèse, `1.2`, puis `50 * 1.2`,
+  soit `60.0` ;
+- la f-string affiche la valeur de `SCORE_MAX`.
+
 ## Lire ce que tape l'utilisateur
+
+Jusqu'ici, toutes les valeurs étaient écrites dans le code. Pour qu'un programme
+dialogue avec la personne qui l'utilise, comme un guichet qui vous demande votre nom,
+il doit lire ce qu'elle tape.
 
 `input()` affiche une question, attend que l'utilisateur tape une réponse puis appuie
 sur Entrée, et renvoie cette réponse.

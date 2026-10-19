@@ -12,6 +12,10 @@ Cette page montre comment créer, transformer, découper et parcourir du texte e
 
 ## Deux types de texte : String et &str
 
+Presque tous les programmes manipulent du texte : un prénom, un message d'accueil,
+une liste de courses. Bien choisir son type vous évitera beaucoup d'erreurs du
+compilateur.
+
 Un texte, ou [chaîne de caractères](../debuter/glossaire.md#chaine-de-caracteres), est
 une suite de lettres. Rust a deux types de texte. Pour débuter, retenez ceci :
 
@@ -31,6 +35,14 @@ println!("{regarde} {possede} {autre}");
 ```sortie
 bonjour bonjour salut
 ```
+
+Ligne par ligne :
+
+- `regarde` est un `&str` : il regarde le texte `"bonjour"` écrit dans le programme ;
+- `possede` est une `String` fabriquée avec `String::from` : une copie qui lui
+  appartient ;
+- `autre` est aussi une `String`, fabriquée cette fois avec `.to_string()` ;
+- `println!` affiche les trois : à l'écran, rien ne les distingue.
 
 `String::from("…")` et `.to_string()` fabriquent une `String` à partir d'un `&str`.
 Dans l'autre sens, pour passer d'une `String` à un `&str`, ajoutez `&` devant :
@@ -57,6 +69,9 @@ fn main() {
 
 ## Agrandir une String
 
+Un texte se construit souvent petit à petit, comme une liste de courses que vous
+complétez au fil de la semaine. Pour cela, il faut une `String` modifiable.
+
 Une `String` déclarée avec `mut` peut grandir. `push_str` ajoute un texte, `push` ajoute
 un seul caractère :
 
@@ -71,6 +86,15 @@ println!("{phrase}");
 Bonjour tout le monde!
 ```
 
+Ligne par ligne :
+
+- `let mut phrase` crée une `String` qui contient « Bonjour ». `mut` lui permet de
+  changer ;
+- `push_str(" tout le monde")` colle ce texte à la fin : `phrase` vaut maintenant
+  « Bonjour tout le monde » ;
+- `push('!')` ajoute un seul caractère. Un caractère seul s'écrit entre apostrophes ;
+- `println!` affiche le résultat final.
+
 L'opérateur `+` colle aussi deux textes, mais à gauche il faut une `String` :
 
 ```rust
@@ -83,7 +107,27 @@ println!("{mot}");
 Bonjour
 ```
 
+**À vous :** écrivez un programme qui part de la `String` « Il fait », lui ajoute
+« beau » avec `push_str`, puis un point avec `push`, et affiche le résultat.
+
+> **Solution**
+>
+> ```rust
+> let mut meteo = String::from("Il fait");
+> meteo.push_str(" beau");
+> meteo.push('.');
+> println!("{meteo}");
+> ```
+>
+> ```sortie
+> Il fait beau.
+> ```
+
 ## Assembler avec format!
+
+Un programme a souvent besoin de fabriquer une phrase avec des valeurs : une
+étiquette, un message de bienvenue, une ligne de facture. `format!` la prépare sans
+l'afficher tout de suite.
 
 `format!` fonctionne comme `println!`, mais il **renvoie** une `String` au lieu de
 l'afficher :
@@ -99,10 +143,21 @@ println!("{fiche}");
 Alice (30 ans)
 ```
 
+Ligne par ligne :
+
+- `prenom` contient le texte « Alice », et `age` le nombre 30 ;
+- `format!` remplace `{prenom}` et `{age}` par leurs valeurs, et renvoie la `String`
+  « Alice (30 ans) » ;
+- cette `String` est rangée dans `fiche` : rien n'est encore affiché ;
+- c'est `println!` qui l'affiche enfin à l'écran.
+
 > **Astuce :** `format!` est le moyen le plus simple de coller plusieurs morceaux de
 > texte et de nombres.
 
 ## La longueur d'un texte
+
+Compter les lettres sert souvent : vérifier qu'un mot de passe est assez long, ou
+qu'un pseudo n'est pas trop long. En Rust, il y a un petit piège.
 
 `len()` compte les **octets**, pas les lettres. Un octet est la plus petite case de la
 mémoire. Une lettre simple prend un octet, une lettre accentuée en prend deux.
@@ -119,9 +174,18 @@ println!("{}", mot.chars().count());
 3
 ```
 
+Ligne par ligne :
+
+- `mot` contient « été » : trois lettres, dont deux accentuées ;
+- `mot.len()` compte les octets : 2 pour `é`, 1 pour `t`, 2 pour `é`, soit 5 ;
+- `mot.chars().count()` compte les caractères : 3.
+
 > **Attention :** pour un texte en français, préférez `chars().count()`.
 
 ## Changer la casse et nettoyer
+
+Ce que tape une personne est rarement propre : des espaces en trop, des majuscules
+au hasard. Avant de comparer ou de ranger un texte, on le nettoie.
 
 ```rust
 let brut = "  Bonjour Rust  ";
@@ -140,7 +204,25 @@ bonjour rust
 - `to_uppercase()` met en majuscules ;
 - `to_lowercase()` met en minuscules.
 
+**À vous :** écrivez un programme qui part du texte `"   alice "`, enlève les
+espaces autour, le met en majuscules et l'affiche entre crochets.
+
+> **Solution**
+>
+> ```rust
+> let saisie = "   alice ";
+> println!("[{}]", saisie.trim().to_uppercase());
+> ```
+>
+> ```sortie
+> [ALICE]
+> ```
+
 ## Chercher dans un texte
+
+Un programme doit souvent vérifier un texte : une adresse contient-elle un `@` ? Un
+nom de fichier finit-il par `.txt` ? C'est comme la recherche de votre traitement de
+texte.
 
 Ces méthodes répondent par `true` ou `false` :
 
@@ -159,6 +241,9 @@ false
 
 ## Remplacer
 
+Remplacer un mot par un autre sert à corriger une faute partout, ou à remplir un
+modèle de lettre avec le bon prénom.
+
 `replace` renvoie une **nouvelle** `String`. Le texte de départ ne change pas :
 
 ```rust
@@ -175,6 +260,10 @@ J'aime le café
 
 ## Découper avec split
 
+Un texte contient souvent plusieurs informations collées : des fruits séparés par
+des virgules, une phrase faite de mots. Pour les traiter une par une, il faut d'abord
+les séparer, comme on casse une tablette de chocolat en carrés.
+
 `split` coupe le texte à chaque séparateur. `collect` range les morceaux dans un `Vec` :
 
 ```rust
@@ -188,6 +277,13 @@ println!("{}", fruits.len());
 ["pomme", "poire", "kiwi"]
 3
 ```
+
+Ligne par ligne :
+
+- `liste` contient trois fruits séparés par des virgules ;
+- `split(',')` coupe à chaque virgule : on obtient « pomme », « poire » et « kiwi » ;
+- `collect()` range ces morceaux dans `fruits`, un `Vec<&str>` (une liste de textes) ;
+- `{:?}` affiche la liste avec ses crochets, et `len()` donne le nombre de morceaux.
 
 Pour couper sur les espaces, `split_whitespace` est plus pratique :
 
@@ -214,7 +310,25 @@ println!("{}", mots.join("-"));
 a-b-c
 ```
 
+**À vous :** écrivez un programme qui découpe le texte `"lundi mardi mercredi"` en
+mots, puis les recolle avec `" / "` entre eux.
+
+> **Solution**
+>
+> ```rust
+> let jours: Vec<&str> = "lundi mardi mercredi".split_whitespace().collect();
+> println!("{}", jours.join(" / "));
+> ```
+>
+> ```sortie
+> lundi / mardi / mercredi
+> ```
+
 ## Transformer un texte en nombre
+
+Pour Rust, `"42"` n'est pas un nombre : c'est un texte de deux caractères, avec
+lequel on ne peut pas calculer. Or ce que vous tapez au clavier arrive toujours sous
+forme de texte. Il faut donc le convertir.
 
 `parse` lit un nombre dans un texte. Indiquez le type voulu avec `::<i32>`. Le résultat
 est un `Result`, car le texte n'est peut-être pas un nombre :
@@ -234,6 +348,15 @@ true
 14
 ```
 
+Ligne par ligne :
+
+- `"42".parse::<i32>()` réussit : le résultat est `Ok(42)`, le nombre dans une boîte
+  « réussite » ;
+- `"abc".parse::<i32>()` échoue : `is_err()` répond `true`, « oui, c'est une erreur » ;
+- l'avant-dernière ligne enlève les espaces avec `trim()`, lit 7, et `unwrap()` sort
+  le nombre de sa boîte `Ok` ;
+- `n` vaut donc le nombre 7, et `n * 2` donne 14.
+
 > **Astuce :** pensez à `trim()` avant `parse` : un espace ou un retour à la ligne fait
 > échouer la lecture. Les erreurs sont expliquées dans [Gérer les erreurs](erreurs.md).
 
@@ -248,7 +371,25 @@ println!("{}", texte.len());
 4
 ```
 
+**À vous :** écrivez un programme qui lit les nombres des textes `"12"` et `"30"`
+avec `parse`, puis affiche leur somme.
+
+> **Solution**
+>
+> ```rust
+> let a = "12".parse::<i32>().unwrap();
+> let b = "30".parse::<i32>().unwrap();
+> println!("{}", a + b);
+> ```
+>
+> ```sortie
+> 42
+> ```
+
 ## Parcourir les caractères
+
+Parfois, il faut examiner un texte lettre par lettre : compter les voyelles,
+vérifier qu'un mot de passe contient un chiffre, ou retourner un mot.
 
 `chars()` donne les caractères un par un (des valeurs de type `char`) :
 
@@ -267,6 +408,15 @@ N.o.ë.l.
 2 voyelles
 ```
 
+Ligne par ligne :
+
+- `for c in mot.chars()` donne à `c` les lettres « N », « o », « ë », puis « l » ;
+- `print!` (sans `ln`) affiche chaque lettre suivie d'un point, sur la même ligne ;
+- `println!()`, vide, passe simplement à la ligne ;
+- `filter` garde les lettres présentes dans `"aeiouyë"`, et `count` les compte : « o »
+  et « ë », donc 2. La partie `|c| …` est une petite fonction sans nom, expliquée
+  dans [les closures](closures.md).
+
 Pour retourner un texte, combinez `chars`, `rev` et `collect` :
 
 ```rust
@@ -279,6 +429,10 @@ radar
 ```
 
 ## Prendre un morceau avec prudence
+
+Prendre un morceau d'un texte sert à n'en garder qu'une partie : le jour dans
+« lundi matin », l'année dans une date. Il faut le faire avec soin, à cause des
+accents.
 
 On peut prendre une partie d'un texte avec `&texte[début..fin]`. Les nombres sont des
 **octets** :
@@ -315,6 +469,11 @@ println!("{debut}");
 ```
 
 ## Les textes bruts
+
+> **Note :** cette partie peut attendre. Lisez-la quand les bases seront solides.
+
+Certains textes contiennent beaucoup de `\` ou de guillemets : un chemin de fichier
+Windows, une citation. Un texte brut les garde tels quels, sans rien à échapper.
 
 Un texte brut s'écrit `r"…"`. Les barres obliques `\` y sont gardées telles quelles.
 Avec `r#"…"#`, il peut même contenir des guillemets :

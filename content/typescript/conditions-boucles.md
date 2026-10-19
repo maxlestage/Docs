@@ -12,6 +12,10 @@ Cette page explique comment faire des choix avec `if`, `switch` et l'opérateur 
 
 ## if et else
 
+Un programme ne fait pas toujours la même chose. Vous-même, vous prenez un parapluie
+s'il pleut et des lunettes de soleil s'il fait beau. Une condition permet au programme
+de faire ce genre de choix.
+
 Une [condition](../debuter/glossaire.md#condition) choisit quel code exécuter. `if`
 (« si ») exécute son bloc `{ ... }` seulement si le test entre parenthèses est vrai.
 `else` (« sinon ») donne le bloc à exécuter dans le cas contraire.
@@ -29,6 +33,14 @@ if (temperature > 25) {
 ```sortie
 Il fait chaud.
 ```
+
+Ligne par ligne :
+
+- `const temperature: number = 28;` range 28 dans la variable `temperature` ;
+- `if (temperature > 25)` pose une question : « 28 est-il plus grand que 25 ? ». La
+  réponse est oui ;
+- le premier bloc s'exécute donc et affiche « Il fait chaud. » ;
+- le bloc du `else` est sauté : il ne sert que si la réponse est non.
 
 Pour plus de deux cas, enchaînez avec `else if` (« sinon, si »). Les tests sont lus
 dans l'ordre ; le premier vrai gagne, les autres sont ignorés.
@@ -51,7 +63,32 @@ if (note >= 16) {
 Bien
 ```
 
+**À vous :** écrivez un programme qui range `15` dans une constante `heure`, puis
+affiche « Bonjour » si l'heure est avant 12, « Bon après-midi » si elle est avant 18,
+et « Bonsoir » sinon.
+
+> **Solution**
+>
+> ```typescript
+> const heure: number = 15;
+> if (heure < 12) {
+>   console.log("Bonjour");
+> } else if (heure < 18) {
+>   console.log("Bon après-midi");
+> } else {
+>   console.log("Bonsoir");
+> }
+> ```
+>
+> ```sortie
+> Bon après-midi
+> ```
+
 ## Comparer avec ===
+
+Pour décider, un programme pose d'abord une question : « l'âge vaut-il 20 ? »,
+« la température dépasse-t-elle 25 ? ». Les opérateurs de comparaison servent à écrire
+ces questions. La réponse est toujours oui (`true`) ou non (`false`).
 
 Les opérateurs de comparaison donnent un `boolean` (`true` ou `false`) :
 
@@ -81,6 +118,14 @@ false
 false
 ```
 
+Ligne par ligne :
+
+- `age === 20` est vrai et `age !== 20` est faux : la première ligne affiche
+  `true false` ;
+- `age >= 18 && aUnBillet` : les deux tests sont vrais, donc `&&` donne `true` ;
+- `age < 12 || age > 65` : aucun des deux tests n'est vrai, donc `||` donne `false` ;
+- `!aUnBillet` inverse `true` : on obtient `false`.
+
 > **Attention :** écrivez toujours `===` (trois signes), jamais `==` (deux). `==`
 > transforme les valeurs avant de comparer : `0 == ""` vaut `true` en JavaScript !
 > Et un seul `=` ne compare pas : il range une valeur dans une variable.
@@ -89,7 +134,30 @@ TypeScript surveille vos comparaisons. Comparer un nombre et un texte est toujou
 faux : c'est sûrement une erreur, et il vous le dit (voir les
 [erreurs fréquentes](#erreurs-frequentes)).
 
+**À vous :** écrivez un programme qui range `70` dans une constante `age`, puis affiche
+« Tarif réduit » si l'âge est inférieur à 18 ou supérieur ou égal à 65, et
+« Plein tarif » sinon.
+
+> **Solution**
+>
+> ```typescript
+> const age: number = 70;
+> if (age < 18 || age >= 65) {
+>   console.log("Tarif réduit");
+> } else {
+>   console.log("Plein tarif");
+> }
+> ```
+>
+> ```sortie
+> Tarif réduit
+> ```
+
 ## Les valeurs « vraies » et « fausses »
+
+Souvent, vous voulez juste savoir si une case est remplie : un nom saisi, un
+message non vide. Un `if` permet de le demander très vite, à condition de connaître ses
+règles.
 
 Un `if` accepte n'importe quelle valeur, pas seulement un `boolean`. Six valeurs
 comptent comme fausses (*falsy*) :
@@ -117,12 +185,22 @@ false false false
 true true true
 ```
 
+Ligne par ligne :
+
+- `texte` contient `""`, le texte vide ;
+- `if (texte)` : le texte vide compte comme faux, donc c'est le bloc du `else` qui
+  s'exécute ;
+- les deux dernières lignes montrent comment un `if` voit six valeurs : les trois
+  premières comptent comme fausses, les trois suivantes comme vraies.
+
 `Boolean(x)` montre comment `x` est vu par un `if`.
 
 > **Astuce :** quand c'est possible, écrivez le test complet : `texte !== ""` ou
 > `nombre !== 0`. Le lecteur comprend tout de suite ce que vous testez.
 
 ## L'opérateur ternaire
+
+> **Note :** cette partie peut attendre. Lisez-la quand les bases seront solides.
 
 Le ternaire `test ? siVrai : siFaux` est un `if/else` qui **donne une valeur**. Il
 tient sur une ligne.
@@ -148,6 +226,10 @@ Lisez-le comme une question : « âge ≥ 18 ? alors "majeur", sinon "mineur" »
 
 ## switch : choisir parmi plusieurs valeurs
 
+Quand une même variable peut prendre beaucoup de valeurs, une longue suite de
+`else if` devient pénible à lire. `switch` range les cas les uns sous les autres, comme
+les tiroirs étiquetés d'une commode.
+
 `switch` compare une valeur à une liste de cas (`case`). Il exécute le code du cas qui
 correspond. `break` sort du `switch` ; `default` traite tous les autres cas.
 
@@ -171,6 +253,14 @@ switch (jour) {
 Week-end !
 ```
 
+Ligne par ligne :
+
+- `jour` contient `"samedi"` ;
+- `switch (jour)` compare cette valeur à chaque `case`, de haut en bas ;
+- `case "samedi":` correspond : l'exécution commence là, descend jusqu'au
+  `console.log` et affiche « Week-end ! » ;
+- `break` sort du `switch` : les autres cas sont ignorés.
+
 Deux `case` à la suite partagent le même code : `samedi` et `dimanche` affichent
 « Week-end ! ».
 
@@ -178,6 +268,10 @@ Deux `case` à la suite partagent le même code : `samedi` et `dimanche` affiche
 > `break` est un piège classique.
 
 ## Les boucles
+
+Imaginez qu'on vous demande d'afficher les nombres de 1 à 100. Écrire 100
+`console.log` serait long et pénible. Une boucle fait ce travail répétitif à votre
+place.
 
 Une [boucle](../debuter/glossaire.md#boucle) répète un bloc de code.
 
@@ -202,6 +296,25 @@ Tour 3
 - `i <= 3` : on continue tant que `i` vaut au plus 3 ;
 - `i++` : après chaque tour, on ajoute 1 à `i`.
 
+**À vous :** écrivez un programme qui affiche la table de 7, de « 7 x 1 = 7 » à
+« 7 x 5 = 35 », une ligne par calcul.
+
+> **Solution**
+>
+> ```typescript
+> for (let i = 1; i <= 5; i++) {
+>   console.log(`7 x ${i} = ${7 * i}`);
+> }
+> ```
+>
+> ```sortie
+> 7 x 1 = 7
+> 7 x 2 = 14
+> 7 x 3 = 21
+> 7 x 4 = 28
+> 7 x 5 = 35
+> ```
+
 ### while : tant que
 
 `while` (« tant que ») répète tant que sa condition est vraie. Utilisez-la quand vous
@@ -222,6 +335,16 @@ console.log(`${annees} ans, ${argent.toFixed(2)} euros`);
 ```sortie
 5 ans, 161.05 euros
 ```
+
+Ligne par ligne :
+
+- au départ, `argent` vaut 100 et `annees` vaut 0 ;
+- avant chaque tour, `while` vérifie `argent < 150`. 100 est plus petit : il entre
+  dans le bloc ;
+- à chaque tour, `argent` grandit de 10 % (110, puis 121, 133.1, 146.41, 161.051) et
+  `annees` augmente de 1 ;
+- après 5 tours, `argent < 150` est faux : la boucle s'arrête, et le dernier
+  `console.log` affiche le résultat, arrondi à deux chiffres par `toFixed(2)`.
 
 > **Attention :** si la condition reste toujours vraie, la boucle ne s'arrête jamais.
 > Vérifiez que quelque chose change à chaque tour. Pour arrêter un programme bloqué,
@@ -248,6 +371,26 @@ KIWI
 
 TypeScript sait que `fruits` contient des `string` : `fruit` est donc un `string`, et
 `toUpperCase()` est autorisé. Un `const` suffit : chaque tour crée un nouveau `fruit`.
+
+**À vous :** écrivez un programme qui range la liste de courses `["pain", "lait",
+"œufs"]` dans une constante, puis affiche chaque article sur sa ligne, précédé d'un
+tiret.
+
+> **Solution**
+>
+> ```typescript
+> const courses = ["pain", "lait", "œufs"];
+>
+> for (const article of courses) {
+>   console.log(`- ${article}`);
+> }
+> ```
+>
+> ```sortie
+> - pain
+> - lait
+> - œufs
+> ```
 
 ### break et continue
 
@@ -276,6 +419,8 @@ for (let i = 1; i <= 10; i++) {
 Les nombres pairs sont sautés (`continue`), et la boucle s'arrête à 9 (`break`).
 
 ## Le rétrécissement : les types suivent vos tests
+
+> **Note :** cette partie peut attendre. Lisez-la quand les bases seront solides.
 
 Voici ce que les types apportent aux conditions. Quand une variable peut avoir
 plusieurs types, un test **rétrécit** son type dans le bloc (*narrowing*). C'est comme
@@ -306,6 +451,9 @@ Dans le premier bloc, TypeScript sait que `reponse` est un `string` : il autoris
 
 ## Les valeurs absentes : ?? et ?.
 
+Une information manque parfois : un champ de formulaire laissé vide, un réglage jamais
+choisi. Ces deux opérateurs évitent que votre programme plante dans ce cas.
+
 Une valeur de type `string | undefined` peut manquer. Deux opérateurs aident à la
 manipuler sans risque.
 
@@ -326,6 +474,14 @@ for (const volume of volumes) {
 0 5
 5 5
 ```
+
+Ligne par ligne :
+
+- `volumes` contient trois réglages : 7, 0 et `null` (aucun réglage) ;
+- la boucle les prend un par un et affiche deux colonnes : `volume ?? 5`, puis
+  `volume || 5` ;
+- pour 7, les deux gardent 7 ; pour `null`, les deux donnent 5 ;
+- pour 0, ils ne sont pas d'accord : c'est toute la différence.
 
 Comparez les deux colonnes : `||` remplace **toutes** les valeurs fausses, y compris
 `0`. `??` ne remplace que `null` et `undefined`. Un volume à `0` est un vrai réglage :
@@ -392,6 +548,15 @@ Passer
 Ralentir
 Stop
 ```
+
+Ligne par ligne :
+
+- `type Feu = ...` crée un type qui n'accepte que trois textes ;
+- `feux` est une liste de `Feu` : TypeScript y refuserait `"bleu"` ;
+- la boucle prend chaque feu, et le `switch` affiche le message du `case` qui
+  correspond ;
+- le `default` n'est jamais atteint ici : il sert à la vérification expliquée
+  juste après.
 
 Le type `never` veut dire « aucune valeur possible ». Dans le `default`, tous les cas
 ont été traités : `feu` ne peut plus rien valoir, son type est donc `never`, et la
