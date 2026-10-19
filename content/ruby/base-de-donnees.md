@@ -157,7 +157,6 @@ end
 Livre.create(titre: "Le Petit Prince", auteur: "Saint-Exupéry")
 puts Livre.count
 puts Livre.find(1).titre
-puts Livre.where(auteur: "Verne").map(&:titre)
 ```
 
 ```text
