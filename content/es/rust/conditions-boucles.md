@@ -1,14 +1,13 @@
-# Condiciones y bucles
+# Las condiciones
 
-Esta página muestra cómo elegir entre varios caminos con `if` y `match`, y cómo repetir código con `loop`, `while` y `for`.
+Esta página muestra cómo elegir entre varios caminos con `if` y `match`, y cómo leer un valor opcional con `if let`.
 
 > **Objetivos:**
 >
 > - escribir una [condición](../debuter/glossaire.md#condicion) con `if`, `else if` y
 >   `else`;
+> - comparar valores con `==`, `<`, `&&`, `||` y `!`;
 > - elegir entre varios casos con `match` y `matches!`;
-> - repetir código con `loop`, `while` y `for`;
-> - salir de un bucle, incluso anidado, con `break` y `continue`;
 > - leer un valor opcional con `if let` y `while let`.
 
 ## La condición if
@@ -224,228 +223,6 @@ false
 `match` es todavía más útil con las enumeraciones: ver
 [Estructuras, enumeraciones y traits](types.md).
 
-## El bucle loop
-
-Imagina que te piden mostrar los números del 1 al 100. Escribir 100 `println!` sería
-largo y pesado. Un bucle hace este trabajo repetitivo por ti.
-
-Un [bucle](../debuter/glossaire.md#bucle) repite un bloque de código. `loop` repite
-sin fin, hasta un `break`. El `break` puede devolver un valor:
-
-```rust
-let mut n = 1;
-let resultado = loop {
-    n = n * 2;
-    if n > 100 {
-        break n;
-    }
-};
-println!("{resultado}");
-```
-
-```sortie
-128
-```
-
-Línea por línea:
-
-- `n` vale 1 al principio; `mut` permite cambiarlo después;
-- en cada vuelta, `n` se multiplica por 2: vale 2, luego 4, 8, 16, 32, 64, 128;
-- mientras `n` no pase de 100, el `if` no hace nada y el bucle vuelve a empezar;
-- cuando `n` vale 128, `break n;` detiene el bucle y da 128, guardado en
-  `resultado`.
-
-## El bucle while
-
-A veces no sabes de antemano cuántas vueltas harán falta. Repites mientras dura una
-situación, como cuando remueves una sopa mientras no está caliente.
-
-`while` repite mientras la condición sea verdadera. Se comprueba antes de cada vuelta:
-
-```rust
-let mut cuenta = 3;
-while cuenta > 0 {
-    println!("{cuenta}...");
-    cuenta -= 1;
-}
-println!("¡Ya!");
-```
-
-```sortie
-3...
-2...
-1...
-¡Ya!
-```
-
-Línea por línea:
-
-- `cuenta` vale 3 al principio;
-- antes de cada vuelta, Rust hace la pregunta `cuenta > 0`. `3 > 0` es verdadero:
-  entra en el bloque;
-- el bloque muestra `cuenta` y luego le resta 1 (`-= 1`): vale 2, luego 1, luego 0;
-- cuando `cuenta` vale 0, `0 > 0` es falso: Rust sale del bucle y muestra «¡Ya!».
-
-**Te toca:** escribe un programa que muestre los números del 1 al 5 con un bucle
-`while`, y luego «¡Listo!».
-
-> **Solución**
->
-> ```rust
-> let mut n = 1;
-> while n <= 5 {
->     println!("{n}");
->     n += 1;
-> }
-> println!("¡Listo!");
-> ```
->
-> ```sortie
-> 1
-> 2
-> 3
-> 4
-> 5
-> ¡Listo!
-> ```
-
-## El bucle for
-
-Muy a menudo tienes una serie de cosas que tratar una por una: cada artículo de una
-lista de la compra, cada número del 1 al 10. `for` está hecho para eso.
-
-`for` recorre un rango o una colección, elemento por elemento. Es el bucle
-más usado.
-
-### Sobre un rango
-
-`1..4` va de 1 a 3 (el 4 queda excluido). `1..=4` va de 1 a 4 incluido. `rev()` recorre
-al revés.
-
-```rust
-for i in 1..4 {
-    print!("{i} ");
-}
-println!();
-for i in (1..=4).rev() {
-    print!("{i} ");
-}
-println!();
-```
-
-```sortie
-1 2 3 
-4 3 2 1 
-```
-
-Línea por línea:
-
-- `for i in 1..4` da a `i` el valor 1, luego 2, luego 3;
-- `print!` muestra sin saltar de línea: los números quedan uno al lado del otro;
-- `println!()`, vacío, solo sirve para saltar de línea;
-- el segundo bucle hace lo mismo del 1 al 4, pero al revés gracias a `rev()`.
-
-### Sobre una colección
-
-```rust
-let frutas = ["manzana", "pera", "kiwi"];
-for fruta in frutas {
-    println!("Me gusta: {fruta}");
-}
-for (i, fruta) in frutas.iter().enumerate() {
-    println!("{i}: {fruta}");
-}
-```
-
-```sortie
-Me gusta: manzana
-Me gusta: pera
-Me gusta: kiwi
-0: manzana
-1: pera
-2: kiwi
-```
-
-`enumerate()` da, además de cada elemento, su posición (a partir de 0).
-
-**Te toca:** escribe un programa que muestre la tabla del 7, de «7 x 1 = 7» a
-«7 x 5 = 35», una línea por cálculo.
-
-> **Solución**
->
-> ```rust
-> for i in 1..=5 {
->     let resultado = 7 * i;
->     println!("7 x {i} = {resultado}");
-> }
-> ```
->
-> ```sortie
-> 7 x 1 = 7
-> 7 x 2 = 14
-> 7 x 3 = 21
-> 7 x 4 = 28
-> 7 x 5 = 35
-> ```
-
-## continue y break
-
-A veces quieres cambiar el curso de un bucle por el camino: dejar de buscar en cuanto
-has encontrado algo, o ignorar algunos elementos. Para eso sirven estas dos palabras.
-
-`continue` pasa a la vuelta siguiente, `break` detiene el bucle:
-
-```rust
-for n in 1..10 {
-    if n % 2 == 0 {
-        continue;
-    }
-    if n > 7 {
-        break;
-    }
-    print!("{n} ");
-}
-println!();
-```
-
-```sortie
-1 3 5 7 
-```
-
-Línea por línea:
-
-- `n` toma los valores 1, 2, 3… hasta 9;
-- si `n` es par (el resto de la división entre 2 vale 0), `continue` pasa enseguida
-  a la vuelta siguiente: no se llega al `print!`;
-- si `n` pasa de 7, `break` detiene todo el bucle: el 9 nunca se muestra;
-- si no, `print!` muestra el número.
-
-### Salir de dos bucles: las etiquetas
-
-En dos bucles anidados, `break` solo detiene el bucle interior. Para detener
-el de fuera, ponle una **etiqueta**: un nombre que empieza por un apóstrofo,
-como `'cuadricula`.
-
-```rust
-'cuadricula: for fila in 1..=3 {
-    for columna in 1..=3 {
-        if fila * columna == 4 {
-            println!("Encontrado en ({fila}, {columna})");
-            break 'cuadricula;
-        }
-    }
-}
-println!("Fin");
-```
-
-```sortie
-Encontrado en (2, 2)
-Fin
-```
-
-`continue 'cuadricula` funciona de la misma forma: pasa a la vuelta siguiente del bucle
-etiquetado.
-
 ## if let y while let
 
 Piensa en un buzón: a veces hay una carta, a veces nada. Antes de leer la carta, hay
@@ -485,7 +262,6 @@ println!();
 ```
 
 > **Consejo:** `if let` es un `match` abreviado, para cuando solo te interesa un caso.
-
 ## Errores frecuentes
 
 ### Una condición que no es un booleano
@@ -578,11 +354,23 @@ Una variable solo tiene un tipo: las dos ramas deben dar texto, por ejemplo
 
 ## Ponte a prueba
 
-**1.** ¿Cuántas veces muestra `bip` este código: `for _ in 0..3 { println!("bip"); }`?
+**1.** ¿Qué muestra este código?
+
+```rust norun
+let x = 7;
+if x > 10 {
+    println!("grande");
+} else if x > 5 {
+    println!("mediano");
+} else {
+    println!("pequeño");
+}
+```
 
 > **Respuesta**
 >
-> Tres veces: `0..3` da 0, 1 y 2 (el 3 queda excluido).
+> `mediano`: 7 no es mayor que 10, pero sí es mayor que 5. Rust se detiene en la
+> primera condición verdadera.
 
 **2.** Escribe un `match` que muestre `pequeño` para 0 a 9, `mediano` para 10 a 99 y
 `grande` en otro caso, para `n = 42`.
@@ -602,25 +390,23 @@ Una variable solo tiene un tipo: las dos ramas deben dar texto, por ejemplo
 > mediano
 > ```
 
-**3.** En dos bucles anidados, ¿cómo detener los dos de golpe?
+**3.** ¿Qué hace `if let Some(cima) = pila.pop() { … }` cuando la pila está vacía?
 
 > **Respuesta**
 >
-> Ponle una etiqueta al bucle de fuera (`'fuera: for …`) y escribe
-> `break 'fuera;` en el bucle interior.
+> `pop()` devuelve `None`, que no encaja con el patrón `Some(cima)`: el bloque no
+> se ejecuta, y el programa sigue después.
 
 ## En resumen
 
 - `if … else` elige un camino, y puede devolver un valor.
+- `==`, `<`, `&&`, `||` y `!` construyen condiciones; una condición siempre es
+  un `bool`.
 - `match` compara un valor con patrones; `_` recoge el resto; `matches!` prueba un
   solo patrón.
-- `loop` repite hasta `break`, `while` mientras una condición sea verdadera.
-- `for x in 1..=5` o `for x in lista`: el bucle más habitual.
-- `continue` pasa a la vuelta siguiente, `break` detiene el bucle; una etiqueta `'nombre`
-  apunta a un bucle concreto.
 - `if let Some(x) = …` y `while let` leen un valor opcional.
 
 Compara con [Ruby](../ruby/conditions-boucles.md) y
 [Rythme](../rythme/conditions-boucles.md).
 
-Siguiente: [Las funciones](fonctions.md).
+Siguiente: [Los bucles](boucles.md).
