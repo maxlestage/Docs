@@ -105,7 +105,7 @@ funciona con cualquier número.
 
 ## Programa 2: una condición
 
-Una [condición](../debuter/glossaire.md#condition) es un cambio de agujas: el programa
+Una [condición](../debuter/glossaire.md#condicion) es un cambio de agujas: el programa
 toma **un solo** camino. Aquí tienes el precio de una entrada de cine según la edad.
 
 ```javascript
@@ -161,7 +161,7 @@ el programa muestra `Precio: 10 €`. Con `const edad = 12;`, la primera prueba 
 
 ## Programa 3: un bucle que acumula
 
-Un [bucle](../debuter/glossaire.md#boucle) repite líneas. Aquí, una hucha: la semana 1
+Un [bucle](../debuter/glossaire.md#bucle) repite líneas. Aquí, una hucha: la semana 1
 metes 2 €, la semana 2 metes 4 €, y así sucesivamente.
 
 ```javascript
@@ -223,7 +223,7 @@ muestra `Semana 4, ahorro 12 €`.
 
 ## Programa 4: una función llamada dos veces
 
-Una [función](../debuter/glossaire.md#fonction) es una pequeña máquina: le das un valor,
+Una [función](../debuter/glossaire.md#funcion) es una pequeña máquina: le das un valor,
 trabaja y te devuelve un resultado. Aquí, la llamamos dos veces.
 
 ```javascript
@@ -285,7 +285,7 @@ Tres observaciones:
 
 - en cada llamada, `n` y `resultado` son cajas **nuevas**. Desaparecen en el `return`
   (el guion `–` en los pasos 5 y 10);
-- antes de llamar, JavaScript calcula el [argumento](../debuter/glossaire.md#argument):
+- antes de llamar, JavaScript calcula el [argumento](../debuter/glossaire.md#argumento):
   `a - 5` se convierte en `4`, y es `4` lo que entra en `n`;
 - el `console.log` **dentro** de la función se muestra durante la llamada, antes de la
   última línea del programa.
@@ -428,7 +428,7 @@ console.table(pasos);
 
 ## El depurador en dos frases
 
-Un [depurador](../debuter/glossaire.md#debogage) pone el programa en pausa en una línea
+Un [depurador](../debuter/glossaire.md#depuracion) pone el programa en pausa en una línea
 (con la instrucción `debugger;` o con un clic en el margen del editor) y te muestra el
 valor de cada variable. Luego avanzas una línea cada vez: es la tabla de traza, rellenada
 por el ordenador; todo se explica en [depurar](debogage.md).

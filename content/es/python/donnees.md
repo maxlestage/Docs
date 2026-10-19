@@ -51,7 +51,7 @@ En toda la página usamos la misma tablita de ventas:
 El formato CSV se presentó en [los formatos de archivo](formats.md).
 Normalmente se lee un archivo. Aquí, para que cada ejemplo quepa en un bloque, el texto
 CSV está **dentro** del programa. `io.StringIO` lo hace pasar por un archivo: es un
-archivo falso, en [memoria](../debuter/glossaire.md#memoire-vive).
+archivo falso, en [memoria](../debuter/glossaire.md#memoria-ram).
 
 ```python
 import csv
@@ -72,7 +72,7 @@ print(filas[0])
 {'dia': 'lunes', 'producto': 'barra', 'cantidad': '40', 'precio': '1.10'}
 ```
 
-Cada fila se convierte en un [diccionario](../debuter/glossaire.md#dictionnaire). Las
+Cada fila se convierte en un [diccionario](../debuter/glossaire.md#diccionario). Las
 claves vienen de la primera línea del CSV.
 
 > **Nota:** con un archivo de verdad, sustituye `io.StringIO(TEXTO)` por un archivo
@@ -470,9 +470,9 @@ Total          208    347.50
 ## ¿Y pandas?
 
 Para tablas grandes, los analistas usan **pandas**, una
-[biblioteca](../debuter/glossaire.md#bibliotheque) externa. No viene con Python: se
+[biblioteca](../debuter/glossaire.md#biblioteca) externa. No viene con Python: se
 instala con [pip](../debuter/glossaire.md#pip) (`pip install pandas`), preferiblemente
-en un [entorno virtual](../debuter/glossaire.md#environnement-virtuel). Por eso los
+en un [entorno virtual](../debuter/glossaire.md#entorno-virtual). Por eso los
 bloques siguientes no se ejecutan en este sitio, pero sus salidas son reales.
 
 pandas guarda los datos en un **DataFrame**: una tabla, como una hoja de cálculo, con

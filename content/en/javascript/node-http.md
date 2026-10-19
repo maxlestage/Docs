@@ -12,7 +12,7 @@ This page shows how to write a small web server with Node's `node:http` module: 
 
 ## A server is a ticket counter
 
-A [server](../debuter/glossaire.md#serveur) is a program that waits for **requests** and
+A [server](../debuter/glossaire.md#server) is a program that waits for **requests** and
 sends back **responses**, like a ticket counter at a train station. The
 [client](../debuter/glossaire.md#client) (a browser, `fetch`, `curl`) comes up to the
 counter and asks for something. The clerk reads the request, then answers.

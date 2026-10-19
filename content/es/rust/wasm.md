@@ -15,7 +15,7 @@ WebAssembly te permite compilar Rust en un archivo `.wasm` que el navegador ejec
 Normalmente, un navegador entiende un solo lenguaje de programación: JavaScript.
 **WebAssembly** (*Wasm*) es un segundo lenguaje que entiende. Nadie lo escribe a mano:
 es un código máquina compacto, fabricado por un
-[compilador](../debuter/glossaire.md#compilateur), como el de Rust.
+[compilador](../debuter/glossaire.md#compilador), como el de Rust.
 
 Piensa en un adaptador de enchufe de viaje. Tu aparato (el código Rust) tiene el
 enchufe de tu país; el país que visitas (el navegador) tiene sus propias tomas. El
@@ -397,7 +397,7 @@ responde `None` en vez de dar la vuelta.
 
 El `.wasm` tiene su propia memoria, como una caja cerrada. Para darle un texto, el
 pegamento JavaScript lo **copia** en esa caja, en UTF-8, y luego le da a Rust dos
-números: **dónde** empieza y **cuántos** [bytes](../debuter/glossaire.md#octet) ocupa.
+números: **dónde** empieza y **cuántos** [bytes](../debuter/glossaire.md#byte) ocupa.
 Por eso `fuerza` recibe `(a: number, b: number)` entre bastidores en `calc.d.ts`.
 
 ```text
@@ -524,7 +524,7 @@ console.log(dividir(10, 0));
 RuntimeError: unreachable
 ```
 
-La división entre cero hace [entrar en pánico](../debuter/glossaire.md#panique) a Rust.
+La división entre cero hace [entrar en pánico](../debuter/glossaire.md#panico) a Rust.
 En el navegador, el pánico se convierte en este `RuntimeError: unreachable`, que no dice
 mucho. Comprueba los casos peligrosos en Rust y devuelve un valor claro, por ejemplo
 `Option<i32>`, que se convierte en `number | undefined` en JavaScript.

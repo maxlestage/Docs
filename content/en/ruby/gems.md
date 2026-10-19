@@ -12,7 +12,7 @@ This page shows, step by step, how to turn your code into a gem: write it, test 
 
 ## What is a gem?
 
-A [gem](../debuter/glossaire.md#gem) is a Ruby [library](../debuter/glossaire.md#bibliotheque)
+A [gem](../debuter/glossaire.md#gem) is a Ruby [library](../debuter/glossaire.md#library)
 packaged to be shared. You already use some: the page
 [Organizing a project](projet.md) shows `gem install` and Bundler. Here, you move to the
 other side: you **make** the gem.
@@ -94,7 +94,7 @@ Try it: add `it: "Ciao"` to `PHRASES`, then call
 
 ## The version number
 
-Every gem has a version number, stored in a [constant](../debuter/glossaire.md#constante)
+Every gem has a version number, stored in a [constant](../debuter/glossaire.md#constant)
 `VERSION`, in its own file:
 
 ```ruby

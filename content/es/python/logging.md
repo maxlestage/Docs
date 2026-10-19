@@ -408,7 +408,7 @@ cada handler. Un mensaje tiene que pasar los dos.
 
 ## Registrar una excepción
 
-Cuando se captura una [excepción](../debuter/glossaire.md#exception), hay que dejar
+Cuando se captura una [excepción](../debuter/glossaire.md#excepcion), hay que dejar
 constancia de **lo que** ha fallado. Hay dos maneras.
 
 ### El mensaje del error con log.error

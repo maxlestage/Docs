@@ -14,7 +14,7 @@ This page shows how to write readable numbers with `format_number`, align column
 
 ## The goal: a readable report
 
-You have a list of sales, [records](../debuter/glossaire.md#enregistrement)
+You have a list of sales, [records](../debuter/glossaire.md#record)
 like `{name: "Apples", qty: 12, price: 0.85}`. Printing them as they are is
 correct, but hard to read. By the end of this page, you will know how to
 write this:
@@ -40,7 +40,7 @@ file, see [files](fichiers.md).
 ## Writing a number for humans
 
 `format_number(number, decimals, language)` turns a number into a
-[text](../debuter/glossaire.md#chaine-de-caracteres) that is easy to read:
+[text](../debuter/glossaire.md#string) that is easy to read:
 
 - it separates the thousands;
 - it writes **exactly** the number of decimals you ask for;
@@ -96,7 +96,7 @@ decimals.
 
 ### It hides the small errors of decimal numbers
 
-A [decimal number](../debuter/glossaire.md#flottant) is not always exact
+A [decimal number](../debuter/glossaire.md#float) is not always exact
 in a computer (see [the pitfalls](pieges.md)). `format_number` rounds, and
 the problem disappears when you print:
 
@@ -154,7 +154,7 @@ Which function should you choose?
 ### Amounts in cents
 
 For money, a good habit: count in **cents**, with
-[integers](../debuter/glossaire.md#entier). Integers are always exact. You
+[integers](../debuter/glossaire.md#integer). Integers are always exact. You
 divide by 100 only to print:
 
 ```rythme
@@ -311,7 +311,7 @@ at each step.
 
 ### Step 1: a single line
 
-First we write a [function](../debuter/glossaire.md#fonction) that turns
+First we write a [function](../debuter/glossaire.md#function) that turns
 **one** sale into **one** line of text. And a small `euros` function for
 the amounts:
 

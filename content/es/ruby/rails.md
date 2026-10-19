@@ -59,7 +59,7 @@ eso es lo que hace que un sitio grande sea fácil de ordenar.
 ### El restaurante en Ruby normal
 
 Esta es la idea en Ruby puro, sin Rails. Cada papel es una pequeña
-[clase](../debuter/glossaire.md#classe).
+[clase](../debuter/glossaire.md#clase).
 
 ```ruby
 class Cocina # el modelo
@@ -175,8 +175,8 @@ articulos GET  /articulos(.:format) articulos#index
 
 ### Un enrutador en Ruby normal
 
-Un enrutador es sobre todo un [diccionario](../debuter/glossaire.md#dictionnaire): una
-dirección da el nombre de un [método](../debuter/glossaire.md#methode). `send` llama al
+Un enrutador es sobre todo un [diccionario](../debuter/glossaire.md#diccionario): una
+dirección da el nombre de un [método](../debuter/glossaire.md#metodo). `send` llama al
 método cuyo nombre le das.
 
 ```ruby

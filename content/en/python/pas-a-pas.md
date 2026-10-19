@@ -170,7 +170,7 @@ track, prints `t-shirt`, and does not even look at `rain`.
 
 ## Program 3: a loop that accumulates
 
-With a [loop](../debuter/glossaire.md#boucle), the same lines come back several times.
+With a [loop](../debuter/glossaire.md#loop), the same lines come back several times.
 In the table, they therefore appear several times, once per round.
 
 ```text
@@ -249,7 +249,7 @@ Many people guess `3 1`. The table shows why that is wrong: when 1 is left, the 
 
 ## Program 4: a function called twice
 
-A [function](../debuter/glossaire.md#fonction) is a small machine: you give it
+A [function](../debuter/glossaire.md#function) is a small machine: you give it
 something, it works on its own, then it **returns** a result. When Python meets a call,
 it **jumps** into the function, then **comes back** to the place of the call.
 
@@ -305,8 +305,8 @@ Two important details:
 
 - `price` and `tax` only exist **during** the call. At each new call, they start from
   scratch. They are called local variables (see
-  [scope](../debuter/glossaire.md#portee)).
-- On the second call, the [parameter](../debuter/glossaire.md#parametre) `price`
+  [scope](../debuter/glossaire.md#scope)).
+- On the second call, the [parameter](../debuter/glossaire.md#parameter) `price`
   receives the value of `a`, that is, 60.
 
 ```python
@@ -332,7 +332,7 @@ Try it: replace `return price + tax` with `print(price + tax)`. The function pri
 
 ## Program 5: a list and a condition in the loop
 
-Last program: a loop over a [list](../debuter/glossaire.md#liste), with an `if` inside.
+Last program: a loop over a [list](../debuter/glossaire.md#list), with an `if` inside.
 Everything you have seen comes together.
 
 ```text
@@ -454,7 +454,7 @@ see each grade go by, one per line, before the other messages of that round.
 
 ## What about the debugger?
 
-Python also has a [debugger](../debuter/glossaire.md#debogage), `pdb`: write
+Python also has a [debugger](../debuter/glossaire.md#debugging), `pdb`: write
 `breakpoint()` in your code, and the program stops there to let you look at the
 variables (`p total`) then move forward one line (`n`). It is your trace table, but
 live; everything is explained in [Debugging in Python](debogage.md).

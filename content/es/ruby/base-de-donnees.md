@@ -147,7 +147,7 @@ su nombre. Las claves son **textos** (`"titulo"`), no símbolos.
 ## ActiveRecord en dos palabras
 
 En una aplicación Ruby on Rails, rara vez se escribe SQL a mano. **ActiveRecord**
-convierte cada tabla en una [clase](../debuter/glossaire.md#classe) Ruby, y escribe el SQL
+convierte cada tabla en una [clase](../debuter/glossaire.md#clase) Ruby, y escribe el SQL
 por ti:
 
 ```ruby norun
@@ -190,7 +190,7 @@ si los libros están en el sótano o en el desván, y no necesitas
 saberlo.
 
 > **Nota:** en inglés se dice *repository*. No lo confundas con el
-> [repositorio Git](../debuter/glossaire.md#depot), que es otra cosa.
+> [repositorio Git](../debuter/glossaire.md#repositorio), que es otra cosa.
 
 ### Un repositorio en memoria
 

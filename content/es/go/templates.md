@@ -73,7 +73,7 @@ cualquier valor.
 
 ## Los campos: {{.Campo}}
 
-En general, se pasa una [estructura](../debuter/glossaire.md#structure). `{{.Nombre}}`
+En general, se pasa una [estructura](../debuter/glossaire.md#estructura). `{{.Nombre}}`
 lee su campo `Nombre`.
 
 ```go

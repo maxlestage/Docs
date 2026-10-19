@@ -12,7 +12,7 @@ Una base de datos guarda tu información cuando el programa se detiene: en Rust,
 
 ## ¿Por qué una base de datos?
 
-Tus variables viven en la [memoria RAM](../debuter/glossaire.md#memoire-vive).
+Tus variables viven en la [memoria RAM](../debuter/glossaire.md#memoria-ram).
 Cuando el programa se detiene, desaparecen. Para guardar información, hay que
 escribirla en el disco.
 

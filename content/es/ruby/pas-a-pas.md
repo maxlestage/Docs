@@ -110,7 +110,7 @@ Debes encontrar `8` y luego `-5`.
 
 ## Programa 2: una condición
 
-Una [condición](../debuter/glossaire.md#condition) hace **saltar** líneas. En la tabla,
+Una [condición](../debuter/glossaire.md#condicion) hace **saltar** líneas. En la tabla,
 anota qué rama elige Ruby.
 
 ```ruby
@@ -166,7 +166,7 @@ así que toca el abrigo.
 
 ## Programa 3: un bucle que acumula
 
-Un [bucle](../debuter/glossaire.md#boucle) repite líneas. En la tabla se escribe **una
+Un [bucle](../debuter/glossaire.md#bucle) repite líneas. En la tabla se escribe **una
 fila por vuelta**.
 
 Metes 10 euros en una hucha mágica. Cada semana, su contenido se duplica. ¿Al cabo de
@@ -224,8 +224,8 @@ vuelta más y obtienes «Semana 4: 160 euros».
 
 ## Programa 4: un método llamado dos veces
 
-Un [método](../debuter/glossaire.md#methode) es como una cafetera. Metes algo dentro
-(el [parámetro](../debuter/glossaire.md#parametre)), trabaja y te devuelve un
+Un [método](../debuter/glossaire.md#metodo) es como una cafetera. Metes algo dentro
+(el [parámetro](../debuter/glossaire.md#parametro)), trabaja y te devuelve un
 resultado. Puedes usarlo varias veces.
 
 ```ruby

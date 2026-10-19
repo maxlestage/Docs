@@ -101,7 +101,7 @@ se usa el valor **más reciente**, el de la fila de arriba.
 Es como dos vasos: para intercambiar su contenido sin un tercer vaso, lo viertes todo
 en el primero y luego recuperas la cantidad correcta.
 
-> **Prueba:** sustituye `let mut b = 5;` por `let mut b = 10;`. Rehaz la tabla.
+> **Pruébalo:** sustituye `let mut b = 5;` por `let mut b = 10;`. Rehaz la tabla.
 > Debes obtener `a = 10, b = 3`.
 
 > **Recuerda:** en cada paso, se leen los valores **actuales** de las variables, no sus
@@ -109,7 +109,7 @@ en el primero y luego recuperas la cantidad correcta.
 
 ## Programa 2: una condición
 
-Una [condición](../debuter/glossaire.md#condition) elige **un solo camino**. Los demás
+Una [condición](../debuter/glossaire.md#condicion) elige **un solo camino**. Los demás
 bloques se saltan, como un cambio de agujas del tren.
 
 ```rust
@@ -158,7 +158,7 @@ ese bloque.
                "jersey"     (nada: se queda "camiseta")
 ```
 
-> **Prueba:** pon `let temperatura = 25;`. Las dos pruebas son falsas: no se ejecuta
+> **Pruébalo:** pon `let temperatura = 25;`. Las dos pruebas son falsas: no se ejecuta
 > ningún bloque, y el programa muestra `25 grados: camiseta`.
 
 > **Recuerda:** en una condición, anota la prueba y su respuesta. Solo el bloque cuya
@@ -166,7 +166,7 @@ ese bloque.
 
 ## Programa 3: un bucle que acumula
 
-Un [bucle](../debuter/glossaire.md#boucle) repite un bloque. En la tabla, cada
+Un [bucle](../debuter/glossaire.md#bucle) repite un bloque. En la tabla, cada
 **vuelta** del bucle se convierte en una o varias filas.
 
 ```rust
@@ -205,7 +205,7 @@ mete una moneda. Si la crearas dentro del bucle, se vaciaría en cada vuelta.
  vuelta:        1           2           3             4
 ```
 
-> **Prueba:** sustituye `1..5` por `1..=5`. Hay una vuelta más (i = 5, +10): el
+> **Pruébalo:** sustituye `1..5` por `1..=5`. Hay una vuelta más (i = 5, +10): el
 > programa muestra `total = 30`.
 
 > **Recuerda:** para un bucle, una fila por vuelta. Anota el valor de la variable del
@@ -213,7 +213,7 @@ mete una moneda. Si la crearas dentro del bucle, se vaciaría en cada vuelta.
 
 ## Programa 4: una función llamada dos veces
 
-Una [función](../debuter/glossaire.md#fonction) es una pequeña máquina: le das un
+Una [función](../debuter/glossaire.md#funcion) es una pequeña máquina: le das un
 valor, trabaja en **su propio rincón** y luego devuelve un resultado.
 
 ```rust
@@ -278,7 +278,7 @@ Dos cosas que observar:
 - en la segunda llamada, `base` e `iva` empiezan de cero: la función no se acuerda de
   la primera llamada.
 
-> **Prueba:** añade `let c = precio_con_iva(a);` antes del `println!`, y muestra `c`.
+> **Pruébalo:** añade `let c = precio_con_iva(a);` antes del `println!`, y muestra `c`.
 > La función recibe 120, el IVA vale 24: `c` vale 144.
 
 > **Recuerda:** en cada llamada, se «entra» en la función con el valor dado, se sigue
@@ -286,7 +286,7 @@ Dos cosas que observar:
 
 ## Programa 5: una lista y una condición en el bucle
 
-Último programa: un bucle sobre una [lista](../debuter/glossaire.md#liste) (un `Vec`),
+Último programa: un bucle sobre una [lista](../debuter/glossaire.md#lista) (un `Vec`),
 con una condición **dentro** del bucle. Contamos los gastos grandes (más de 10 €) y los
 sumamos.
 
@@ -335,7 +335,7 @@ En cada vuelta hay una prueba. Añade una columna para ella:
 En las vueltas 1 y 4, la prueba es falsa: `grandes` y `suma` no se mueven.
 Simplemente **copias** sus valores en la tabla.
 
-> **Prueba:** sustituye `*g > 10` por `*g >= 12`. El 12 sigue contando, pero no el 4
+> **Pruébalo:** sustituye `*g > 10` por `*g >= 12`. El 12 sigue contando, pero no el 4
 > ni el 7: la salida no cambia. Con `*g > 12`, en cambio, obtienes
 > `2 gastos grandes, total 55`.
 
@@ -450,7 +450,7 @@ Y en la salida de errores, además:
 [src/main.rs:3:5] base + iva = 120
 ```
 
-> **Prueba:** en el programa 5, añade `dbg!(g, grandes, suma);` al final del bloque
+> **Pruébalo:** en el programa 5, añade `dbg!(g, grandes, suma);` al final del bloque
 > del bucle. Ejecútalo con `cargo run`: obtienes tu tabla de traza, escrita por el
 > propio programa.
 
@@ -460,7 +460,7 @@ Y en la salida de errores, además:
 
 ## ¿Y el depurador?
 
-Un [depurador](../debuter/glossaire.md#debogage) pone el programa en pausa en una línea
+Un [depurador](../debuter/glossaire.md#depuracion) pone el programa en pausa en una línea
 y te muestra todas las variables, sin añadir nada al código. Hace tu tabla de traza por
 ti, una línea cada vez: mira la sección sobre un depurador en VS Code, en el capítulo
 [Depurar en Rust](debogage.md).
@@ -647,4 +647,4 @@ fn main() {
 - `println!` con una etiqueta o `dbg!` hacen que el programa muestre sus pasos;
   `dbg!` escribe en la salida de errores (*stderr*).
 
-Siguiente: [Las trampas del principiante en Rust](pieges.md)
+Siguiente: [las trampas del principiante en Rust](pieges.md)

@@ -164,7 +164,7 @@ Rust skips that block.
 
 ## Program 3: a loop that accumulates
 
-A [loop](../debuter/glossaire.md#boucle) repeats a block. In the table, each **turn** of
+A [loop](../debuter/glossaire.md#loop) repeats a block. In the table, each **turn** of
 the loop becomes one or more rows.
 
 ```rust
@@ -212,7 +212,7 @@ every turn.
 
 ## Program 4: a function called twice
 
-A [function](../debuter/glossaire.md#fonction) is a small machine: you give it a value,
+A [function](../debuter/glossaire.md#function) is a small machine: you give it a value,
 it works in **its own corner**, then it gives back a result.
 
 ```rust
@@ -284,7 +284,7 @@ Two things to notice:
 
 ## Program 5: a list and a condition in the loop
 
-Last program: a loop over a [list](../debuter/glossaire.md#liste) (a `Vec`), with a
+Last program: a loop over a [list](../debuter/glossaire.md#list) (a `Vec`), with a
 condition **inside** the loop. We count the big expenses (more than 10 €) and add them
 up.
 
@@ -455,7 +455,7 @@ And on the error output, as well:
 
 ## What about the debugger?
 
-A [debugger](../debuter/glossaire.md#debogage) pauses the program on a line and shows you
+A [debugger](../debuter/glossaire.md#debugging) pauses the program on a line and shows you
 all the variables, without adding anything to the code. It fills in your trace table
 for you, one line at a time: see the section about a debugger in VS Code, in the chapter
 [Debugging in Rust](debogage.md).

@@ -16,8 +16,8 @@ This page shows how TypeScript does arithmetic: the `number` type, the operators
 A program calculates all the time: a price, an age, a score, a distance. Before
 calculating, you need to know how TypeScript stores these numbers.
 
-In many languages, there is one type for [integers](../debuter/glossaire.md#entier)
-(`7`) and another for decimal numbers, the [floats](../debuter/glossaire.md#flottant)
+In many languages, there is one type for [integers](../debuter/glossaire.md#integer)
+(`7`) and another for decimal numbers, the [floats](../debuter/glossaire.md#float)
 (`7.5`). Not in TypeScript: both are `number`.
 
 ```typescript
@@ -54,7 +54,7 @@ Line by line:
 Calculating is the basic job of a computer. Operators are the keys of its calculator:
 you combine them to get a total, an average, a price.
 
-An [operator](../debuter/glossaire.md#operateur) is a symbol that calculates. Here are
+An [operator](../debuter/glossaire.md#operator) is a symbol that calculates. Here are
 the ones for numbers:
 
 | Operator | Role | Example | Result |
@@ -470,7 +470,7 @@ false
 ```
 
 This is not a TypeScript bug. The computer stores numbers in
-[binary](../debuter/glossaire.md#binaire) (with 0s and 1s). But `0.1` cannot be written
+[binary](../debuter/glossaire.md#binary) (with 0s and 1s). But `0.1` cannot be written
 exactly in binary, just as `1/3` cannot be written exactly in decimal (`0.3333…`). A
 tiny error remains, and it sometimes shows up. Python, Java and JavaScript do exactly
 the same.

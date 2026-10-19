@@ -34,7 +34,7 @@ trae. El idioma para hablarle se llama **SQL**.
 
 Go tiene un solo paquete para todas las bases: `database/sql`. Pero no sabe hablar con
 **ninguna** base por sí solo. Necesita un **driver** (controlador): un pequeño
-[paquete](../debuter/glossaire.md#paquet) que conoce una base concreta.
+[paquete](../debuter/glossaire.md#paquete) que conoce una base concreta.
 
 Es como un adaptador de enchufe de viaje: `database/sql` es tu aparato, el driver es el
 adaptador del país.
@@ -478,7 +478,7 @@ Una línea puesta a nivel del paquete pide al compilador que compruebe que
 var _ Store = (*MemoriaStore)(nil)
 ```
 
-Si falta uno, la [compilación](../debuter/glossaire.md#compilation) falla enseguida,
+Si falta uno, la [compilación](../debuter/glossaire.md#compilacion) falla enseguida,
 con el nombre del método que falta.
 
 ## La misma interfaz, versión SQL
