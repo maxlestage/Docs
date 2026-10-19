@@ -492,4 +492,4 @@ alphabétique.
 - Une clé absente donne la valeur zéro ; `v, ok := m[k]` dit si elle existe.
 - L'ordre de `range` est aléatoire : triez avec `slices.Sorted(maps.Keys(m))`.
 
-Suite : [Les pièges du débutant en Go](pieges.md)
+Suite : [Suivre un programme pas à pas en Go](pas-a-pas.md)

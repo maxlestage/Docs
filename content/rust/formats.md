@@ -505,4 +505,4 @@ ligne.
 - `#[serde(rename…)]`, `Option` et `#[serde(default)]` adaptent la structure au format.
 - La même structure sert pour JSON, CSV (crate `csv`) et TOML (crate `toml`).
 
-Suite : [Rust pour le web](web.md)
+Suite : [Une base de données en Rust](base-de-donnees.md)

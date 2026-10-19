@@ -218,7 +218,7 @@ Ce bloc ne fait rien : il **décrit** seulement. Lisons chaque ligne :
 - `&mut self` : la méthode **modifie** le dépôt (ajouter, supprimer).
 - `&self` : la méthode **regarde** seulement (trouver, tous).
 - `ErreurDepot` est notre propre type d'erreur (voir
-  [Votre propre type d'erreur](erreurs.md#votre-propre-type-derreur)).
+  [Votre propre type d'erreur](erreurs.md#votre-propre-type-d-erreur)).
 
 > **À retenir :** un trait est une liste de promesses. Chaque type qui l'implémente
 > doit tenir les quatre.

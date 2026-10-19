@@ -148,3 +148,4 @@ l'ordre des parcours (une ligne par lot de 3 à 5 pages, dans les deux langues) 
 - 2026-10-19 — Traductions EN et ES de Python : `nombres`, `texte`, `collections`, `dictionnaires`, `comprehensions` (10 pages, 182 exemples vérifiés).
 - 2026-10-19 — Session principale : 32 pages de plus pour les débutants qui peinent (Débuter : 7 pages « Les notions de base », bases de données, sécurité, open source, métiers ; dans chaque langage les pièges du débutant et 15 exercices faciles ; 7 chapitres de la liste).
 - 2026-10-19 — Trois chapitres : Python `contextes`, TypeScript `regex`, Go `embed` (37 exemples exécutés, et les exemples `norun` vérifiés à la main). `go/context` et `rust/traits-objets`, pris par la session principale, ont été laissés.
+- 2026-10-19 — Session principale : toute la liste « À faire » (16 chapitres), une page « pas à pas » et une deuxième série d'exercices dans chaque langage, 5 idées de plus sur Comparer (31 pages, 674 exemples exécutés).
