@@ -118,17 +118,17 @@ Traduit dans les deux langues : tout « Débuter » ; `introduction`, `premiers-
 l'ordre des parcours (une ligne par lot de 3 à 5 pages, dans les deux langues) :
 
 - [x] Python : `nombres`, `texte`, `collections`, `dictionnaires`, `comprehensions`
-- [ ] JavaScript : `nombres`, `texte`, `collections`, `objets`
-- [ ] TypeScript : `texte`, `collections`, `objets`, `unions`
-- [ ] Go : `nombres`, `texte`, `collections`, `maps`
-- [ ] Ruby : `nombres`, `texte`, `collections`, `intervalles`
-- [ ] Rust : `nombres`, `texte`, `collections`, `hashmap`
-- [ ] Rythme : `nombres`, `texte`, `collections`, `dictionnaires`
+- [x] JavaScript : `nombres`, `texte`, `collections`, `objets`
+- [x] TypeScript : `texte`, `collections`, `objets`, `unions`
+- [x] Go : `nombres`, `texte`, `collections`, `maps`
+- [x] Ruby : `nombres`, `texte`, `collections`, `intervalles`
+- [x] Rust : `nombres`, `texte`, `collections`, `hashmap`
+- [x] Rythme : `nombres`, `texte`, `collections`, `dictionnaires`
 - [ ] Chaque parcours : `erreurs`, `tests`, `exercices`, `aide-memoire`
 - [ ] Débuter : `variables`, `logique`, `boucles`, `fonctions`, `donnees`, `lire-une-erreur`, `bloque`
 - [ ] Chaque langage : `pieges`, `exercices-faciles`
 - [ ] Débuter : `bases-de-donnees`, `securite`, `open-source`, `metiers`
-- [ ] Nouveaux chapitres : Python `contextes`, TypeScript `regex`, Go `embed`
+- [x] Nouveaux chapitres : Python `contextes`, TypeScript `regex`, Go `embed`
 - [ ] Chaque langage : `pas-a-pas`, `exercices-2` ; et les chapitres cochés le 2026-10-19 (session principale)
 - [ ] Puis le reste de chaque parcours, dans l'ordre de `src/catalog.rs`
 
@@ -148,4 +148,6 @@ l'ordre des parcours (une ligne par lot de 3 à 5 pages, dans les deux langues) 
 - 2026-10-19 — Traductions EN et ES de Python : `nombres`, `texte`, `collections`, `dictionnaires`, `comprehensions` (10 pages, 182 exemples vérifiés).
 - 2026-10-19 — Session principale : 32 pages de plus pour les débutants qui peinent (Débuter : 7 pages « Les notions de base », bases de données, sécurité, open source, métiers ; dans chaque langage les pièges du débutant et 15 exercices faciles ; 7 chapitres de la liste).
 - 2026-10-19 — Trois chapitres : Python `contextes`, TypeScript `regex`, Go `embed` (37 exemples exécutés, et les exemples `norun` vérifiés à la main). `go/context` et `rust/traits-objets`, pris par la session principale, ont été laissés.
+- 2026-10-19 — Traductions EN et ES de JavaScript : `nombres`, `texte`, `collections`, `objets` (8 pages, 140 exemples vérifiés).
+- 2026-10-19 — Traductions EN et ES : TypeScript (`texte`, `collections`, `objets`, `unions`, `regex`), Go (`nombres`, `texte`, `collections`, `maps`, `embed`), Ruby (`nombres`, `texte`, `collections`, `intervalles`), Rust (`nombres`, `texte`, `collections`, `hashmap`), Rythme (`nombres`, `texte`, `collections`, `dictionnaires`) et Python `contextes` (46 pages, 704 exemples vérifiés).
 - 2026-10-19 — Session principale : toute la liste « À faire » (16 chapitres), une page « pas à pas » et une deuxième série d'exercices dans chaque langage, 5 idées de plus sur Comparer (31 pages, 674 exemples exécutés).
