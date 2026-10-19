@@ -1,0 +1,622 @@
+# Arrays y tuplas
+
+Esta página explica cómo guardar varios valores en arrays, tuplas, `Map` y `Set`, y cómo los tipos mantienen coherentes estas colecciones.
+
+> **Objetivos:**
+>
+> - sabrás crear un array tipado (`number[]`), leerlo y modificarlo;
+> - sabrás proteger un array con `readonly` y describir una tupla
+>   `[string, number]`;
+> - sabrás transformar un array con `map`, `filter` y `reduce`;
+> - sabrás manejar el `undefined` que devuelve `find`;
+> - sabrás usar `Map`, `Set` y `Record`.
+
+## Crear un array
+
+Un array es una [lista](../debuter/glossaire.md#lista) ordenada de valores, escrita
+entre corchetes. Su tipo se escribe con el tipo de los elementos seguido de `[]`:
+
+```typescript
+const notas: number[] = [12, 15, 9];
+const nombres: string[] = ["Alice", "Bob", "Chloé"];
+const vacio: number[] = [];
+
+console.log(notas);
+console.log(nombres.length, vacio.length);
+```
+
+```sortie
+[ 12, 15, 9 ]
+3 0
+```
+
+`number[]` se lee «array de números». Existe otra forma de escribirlo, que significa
+exactamente lo mismo: `Array<number>`. Los signos `< >` indican el tipo de los
+elementos; los volverás a ver en [los genéricos](generiques.md).
+
+```typescript
+const ciudades: Array<string> = ["Lyon", "Nantes"];
+console.log(ciudades);
+```
+
+```sortie
+[ 'Lyon', 'Nantes' ]
+```
+
+Con valores iniciales, TypeScript adivina el tipo: `const notas = [12, 15, 9]`
+también da un `number[]`. Escribe el tipo para un array vacío: sin él, TypeScript no
+puede saber qué vas a guardar en él.
+
+> **Recuerda:** todos los elementos de un array tienen el mismo tipo. Un array de
+> números rechaza un texto: es la garantía de que cada elemento se maneja de la misma
+> forma.
+
+## Leer y modificar
+
+Cada elemento tiene un [índice](../debuter/glossaire.md#indice) que empieza en **0**.
+
+```typescript
+const frutas: string[] = ["manzana", "pera", "kiwi"];
+
+console.log(frutas[0]);
+console.log(frutas.at(-1));
+frutas[1] = "mango";
+frutas.push("fresa");
+console.log(frutas);
+
+const ultima = frutas.pop();
+console.log(ultima, frutas);
+console.log(frutas.includes("kiwi"), frutas.indexOf("kiwi"));
+```
+
+```sortie
+manzana
+kiwi
+[ 'manzana', 'mango', 'kiwi', 'fresa' ]
+fresa [ 'manzana', 'mango', 'kiwi' ]
+true 2
+```
+
+- `frutas[1] = ...` reemplaza un elemento;
+- `push` añade al final, `pop` quita y devuelve el último;
+- `includes` responde `true` o `false`, `indexOf` da la posición (`-1` si no está).
+
+Incluso con `const`, el array puede cambiar: `const` solo impide reemplazar **todo** el
+array por otro.
+
+> **Atención:** leer un índice que no existe (`frutas[10]`) da `undefined`, pero
+> TypeScript anuncia de todos modos un `string`. Comprueba antes la longitud, o
+> prefiere `at()`, cuyo tipo `string | undefined` te recuerda el riesgo.
+
+### Recorrer un array
+
+`for...of` da cada elemento. Con `entries()`, obtienes también el índice.
+
+```typescript
+const podio = ["Alice", "Bob", "Chloé"];
+
+for (const [i, nombre] of podio.entries()) {
+  console.log(`${i + 1}. ${nombre}`);
+}
+```
+
+```sortie
+1. Alice
+2. Bob
+3. Chloé
+```
+
+`const [i, nombre]` separa cada par en dos variables: es la **desestructuración**,
+explicada más abajo con las tuplas.
+
+## Los arrays de solo lectura
+
+Añade `readonly` delante del tipo: el array ya no se puede modificar. `push`, `pop` o
+`frutas[0] = ...` se rechazan.
+
+```typescript
+const dias: readonly string[] = ["lunes", "martes", "miércoles"];
+
+console.log(dias[0], dias.length);
+console.log(dias.includes("martes"));
+```
+
+```sortie
+lunes 3
+true
+```
+
+Solo quedan disponibles los métodos que **leen**. Es útil para una lista fija, o para
+prometer que una función no tocará el array que le das:
+
+```typescript
+function media(valores: readonly number[]): number {
+  let total = 0;
+  for (const v of valores) {
+    total += v;
+  }
+  return total / valores.length;
+}
+
+console.log(media([12, 15, 9]));
+```
+
+```sortie
+12
+```
+
+## Las tuplas
+
+Una [tupla](../debuter/glossaire.md#tupla) es un array de **longitud fija**, donde
+cada posición tiene su propio tipo. `[string, number]` significa: «exactamente dos
+elementos, un texto y luego un número».
+
+```typescript
+const jugador: [string, number] = ["Alice", 1200];
+
+console.log(jugador[0].toUpperCase());
+console.log(jugador[1] + 50);
+
+const [nombre, puntos] = jugador;
+console.log(`${nombre} tiene ${puntos} puntos.`);
+```
+
+```sortie
+ALICE
+1250
+Alice tiene 1200 puntos.
+```
+
+TypeScript sabe que `jugador[0]` es un `string` y `jugador[1]` un `number`. La línea
+`const [nombre, puntos] = jugador;` guarda el primer elemento en `nombre` y el segundo
+en `puntos`.
+
+Una tupla es práctica para devolver dos valores desde una función:
+
+```typescript
+function minMax(valores: number[]): [number, number] {
+  return [Math.min(...valores), Math.max(...valores)];
+}
+
+const [menor, mayor] = minMax([4, 9, 1, 7]);
+console.log(menor, mayor);
+```
+
+```sortie
+1 9
+```
+
+`...valores` (la **propagación**, *spread*) despliega el array en argumentos
+separados: `Math.min(4, 9, 1, 7)`.
+
+> **Consejo:** a partir de dos o tres elementos, una tupla se vuelve difícil de leer
+> (¿qué significa `jugador[3]`?). Prefiere entonces un objeto con nombres de
+> propiedades: ver [los objetos](objets.md).
+
+## Transformar: map, filter, reduce
+
+Estos tres métodos reciben un *callback* (una función, ver
+[las funciones](fonctions.md#los-callbacks-pasar-una-funcion-a-una-funcion)). No
+modifican el array original: devuelven uno nuevo, o un valor.
+
+### map: transformar cada elemento
+
+```typescript
+const precios = [10, 20, 35];
+const preciosConIva = precios.map((p) => p * 1.2);
+const etiquetas = precios.map((p) => `${p} €`);
+
+console.log(preciosConIva);
+console.log(etiquetas);
+```
+
+```sortie
+[ 12, 24, 42 ]
+[ '10 €', '20 €', '35 €' ]
+```
+
+TypeScript lo adivina todo: `p` es un `number` (un elemento de `precios`),
+`preciosConIva` es un `number[]`, y `etiquetas` un `string[]`, porque el callback
+devuelve un texto. Pasa el ratón sobre estos nombres en el editor para verlo.
+
+### filter: quedarse con algunos elementos
+
+```typescript
+const notas = [12, 7, 15, 9, 18];
+const aprobadas = notas.filter((n) => n >= 10);
+
+console.log(aprobadas);
+console.log(notas);
+```
+
+```sortie
+[ 12, 15, 18 ]
+[ 12, 7, 15, 9, 18 ]
+```
+
+El callback responde `true` (quedárselo) o `false` (descartarlo). `notas` no ha
+cambiado.
+
+### reduce: resumirlo todo en un valor
+
+`reduce` recorre el array guardando un **acumulador**: un valor que crece en cada
+vuelta, como una hucha. El segundo argumento es su valor inicial.
+
+```typescript
+const compras = [4.5, 12, 3.5];
+const total = compras.reduce((suma, precio) => suma + precio, 0);
+console.log(total);
+
+const palabras = ["lobo", "elefante", "gato"];
+const letras = palabras.reduce((acc, palabra) => acc + palabra.length, 0);
+console.log(letras);
+```
+
+```sortie
+20
+16
+```
+
+En la primera vuelta, `suma` vale `0` (el valor inicial); después `4.5`, `16.5` y por
+último `20`. El tipo del acumulador viene del valor inicial: `0` da un `number`.
+
+### Encadenar
+
+Como cada método devuelve un array, se pueden encadenar:
+
+```typescript
+const notas = [12, 7, 15, 9, 18];
+
+const totalConBonus = notas
+  .filter((n) => n >= 10)
+  .map((n) => n + 1)
+  .reduce((acc, n) => acc + n, 0);
+
+console.log(totalConBonus);
+```
+
+```sortie
+48
+```
+
+Lee de arriba abajo: te quedas con las notas aprobadas (`12, 15, 18`), sumas un punto
+extra a cada una (`13, 16, 19`) y luego calculas la suma.
+
+### Ordenar
+
+`sort` ordena el array **en el sitio**. Atención: sin callback, ordena como texto,
+¡incluso los números! Da siempre una función de comparación `(a, b) => a - b`.
+
+```typescript
+const numeros = [10, 9, 1, 100];
+
+console.log([...numeros].sort());
+console.log([...numeros].sort((a, b) => a - b));
+console.log([...numeros].sort((a, b) => b - a));
+```
+
+```sortie
+[ 1, 10, 100, 9 ]
+[ 1, 9, 10, 100 ]
+[ 100, 10, 9, 1 ]
+```
+
+`[...numeros]` crea una copia, para no modificar el propio `numeros`.
+
+## find: un resultado que puede faltar
+
+`find` devuelve el **primer** elemento que cumple la prueba. Si no encuentra ninguno,
+devuelve `undefined`. Su tipo lo dice claramente: para un `string[]`, es
+`string | undefined`.
+
+```typescript
+const nombres = ["Alice", "Bob", "Chloé"];
+
+const conC = nombres.find((p) => p.startsWith("C"));
+const conZ = nombres.find((p) => p.startsWith("Z"));
+
+console.log(conC, conZ);
+```
+
+```sortie
+Chloé undefined
+```
+
+Aquí es donde TypeScript te protege: no puedes usar el resultado como un `string` sin
+tratar el caso `undefined`. Tres formas de hacerlo:
+
+```typescript
+const nombres = ["Alice", "Bob", "Chloé"];
+const encontrado = nombres.find((p) => p.startsWith("B"));
+
+// 1. Comprobar antes de usar
+if (encontrado !== undefined) {
+  console.log(encontrado.toUpperCase());
+} else {
+  console.log("Nadie.");
+}
+
+// 2. Llamar solo si el valor existe
+console.log(encontrado?.toLowerCase());
+
+// 3. Dar un valor por defecto
+const nombre = encontrado ?? "desconocido";
+console.log(nombre.length);
+```
+
+```sortie
+BOB
+bob
+3
+```
+
+Después de la prueba `encontrado !== undefined`, TypeScript sabe que `encontrado` es
+un `string`.
+
+> **Recuerda:** un tipo `T | undefined` es una pregunta que TypeScript te hace: «¿y si
+> no se encuentra nada?». Respóndela, con `if`, `?.` o `??`.
+
+## Map: asociar claves a valores
+
+Un `Map` es un [diccionario](../debuter/glossaire.md#diccionario): asocia una
+**clave** a un **valor**, como una guía telefónica asocia un nombre a un número. Su
+tipo se escribe `Map<TipoDeClaves, TipoDeValores>`.
+
+```typescript
+const stock = new Map<string, number>();
+
+stock.set("manzanas", 10);
+stock.set("peras", 4);
+stock.set("manzanas", 12);
+
+console.log(stock.get("manzanas"));
+console.log(stock.has("kiwis"), stock.size);
+
+for (const [fruta, cantidad] of stock) {
+  console.log(`${fruta}: ${cantidad}`);
+}
+```
+
+```sortie
+12
+false 2
+manzanas: 12
+peras: 4
+```
+
+- `set(clave, valor)` añade o reemplaza (una clave es única);
+- `get(clave)` lee el valor, `has(clave)` comprueba si la clave existe;
+- `size` da el número de pares; `delete(clave)` quita uno.
+
+`get` devuelve `number | undefined`: puede que la clave no exista. El mismo reflejo
+que con `find`:
+
+```typescript
+const stock = new Map<string, number>([["manzanas", 10]]);
+
+const kiwis = stock.get("kiwis") ?? 0;
+console.log(kiwis + 5);
+```
+
+```sortie
+5
+```
+
+## Set: una colección sin duplicados
+
+Un `Set` es un [conjunto](../debuter/glossaire.md#conjunto): cada valor aparece en él
+una sola vez. Su tipo se escribe `Set<T>`.
+
+```typescript
+const visitantes = new Set<string>();
+
+visitantes.add("Alice");
+visitantes.add("Bob");
+visitantes.add("Alice");
+
+console.log(visitantes.size);
+console.log(visitantes.has("Bob"));
+
+const sinDuplicados = [...new Set([3, 1, 3, 2, 1])];
+console.log(sinDuplicados);
+```
+
+```sortie
+2
+true
+[ 3, 1, 2 ]
+```
+
+`new Set(array)` y luego `[...]` es el truco clásico para quitar los duplicados de un
+array, conservando el orden de primera aparición.
+
+## Record: un objeto clave-valor
+
+`Record<string, number>` describe un objeto simple cuyas claves son textos y cuyos
+valores son números. Es más ligero que un `Map`, y se escribe directamente con llaves.
+
+```typescript
+const puntuaciones: Record<string, number> = {
+  alice: 12,
+  bob: 8,
+};
+
+puntuaciones.chloe = 15;
+puntuaciones["bob"] += 1;
+
+console.log(puntuaciones);
+console.log(Object.keys(puntuaciones));
+
+for (const [nombre, puntos] of Object.entries(puntuaciones)) {
+  console.log(nombre.padEnd(6), puntos);
+}
+```
+
+```sortie
+{ alice: 12, bob: 9, chloe: 15 }
+[ 'alice', 'bob', 'chloe' ]
+alice  12
+bob    9
+chloe  15
+```
+
+`Object.keys` da las claves, `Object.entries` los pares `[clave, valor]`.
+
+Con una unión de tipos literales como claves, `Record` exige **todas** las claves:
+
+```typescript
+type Dia = "lunes" | "martes" | "miercoles";
+
+const horas: Record<Dia, number> = {
+  lunes: 7,
+  martes: 8,
+  miercoles: 4,
+};
+
+console.log(horas.martes);
+```
+
+```sortie
+8
+```
+
+Olvidar `miercoles` sería un error.
+
+> **Consejo:** usa `Record` para datos fijos escritos en el código, y `Map` cuando
+> añades y quitas claves a menudo.
+
+## Errores frecuentes
+
+### Guardar un valor del tipo incorrecto
+
+```typescript norun
+const notas: number[] = [12, 15];
+notas.push("18");
+```
+
+```text
+main.ts:2:12 - error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
+
+2 notas.push("18");
+             ~~~~
+
+
+Found 1 error in main.ts:2
+```
+
+`"18"` es un texto. Un `number[]` solo acepta números: `notas.push(18)`.
+
+### Modificar un array readonly
+
+```typescript norun
+const dias: readonly string[] = ["lunes", "martes"];
+dias.push("miércoles");
+```
+
+```text
+main.ts:2:6 - error TS2339: Property 'push' does not exist on type 'readonly string[]'.
+
+2 dias.push("miércoles");
+       ~~~~
+
+
+Found 1 error in main.ts:2
+```
+
+Un array `readonly` no tiene método `push`. Crea un array nuevo en su lugar:
+`const semana = [...dias, "miércoles"];`.
+
+### Invertir el orden de una tupla
+
+```typescript norun
+const jugador: [string, number] = [42, "Alice"];
+```
+
+```text
+main.ts:1:36 - error TS2322: Type 'number' is not assignable to type 'string'.
+
+1 const jugador: [string, number] = [42, "Alice"];
+                                     ~~
+
+main.ts:1:40 - error TS2322: Type 'string' is not assignable to type 'number'.
+
+1 const jugador: [string, number] = [42, "Alice"];
+                                         ~~~~~~~
+
+
+Found 2 errors in the same file, starting at: main.ts:1
+```
+
+En una tupla, el orden importa: primero el texto, luego el número.
+Escribe `["Alice", 42]`.
+
+### Usar el resultado de get sin comprobarlo
+
+```typescript norun
+const stock = new Map<string, number>([["manzanas", 10]]);
+const n = stock.get("peras");
+console.log(n + 1);
+```
+
+```text
+main.ts:3:13 - error TS18048: 'n' is possibly 'undefined'.
+
+3 console.log(n + 1);
+              ~
+
+
+Found 1 error in main.ts:3
+```
+
+Puede que la clave `"peras"` no exista. Da un valor por defecto:
+`const n = stock.get("peras") ?? 0;`.
+
+## Ponte a prueba
+
+**Pregunta 1:** ¿cuál es el tipo de `["a", "b"].map((s) => s.length)`?
+
+> **Respuesta**
+>
+> `number[]`. El callback devuelve `s.length`, un número, para cada elemento.
+
+**Pregunta 2:** ¿qué diferencia hay entre `string[]` y `[string, string]`?
+
+> **Respuesta**
+>
+> `string[]` es un array de textos de cualquier longitud. `[string, string]` es una
+> tupla: exactamente dos textos.
+
+**Pregunta 3:** completa el código para mostrar el primer número par, o `ninguno`.
+
+```typescript norun
+const numeros = [3, 7, 8, 5];
+const par = numeros.find((n) => n % 2 === 0);
+```
+
+> **Respuesta**
+>
+> ```typescript
+> const numeros = [3, 7, 8, 5];
+> const par = numeros.find((n) => n % 2 === 0);
+> console.log(par ?? "ninguno");
+> ```
+>
+> ```sortie
+> 8
+> ```
+>
+> `par` es de tipo `number | undefined`: `??` trata el caso en que no se encuentra
+> nada.
+
+## En resumen
+
+- Un array se escribe `number[]` o `Array<number>`; todos sus elementos tienen el
+  mismo tipo. `readonly number[]` impide que cambie.
+- Una tupla `[string, number]` tiene una longitud fija y un tipo por posición.
+- `map`, `filter` y `reduce` devuelven valores nuevos, cuyo tipo adivina TypeScript;
+  ordena los números con `sort((a, b) => a - b)`.
+- `find` y `Map.get` devuelven `T | undefined`: trata el caso con `if`, `?.` o `??`.
+- `Map<K, V>` asocia claves a valores, `Set<T>` evita los duplicados,
+  `Record<string, number>` describe un objeto clave-valor.
+
+Siguiente: [objetos, interfaces y alias de tipo](objets.md).
