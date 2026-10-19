@@ -407,32 +407,9 @@ Leur somme : 45
 
 C'est exactement le tableau de la section précédente ! Trois conseils :
 
-- **Mettez des étiquettes** (`note=`, `admis=`). Une suite de nombres seuls
-  (`12 1 12`) est vite illisible.
+- **Mettez des étiquettes** (`note=`) : des nombres seuls (`12 1 12`) sont illisibles.
 - **Placez le `Printf` à la fin du tour**, pour voir les valeurs après les calculs.
-- `range` compte à partir de 0. On affiche `i+1` pour parler de « tour 1 ».
-
-Pour voir le type et la valeur exacte d'une variable, le verbe `%v` marche pour
-tout, et `%q` met un texte entre guillemets (pratique pour repérer un espace en trop) :
-
-```go
-package main
-
-import "fmt"
-
-func main() {
-	prenom := "Léa "
-	fmt.Printf("prenom=%v\n", prenom)
-	fmt.Printf("prenom=%q\n", prenom)
-}
-```
-
-```sortie
-prenom=Léa 
-prenom="Léa "
-```
-
-Avec `%q`, l'espace caché à la fin saute aux yeux.
+- `range` compte à partir de 0 : on affiche `i+1` pour dire « tour 1 ».
 
 Essayez : déplacez le `fmt.Printf` **avant** le `if`. Chaque ligne montre alors les
 valeurs du tour précédent : `tour 1 : note=12 admis=0 somme=0`.
@@ -567,30 +544,13 @@ func main() {
 
 ## Testez-vous
 
-**1.** Que vaut `x` à la fin ?
-
-```go
-package main
-
-import "fmt"
-
-func main() {
-	x := 4
-	y := x + 1
-	x = y * 2
-	y = 0
-	fmt.Println(x)
-}
-```
+**1.** Que vaut `x` après ces quatre lignes : `x := 4`, `y := x + 1`, `x = y * 2`,
+`y = 0` ?
 
 > **Réponse**
 >
 > `x` vaut 10. Étape par étape : `x` = 4, puis `y` = 5, puis `x` = 5 × 2 = 10. Mettre
 > `y` à 0 ensuite ne change pas `x` : la valeur 10 a déjà été rangée.
->
-> ```sortie
-> 10
-> ```
 
 **2.** Combien de fois `Bonjour` s'affiche-t-il avec `for i := 0; i < 3; i++` ?
 Quelle est la valeur de `i` quand la boucle s'arrête ?
@@ -622,10 +582,6 @@ func main() {
 >
 > Il affiche 10. Le premier appel rend 2 + 3 = 5, rangé dans `r`. Le deuxième appel
 > reçoit `a` = 5 et `b` = 5, et rend 10, qui remplace l'ancien 5.
->
-> ```sortie
-> 10
-> ```
 
 ## En résumé
 
