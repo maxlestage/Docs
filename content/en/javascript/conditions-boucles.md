@@ -30,6 +30,15 @@ It is hot.
 End of the program.
 ```
 
+Line by line:
+
+- `const temperature = 28;` stores 28 in the constant `temperature`;
+- `if (temperature > 25)` asks a question: "is 28 greater than 25?". The answer is
+  yes;
+- so the `console.log` inside the curly braces runs;
+- the last `console.log` is outside the curly braces: it runs in every case, even if
+  it were cold.
+
 - The question goes between parentheses `( )`.
 - The code to run if the answer is true goes between curly braces `{ }`. This is called
   a **block**.
@@ -37,6 +46,9 @@ End of the program.
   require it, but it makes the code readable.
 
 ### else and else if
+
+Often there is more than one case. A grade can be very good, average or poor, and you
+want a different message for each one, like on a school report.
 
 `else` gives the path to follow when the condition is false. `else if` adds more
 questions, asked in order.
@@ -62,7 +74,32 @@ Good
 As soon as a question answers true, its block runs and the following ones are ignored.
 Here, `grade >= 10` is true too, but it is never tested.
 
+**Your turn:** write a program that stores `15` in a constant `hour`, then displays
+"Good morning" if the hour is before 12, "Good afternoon" if it is before 18, and
+"Good evening" otherwise.
+
+> **Solution**
+>
+> ```javascript
+> const hour = 15;
+>
+> if (hour < 12) {
+>   console.log("Good morning");
+> } else if (hour < 18) {
+>   console.log("Good afternoon");
+> } else {
+>   console.log("Good evening");
+> }
+> ```
+>
+> ```sortie
+> Good afternoon
+> ```
+
 ## Comparison operators
+
+To decide, a program first asks a question: "is the age 18?", "is the temperature
+above 25?". Comparison operators are used to write these questions.
 
 A comparison answers with a [boolean](../debuter/glossaire.md#boolean): `true` or
 `false`.
@@ -87,11 +124,23 @@ true
 true
 ```
 
+Line by line:
+
+- `age` is 17;
+- `age >= 18` asks "is 17 greater than or equal to 18?". No: `false`;
+- `age !== 18` asks "is 17 different from 18?". Yes: `true`;
+- `"abc" < "abd"`: both texts start with "ab", and "c" comes before "d" in the
+  alphabet: `true`.
+
 Texts are compared in alphabetical order (more precisely, in the order of the character
 codes). A reminder from [the previous page](premiers-pas.md): use `===` and `!==`,
 never `==` and `!=`.
 
 ## Logical operators
+
+A decision often depends on several things at once. To get into the cinema, you need
+to be old enough **and** have a ticket. These three operators join several questions
+into one.
 
 To combine several questions:
 
@@ -121,10 +170,41 @@ It is the weekend
 false
 ```
 
+Line by line:
+
+- `age` is 25 and `hasTicket` is `true`;
+- first `if`: `age >= 18` is true **and** `hasTicket` is true, so entry is allowed;
+- second `if`: `day` is `"sunday"`. The first test is false, the second is true, and
+  with `||` that is enough;
+- the last `console.log` displays `!hasTicket`: `true` flipped becomes `false`.
+
 > **Tip:** JavaScript stops as soon as it knows the answer. In `a && b`, if `a` is
 > false, `b` is not even looked at.
 
+**Your turn:** write a program that stores `70` in a constant `age`, then displays
+"Reduced price" if the age is under 18 or 65 and over, and "Full price" otherwise.
+
+> **Solution**
+>
+> ```javascript
+> const age = 70;
+>
+> if (age < 18 || age >= 65) {
+>   console.log("Reduced price");
+> } else {
+>   console.log("Full price");
+> }
+> ```
+>
+> ```sortie
+> Reduced price
+> ```
+
 ## Truthy and falsy
+
+You often want to know whether a box is filled in: a typed username, a number other
+than zero. JavaScript lets you ask this very simply, by putting the value alone in the
+`if`.
 
 In an `if`, you can put any value, not just a boolean. JavaScript then turns it into
 `true` or `false`. Six values become `false`: they are called **falsy**.
@@ -159,6 +239,16 @@ NaN → false
 [] → true
 ```
 
+Line by line:
+
+- `values` is a list of nine values of all kinds;
+- `for (const v of values)` takes these values one by one and stores each one in `v`.
+  This loop is explained further down this page;
+- `Boolean(v)` turns the value into `true` or `false`, and `console.log` displays both
+  side by side;
+- the third line of the output starts with a space: that is the empty text `""`, which
+  displays nothing.
+
 `Boolean(v)` shows what a value turns into. This rule is often used to test whether a
 text is filled in:
 
@@ -177,6 +267,8 @@ Empty username!
 ```
 
 ## The ternary operator
+
+> **Note:** this part can wait. Read it once the basics feel solid.
 
 To choose between **two values**, the ternary is shorter than an `if`:
 `condition ? valueIfTrue : valueIfFalse`.
@@ -202,6 +294,9 @@ Read it like a question: "age ≥ 18? if yes adult, otherwise minor".
 
 ## Missing values: ?? and ?.
 
+A value is sometimes missing: a setting the user did not choose, an address not filled
+in yet. These two operators handle that gap without writing an `if` every time.
+
 ### ??: a fallback value
 
 `a ?? b` gives `a`, unless `a` is `null` or `undefined`: it then gives `b`.
@@ -220,6 +315,13 @@ blue
 0
 50
 ```
+
+Line by line:
+
+- `let color;` creates a variable with no value: it is `undefined`. So `??` gives the
+  fallback value `"blue"`;
+- `volume` is `0`, which is neither `null` nor `undefined`: `volume ?? 50` keeps `0`;
+- `volume || 50` gives `50`, because `0` is falsy.
 
 Compare with `||`, which you often see in old code: `||` replaces **all** falsy values,
 including `0`. A volume of `0` is a real value: `??` keeps it, `||` overwrites it.
@@ -246,6 +348,8 @@ unknown city
 Objects `{ ... }` are explained in [the page about objects](objets.md).
 
 ## Multiple choice: switch
+
+> **Note:** this part can wait. Read it once the basics feel solid.
 
 When you compare **the same value** against several possibilities, `switch` is clearer
 than a long series of `else if`.
@@ -278,6 +382,9 @@ Work
 
 ## The while loop
 
+Imagine you are asked to display the numbers from 1 to 100. Writing 100 `console.log`
+would be long and tedious. A loop does this repetitive work for you.
+
 A [loop](../debuter/glossaire.md#loop) repeats a block of code. `while` repeats it as
 long as the condition is true.
 
@@ -298,11 +405,49 @@ console.log("Liftoff!");
 Liftoff!
 ```
 
+Line by line:
+
+- `let counter = 3;`: the variable starts at 3. It is a `let`, because it will change;
+- `while (counter > 0)`: before each round, JavaScript asks the question. `3 > 0` is
+  true: it enters the block;
+- the block displays `counter`, then `counter--` takes 1 away: it becomes 2, then 1,
+  then 0;
+- when `counter` is 0, `0 > 0` is false: JavaScript leaves the loop and moves on to
+  the last `console.log`.
+
 > **Warning:** if the condition always stays true, the loop never stops. Here,
 > `counter--` brings the counter closer to 0 on each round. To stop a stuck program,
 > press **Ctrl + C** in the terminal.
 
+**Your turn:** write a program that displays the numbers from 1 to 5 with a `while`
+loop, then "Done!".
+
+> **Solution**
+>
+> ```javascript
+> let n = 1;
+>
+> while (n <= 5) {
+>   console.log(n);
+>   n++;
+> }
+> console.log("Done!");
+> ```
+>
+> ```sortie
+> 1
+> 2
+> 3
+> 4
+> 5
+> Done!
+> ```
+
 ## The for loop
+
+Many loops count: from 1 to 5, from 1 to 10… With `while`, the start, the question and
+the step are scattered over several lines, and it is easy to forget one. `for` brings
+them together.
 
 `for` groups on one line the three parts of a counting loop:
 `for (start; condition; step)`.
@@ -325,7 +470,29 @@ for (let i = 1; i <= 5; i++) {
 2. **Condition**: `i <= 5`, checked before each round.
 3. **Step**: `i++`, run after each round.
 
+**Your turn:** write a program that displays the 7 times table, from "7 x 1 = 7" to
+"7 x 5 = 35", one line per calculation.
+
+> **Solution**
+>
+> ```javascript
+> for (let i = 1; i <= 5; i++) {
+>   console.log(`7 x ${i} = ${7 * i}`);
+> }
+> ```
+>
+> ```sortie
+> 7 x 1 = 7
+> 7 x 2 = 14
+> 7 x 3 = 21
+> 7 x 4 = 28
+> 7 x 5 = 35
+> ```
+
 ## for...of and for...in
+
+Very often, you have a list of things to handle one by one: each item on a shopping
+list, each student in a class. These two loops are made for that.
 
 ### for...of: going through the values
 
@@ -353,6 +520,16 @@ b
 c
 ```
 
+Line by line:
+
+- `fruits` holds an array of three texts;
+- `for (const fruit of fruits)` takes the first element, `"apple"`, and stores it in
+  `fruit`;
+- the block displays the sentence with `"apple"`. Then JavaScript goes back to the
+  `for`, which stores `"pear"` in `fruit`, and so on;
+- after `"kiwi"`, there are no more elements: the loop stops. The second loop does the
+  same with the letters of `"abc"`.
+
 Here `const` is fine: on each round, a **new** variable `fruit` is created.
 
 ### for...in: going through the keys
@@ -377,6 +554,10 @@ bob 8
 
 ## break and continue
 
+Sometimes you want to change the course of a loop on the way: stop searching as soon
+as you have found something, or ignore some elements. That is the job of these two
+words.
+
 - `break` leaves the loop right away.
 - `continue` skips the rest of the current round and moves on to the next one.
 
@@ -399,6 +580,14 @@ for (const n of numbers) {
 7
 12
 ```
+
+Line by line:
+
+- `for (const n of numbers)` gives `n` the values 4, 7, -1, 12… one by one;
+- if `n` is negative, `continue` moves straight on to the next round: the
+  `console.log` is not reached;
+- if `n` is 0, `break` stops the whole loop;
+- otherwise, `console.log(n)` displays the number.
 
 `-1` is skipped by `continue`. At `0`, `break` stops everything: `5` is never displayed.
 
