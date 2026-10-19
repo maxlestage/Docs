@@ -503,4 +503,4 @@ console.log(`${a} x 2 = ${a * 2}`);
 - Una plantilla `` `...${x}...` `` inserta valores en un texto; `//` empieza un
   comentario.
 
-Siguiente: [condiciones y bucles](conditions-boucles.md).
+Siguiente: [Nombres et calculs](nombres.md)

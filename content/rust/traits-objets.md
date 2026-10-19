@@ -438,7 +438,7 @@ Une règle simple pour débuter :
 > **À retenir :** commencez par `impl Trait`. Passez à `dyn Trait` quand vous avez
 > besoin de **mélanger** des types différents.
 
-## Renvoyer une closure avec Box<dyn Fn>
+## Renvoyer une closure avec `Box<dyn Fn>`
 
 Une [closure](fonctions.md#les-closures) est une petite fonction sans nom. Chaque
 closure a son propre type, que personne ne peut écrire. Pour qu'une fonction renvoie
