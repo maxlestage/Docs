@@ -65,50 +65,50 @@ jour la liste ci-dessous, puis publie.
 ## À faire
 
 ### Python
-- [ ] `sqlite` — Une base de données avec sqlite3 (exécutable : base en mémoire)
+- [x] `sqlite` — Une base de données avec sqlite3 (exécutable : base en mémoire)
 - [ ] `collections-avancees` — namedtuple, deque, heapq, bisect, Counter en détail
 - [ ] `contextes` — Les gestionnaires de contexte (with, contextlib)
 - [ ] `logging` — Journaliser avec logging
 - [ ] `donnees` — Analyser des données (csv + statistics ; pandas en `norun`)
 
 ### JavaScript
-- [ ] `tableaux-avances` — (flatMap, groupBy, toSorted, structuredClone)
+- [x] `tableaux-avances` — (flatMap, groupBy, toSorted, structuredClone)
 - [ ] `node-http` — Un serveur avec node:http et ses routes
 - [ ] `canvas` — Dessiner dans le navigateur (norun) et la logique à côté
 - [ ] `stockage` — localStorage, IndexedDB (norun) et JSON
 
 ### TypeScript
-- [ ] `nombres` — Nombres et calculs en TypeScript
+- [x] `nombres` — Nombres et calculs en TypeScript
 - [ ] `regex` — Les expressions régulières typées
 - [ ] `dates` — Dates et heures
 - [ ] `ligne-de-commande` — Un outil en ligne de commande typé
 - [ ] `decorateurs` — Les décorateurs (TypeScript 5)
 
 ### Go
-- [ ] `context` — Annuler et limiter dans le temps avec context
+- [x] `context` — Annuler et limiter dans le temps avec context
 - [ ] `sync` — sync.Once, RWMutex, atomic, errgroup (norun)
 - [ ] `base-de-donnees` — database/sql (norun) et un stockage en mémoire testable
 - [ ] `embed` — Embarquer des fichiers avec embed
 
 ### Ruby
-- [ ] `base-de-donnees` — SQLite et ActiveRecord (norun) ; un stockage en mémoire testable
+- [x] `base-de-donnees` — SQLite et ActiveRecord (norun) ; un stockage en mémoire testable
 - [ ] `rails` — Un premier site avec Rails, pas à pas (norun)
 - [ ] `gems` — Créer et publier sa propre gem
 
 ### Rust
-- [ ] `traits-objets` — dyn Trait, Box<dyn Trait> et la répartition dynamique
+- [x] `traits-objets` — dyn Trait, Box<dyn Trait> et la répartition dynamique
 - [ ] `base-de-donnees` — rusqlite (norun) et un stockage en mémoire testable
 - [ ] `wasm` — Rust dans le navigateur avec WebAssembly (norun)
 
 ### Rythme
-- [ ] `symboles` — Les symboles et quand les utiliser
+- [x] `symboles` — Les symboles et quand les utiliser
 - [ ] `textes-avances` — format_number, colonnes, rapports
 
 ### Débuter
-- [ ] `bases-de-donnees` — Qu'est-ce qu'une base de données
-- [ ] `securite` — Les bases de la sécurité (mots de passe, injections)
-- [ ] `open-source` — Contribuer à un projet open source
-- [ ] `metiers` — Les métiers du développement
+- [x] `bases-de-donnees` — Qu'est-ce qu'une base de données
+- [x] `securite` — Les bases de la sécurité (mots de passe, injections)
+- [x] `open-source` — Contribuer à un projet open source
+- [x] `metiers` — Les métiers du développement
 
 ### Traductions (anglais et espagnol)
 
@@ -124,9 +124,14 @@ l'ordre des parcours (une ligne par lot de 3 à 5 pages, dans les deux langues) 
 - [ ] Rust : `nombres`, `texte`, `collections`, `hashmap`
 - [ ] Rythme : `nombres`, `texte`, `collections`, `dictionnaires`
 - [ ] Chaque parcours : `erreurs`, `tests`, `exercices`, `aide-memoire`
+- [ ] Débuter : `variables`, `logique`, `boucles`, `fonctions`, `donnees`, `lire-une-erreur`, `bloque`
+- [ ] Chaque langage : `pieges`, `exercices-faciles`
+- [ ] Débuter : `bases-de-donnees`, `securite`, `open-source`, `metiers`
 - [ ] Puis le reste de chaque parcours, dans l'ordre de `src/catalog.rs`
 
 ### Pour tous
+- [ ] Pour chaque langage, une page « Pas à pas » de plus dans « Les bases » si un
+  chapitre est trop dense (le découper, avec des tableaux qui suivent les variables)
 - [ ] `exercices-2` — Une deuxième série de 12 exercices corrigés, par langage
 - [ ] Un outil qui signale les blocs `norun` d'erreur (tracebacks) dont le code ne
   correspond plus à la page traduite (ils ne sont pas vérifiés aujourd'hui)
@@ -138,3 +143,4 @@ l'ordre des parcours (une ligne par lot de 3 à 5 pages, dans les deux langues) 
 - 2026-10-19 — La routine publie par une PR, fusionnée à partir de 3 commits quand la CI est verte.
 - 2026-10-19 — Le site en trois langues (FR, EN, ES) : interface traduite, 39 pages traduites dans chaque langue.
 - 2026-10-19 — Traductions EN et ES de Python : `nombres`, `texte`, `collections`, `dictionnaires`, `comprehensions` (10 pages, 182 exemples vérifiés).
+- 2026-10-19 — Session principale : 32 pages de plus pour les débutants qui peinent (Débuter : les notions de base ; pièges et exercices faciles dans chaque langage) et 11 chapitres de la liste.
