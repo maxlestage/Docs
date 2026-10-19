@@ -12,6 +12,10 @@ This page shows the ways to group values together: lists, ranges, records, dicti
 
 ## Lists
 
+When you have many values of the same kind (the grades of a class, the items in a
+basket), one variable per value would quickly become unmanageable. A list keeps them
+all under a single name.
+
 A [list](../debuter/glossaire.md#list) is a sequence of values, in a precise
 order, like a shopping list. You write it between square brackets, with commas
 between the elements.
@@ -34,6 +38,9 @@ of elements.
 
 ## Adding an element without changing anything
 
+Your data grows: one more item in the basket, one more student in the class. So you
+need to know how to make a list longer.
+
 A list never changes. To "add" an element, you build a **new** list, and the
 old one stays as it is:
 
@@ -51,6 +58,14 @@ print(fruits + ["melon"], [..fruits, "plum"], ["cherry", ..fruits])
 ["apple", "pear", "melon"] ["apple", "pear", "plum"] ["cherry", "apple", "pear"]
 ```
 
+Line by line:
+
+- `fruits = ["apple", "pear"]` stores a list of two fruits under the name `fruits`;
+- `push(fruits, "kiwi")` builds a new list of three fruits, named `more`;
+- the next two `print` calls prove it: `fruits` still has two elements, `more` has
+  three;
+- the last line builds three other lists, without ever touching `fruits`.
+
 - `push(list, x)` gives the list with `x` at the end;
 - `+` puts two lists end to end;
 - `..fruits` between square brackets inserts all the elements of `fruits`, at
@@ -58,6 +73,22 @@ print(fruits + ["melon"], [..fruits, "plum"], ["cherry", ..fruits])
 
 It's like photocopying the shopping list and writing on the copy: the
 original doesn't move.
+
+**Your turn:** write a program that stores `["bread", "milk"]` under the name
+`shopping`, builds a new list with `"butter"` at the end, then prints this new list and
+its number of elements.
+
+> **Solution**
+>
+> ```rythme
+> shopping = ["bread", "milk"]
+> longer = push(shopping, "butter")
+> print(longer, len(longer))
+> ```
+>
+> ```sortie
+> ["bread", "milk", "butter"] 3
+> ```
 
 ## Reading safely with get
 
@@ -89,6 +120,9 @@ Options are explained in [handling errors](erreurs.md).
 
 ## Ranges
 
+Writing `[1, 2, 3, ..., 100]` by hand would take a long time. A range builds a
+sequence of numbers in one go, like the page numbers of a book.
+
 `a..b` is the list of whole numbers from `a` to `b`, both included:
 
 ```rythme
@@ -105,6 +139,9 @@ print(0..20 |> step_by(5), reverse(1..3))
 `reverse`.
 
 ## Common list functions
+
+Sorting, adding up, keeping some elements: these tasks come up all the time. Rythme
+gives you ready-made functions, like tools stored in a toolbox.
 
 ```rythme
 numbers = [3, 1, 4, 1, 5, 9, 2, 6]
@@ -134,7 +171,25 @@ print(filter(numbers, is_even), map(numbers, fn(x) = x * 10))
 > **Tip:** `rythme help lists` lists all the list functions, and
 > `rythme help sort_by` explains one of them.
 
+**Your turn:** write a program that stores the grades `[12, 8, 15, 10]` under
+the name `grades`, then prints the best grade, the sum of the grades and the sorted
+grades.
+
+> **Solution**
+>
+> ```rythme
+> grades = [12, 8, 15, 10]
+> print(max(grades), sum(grades), sort(grades))
+> ```
+>
+> ```sortie
+> 15 45 [8, 10, 12, 15]
+> ```
+
 ## Records
+
+A person has a name, a year of birth, a city. In a list, these values would be mixed
+up, with nothing saying which is which. A record gives each one a name.
 
 A **record** groups named values, its **fields**. It's a card: a "name" box,
 a "born" box... You write it between curly braces, and you read a field with a
@@ -151,6 +206,12 @@ Ada 1815
 {name: "Ada", born: 1815, city: "London"}
 ```
 
+Line by line:
+
+- the first line creates a card with three fields and gives it the name `ada`;
+- `ada.name` reads the `name` field, which is `"Ada"`; `ada.born` reads `1815`;
+- `print(ada)` prints the whole card, with all its fields.
+
 Rythme has no classes: a record is enough to describe a person, a product or a
 point. `keys` gives the names of the fields, `has` tells whether a field
 exists, and `get` reads a field that may be missing:
@@ -165,6 +226,9 @@ print(keys(ada), has(ada, "age"), get(ada, "city"))
 ```
 
 ## Updating a record
+
+A piece of information changes: an address, an age, a corrected grade. You then
+need an up-to-date version of the card.
 
 You don't change a record: you build a new one. `{..ada, born: 1816}` copies
 all the fields of `ada`, then replaces `born`:
@@ -186,7 +250,34 @@ print(with_city)
 
 `ada` has not changed.
 
+Line by line:
+
+- `ada` is a card with two fields;
+- `fixed` copies `ada`, but its `born` field is 1816;
+- `with_city` copies `ada` and adds a `city` field;
+- the three `print` calls show three different cards: the first one has not moved.
+
+**Your turn:** write a program that creates a record `book` with the fields
+`title` (`"The Little Prince"`) and `pages` (96), builds a version with 300 pages, then
+prints both.
+
+> **Solution**
+>
+> ```rythme
+> book = {title: "The Little Prince", pages: 96}
+> thick = {..book, pages: 300}
+> print(book)
+> print(thick)
+> ```
+>
+> ```sortie
+> {title: "The Little Prince", pages: 96}
+> {title: "The Little Prince", pages: 300}
+> ```
+
 ## Taking a value apart
+
+> **Note:** this part can wait. Read it once the basics feel solid.
 
 You can name the pieces of a list or a record all at once:
 
@@ -226,10 +317,22 @@ Grace
 [12, 17, 19]
 ```
 
+Line by line:
+
+- `students` is a list of three cards, one per student;
+- `fn(s) = s.grade` is a small function: it receives a student `s` and gives their
+  grade;
+- `max_by` keeps the student with the highest grade: Grace's card;
+- `map(fn(s) = s.name)` replaces each card with the student's name;
+- the last line sorts the students by grade, then keeps only the grades.
+
 `max_by` and `sort_by` receive a function that says **what** to compare:
 here, each student's grade.
 
 ## Dictionaries
+
+A dictionary lets you quickly find a value from a name: a person's age, the price
+of an item, like in a phone book.
 
 A [dictionary](../debuter/glossaire.md#dictionary) (`dict`) links a value to
 each **key**, just as a real dictionary links a definition to each word. Keys
@@ -249,6 +352,14 @@ print(ages)
 dict("Ada" => 36, "Bob" => 26)
 dict("Ada" => 36, "Bob" => 25)
 ```
+
+Line by line:
+
+- `dict(...)` builds the dictionary from two pairs: Bob is 25, Ada is 36;
+- `ages["Ada"]` looks up the key `"Ada"` and gives 36; `get(ages, "Eve")` gives
+  `None`, because Eve isn't there;
+- `put(ages, "Bob", 26)` builds a new dictionary where Bob is 26;
+- the last `print` shows that `ages` has not moved: Bob is still 25.
 
 `put` gives a **new** dictionary, and `ages` has not changed. A dictionary is
 always kept in the order of its keys.
@@ -274,7 +385,26 @@ end
 > record. When the keys come with the data (first names, words), use a
 > dictionary.
 
+**Your turn:** write a program that builds a dictionary `prices` where `"apple"`
+costs 2 and `"bread"` costs 1, prints the price of bread, then prints a version where
+the apple costs 3.
+
+> **Solution**
+>
+> ```rythme
+> prices = dict([["apple", 2], ["bread", 1]])
+> print(prices["bread"])
+> print(put(prices, "apple", 3))
+> ```
+>
+> ```sortie
+> 1
+> dict("apple" => 3, "bread" => 1)
+> ```
+
 ## Sets
+
+> **Note:** this part can wait. Read it once the basics feel solid.
 
 A **set** (`set`) keeps each value only once, like a stamp collection without
 duplicates:
@@ -289,6 +419,9 @@ set(1, 2, 3) 3 true
 ```
 
 ## Which collection to choose
+
+Each collection has its use, like each drawer in a kitchen. This table helps you
+choose.
 
 | Need | Choice | Example |
 |------|--------|---------|

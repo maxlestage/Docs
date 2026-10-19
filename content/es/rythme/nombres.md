@@ -11,6 +11,10 @@ Esta página muestra los dos tipos de números de Rythme, los enteros y los deci
 
 ## Dos tipos de números
 
+Un programa maneja números todo el tiempo: una edad, una puntuación, un
+precio. Algunos se cuentan uno a uno (3 manzanas), otros tienen decimales
+(1,5 kg de manzanas).
+
 Rythme conoce dos tipos de números:
 
 - los [enteros](../debuter/glossaire.md#entero) (`Int`), sin decimales:
@@ -56,6 +60,16 @@ print(factorial(30))
 265252859812191058636308480000000
 ```
 
+Línea por línea:
+
+- `print(2 ** 100)` multiplica 2 por sí mismo 100 veces: un número de 31
+  cifras;
+- la segunda línea multiplica un millón por un millón: un billón;
+- `fn factorial(n) = …` define una función. El factorial de `n` es
+  1 × 2 × 3 × … × `n`;
+- así que `factorial(30)` multiplica todos los números del 1 al 30: el
+  resultado tiene 33 cifras, todas correctas.
+
 Todas las cifras son exactas. Los Floats, en cambio, son valores
 **aproximados**: guardan unas 16 cifras.
 
@@ -71,6 +85,10 @@ No es un defecto de Rythme: todos los lenguajes calculan así los números
 decimales. Para comparar Floats, redondéalos primero (mira más abajo).
 
 ## Las cuatro operaciones
+
+Un programa sirve a menudo de calculadora: el total de una cesta de la
+compra, lo que paga cada uno en un restaurante. Estos cuatro signos bastan
+para la mayoría de los cálculos.
 
 `+`, `-` y `*` funcionan como en la escuela. Entre dos Int, el resultado es
 un Int; en cuanto hay un Float, el resultado es un Float:
@@ -96,6 +114,25 @@ print(7 / 2, 6 / 3, 1 / 3)
 ```
 
 Así, `7 / 2` vale `3.5`, y no `3` como en otros lenguajes.
+
+**Te toca:** escribe un programa que guarde `precio = 4` y `cantidad = 3`,
+luego muestre el total que hay que pagar y, por último, lo que paga cada
+uno si dos personas se reparten ese total.
+
+> **Solución**
+>
+> ```rythme
+> precio = 4
+> cantidad = 3
+> total = precio * cantidad
+> print(total)
+> print(total / 2)
+> ```
+>
+> ```sortie
+> 12
+> 6.0
+> ```
 
 ## División entera, resto y potencia
 
@@ -137,7 +174,24 @@ print(2 + 3 * 4, (2 + 3) * 4, -2 ** 2)
 > **Consejo:** `n % 2 == 0` dice si `n` es par. Rythme también tiene
 > `is_even(n)` e `is_odd(n)`, más legibles.
 
+**Te toca:** tienes 23 huevos y cajas de 6. Escribe un programa que muestre
+el número de cajas llenas y después el número de huevos que sobran.
+
+> **Solución**
+>
+> ```rythme
+> huevos = 23
+> print(huevos // 6, huevos % 6)
+> ```
+>
+> ```sortie
+> 3 5
+> ```
+
 ## Par o impar
+
+Saber si un número es par sirve más a menudo de lo que crees: colorear una
+fila de cada dos en una tabla, formar equipos de dos.
 
 ```rythme
 print(is_even(4), is_odd(4), is_odd(7))
@@ -153,6 +207,10 @@ true false true
 `filter` o a `count`.
 
 ## Las funciones de cálculo
+
+Algunos cálculos aparecen todo el tiempo: encontrar la puntuación más alta,
+quitarle el signo a un número. En lugar de reescribirlos, usas funciones ya
+hechas, como las teclas especiales de una calculadora.
 
 Rythme ofrece las funciones matemáticas habituales, sin importar nada:
 
@@ -177,6 +235,9 @@ print(pow(2, 8), pow(2.0, 0.5))
 - `pow(x, n)`: la potencia, como `x ** n`.
 
 ## Redondear
+
+Un resultado como `0.30000000000000004` rara vez es útil tal cual.
+Redondear es lo que haces en la caja cuando dices «unos 13 euros».
 
 Cuatro funciones transforman un Float en un Int:
 
@@ -203,7 +264,25 @@ print(round(3.14159, 2), round(0.1 + 0.2, 2) == 0.3)
 
 `round(x, cifras)` conserva ese número de decimales y da un Float.
 
+**Te toca:** una comida cuesta `12.3` €. Escribe un programa que muestre
+ese precio redondeado al euro más cercano, luego al euro de arriba y luego
+al euro de abajo.
+
+> **Solución**
+>
+> ```rythme
+> precio_comida = 12.3
+> print(round(precio_comida), ceil(precio_comida), floor(precio_comida))
+> ```
+>
+> ```sortie
+> 12 13 12
+> ```
+
 ## Convertir
+
+Lo que el usuario escribe con el teclado llega como texto: `"42"` todavía
+no es el número 42. Para calcular con él, primero hay que convertirlo.
 
 Rythme **nunca** convierte un valor en silencio. `int` y `float` convierten
 cuando tú se lo pides:
@@ -224,6 +303,10 @@ explicado en [gestionar los errores](erreurs.md).
 
 ## MCD y MCM
 
+Estos dos cálculos sirven para repartir o para volver a coincidir: dos
+autobuses que pasan cada 4 y cada 6 minutos vuelven a pasar juntos cada 12
+minutos.
+
 `gcd(a, b)` da el máximo común divisor (MCD), y `lcm(a, b)` el mínimo
 común múltiplo (MCM):
 
@@ -240,9 +323,21 @@ print("{numerador}/{denominador} = {numerador // d}/{denominador // d}")
 18/24 = 3/4
 ```
 
+Línea por línea:
+
+- la primera línea muestra el MCD de 12 y 18 (6), y luego el MCM de 4 y 6
+  (12);
+- `numerador` y `denominador` reciben 18 y 24: la fracción 18/24;
+- `d` recibe 6, el número más grande que divide a la vez a 18 y a 24;
+- la última línea divide arriba y abajo entre `d`: `18 // 6` vale 3 y
+  `24 // 6` vale 4.
+
 El MCD sirve, por ejemplo, para simplificar una fracción.
 
 ## Pi y la trigonometría
+
+Estas funciones sirven en cuanto hay círculos o ángulos: calcular un área,
+dibujar, hacer girar un objeto en un juego.
 
 `pi` es la constante π. `sin`, `cos` y `tan` reciben un ángulo en
 **radianes**. Para grados, multiplica por `pi / 180`:
@@ -263,10 +358,24 @@ print("área del círculo: {round(pi * radio ** 2, 2)}")
 área del círculo: 12.57
 ```
 
+Línea por línea:
+
+- `print(pi)` muestra π, con 16 cifras;
+- `angulo` recibe 30 grados, convertidos a radianes;
+- la línea siguiente muestra el seno de ese ángulo, primero tal cual y
+  luego redondeado a 2 decimales;
+- `cos(0)` vale `1.0`, y el coseno de 60°, redondeado, vale `0.5`;
+- `radio` vale 2: el área del círculo, π × 2 × 2, vale unos 12,57.
+
 El seno de 30° vale 0,5; el cálculo aproximado da `0.49999999999999994`,
 y `round` lo deja limpio.
 
 ## Números al azar
+
+> **Nota:** esta parte puede esperar. Léela cuando las bases estén firmes.
+
+El azar sirve sobre todo en los juegos: tirar un dado, elegir quién empieza,
+sacar una carta.
 
 `random(a, b)` saca un entero de `a` a `b`, ambos incluidos, como un dado.
 `random()` da un Float entre 0 y 1, y `random(lista)` un elemento al azar.
@@ -295,6 +404,10 @@ true true
 
 ## Mostrar un número de forma bonita
 
+Un precio se escribe `13.50 €`, no `13.5 €`. Para que un número sea
+agradable de leer, eliges su número de decimales y cómo se escriben los
+miles.
+
 `text(x, decimales)` escribe un número con **exactamente** ese número de
 decimales. Es perfecto para precios:
 
@@ -308,6 +421,29 @@ print("Total: {text(precio * 3, 2)} €")
 3.14 5.00 0.333
 Total: 13.50 €
 ```
+
+Línea por línea:
+
+- `text(3.14159, 2)` conserva dos decimales: `3.14`. `text(5, 2)` los
+  añade: `5.00`;
+- `precio` recibe 4.5;
+- `precio * 3` vale 13.5, y `text(…, 2)` lo escribe `13.50`. Las llaves lo
+  colocan dentro del texto.
+
+**Te toca:** un cuaderno cuesta `2.5` €. Escribe un programa que muestre
+`4 cuadernos: 10.00 €`, calculando el precio con `text`.
+
+> **Solución**
+>
+> ```rythme
+> precio_cuaderno = 2.5
+> cuadernos = 4
+> print("{cuadernos} cuadernos: {text(precio_cuaderno * cuadernos, 2)} €")
+> ```
+>
+> ```sortie
+> 4 cuadernos: 10.00 €
+> ```
 
 `format_number(x, decimales, idioma)` también separa los miles. Con
 `"es"`, obtienes la escritura española: un punto para los miles y una coma
