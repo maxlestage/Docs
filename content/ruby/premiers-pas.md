@@ -12,6 +12,10 @@ Cette page présente les bases de Ruby : variables, nombres, textes, symboles, b
 
 ## Les variables
 
+Un programme a besoin de se souvenir de choses : un prénom, un score, un prix. Sans
+variable, chaque valeur serait perdue aussitôt, comme un numéro de téléphone qu'on
+oublie faute de l'avoir noté.
+
 Une [variable](../debuter/glossaire.md#variable) est un nom qui désigne une
 [valeur](../debuter/glossaire.md#valeur). Pensez à une étiquette collée sur une boîte :
 l'étiquette est le nom, le contenu de la boîte est la valeur. Vous la créez avec `=`.
@@ -27,6 +31,13 @@ puts age
 Alice
 30
 ```
+
+Ligne par ligne :
+
+- `age = 30` range le nombre 30 dans une boîte nommée `age` ;
+- `prenom = "Alice"` range le texte `"Alice"` dans une autre boîte, nommée `prenom` ;
+- les deux `puts` lisent le contenu de chaque boîte et l'affichent, dans l'ordre où
+  ils sont écrits : d'abord `prenom`, puis `age`.
 
 Ici, `=` ne veut pas dire « est égal à ». Il veut dire « range cette valeur sous ce
 nom ». On parle d'**affectation**.
@@ -69,7 +80,28 @@ puts score
 `score += 1` est un raccourci pour `score = score + 1`. Il existe aussi `-=`, `*=` et
 `/=`.
 
+**À vous :** écrivez un programme qui range `5` dans une variable `pommes`, affiche sa
+valeur, lui ajoute 3 avec `+=`, puis affiche la nouvelle valeur.
+
+> **Solution**
+>
+> ```ruby
+> pommes = 5
+> puts pommes
+> pommes += 3
+> puts pommes
+> ```
+>
+> ```sortie
+> 5
+> 8
+> ```
+
 ## Les nombres
+
+Presque tous les programmes calculent : le total d'un panier, une moyenne de notes, le
+temps qui reste avant un rendez-vous. Ruby calcule comme une calculatrice, avec
+quelques règles à connaître.
 
 Ruby distingue les entiers (`Integer`, sans virgule) et les nombres à virgule (`Float`,
 appelés **flottants**). En Ruby, la virgule s'écrit avec un point : `2.5`.
@@ -102,6 +134,15 @@ puts 2 ** 10
 1
 1024
 ```
+
+Ligne par ligne :
+
+- `puts 7 + 3` : Ruby fait d'abord le calcul, puis `puts` affiche le résultat, 10 ;
+- `puts 7 / 2` affiche 3 et non 3.5 : les deux nombres sont des entiers (la section
+  suivante explique pourquoi) ;
+- `puts 7.0 / 2` : avec un flottant, le résultat garde sa partie après la virgule ;
+- `7 % 2` vaut 1, car 7 = 2 x 3 + 1 : il reste 1 ;
+- `2 ** 10` multiplie 2 par lui-même 10 fois : 1024.
 
 ### Division entière et division à virgule
 
@@ -172,7 +213,28 @@ puts -5.abs
 - `floor` arrondit vers le bas, `ceil` vers le haut.
 - `abs` donne la valeur sans le signe (la **valeur absolue**).
 
+**À vous :** 17 bonbons sont partagés entre 5 enfants. Écrivez un programme qui range
+ces deux nombres dans des variables, puis affiche combien de bonbons reçoit chaque
+enfant, et combien il en reste.
+
+> **Solution**
+>
+> ```ruby
+> bonbons = 17
+> enfants = 5
+> puts bonbons / enfants
+> puts bonbons % enfants
+> ```
+>
+> ```sortie
+> 3
+> 2
+> ```
+
 ## Les chaînes de caractères
+
+Un programme parle avec des mots : il affiche un prénom, un message d'accueil, une
+adresse. Tout ce qui est du texte se range dans une chaîne.
 
 Un texte s'écrit entre guillemets. On parle de
 [chaîne de caractères](../debuter/glossaire.md#chaine-de-caracteres), ou de **chaîne**
@@ -237,7 +299,25 @@ puts 5.to_s + "5"
 
 Le chapitre [travailler avec du texte](texte.md) va beaucoup plus loin.
 
+**À vous :** écrivez un programme qui range un prix de `4` euros et une quantité de `3`
+dans deux variables, puis affiche `3 croissants coûtent 12 euros.` grâce à
+l'interpolation.
+
+> **Solution**
+>
+> ```ruby
+> prix = 4
+> quantite = 3
+> puts "#{quantite} croissants coûtent #{prix * quantite} euros."
+> ```
+>
+> ```sortie
+> 3 croissants coûtent 12 euros.
+> ```
+
 ## Les symboles
+
+> **Note :** cette partie peut attendre. Lisez-la quand les bases seront solides.
 
 Un symbole commence par `:`. C'est un nom fixe, souvent utilisé comme étiquette.
 Contrairement à un texte, on ne le modifie pas : il sert juste à nommer quelque chose.
@@ -253,9 +333,20 @@ rouge
 :rouge
 ```
 
+Ligne par ligne :
+
+- `couleur = :rouge` range le symbole `:rouge` dans la variable `couleur` ;
+- `puts couleur` l'affiche comme un mot, sans les deux-points ;
+- `p couleur` le montre tel que Ruby le voit, avec ses deux-points : c'est bien un
+  symbole, pas un texte.
+
 Vous les retrouverez comme clés de hash dans [les tableaux et hashs](collections.md).
 
 ## Les booléens et nil
+
+Un programme doit souvent répondre par oui ou par non : la personne est-elle majeure ?
+Le mot de passe est-il le bon ? Les booléens sont ces réponses. Et parfois, il n'y a
+encore rien du tout à ranger : c'est le rôle de `nil`.
 
 `true` (vrai) et `false` (faux) sont les [booléens](../debuter/glossaire.md#booleen).
 `nil` veut dire « rien, aucune valeur » : c'est une boîte vide.
@@ -289,12 +380,24 @@ nil
 true
 ```
 
+Ligne par ligne :
+
+- `3 > 2` pose la question « 3 est-il plus grand que 2 ? ». Oui : Ruby répond `true` ;
+- `3 == 4` répond `false`, et `3 != 4` répond `true` : 3 et 4 sont bien différents ;
+- `"a" == "a"` montre qu'on peut aussi comparer des textes ;
+- `p nil` affiche `nil`, et `nil.nil?` demande « est-ce `nil` ? » : la réponse est
+  `true`.
+
 > **Attention :** `=` range une valeur, `==` compare deux valeurs. Ne les confondez pas.
 
 > **À retenir :** en Ruby, seuls `false` et `nil` sont « faux ». Tout le reste est vrai,
 > même `0` et `""`.
 
 ## Afficher avec puts, print et p
+
+Un programme travaille en silence. Pour voir un résultat, vous devez le lui demander,
+comme on demande à quelqu'un de lire un résultat à voix haute. Ruby vous donne trois
+façons de le faire.
 
 - `puts` affiche puis passe à la ligne.
 - `print` affiche sans passer à la ligne.
@@ -316,6 +419,14 @@ texte
 42
 ```
 
+Ligne par ligne :
+
+- `print "a"` affiche `a` et reste sur la même ligne ; `print "b"` écrit `b` juste à
+  côté ;
+- `puts` tout seul n'affiche rien : il passe seulement à la ligne ;
+- `puts "texte"` affiche le texte sans guillemets, `p "texte"` le montre avec ;
+- `p 42` affiche `42` sans guillemets : c'est un nombre, pas un texte.
+
 `p` montre les guillemets : vous voyez tout de suite que `"42"` est un texte et `42`
 un nombre.
 
@@ -333,6 +444,25 @@ puts 42
 42
 ```
 
+**À vous :** écrivez un programme qui affiche `Bonjour, Alice` sur une seule ligne, avec
+un `print` pour `"Bonjour, "` puis un `puts` pour `"Alice"`. Affichez ensuite le
+nombre `7` puis le texte `"7"` avec `p`.
+
+> **Solution**
+>
+> ```ruby
+> print "Bonjour, "
+> puts "Alice"
+> p 7
+> p "7"
+> ```
+>
+> ```sortie
+> Bonjour, Alice
+> 7
+> "7"
+> ```
+
 ## Les commentaires
 
 Un commentaire commence par `#`. Ruby l'ignore. Il sert à expliquer le code aux
@@ -348,6 +478,11 @@ visible
 ```
 
 ## Les conventions de nommage
+
+> **Note :** cette partie peut attendre. Lisez-la quand les bases seront solides.
+
+Un programme se relit bien plus souvent qu'il ne s'écrit. Un bon nom est comme une
+étiquette lisible sur un bocal : on sait ce qu'il contient sans l'ouvrir.
 
 - Variables et méthodes : `snake_case` (`prix_total`), en minuscules avec des `_`.
 - Classes et modules : `CamelCase` (`CompteBancaire`).
@@ -366,6 +501,14 @@ puts prix_ttc
 ```sortie
 120.0
 ```
+
+Ligne par ligne :
+
+- `TAUX_TVA = 0.2` crée une constante : son nom en majuscules dit « ne pas changer » ;
+- `prix_ht` vaut 100 ;
+- Ruby calcule d'abord la parenthèse, `1 + 0.2`, soit `1.2`, puis `100 * 1.2`. Il range
+  `120.0` dans `prix_ttc` ;
+- `puts` affiche cette valeur.
 
 Le résultat est `120.0` et non `120` : un calcul qui mélange un entier et un flottant
 donne un flottant.
