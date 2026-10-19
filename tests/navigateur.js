@@ -1,6 +1,6 @@
-// Le site dans Chromium : chaque page sans erreur JavaScript ni défilement de côté, sur
-// téléphone et sur ordinateur, en clair et en sombre ; la recherche, le thème, le menu
-// des chapitres et le bouton « Copier ».
+// Le site dans Chromium : chaque page sans erreur JavaScript ni défilement de côté (ni du
+// code ni des tableaux sur téléphone), sur téléphone et sur ordinateur, en clair et en
+// sombre ; la recherche, le thème, le menu des chapitres et le bouton « Copier ».
 //
 //   node tests/navigateur.js http://localhost:8000/Docs
 // (l'export statique, servi par n'importe quel serveur de fichiers : le serveur Paquets,
@@ -30,6 +30,12 @@ const check = (ok, what) => { if (!ok) failures.push(what); };
       check(res.status() === 200, `${path}: ${res.status()}`);
       const wide = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
       check(wide <= 0, `${path} (${width}px): ${wide}px de trop en largeur`);
+      // Sur téléphone, ni le code ni les tableaux ne défilent de côté non plus.
+      if (width < 640) {
+        const scrolls = await page.evaluate(() => [...document.querySelectorAll(".prose pre, .prose .table-wrap")]
+          .filter((el) => el.scrollWidth > el.clientWidth + 1).length);
+        check(scrolls === 0, `${path} (${width}px): ${scrolls} bloc(s) qui défilent de côté`);
+      }
     }
     check(errors.length === 0, `${width}px: ${errors.join(" | ")}`);
     await page.close();
