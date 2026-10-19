@@ -12,6 +12,9 @@ Esta página muestra cómo crear, unir, cortar y transformar texto en Ruby.
 
 ## Crear un texto
 
+Casi todos los programas manejan texto: un nombre que saludar, un mensaje que mostrar,
+una respuesta escrita con el teclado.
+
 Un texto se llama **cadena** (`String`), o
 [cadena de caracteres](../debuter/glossaire.md#cadena-de-caracteres): una serie de
 caracteres (letras, cifras, espacios, signos) ensartados como perlas. Lo escribes
@@ -56,6 +59,9 @@ Dijo: "Hola"
 ```
 
 ## Unir textos
+
+Un mensaje suele estar hecho de trozos: una parte fija y una parte que cambia. Es como
+una carta modelo en la que completas el nombre a mano.
 
 ### Con +
 
@@ -115,7 +121,25 @@ jajaja
 ----------
 ```
 
+**Te toca:** escribe un programa que guarde `"Leo"` en `nombre` y `8` en `edad`, y
+luego muestre «Leo cumplirá 9 años el año que viene.» con la interpolación.
+
+> **Solución**
+>
+> ```ruby
+> nombre = "Leo"
+> edad = 8
+> puts "#{nombre} cumplirá #{edad + 1} años el año que viene."
+> ```
+>
+> ```sortie
+> Leo cumplirá 9 años el año que viene.
+> ```
+
 ## La longitud de un texto
+
+Conocer la longitud sirve para comprobar lo que alguien ha escrito: una contraseña
+demasiado corta, una casilla vacía.
 
 `length` da el número de caracteres. Los espacios también cuentan.
 
@@ -131,9 +155,18 @@ puts "".empty?
 true
 ```
 
+Línea por línea:
+
+- `"gato".length` cuenta g, a, t, o: 4 caracteres;
+- `"un gato".length` da 7, porque el espacio entre las dos palabras también cuenta;
+- `""` es un texto vacío, sin ningún carácter: por eso `empty?` responde `true`.
+
 `empty?` responde `true` cuando el texto está vacío.
 
 ## Mayúsculas y minúsculas
+
+No todo el mundo escribe igual: «alicia», «ALICIA», «Alicia». Estos métodos ponen un
+texto en orden, para mostrarlo de forma limpia o para compararlo.
 
 - `upcase` pone todo en mayúsculas.
 - `downcase` pone todo en minúsculas.
@@ -173,6 +206,9 @@ HOLA
 
 ## Quitar los espacios de alrededor
 
+Un espacio de más no se ve en la pantalla. Sin embargo, para Ruby, `"Alicia "` y
+`"Alicia"` son dos textos distintos.
+
 `strip` quita los espacios (y los saltos de línea) al principio y al final.
 
 ```ruby
@@ -186,10 +222,36 @@ puts "[" + entrada.strip + "]"
 [Alicia]
 ```
 
+Línea por línea:
+
+- `entrada` contiene «Alicia», con tres espacios a cada lado;
+- la segunda línea pega corchetes alrededor del texto: muestran dónde empieza y dónde
+  termina, espacios incluidos;
+- la tercera hace lo mismo con `entrada.strip`: los espacios han desaparecido, los
+  corchetes tocan el nombre.
+
 > **Consejo:** usa `strip` con cualquier texto que alguien escriba: a menudo se añaden
 > espacios sin querer.
 
+**Te toca:** escribe un programa que guarde `"  alicia  "` en `entrada`, y luego
+muestre «¡Hola, Alicia!», sin los espacios y con mayúscula.
+
+> **Solución**
+>
+> ```ruby
+> entrada = "  alicia  "
+> nombre = entrada.strip
+> puts "¡Hola, #{nombre.capitalize}!"
+> ```
+>
+> ```sortie
+> ¡Hola, Alicia!
+> ```
+
 ## Buscar en un texto
+
+Buscar un trozo de texto sirve en todas partes: encontrar una palabra en un mensaje,
+comprobar que una dirección termina en «.es».
 
 - `include?`: ¿contiene el texto este trozo?
 - `start_with?`: ¿empieza por este trozo?
@@ -207,6 +269,15 @@ true
 true
 false
 ```
+
+Línea por línea:
+
+- `frase` contiene el texto que se examina;
+- `include?("choco")` busca «choco» en cualquier sitio: está en «chocolate», así que
+  `true`;
+- `start_with?("Me encanta")` solo mira el principio: `true`;
+- `end_with?(".")` solo mira el final: la frase no tiene punto final, así que
+  `false`.
 
 > **Atención:** la búsqueda distingue mayúsculas y minúsculas.
 > `"Gato".include?("gato")` vale `false`. Usa `downcase` para comparar sin tener en
@@ -237,6 +308,9 @@ nil
 
 ## Cortar y volver a pegar
 
+Un texto suele reunir varios datos: las palabras de una frase, una lista de la compra
+separada por comas. Para tratarlos uno por uno, hay que separarlos.
+
 `split` corta un texto en trozos y devuelve un array. `join` hace lo contrario:
 vuelve a pegar un array en un solo texto.
 
@@ -256,9 +330,34 @@ puts lista.join(" / ")
 rojo / verde / azul
 ```
 
+Línea por línea:
+
+- `frase.split(" ")` corta en cada espacio: tres trozos, guardados en el array
+  `frutas`;
+- `p frutas` muestra el array, con sus corchetes y sus comillas;
+- `"rojo,verde,azul".split(",")` corta esta vez en cada coma;
+- `lista.join(" / ")` vuelve a pegar los tres colores, con «/» entre cada uno.
+
 Los arrays se explican en [los arrays y los hashes](collections.md).
 
+**Te toca:** escribe un programa que corte `"pan;leche;huevos"` en cada punto y coma,
+y luego vuelva a pegar los trozos con «, » entre ellos.
+
+> **Solución**
+>
+> ```ruby
+> compra = "pan;leche;huevos".split(";")
+> puts compra.join(", ")
+> ```
+>
+> ```sortie
+> pan, leche, huevos
+> ```
+
 ## Reemplazar un trozo
+
+Es la función «Buscar y reemplazar» de un procesador de textos: corriges una palabra,
+o cambias un nombre en todas partes de una vez.
 
 `sub` reemplaza la **primera** vez que aparece un trozo. `gsub` las reemplaza
 **todas**.
@@ -274,9 +373,19 @@ el gato, un perro
 el gato, el perro
 ```
 
+Línea por línea:
+
+- `texto` contiene dos veces «un»;
+- `sub("un", "el")` solo cambia el primer «un»;
+- `gsub("un", "el")` cambia los dos;
+- `texto` en sí no cambia: cada línea parte del texto original.
+
 > **Recuerda:** piensa en «g» de «global»: `gsub` reemplaza en todas partes.
 
 ## Tomar una parte del texto
+
+A veces solo te interesa una parte del texto: la inicial de un nombre, el año de una
+fecha.
 
 Como en un array, cada carácter tiene una posición, llamada
 [índice](../debuter/glossaire.md#indice). La primera es `0`, no `1`: el índice
@@ -314,6 +423,9 @@ nil
 
 ## Los caracteres uno por uno
 
+Para examinar cada letra de una palabra, para contarlas o transformarlas, primero hay
+que separarlas.
+
 `chars` da el array de todos los caracteres. Práctico para recorrerlos.
 
 ```ruby
@@ -330,9 +442,21 @@ C
 cba
 ```
 
+Línea por línea:
+
+- `"abc".chars` da el array `["a", "b", "c"]`, que `p` muestra;
+- `each { |letra| ... }` toma cada carácter por turnos, lo guarda en `letra` y luego
+  ejecuta `puts letra.upcase`: A, luego B, luego C;
+- `reverse` lee el texto del final al principio.
+
 `reverse` devuelve el texto al revés.
 
 ## Un texto en varias líneas
+
+> **Nota:** esta parte puede esperar. Léela cuando las bases estén firmes.
+
+Escribir una carta entera en una sola línea, con `\n` por todas partes, sería
+ilegible. El heredoc te deja escribir el texto tal como se mostrará.
 
 Para un texto largo, usa un **heredoc**: `<<~FIN`, luego tus líneas, luego `FIN`
 solo en su línea.
@@ -358,6 +482,10 @@ Gracias por tu visita.
 
 ## Texto y números
 
+Un «42» escrito con el teclado es un texto, no un número: Ruby se niega a calcular con
+él. Primero hay que convertirlo. Y para mostrar un número de forma limpia, se le da
+formato.
+
 ### Pasar de uno a otro
 
 - `to_i` convierte un texto en entero, `to_f` en número decimal.
@@ -374,6 +502,13 @@ puts 10.to_s + "0"
 5.0
 100
 ```
+
+Línea por línea:
+
+- `"42".to_i` convierte el texto en el número 42: ya se le puede sumar 1, lo que da 43;
+- `"2.5".to_f` da el número 2.5; por 2, son 5.0;
+- `10.to_s` da el texto `"10"`; `+ "0"` pega un cero al final: `"100"`. No se hace
+  ningún cálculo.
 
 ### Alinear texto
 
@@ -418,7 +553,28 @@ Ticket n.º 007
 
 > **Consejo:** `%03d` escribe un entero con 3 cifras, con ceros delante.
 
+**Te toca:** escribe un programa que guarde el texto `"2.5"` (un precio) en `precio` y
+`3` en `cantidad`, y luego muestre el total: «Total: 7.50 €».
+
+> **Solución**
+>
+> ```ruby
+> precio = "2.5"
+> cantidad = 3
+> total = precio.to_f * cantidad
+> puts format("Total: %.2f €", total)
+> ```
+>
+> ```sortie
+> Total: 7.50 €
+> ```
+
 ## Los textos congelados
+
+> **Nota:** esta parte puede esperar. Léela cuando las bases estén firmes.
+
+Congelar un texto lo protege: un valor que nunca debe cambiar, como el nombre de tu
+sitio web, ya no se puede modificar por error.
 
 Un texto **congelado** (`freeze`) ya no se puede modificar: se vuelve
 [inmutable](../debuter/glossaire.md#inmutable). Para cambiarlo, haz una
@@ -436,6 +592,14 @@ puts copia
 true
 hola mundo
 ```
+
+Línea por línea:
+
+- `"hola".freeze` crea un texto congelado, guardado en `palabra`;
+- `palabra.frozen?` comprueba que está congelado: `true`;
+- `palabra.dup` fabrica una copia, que no está congelada;
+- `copia << " mundo"` añade `" mundo"` al final de la copia. `palabra` sigue valiendo
+  `"hola"`.
 
 `<<` añade texto al final de una cadena. Con un texto congelado, provoca un error
 `FrozenError`.

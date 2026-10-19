@@ -12,6 +12,10 @@ This page presents the two ways to store several values in a row in Go: the arra
 
 ## Arrays
 
+Say you want to keep a student's grades. Creating one variable per grade (`grade1`,
+`grade2`, `grade3`…) quickly becomes tedious. An array stores all these values under a
+single name, like a box with numbered compartments.
+
 An array stores a **fixed** number of values of the same type. The size is part of the
 type: `[3]int` is "an array of 3 integers".
 
@@ -36,6 +40,16 @@ func main() {
 Tue 3
 ```
 
+Line by line:
+
+- `var grades [3]int` creates an array of 3 slots, all set to 0: `[0 0 0]`;
+- `grades[0] = 12` puts 12 in the first slot, `grades[2] = 18` in the third. The middle
+  slot keeps its 0;
+- `days := [3]string{...}` creates the array and fills it in a single line;
+- `days[1]` is the second slot, "Tue", and `len(days)` is 3.
+
+Three rules to know:
+
 - The slots are numbered starting from **0**: that's the [index](../debuter/glossaire.md#index).
 - A slot that hasn't been filled holds the zero value of its type (`0` here).
 - `len` gives the number of slots.
@@ -44,6 +58,9 @@ An array can neither grow nor shrink. That's why it is rarely used: you will alm
 always prefer the slice.
 
 ## Slices
+
+Often, you don't know in advance how many values you will have: a shopping list grows
+during the week. The slice is made for that.
 
 A slice is a [list](../debuter/glossaire.md#list) of values of the same type, whose
 size can change. Its type is written without a size: `[]int`.
@@ -71,8 +88,35 @@ apple 3
 pear
 ```
 
+Line by line:
+
+- `fruits := []string{...}` creates a slice that holds three strings;
+- `fruits[0]` is the first element, "apple", and `len(fruits)` is 3;
+- `fruits[1] = "mango"` replaces "kiwi" with "mango". The other slots don't move.
+
 `fruits[len(fruits)-1]` is the last element: with 3 elements, the indexes go from 0 to
 2.
+
+**Your turn:** write a program that creates a slice `colors` with "red", "green" and
+"blue", replaces "green" with "yellow", then prints the slice and its length.
+
+> **Solution**
+>
+> ```go
+> package main
+>
+> import "fmt"
+>
+> func main() {
+> 	colors := []string{"red", "green", "blue"}
+> 	colors[1] = "yellow"
+> 	fmt.Println(colors, len(colors))
+> }
+> ```
+>
+> ```sortie
+> [red yellow blue] 3
+> ```
 
 ### Creating a slice with make
 
@@ -103,6 +147,9 @@ elements to it.
 
 ## Adding with append
 
+A shopping list fills up little by little: you add an item as soon as you think of it.
+`append` does the same thing for a slice.
+
 `append` adds elements at the end of a slice and **returns** the new slice. You must
 always keep this result.
 
@@ -128,9 +175,41 @@ func main() {
 [bread milk eggs rice tea]
 ```
 
+Line by line:
+
+- `var shopping []string` creates an empty slice;
+- the first `append` returns a slice that holds "bread". It is stored back in
+  `shopping`;
+- the second `append` adds two elements at once: `shopping` now has 3;
+- the last `append` adds all the elements of `others` at the end.
+
 `others...` unpacks the slice `others` into several arguments.
 
+**Your turn:** write a program that starts from an empty slice `guests`, adds "Lea",
+then "Tom" and "Sam" in a single `append`, and prints the slice and its length.
+
+> **Solution**
+>
+> ```go
+> package main
+>
+> import "fmt"
+>
+> func main() {
+> 	var guests []string
+> 	guests = append(guests, "Lea")
+> 	guests = append(guests, "Tom", "Sam")
+> 	fmt.Println(guests, len(guests))
+> }
+> ```
+>
+> ```sortie
+> [Lea Tom Sam] 3
+> ```
+
 ### Capacity
+
+> **Note:** this part can wait. Read it once the basics feel solid.
 
 Behind every slice hides an array, which has a certain amount of room: the **capacity**
 (`cap`). When there is no room left, `append` creates a bigger array and copies
@@ -170,6 +249,9 @@ full, Go takes a bigger one.
 
 ## Cutting a slice
 
+Sometimes you only need part of a list: the top three of a ranking, or everything but
+the first element. That's what cutting is for.
+
 `s[start:end]` takes the elements from index `start` **included** to index `end`
 **excluded**.
 
@@ -200,7 +282,32 @@ func main() {
 
 > **Remember:** `s[1:3]` contains `3 - 1 = 2` elements. The end is always excluded.
 
+**Your turn:** write a program that stores the months `"Jan"` to `"Jun"` in a slice
+`months`, then prints the first three, and finally the last three.
+
+> **Solution**
+>
+> ```go
+> package main
+>
+> import "fmt"
+>
+> func main() {
+> 	months := []string{"Jan", "Feb", "Mar", "Apr", "May", "Jun"}
+> 	fmt.Println(months[:3])
+> 	fmt.Println(months[3:])
+> }
+> ```
+>
+> ```sortie
+> [Jan Feb Mar]
+> [Apr May Jun]
+> ```
+
 ## The shared-array trap
+
+This point surprises almost every beginner, and it causes bugs that are hard to find.
+It's better to understand it right now.
 
 Cutting copies **nothing**: it looks at the same hidden array, through another window.
 Changing one changes the other.
@@ -223,6 +330,14 @@ func main() {
 [99 2 3 4]
 [99 2]
 ```
+
+Line by line:
+
+- `numbers` holds 1, 2, 3 and 4;
+- `start := numbers[:2]` creates no new slot: `start` shows the first two slots of
+  `numbers`;
+- `start[0] = 99` therefore writes 99 into the first slot, shared by both;
+- the two `Println` read the same slots: 99 appears twice.
 
 `start` and `numbers` share the same slots: changing `start[0]` changed `numbers[0]`.
 
@@ -285,6 +400,8 @@ func main() {
 
 ## Two-dimensional slices
 
+> **Note:** this part can wait. Read it once the basics feel solid.
+
 A slice can contain slices: it's a grid, like a spreadsheet or a game board.
 
 ```go
@@ -324,6 +441,9 @@ by one. The `%q` verb prints text between quotes: this way you can see the empty
 `""`.
 
 ## Sorting and searching
+
+Looking for a name in a list, ordering grades from lowest to highest: these are very
+common tasks. Go provides them ready-made, so you don't have to write them yourself.
 
 ### The slices package
 
@@ -369,6 +489,32 @@ true
 | `slices.Reverse(s)` | reverses the order of `s` |
 
 > **Note:** `slices.Sort` changes the slice itself, and returns nothing.
+
+**Your turn:** write a program that stores the temperatures 18, 25, 12 and 21 in a
+slice, prints the highest one, then prints the sorted slice.
+
+> **Solution**
+>
+> ```go
+> package main
+>
+> import (
+> 	"fmt"
+> 	"slices"
+> )
+>
+> func main() {
+> 	temperatures := []int{18, 25, 12, 21}
+> 	fmt.Println(slices.Max(temperatures))
+> 	slices.Sort(temperatures)
+> 	fmt.Println(temperatures)
+> }
+> ```
+>
+> ```sortie
+> 25
+> [12 18 21 25]
+> ```
 
 ### Sorting by a rule: sort.Slice
 

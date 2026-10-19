@@ -12,6 +12,10 @@ Cette page montre les outils de Rythme pour les textes : insérer des valeurs, c
 
 ## Insérer une valeur dans un texte
 
+Un programme parle souvent à quelqu'un : il affiche un prénom, un total, un score.
+Insérer une valeur, c'est comme remplir les blancs d'une lettre type : le texte est
+prêt, il ne manque que les valeurs.
+
 Un texte, qu'on appelle aussi une
 [chaîne de caractères](../debuter/glossaire.md#chaine-de-caracteres), est
 une suite de caractères : lettres, chiffres, espaces, signes.
@@ -34,10 +38,23 @@ Ada a 2 fruits.
 Le double de 21 est 42.
 ```
 
+Ligne par ligne :
+
+- `nom` reçoit le texte `"Ada"`, et `fruits` une liste de deux textes ;
+- dans `"Bonjour {nom} !"`, Rythme remplace `{nom}` par sa valeur, `Ada`, puis
+  affiche le texte ;
+- `{len(fruits)}` est d'abord calculé : la liste a 2 éléments, donc 2 entre dans le
+  texte ;
+- `{21 * 2}` fait le calcul, 42, et le met à sa place.
+
 > **Astuce :** pour transformer n'importe quelle valeur en texte, utilisez
 > `text` : `text(42)` vaut `"42"`.
 
 ## Les caractères spéciaux
+
+Un texte s'écrit entre guillemets. Mais comment écrire un guillemet **dans** le
+texte, ou passer à la ligne ? Il faut un moyen de dire « ce caractère-là est
+spécial ».
 
 Certains caractères ne se tapent pas directement dans un texte. On les écrit
 avec une barre oblique inverse `\` devant, une **séquence d'échappement** :
@@ -63,7 +80,16 @@ ligne 2
 Des accolades : { et }
 ```
 
+Ligne par ligne :
+
+- `\"` affiche un guillemet : le texte ne s'arrête pas là ;
+- `\n` coupe la ligne : `ligne 2` s'affiche en dessous de `ligne 1` ;
+- `\{` et `\}` affichent des accolades, sans chercher de valeur à insérer.
+
 ## Longueur et majuscules
+
+Un programme a souvent besoin de vérifier ou de mettre en forme un texte : un mot de
+passe est-il assez long ? Un prénom tapé « élise » doit-il s'afficher « Élise » ?
 
 `len` compte les caractères. `upper` met tout en majuscules, `lower` tout en
 minuscules, et `capitalize` seulement la première lettre :
@@ -79,9 +105,36 @@ print(upper(mot), lower("BONJOUR"), capitalize(mot))
 ÉLISE bonjour Élise
 ```
 
+Ligne par ligne :
+
+- `mot` reçoit le texte `"élise"` ;
+- `len(mot)` compte ses caractères : 5 ;
+- `upper(mot)` donne `"ÉLISE"`, `lower("BONJOUR")` donne `"bonjour"` et
+  `capitalize(mot)` donne `"Élise"` ;
+- `print` affiche ces trois textes sur une ligne, séparés par une espace.
+
 Les accents sont comptés comme un seul caractère : `len("été")` vaut 3.
 
+**À vous :** écrivez un programme qui range `"rythme"` dans une variable `langage`,
+puis affiche sa longueur, et en dessous le même mot en majuscules.
+
+> **Solution**
+>
+> ```rythme
+> langage = "rythme"
+> print(len(langage))
+> print(upper(langage))
+> ```
+>
+> ```sortie
+> 6
+> RYTHME
+> ```
+
 ## Lire un caractère par sa position
+
+Parfois, vous n'avez besoin que d'une partie d'un texte : l'initiale d'un prénom, ou
+les premières lettres d'un mot.
 
 Chaque caractère a une position, à partir de **0**. `mot[0]` est le premier
 caractère, `mot[-1]` le dernier. `slice(mot, debut, fin)` prend un morceau,
@@ -117,6 +170,10 @@ print("[{trim(saisie)}]")
 
 ## Découper et recoller
 
+Un texte contient souvent plusieurs informations collées : une liste de courses
+« pain,lait,oeufs », ou une phrase faite de mots. Pour traiter chaque morceau à part,
+il faut d'abord les séparer.
+
 `split` découpe un texte en une liste de morceaux. Sans séparateur, il coupe
 aux espaces. `join` fait l'inverse : il recolle une liste avec un séparateur.
 
@@ -135,6 +192,14 @@ print(join(["rouge", "vert", "bleu"], ", "))
 rouge, vert, bleu
 ```
 
+Ligne par ligne :
+
+- `split(phrase)` coupe `"le chat dort"` aux espaces : `mots` vaut
+  `["le", "chat", "dort"]`, une liste de 3 textes ;
+- `split("rouge;vert;bleu", ";")` coupe à chaque `;` ;
+- `join(…, ", ")` fait le chemin inverse : il colle les trois mots en mettant `", "`
+  entre eux.
+
 Avec `|>`, on enchaîne : on découpe, on transforme chaque mot, on recolle.
 
 ```rythme
@@ -149,7 +214,26 @@ Avec `|>`, on enchaîne : on découpe, on transforme chaque mot, on recolle.
 Le Chat Dort
 ```
 
+**À vous :** écrivez un programme qui découpe la liste de courses `"pain,lait,oeufs"`
+aux virgules, affiche le nombre d'articles, puis les recolle avec `" - "` entre eux.
+
+> **Solution**
+>
+> ```rythme
+> courses = split("pain,lait,oeufs", ",")
+> print(len(courses))
+> print(join(courses, " - "))
+> ```
+>
+> ```sortie
+> 3
+> pain - lait - oeufs
+> ```
+
 ## Chercher dans un texte
+
+Avant d'agir, un programme a souvent besoin de vérifier un texte : ce fichier est-il
+une photo ? Cette adresse contient-elle un `@` ?
 
 Trois questions, trois réponses `true` ou `false` :
 
@@ -170,6 +254,13 @@ true true
 false
 ```
 
+Ligne par ligne :
+
+- `fichier` reçoit le nom `"vacances.jpg"` ;
+- `contains` trouve `"cance"` au milieu du nom : `true` ;
+- le nom commence bien par `"vac"` et finit par `".jpg"` : `true true` ;
+- il ne finit pas par `".png"` : `false`.
+
 > **Attention :** les majuscules comptent : `contains("Bonjour", "bon")`
 > vaut `false`. Passez d'abord le texte en minuscules avec `lower` si besoin.
 
@@ -186,6 +277,9 @@ true false true
 
 ## Remplacer un morceau
 
+C'est la fonction « rechercher et remplacer » d'un traitement de texte : corriger un
+mot partout, ou changer un séparateur.
+
 `replace(texte, ancien, nouveau)` remplace **chaque** apparition de `ancien` :
 
 ```rythme
@@ -201,7 +295,24 @@ un chat et un chien
 Comme toujours en Rythme, le texte de départ ne change pas : `replace` donne
 un nouveau texte.
 
+**À vous :** écrivez un programme qui range `"mes notes de cours.txt"` dans une
+variable, puis affiche ce nom de fichier avec des `_` à la place des espaces.
+
+> **Solution**
+>
+> ```rythme
+> nom_fichier = "mes notes de cours.txt"
+> print(replace(nom_fichier, " ", "_"))
+> ```
+>
+> ```sortie
+> mes_notes_de_cours.txt
+> ```
+
 ## Les caractères et les lignes
+
+Un texte se traite parfois caractère par caractère (compter les voyelles), ou ligne
+par ligne (lire un poème, une liste). Pour cela, on le transforme en liste.
 
 `chars` donne la liste des caractères. `lines` découpe un texte en lignes
 (`\n` veut dire « retour à la ligne ») :
@@ -220,6 +331,13 @@ print(len(lines(poeme)), "lignes")
 3 lignes
 ```
 
+Ligne par ligne :
+
+- `chars("abc")` donne une liste de trois textes d'un seul caractère ;
+- `poeme` contient trois lignes, séparées par `\n` ;
+- `lines(poeme)` coupe à chaque `\n` : une liste de 3 lignes ;
+- `len` compte les éléments de cette liste : 3.
+
 Avec une liste de caractères, toutes les fonctions de listes marchent. Par
 exemple, compter les voyelles :
 
@@ -234,6 +352,8 @@ print(nombre)
 ```
 
 ## Répéter et aligner
+
+> **Note :** cette partie peut attendre. Lisez-la quand les bases seront solides.
 
 `repeat(texte, n)` répète un texte `n` fois. Pratique pour un trait :
 
@@ -297,6 +417,13 @@ Ok(3.5)
 Err("\"douze\" n'est pas un nombre entier")
 ```
 
+Ligne par ligne :
+
+- `parse_int("42")` réussit : il donne `Ok(42)`, le nombre rangé dans une boîte `Ok` ;
+- `parse_int(" 7 ")` ignore les espaces autour et donne `Ok(7)` ;
+- `parse_float("3.5")` lit un nombre à virgule, écrit avec un point ;
+- `parse_int("douze")` échoue : il donne `Err`, avec un message qui dit pourquoi.
+
 Pour obtenir le nombre, traitez les deux cas avec `match`, ou donnez une
 valeur par défaut avec `unwrap_or` :
 
@@ -323,7 +450,25 @@ le double est 42
 > (erreur E022) si le texte n'en est pas un. Gardez-le pour un texte écrit
 > par vous ; pour une saisie, préférez `parse_int`.
 
+**À vous :** écrivez un programme qui range le texte `"15"` dans `saisie`, le lit avec
+`parse_int` et `unwrap_or(0)`, puis affiche « Dans 10 ans, vous aurez 25 ans. » en
+calculant 25 à partir du nombre lu.
+
+> **Solution**
+>
+> ```rythme
+> saisie = "15"
+> age = parse_int(saisie) |> unwrap_or(0)
+> print("Dans 10 ans, vous aurez {age + 10} ans.")
+> ```
+>
+> ```sortie
+> Dans 10 ans, vous aurez 25 ans.
+> ```
+
 ## Écrire un grand nombre lisiblement
+
+> **Note :** cette partie peut attendre. Lisez-la quand les bases seront solides.
 
 `format_number(nombre, decimales, langue)` sépare les milliers et arrondit.
 Avec `"fr"`, il écrit le nombre à la française :
@@ -344,6 +489,10 @@ Sans langue, c'est l'écriture anglaise. Et `text(nombre, decimales)` donne
 simplement un nombre avec ce nombre de décimales.
 
 ## Les expressions régulières
+
+Parfois, vous ne cherchez pas un morceau précis, mais une **forme** : « des
+chiffres », « un mot ». Par exemple, tous les nombres d'une phrase, quels qu'ils
+soient.
 
 Une **expression régulière** (une « regex ») est un petit modèle qui décrit
 des morceaux de texte. Quelques signes suffisent pour commencer :
@@ -377,6 +526,13 @@ true false
 ["3", "12"]
 Mon code : ****
 ```
+
+Ligne par ligne :
+
+- `matches("2024", "\\d+")` : le texte entier n'est fait que de chiffres, donc `true` ;
+  dans `"20h24"`, le `h` n'est pas un chiffre, donc `false` ;
+- `find_all` cherche tous les groupes de chiffres et donne `["3", "12"]` ;
+- `replace_all` remplace chaque chiffre (`\\d`, un seul à la fois) par `*`.
 
 Par exemple, additionner tous les nombres d'une phrase :
 

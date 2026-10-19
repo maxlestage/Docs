@@ -32,6 +32,14 @@ console.log(cat);
 { name: 'Felix', age: 3, color: 'ginger', vaccinated: true }
 ```
 
+Line by line:
+
+- `const cat = {` opens the object and gives it a name: `cat`;
+- the next four lines are its properties: the key `name` holds `"Felix"`, the key `age`
+  holds `3`, and so on;
+- `};` closes the object;
+- `console.log(cat)` displays the whole object, with all its properties.
+
 - The object is written between curly braces `{ }`.
 - Each property is written `key: value`, and properties are separated by commas.
 - A comma after the last property is allowed: it makes adding a line easier.
@@ -40,6 +48,9 @@ An array stores values **in order**, by number. An object stores them **by name*
 other languages, this is called a [dictionary](../debuter/glossaire.md#dictionary).
 
 ## Reading a property
+
+An ID card is only useful if you can look things up on it: the cat's name, or its age.
+Reading a property means looking at one specific line of the card.
 
 You read a property with a dot `.` or with square brackets `[ ]`.
 
@@ -61,12 +72,22 @@ undefined
 Felix
 ```
 
+Line by line:
+
+- `cat.name` fetches the value stored under the key `name`: `"Felix"`;
+- `cat["age"]` does the same thing with square brackets, and gives `3`;
+- `cat.weight` looks for a key that does not exist: the result is `undefined`;
+- `key` holds the string `"name"`, so `cat[key]` is the same as writing `cat["name"]`.
+
 - The dot is the most common: `cat.name`.
 - Square brackets take a **string**: useful when the key is in a variable (`cat[key]`)
   or contains a space (`object["date of birth"]`).
 - A property that does not exist gives `undefined`, without an error.
 
 ## Adding, changing, deleting
+
+Information changes over time: the cat gets a year older, you learn its color. Like
+a card written in pencil, you can correct a line, add one or erase one.
 
 You can change an object after creating it, even if it is in a `const` (like an array:
 `const` only prevents you from replacing the whole object).
@@ -89,9 +110,33 @@ true
 false
 ```
 
+Line by line:
+
+- `cat.age = 4;` replaces 3 with 4: the key `age` already existed;
+- `cat.color = "ginger";` adds a line to the card, because `color` did not exist;
+- `delete cat.name;` erases the property `name`;
+- `"color" in cat` answers `true`, and `"name" in cat` answers `false`: `name` was
+  deleted.
+
 - Assigning a key that exists **changes** it; a new key is **added**.
 - `delete` removes a property.
 - `"key" in object` checks whether a property exists.
+
+**Your turn:** write a program that creates an object `book` with a `title`
+("The Little Prince") and a number of `pages` (96). Then add a property `read` set to
+`true`, and display the object.
+
+> **Solution**
+>
+> ```javascript
+> const book = { title: "The Little Prince", pages: 96 };
+> book.read = true;
+> console.log(book);
+> ```
+>
+> ```sortie
+> { title: 'The Little Prince', pages: 96, read: true }
+> ```
 
 ## Shorthand properties
 
@@ -112,6 +157,10 @@ console.log(person);
 `{ name, age }` is shorthand for `{ name: name, age: age }`.
 
 ## Methods and this
+
+An object can also do things, not just keep information. A bank account has a
+balance, but you also want to deposit money into it: a method stores that action in
+the object, next to the data it uses.
 
 A property can hold a function: it is then called a
 [method](../debuter/glossaire.md#method). Inside it, the word `this` refers to the
@@ -137,6 +186,15 @@ console.log(account.summary());
 Alice has 150 €
 ```
 
+Line by line:
+
+- `account` has two plain properties, `owner` and `balance`, and two methods, `deposit`
+  and `summary`;
+- `account.deposit(50)` calls the method with `amount` set to 50:
+  `this.balance += amount` takes the balance from 100 to 150;
+- `account.summary()` builds a string with `this.owner` and `this.balance`;
+- `console.log` displays that string: "Alice has 150 €".
+
 `deposit(amount) { ... }` is shorthand for `deposit: function (amount) { ... }`.
 In `account.deposit(50)`, `this` is the object before the dot: `account`.
 
@@ -146,7 +204,34 @@ In `account.deposit(50)`, `this` is the object before the dot: `account`.
 Objects that share the same methods are built with **classes**: that will be for
 [the page on inheritance](heritage.md).
 
+**Your turn:** write a program that creates an object `counter` with a property `value`
+set to 0 and a method `increase()` that adds 1 to `value`. Call `increase()` twice,
+then display `counter.value`.
+
+> **Solution**
+>
+> ```javascript
+> const counter = {
+>   value: 0,
+>   increase() {
+>     this.value += 1;
+>   },
+> };
+>
+> counter.increase();
+> counter.increase();
+> console.log(counter.value);
+> ```
+>
+> ```sortie
+> 2
+> ```
+
 ## Looping over an object
+
+Sometimes you do not want to read one property, but all of them: taking stock of an
+inventory, or displaying every line of a card. You then need the list of what the
+object contains.
 
 Three functions turn an object into an array:
 
@@ -167,6 +252,13 @@ console.log(Object.entries(stock));
 [ 12, 5, 0 ]
 [ [ 'apples', 12 ], [ 'pears', 5 ], [ 'kiwis', 0 ] ]
 ```
+
+Line by line:
+
+- `stock` stores three fruits, each with its quantity;
+- `Object.keys(stock)` gives the array of keys: the names of the fruits;
+- `Object.values(stock)` gives the array of values: the quantities;
+- `Object.entries(stock)` gives an array of pairs: each pair holds a key and its value.
 
 With `for...of` and destructuring, you loop over keys and values at the same time:
 
@@ -191,7 +283,28 @@ Total: 17
 Keys are visited in the order they were added (except keys that are whole numbers,
 which come first in increasing order).
 
+**Your turn:** write a program that stores the object `{ math: 15, history: 12 }` in
+`grades`, then displays each subject and its grade as "math: 15", using
+`Object.entries` and `for...of`.
+
+> **Solution**
+>
+> ```javascript
+> const grades = { math: 15, history: 12 };
+>
+> for (const [subject, grade] of Object.entries(grades)) {
+>   console.log(`${subject}: ${grade}`);
+> }
+> ```
+>
+> ```sortie
+> math: 15
+> history: 12
+> ```
+
 ## Object destructuring
+
+> **Note:** this part can wait. Read it once the basics feel solid.
 
 As with arrays, you can put several properties into variables at once. Here, it is the
 **name** that matters, not the position.
@@ -230,6 +343,9 @@ Alice, 30 years old
 
 ## Copying an object
 
+Copying lets you change one version without spoiling the original, like photocopying
+a form before filling it in.
+
 Like arrays, an object is shared **by reference**: `b = a` copies nothing, both names
 refer to the same object. To copy, use the spread `...`.
 
@@ -250,6 +366,13 @@ console.log(extended);
 { name: 'Alice', age: 31 }
 { name: 'Alice', age: 40, city: 'Lyon' }
 ```
+
+Line by line:
+
+- `copy` gets a new object, filled with the properties of `original`;
+- `copy.age = 31` only changes the copy: `original` keeps 30;
+- `extended` also copies `original`, adds `city`, and replaces `age` with 40;
+- the three `console.log` calls show three different objects.
 
 In `extended`, the properties written **after** the spread replace those of the
 original.
@@ -305,10 +428,20 @@ Person: {"name":"Alice","age":30,"languages":["fr","en"]}
 }
 ```
 
+Line by line:
+
+- the first `console.log` puts the object as it is into the template literal: you get
+  `[object Object]`, which is not useful;
+- the second goes through `JSON.stringify` first: the object becomes a string on one
+  line;
+- the third adds `null, 2`: the string is spread over several lines, easier to read.
+
 The third argument (`2`) indents the result by 2 spaces. JSON is also used to save data
 in a file: see [data formats](formats.md).
 
 ## Optional chaining
+
+> **Note:** this part can wait. Read it once the basics feel solid.
 
 In nested objects, a property in the middle may be missing. `?.` stops cleanly and
 returns `undefined` instead of crashing; `??` then provides a fallback value (see
@@ -332,6 +465,9 @@ Bob: unknown
 ```
 
 ## Map and Set
+
+An object is perfect for describing one thing. But to count words, or to note who has
+already come by, JavaScript offers two better-suited tools: `Map` and `Set`.
 
 ### Map: a made-to-measure dictionary
 
@@ -364,6 +500,14 @@ cat 3
 dog 1
 ```
 
+Line by line:
+
+- `new Map()` creates an empty `Map`, stored in `counter`;
+- the loop reads the words one by one. `counter.get(word) ?? 0` gives the word's current
+  count (0 if it is new), and `set` stores that count plus 1;
+- after the loop, `"cat"` holds 3 and `"dog"` holds 1;
+- `get`, `has` and `size` query the `Map`, and the last loop displays each pair.
+
 ### Set: a collection without duplicates
 
 A `Set` is a [set](../debuter/glossaire.md#set): a collection of **unique**
@@ -391,6 +535,23 @@ true
 ```
 
 `[...new Set(array)]` is the classic trick for removing duplicates from an array.
+
+**Your turn:** write a program that creates an empty `Set` called `colors`, adds
+`"red"`, then `"blue"`, then `"red"` again, and displays the number of colors.
+
+> **Solution**
+>
+> ```javascript
+> const colors = new Set();
+> colors.add("red");
+> colors.add("blue");
+> colors.add("red");
+> console.log(colors.size);
+> ```
+>
+> ```sortie
+> 2
+> ```
 
 ### Which one to choose?
 

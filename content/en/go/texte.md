@@ -12,6 +12,9 @@ This page explains how Go stores text (bytes and runes), and how to split it, tr
 
 ## Strings
 
+Almost every program handles text: a first name, a message, a line read from a file.
+In Go, text has its own type, just like numbers have theirs.
+
 A piece of text is called a [string](../debuter/glossaire.md#string), of
 type `string`. You write it between double quotes.
 
@@ -32,6 +35,15 @@ func main() {
 Hello, Alice!
 true
 ```
+
+Line by line:
+
+- `firstName := "Alice"` stores the text "Alice" in the variable `firstName`;
+- the next line sticks three pieces together: `"Hello, "`, the content of
+  `firstName`, then `"!"`. So `greeting` holds `"Hello, Alice!"`;
+- `fmt.Println(greeting)` prints that text;
+- `firstName == "Alice"` asks a question: "are the two texts identical?". The answer
+  is yes, hence `true`.
 
 - `+` sticks two strings end to end;
 - `==` compares two strings.
@@ -65,7 +77,31 @@ He said: "Hi"
 > **Remember:** a Go string is **immutable**: you can't change one of its letters.
 > All the functions that "modify" a text actually create a new one.
 
+**Your turn:** write a program that stores `"Leeds"` in a variable `city`, then prints
+"I live in Leeds." by sticking the pieces together with `+`.
+
+> **Solution**
+>
+> ```go
+> package main
+>
+> import "fmt"
+>
+> func main() {
+> 	city := "Leeds"
+> 	fmt.Println("I live in " + city + ".")
+> }
+> ```
+>
+> ```sortie
+> I live in Leeds.
+> ```
+
 ## Bytes and runes
+
+Why care? As soon as a word contains an accent, counting its letters or taking its
+first letter no longer works the way you expect. Knowing how Go stores text saves you
+from these surprises.
 
 A Go string is a sequence of [bytes](../debuter/glossaire.md#byte) (numbers from 0 to
 255), encoded in UTF-8. Simple letters (`a`, `Z`, `5`) take 1 byte. Accented letters
@@ -97,6 +133,13 @@ func main() {
 3
 3
 ```
+
+Line by line:
+
+- `word := "été"` stores a 3-letter word, two of them accented;
+- `len(word)` counts bytes: 2 for each `é` and 1 for the `t`, so 5;
+- `utf8.RuneCountInString(word)` counts characters: 3;
+- `len("abc")` gives 3: without accents, one character takes a single byte.
 
 `"été"` (French for "summer") has 3 characters, but 5 bytes: each `é` takes 2.
 
@@ -157,7 +200,35 @@ func main() {
 
 The position jumps from 2 to 4: `ë` takes bytes 2 and 3.
 
+**Your turn:** write a program that goes through the word `"café"` with `range` and
+prints each letter on its own line.
+
+> **Solution**
+>
+> ```go
+> package main
+>
+> import "fmt"
+>
+> func main() {
+> 	for _, c := range "café" {
+> 		fmt.Printf("%c\n", c)
+> 	}
+> }
+> ```
+>
+> ```sortie
+> c
+> a
+> f
+> é
+> ```
+
 ## The strings package
+
+Cutting a sentence into words, putting a text in capitals, checking that an address
+contains an `@`: these needs come up all the time. Instead of rewriting everything, you
+take the ready-made tool from this toolbox.
 
 The `strings` package holds the basic tools for text.
 
@@ -188,6 +259,15 @@ false
 8
 2
 ```
+
+Line by line:
+
+- `sentence` holds the text you search in;
+- each following line asks a question about `sentence` and prints the answer;
+- the sentence doesn't end with "bed", hence `false`;
+- "sleeps" starts at position 8, because counting starts at 0: `T` is at 0, `h` at 1,
+  `e` at 2, and so on;
+- the letter `a` appears 2 times: once in "cat", once in "sofa".
 
 - `Contains`: does the text contain this piece?
 - `HasPrefix`, `HasSuffix`: does it start, or end, with this piece?
@@ -262,7 +342,35 @@ apple, kiwi, pear
 `strings.Fields` cuts at spaces, however many there are. It's the best choice to
 separate the words of a sentence.
 
+**Your turn:** write a program that cuts the text `"monday,tuesday,wednesday"` at each
+comma, prints the number of days, then the days in capitals, separated by ` - `.
+
+> **Solution**
+>
+> ```go
+> package main
+>
+> import (
+> 	"fmt"
+> 	"strings"
+> )
+>
+> func main() {
+> 	days := strings.Split("monday,tuesday,wednesday", ",")
+> 	fmt.Println(len(days))
+> 	fmt.Println(strings.ToUpper(strings.Join(days, " - ")))
+> }
+> ```
+>
+> ```sortie
+> 3
+> MONDAY - TUESDAY - WEDNESDAY
+> ```
+
 ## Building text
+
+A program often has to make a text out of several pieces: a name, a grade, a date. It's
+like filling in a form: the template stays the same, only the boxes change.
 
 ### fmt.Sprintf
 
@@ -286,6 +394,16 @@ func main() {
 Alice   |  14.3
 15
 ```
+
+Line by line:
+
+- `name` holds `"Alice"` and `average` holds `14.256`;
+- `%-8s` puts the name in a box of 8 characters, aligned to the left: `Alice` is
+  followed by 3 spaces. The `|` is copied as is;
+- `%6.1f` writes the number with a single digit after the decimal point (`14.3`), in a
+  box of 6 characters, aligned to the right;
+- nothing is printed at this point: the text is stored in `line`, then printed by
+  `Println`. It is 8 + 1 + 6 = 15 characters long.
 
 ### strings.Builder
 
@@ -325,7 +443,32 @@ End
 
 The `&` in front of `sb` is explained in [pointers](pointeurs.md).
 
+**Your turn:** write a program that stores `"Alice"` in `name` and `12` in `age`, builds
+the text "Alice is 12 years old." with `fmt.Sprintf`, stores it in a variable
+`sentence`, then prints it.
+
+> **Solution**
+>
+> ```go
+> package main
+>
+> import "fmt"
+>
+> func main() {
+> 	name := "Alice"
+> 	age := 12
+> 	sentence := fmt.Sprintf("%s is %d years old.", name, age)
+> 	fmt.Println(sentence)
+> }
+> ```
+>
+> ```sortie
+> Alice is 12 years old.
+> ```
+
 ## Text and numbers: strconv
+
+> **Note:** this part can wait. Read it once the basics feel solid.
 
 To stick a number to a text, you first have to convert it. The `strconv` package
 does that (see also [numbers and calculations](nombres.md)).
@@ -359,10 +502,22 @@ true
 "said \"yes\""
 ```
 
+Line by line:
+
+- `strconv.Itoa(age)` turns the number 12 into the text `"12"`, which `+` can stick;
+- `strconv.Atoi("2026")` does the opposite: it reads the text and gives the number
+  2026. It also returns `err`, which is `nil` ("nothing") when all went well;
+- `strconv.ParseBool("true")` reads the text `"true"` and gives the boolean `true`. The
+  `_` ignores the error;
+- `strconv.Quote` wraps the text in quotes and adds the `\` that are needed.
+
 > **Warning:** `string(65)` doesn't give `"65"`, but `"A"` (the letter with code 65).
 > To turn a number into text, always use `strconv.Itoa` or `fmt.Sprint`.
 
 ## Raw strings
+
+In a normal string, each `\` must be doubled: a Windows path quickly becomes hard to
+read, like `"C:\\Users\\alice"`. Raw strings avoid this problem.
 
 Between backquotes `` ` ``, a string is **raw**: the `\` are not interpreted, and the
 text can span several lines.
@@ -387,6 +542,12 @@ C:\Users\alice\notes.txt
 The sky is blue,
 	and so is the sea.
 ```
+
+Line by line:
+
+- `path` holds `\` characters copied as is: the `\n` in `\notes` doesn't start a new
+  line;
+- `poem` spans two lines: the line break is part of the text.
 
 Everything is kept as is, even the tab at the start of the second line. It's handy
 for a Windows path, a text template, JSON or a

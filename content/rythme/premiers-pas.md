@@ -26,6 +26,13 @@ print(nom, naissance)
 Ada 1815
 ```
 
+Ligne par ligne :
+
+- `nom = "Ada"` range le texte `"Ada"` sous le nom `nom` ;
+- `naissance = 1815` fait de même avec le nombre 1815 ;
+- `print(nom, naissance)` retrouve les deux valeurs grâce à leurs noms, puis
+  les affiche.
+
 Imaginez une étiquette collée sur une boîte : `nom` est l'étiquette, `"Ada"`
 est ce qu'il y a dans la boîte. Ailleurs, on appelle cela une
 [variable](../debuter/glossaire.md#variable).
@@ -33,6 +40,10 @@ est ce qu'il y a dans la boîte. Ailleurs, on appelle cela une
 `print` affiche ses valeurs séparées par une espace, puis passe à la ligne.
 
 ## Les noms ne changent jamais
+
+Une valeur qui change en cours de route est une source d'erreurs fréquente :
+on ne sait plus ce qu'elle vaut à tel endroit du programme. Rythme évite ce
+problème avec une règle simple.
 
 En Rythme, une valeur ne change jamais : elle est
 [immuable](../debuter/glossaire.md#immuable). Un nom désigne une seule
@@ -49,6 +60,13 @@ print(total, total2)
 10 15
 ```
 
+Ligne par ligne :
+
+- `total = 10` : le nom `total` désigne 10 ;
+- `total2 = total + 5` calcule 10 + 5, puis donne le résultat, 15, au nouveau
+  nom `total2` ;
+- `total` n'a pas bougé : `print` affiche donc 10, puis 15.
+
 L'étiquette est collée pour de bon : on ne la décolle pas, on en colle une
 nouvelle sur une nouvelle boîte. C'est plus simple à suivre : quand vous
 lisez `total`, vous savez qu'il vaut 10 partout dans le programme.
@@ -57,7 +75,26 @@ lisez `total`, vous savez qu'il vaut 10 partout dans le programme.
 > reçoit un nouveau nom. Rythme refuse les deux (voir
 > [les erreurs fréquentes](#erreurs-frequentes)).
 
+**À vous :** écrivez un programme qui donne le nom `pommes` à la valeur 4,
+puis le nom `pommes2` à `pommes` plus 3, et qui affiche les deux.
+
+> **Solution**
+>
+> ```rythme
+> pommes = 4
+> pommes2 = pommes + 3
+> print(pommes, pommes2)
+> ```
+>
+> ```sortie
+> 4 7
+> ```
+
 ## Les sortes de valeurs
+
+On ne fait pas la même chose avec toutes les valeurs : on additionne deux
+nombres, on met un texte en majuscules, mais un nombre en majuscules n'a pas
+de sens. Connaître la sorte d'une valeur, c'est savoir ce qu'on peut en faire.
 
 Chaque valeur a une sorte, son [type](../debuter/glossaire.md#type). Voici
 les quatre plus simples :
@@ -86,6 +123,10 @@ Un `Float` s'affiche toujours avec un point, même quand il est rond : `2.0`.
 On ne le confond donc jamais avec l'`Int` `2`.
 
 ## Calculer
+
+Un programme sert très souvent à calculer : le total des courses, une
+moyenne, un partage. Comme sur une calculatrice, vous écrivez le calcul et
+Rythme donne le résultat.
 
 Voici les **opérateurs** de calcul :
 
@@ -145,7 +186,26 @@ print(round(3.7), round(3.14159, 2), int(3.9), float(2))
 `round(x)` arrondit à l'entier le plus proche, `round(x, 2)` garde deux
 décimales, `int` coupe les décimales, `float` donne un nombre à virgule.
 
+**À vous :** 17 bonbons sont partagés entre 5 enfants. Écrivez un programme
+qui affiche combien chaque enfant en reçoit, puis combien il en reste.
+
+> **Solution**
+>
+> ```rythme
+> bonbons = 17
+> enfants = 5
+> print(bonbons // enfants, bonbons % enfants)
+> ```
+>
+> ```sortie
+> 3 2
+> ```
+
 ## Les textes et l'insertion
+
+Un programme parle souvent à la personne qui l'utilise : « Bonjour, Ada »,
+« Total : 15 euros ». Il doit donc fabriquer des phrases qui contiennent des
+valeurs, un peu comme un formulaire à trous qu'on remplit.
 
 Un texte s'écrit entre guillemets droits `"`. Pour mettre une valeur dans un
 texte, écrivez-la entre accolades `{...}` : c'est l'**insertion**.
@@ -161,6 +221,14 @@ print("Dans dix ans : {age + 10} ans.")
 Ada a 36 ans.
 Dans dix ans : 46 ans.
 ```
+
+Ligne par ligne :
+
+- `nom` désigne `"Ada"` et `age` désigne 36 ;
+- dans `"{nom} a {age} ans."`, Rythme remplace `{nom}` par Ada et `{age}` par
+  36, puis affiche la phrase ;
+- à la dernière ligne, il calcule d'abord `age + 10`, soit 46, puis l'insère
+  dans le texte.
 
 Entre les accolades, on peut écrire un calcul, pas seulement un nom. Comme
 en Ruby, `#{...}` marche aussi :
@@ -200,7 +268,25 @@ SALUT 3 ok ["a", "b", "c"]
 `upper` met en majuscules, `len` compte les caractères, `trim` enlève les
 espaces autour, `split` découpe en morceaux.
 
+**À vous :** donnez le nom `croissants` à 3 et le nom `prix_unitaire` à 2.
+Avec l'insertion, affichez la phrase `3 croissants coûtent 6 euros.`
+
+> **Solution**
+>
+> ```rythme
+> croissants = 3
+> prix_unitaire = 2
+> print("{croissants} croissants coûtent {croissants * prix_unitaire} euros.")
+> ```
+>
+> ```sortie
+> 3 croissants coûtent 6 euros.
+> ```
+
 ## Afficher avec print et puts
+
+Afficher, c'est votre seule façon de voir ce que fait un programme : sans
+`print`, il calcule en silence et vous ne voyez rien.
 
 `print` et `puts` sont la même fonction. `puts` est le nom de Ruby. Au début
 d'une ligne, vous pouvez même oublier les parenthèses :
@@ -216,6 +302,13 @@ avec des parenthèses
 sans parenthèses
 deux valeurs : 2
 ```
+
+Ligne par ligne :
+
+- la première ligne affiche son texte, avec des parenthèses ;
+- `puts "sans parenthèses"` fait exactement la même chose, sans parenthèses ;
+- la dernière ligne donne deux valeurs : un texte et le calcul `1 + 1`.
+  Rythme calcule 2, puis affiche les deux.
 
 Les valeurs données à `print` sont séparées par des virgules. Elles
 s'affichent séparées par une espace.
@@ -235,11 +328,22 @@ print(prix * 2)
 24
 ```
 
+Ligne par ligne :
+
+- la première ligne n'est qu'un commentaire : Rythme la saute ;
+- `prix = 12` est exécuté, et le commentaire qui le suit est ignoré ;
+- `print(prix * 2)` calcule 12 × 2 et affiche 24.
+
 Vous croiserez aussi `##`, deux dièses : c'est un commentaire qui décrit la
 fonction écrite juste en dessous (voir
 [documenter avec rythme doc](projet.md#documenter-avec-rythme-doc)).
 
 ## Des accents dans les noms
+
+> **Note :** cette partie peut attendre. Lisez-la quand les bases seront solides.
+
+Un nom bien choisi rend un programme facile à relire. Il doit cependant
+suivre quelques règles.
 
 Un nom commence par une lettre ou `_`, puis contient des lettres, des
 chiffres et des `_`. Les accents sont permis :

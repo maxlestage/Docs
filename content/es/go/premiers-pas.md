@@ -15,6 +15,9 @@ Esta página muestra cómo guardar valores en variables, cuáles son los tipos b
 Una [variable](../debuter/glossaire.md#variable) es una caja con una etiqueta.
 Guardas un valor dentro, y lo encuentras gracias a su nombre.
 
+Un programa necesita acordarse de cosas: un nombre, una edad, una puntuación. Como
+una nota pegada en la nevera, la variable guarda la información para más tarde.
+
 En Go, la forma más completa de crear una variable usa la palabra `var`:
 
 ```go
@@ -32,6 +35,16 @@ func main() {
 ```sortie
 Alice tiene 12 años
 ```
+
+Línea por línea:
+
+- `package main`, `import "fmt"` y `func main()` forman el marco visto en la
+  introducción: el programa empieza en `main`;
+- `var nombre string = "Alice"` crea la caja `nombre` y guarda en ella el texto
+  `"Alice"`;
+- `var edad int = 12` crea la caja `edad` y guarda en ella el número 12;
+- `fmt.Println` muestra sus valores en orden, separados por espacios: el contenido de
+  `nombre`, la palabra «tiene», el contenido de `edad` y la palabra «años».
 
 Lee `var edad int = 12` así: «crea una variable `edad`, de tipo `int` (un entero),
 que vale 12».
@@ -67,6 +80,29 @@ func main() {
 `puntos = puntos + 5` se lee de derecha a izquierda: Go calcula `puntos + 5` (25 + 5), y luego
 guarda el resultado en `puntos`.
 
+**Te toca:** escribe un programa que cree una variable `manzanas` de tipo `int` que
+valga 3 y la muestre. Luego súmale 4 y muéstrala de nuevo.
+
+> **Solución**
+>
+> ```go
+> package main
+>
+> import "fmt"
+>
+> func main() {
+> 	var manzanas int = 3
+> 	fmt.Println(manzanas)
+> 	manzanas = manzanas + 4
+> 	fmt.Println(manzanas)
+> }
+> ```
+>
+> ```sortie
+> 3
+> 7
+> ```
+
 ## La declaración corta :=
 
 Escribir el tipo cada vez es largo. Si das un valor, Go **adivina** el tipo
@@ -99,7 +135,31 @@ Bob 9 1.32
 `:=` solo funciona dentro de una función. Fuera, a nivel del archivo,
 usa `var`.
 
+**Te toca:** con `:=`, crea una variable `ciudad` que valga `"Niza"` y una variable
+`habitantes` que valga `340000`. Con un solo `fmt.Println`, muestra
+`Niza tiene 340000 habitantes`.
+
+> **Solución**
+>
+> ```go
+> package main
+>
+> import "fmt"
+>
+> func main() {
+> 	ciudad := "Niza"
+> 	habitantes := 340000
+> 	fmt.Println(ciudad, "tiene", habitantes, "habitantes")
+> }
+> ```
+>
+> ```sortie
+> Niza tiene 340000 habitantes
+> ```
+
 ### Varias variables de una vez
+
+> **Nota:** esta parte puede esperar. Léela cuando las bases estén firmes.
 
 ```go
 package main
@@ -122,6 +182,9 @@ func main() {
 La línea `x, y = y, x` intercambia los dos valores, sin variable intermedia.
 
 ## Los valores cero
+
+A veces creas una variable antes de saber su valor: un contador que empezará en
+cero, un nombre que rellenarás más tarde. Go la rellena entonces por ti.
 
 Si creas una variable con `var` sin darle un valor, no está vacía:
 recibe el **valor cero** de su tipo.
@@ -146,6 +209,14 @@ func main() {
 []
 ```
 
+Línea por línea:
+
+- los cuatro `var` crean cuatro variables sin valor: Go guarda en cada una el valor
+  cero de su tipo;
+- `fmt.Println` muestra `n`, `precio` y `activo`: `0`, `0` y `false`;
+- un texto vacío no se ve en la pantalla. Por eso `Printf` (explicado más abajo) lo
+  rodea de corchetes: `[]` muestra que no hay nada entre los dos.
+
 | Tipo | Valor cero |
 |------|-------------|
 | `int`, `float64` | `0` |
@@ -156,6 +227,10 @@ func main() {
 > «sin inicializar» que contenga cualquier cosa.
 
 ## Los tipos básicos
+
+Go necesita saber qué clase de valor guarda, para saber qué puede hacer con él: se
+puede dividir un precio entre 2, pero no un nombre. Es como una cocina ordenada, con
+los cubiertos en un cajón y los platos en otro.
 
 | Tipo | Lo que contiene | Ejemplo |
 |------|-------------------|---------|
@@ -185,6 +260,15 @@ func main() {
 15 13.5 León true 76
 ```
 
+Línea por línea:
+
+- `nota := 15` crea un `int`. `media := 13.5` crea un `float64`, por la coma decimal
+  (un punto en Go);
+- `ciudad := "León"` crea un `string`: el texto va entre comillas dobles;
+- `aprobado := nota >= 10` hace una pregunta: «¿15 es mayor o igual que 10?». La
+  respuesta, `true`, se guarda en `aprobado`, que es por tanto un `bool`;
+- `inicial := 'L'` crea una `rune`: un solo carácter, entre comillas simples.
+
 Sorpresa: `inicial` se muestra como `76`. Una `rune` es en realidad un número, el código
 [Unicode](../debuter/glossaire.md#unicode) del carácter. Para ver la letra, hace falta
 `Printf` y `%c`, como vamos a ver.
@@ -193,6 +277,8 @@ Sorpresa: `inicial` se muestra como `76`. Una `rune` es en realidad un número, 
 
 Una [constante](../debuter/glossaire.md#constante) es un valor que no cambia nunca.
 Se crea con `const`.
+Sirve para los valores fijos de tu programa: una tasa de IVA, el número de días de
+una semana. Es un precio grabado en una placa, no escrito a lápiz.
 
 ```go
 package main
@@ -214,8 +300,37 @@ func main() {
 6.28318
 ```
 
+Línea por línea:
+
+- `const TasaIVA = 0.2` está escrita fuera de `main`, a nivel del archivo;
+- `const pi = 3.14159` crea una constante dentro de `main`;
+- `precio := 50.0` es una variable normal;
+- `precio * (1 + TasaIVA)` calcula 50 × 1,2. Go muestra `60`, sin ceros inútiles.
+
 Una constante se puede declarar fuera de `main`, a nivel del archivo: entonces es
 visible en todas partes. Intentar modificarla (`pi = 3`) es un error de compilación.
+
+**Te toca:** crea una constante `DiasPorSemana` que valga 7 y luego una variable
+`semanas` que valga 3. Muestra el número de días de esas 3 semanas.
+
+> **Solución**
+>
+> ```go
+> package main
+>
+> import "fmt"
+>
+> const DiasPorSemana = 7
+>
+> func main() {
+> 	semanas := 3
+> 	fmt.Println(semanas * DiasPorSemana)
+> }
+> ```
+>
+> ```sortie
+> 21
+> ```
 
 ### Series de constantes con iota
 
@@ -268,6 +383,9 @@ func main() {
 
 ## Mostrar con fmt
 
+Mostrar es la forma en que tu programa te habla: enseña un resultado o un mensaje.
+`fmt` te ayuda a presentarlo con limpieza, como un tique de caja bien alineado.
+
 ### Println
 
 `fmt.Println` muestra sus valores separados por espacios y luego pasa a la línea siguiente.
@@ -294,6 +412,14 @@ func main() {
 ```sortie
 Alice tiene 12 años.
 ```
+
+Línea por línea:
+
+- `nombre` vale `"Alice"` y `edad` vale `12`;
+- en el modelo `"%s tiene %d años.\n"`, Go reemplaza el primer verbo, `%s`, por el
+  primer valor que sigue al modelo: `nombre`;
+- luego reemplaza el segundo verbo, `%d`, por el segundo valor: `edad`;
+- `\n` no se muestra: hace pasar a la línea siguiente.
 
 Los verbos más útiles:
 
@@ -350,10 +476,36 @@ Descuento: 20%
 `Alumno` es una **estructura**: un valor que agrupa varios campos. Se
 explican en [los tipos](types.md).
 
+**Te toca:** crea una variable `libro` que valga `"El principito"` y una variable
+`paginas` que valga 96. Con `Printf`, muestra `El principito tiene 96
+páginas.` y luego, en otra línea, el tipo de `paginas` con `%T`.
+
+> **Solución**
+>
+> ```go
+> package main
+>
+> import "fmt"
+>
+> func main() {
+> 	libro := "El principito"
+> 	paginas := 96
+> 	fmt.Printf("%s tiene %d páginas.\n", libro, paginas)
+> 	fmt.Printf("%T\n", paginas)
+> }
+> ```
+>
+> ```sortie
+> El principito tiene 96 páginas.
+> int
+> ```
+
 ## Los comentarios
 
 Un [comentario](../debuter/glossaire.md#comentario) es una nota para los humanos:
 Go lo ignora.
+Sirve para explicar **por qué** el código está escrito así, a quien lo vuelva a
+leer. A menudo serás tú, un mes después. Es como una nota en el margen de una receta.
 
 ```go
 package main
@@ -379,6 +531,9 @@ visible
 > por su nombre: `// main es...`. Las herramientas de documentación de Go lo aprovechan.
 
 ## Elegir buenos nombres
+
+Un buen nombre dice lo que contiene la variable. `precioTotal` se entiende enseguida;
+`x` o `pt` obligan a buscar. Escribes el código una vez, pero lo relees muchas veces.
 
 Un nombre de variable empieza por una letra, seguida de letras, cifras o `_`.
 En Go, las palabras se pegan con mayúsculas: `precioTotal`, `numeroDeAlumnos`. Es el

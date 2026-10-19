@@ -12,6 +12,10 @@ Esta página muestra cómo construir una lista, un diccionario o un conjunto en 
 
 ## Del bucle a la comprensión
 
+Transformar cada elemento de una lista es una necesidad muy común: precios que
+convertir, nombres que poner en mayúsculas, notas que duplicar. Es como una receta que
+dice «para cada manzana, pélala»: la misma acción, sobre cada elemento.
+
 Ya sabes construir una nueva [lista](../debuter/glossaire.md#lista) con un bucle `for`:
 se parte de una lista vacía y luego se añade un elemento en cada vuelta.
 
@@ -26,6 +30,14 @@ print(cuadrados)
 ```sortie
 [1, 4, 9, 16]
 ```
+
+Línea por línea:
+
+- `cuadrados = []` crea una lista vacía: es el cuenco donde se guardarán los resultados;
+- `for n in numeros:` da a `n` los valores 1, luego 2, luego 3, luego 4;
+- en cada vuelta, `cuadrados.append(n * n)` añade el cuadrado de `n` al final de
+  `cuadrados`;
+- después de la última vuelta, `print(cuadrados)` muestra la lista llena.
 
 Este patrón es tan común que Python tiene una forma más corta de escribirlo: la
 **comprensión de lista**. Se construye en tres pasos, a partir del bucle:
@@ -69,6 +81,22 @@ print([f"¡Hola {n}!" for n in nombres])
 ['¡Hola alice!', '¡Hola bob!', '¡Hola chloé!']
 ```
 
+**Te toca:** escribe un programa que parta de `precios = [2, 5, 8]` (precios en euros) y
+construya, con una comprensión, la lista de los mismos precios en céntimos, y luego la
+muestre.
+
+> **Solución**
+>
+> ```python
+> precios = [2, 5, 8]
+> centimos = [p * 100 for p in precios]
+> print(centimos)
+> ```
+>
+> ```sortie
+> [200, 500, 800]
+> ```
+
 ## Filtrar con if
 
 A menudo solo se conservan algunos elementos. Con un bucle, se escribe un `if` dentro
@@ -87,6 +115,13 @@ print(aprobadas)
 [12, 15, 18]
 ```
 
+Línea por línea:
+
+- `aprobadas = []` parte de una lista vacía;
+- `for nota in notas:` toma las notas una a una: 12, 7, 15, 9 y luego 18;
+- `if nota >= 10:` solo deja pasar las notas de 10 o más;
+- así que 12, 15 y 18 se añaden con `append`; 7 y 9 se ignoran.
+
 En una comprensión, el `if` va **al final**, después del `for`:
 
 ```python
@@ -100,6 +135,21 @@ print(aprobadas)
 ```
 
 Es un colador: solo los elementos que pasan la prueba llegan a la nueva lista.
+
+**Te toca:** escribe un programa que parta de `edades = [12, 25, 17, 40]` y construya,
+con una comprensión, la lista de las edades de 18 años o más, y luego la muestre.
+
+> **Solución**
+>
+> ```python
+> edades = [12, 25, 17, 40]
+> mayores = [edad for edad in edades if edad >= 18]
+> print(mayores)
+> ```
+>
+> ```sortie
+> [25, 40]
+> ```
 
 ### Transformar según una condición
 
@@ -122,6 +172,9 @@ print(resultados)
 
 ## Comprensiones de diccionario
 
+Un diccionario se parece a una agenda: a cada nombre le corresponde un dato. Una
+comprensión de diccionario rellena esa agenda en una sola línea.
+
 El mismo principio funciona para un
 [diccionario](../debuter/glossaire.md#diccionario). Se usan llaves `{ }` y se escribe
 `clave: valor` antes del `for`.
@@ -135,6 +188,13 @@ print(longitudes)
 ```sortie
 {'alice': 5, 'bob': 3, 'chloé': 5}
 ```
+
+Línea por línea:
+
+- `nombres` contiene tres nombres;
+- para cada nombre `n`, la comprensión crea un par: la clave `n` y el valor `len(n)`,
+  el número de letras;
+- `"alice"` da el par `'alice': 5`, luego `"bob"` da `'bob': 3`, y así sucesivamente.
 
 Para recorrer un diccionario existente, usa `.items()`, que da los pares
 `(clave, valor)`:
@@ -156,6 +216,22 @@ print(baratas)
 > números decimales (consulta [los números](nombres.md)). Usa `round(p * 0.8, 2)` para
 > una presentación limpia.
 
+**Te toca:** escribe un programa que parta de `precios = {"pan": 1, "leche": 2}` y
+construya, con una comprensión, un diccionario de los mismos precios en céntimos, y
+luego lo muestre.
+
+> **Solución**
+>
+> ```python
+> precios = {"pan": 1, "leche": 2}
+> centimos = {nombre: p * 100 for nombre, p in precios.items()}
+> print(centimos)
+> ```
+>
+> ```sortie
+> {'pan': 100, 'leche': 200}
+> ```
+
 ### Invertir un diccionario
 
 Un uso clásico: intercambiar las claves y los valores.
@@ -172,6 +248,9 @@ print(pais_a_codigo)
 
 ## Comprensiones de conjunto
 
+Piensa en una lista de invitados donde algunos nombres se escribieron dos veces.
+Quieres a cada persona una sola vez: eso es exactamente lo que hace un conjunto.
+
 Con llaves pero **sin** dos puntos, se obtiene un
 [conjunto](../debuter/glossaire.md#conjunto) (`set`): cada valor aparece en él una sola
 vez.
@@ -186,6 +265,15 @@ print(sorted(unicas))
 ['gato', 'perro', 'pez']
 ```
 
+Línea por línea:
+
+- `palabras` contiene cinco palabras, con duplicados escritos de formas distintas;
+- `p.lower()` pone cada palabra en minúsculas: `"Gato"` y `"GATO"` se convierten
+  ambas en `"gato"`;
+- las llaves guardan estas palabras en un conjunto, que conserva cada valor una sola
+  vez;
+- `sorted(unicas)` da una lista ordenada alfabéticamente, para mostrarla.
+
 Un conjunto no tiene orden: se ordena con `sorted` para obtener una presentación
 estable.
 
@@ -197,6 +285,11 @@ estable.
 | `(x for x in ...)` | una expresión generadora (ver más abajo) |
 
 ## Comprensiones anidadas
+
+> **Nota:** esta parte puede esperar. Léela cuando las bases estén firmes.
+
+A veces hay que combinar dos listas: cada color con cada talla, como en una tienda de
+ropa.
 
 Una comprensión puede contener **varios `for`**. Se leen en el mismo orden que unos
 bucles anidados: el primer `for` es el bucle exterior.
@@ -211,6 +304,14 @@ print(articulos)
 ```sortie
 ['rojo-S', 'rojo-M', 'azul-S', 'azul-M']
 ```
+
+Línea por línea:
+
+- el primer `for` toma `"rojo"`;
+- el segundo `for` recorre entonces todas las tallas: se obtiene `"rojo-S"` y luego
+  `"rojo-M"`;
+- el primer `for` pasa después a `"azul"`, y el segundo vuelve a empezar: `"azul-S"`
+  y luego `"azul-M"`.
 
 Es el equivalente de:
 
@@ -279,6 +380,12 @@ print(max(len(p) for p in ["uno", "tres", "cuatro"]))
 6
 ```
 
+Línea por línea:
+
+- `n * 2 for n in notas` produce el doble de cada nota, uno a uno: 24, 14, 30, 18, 36;
+- `sum` los va sumando a medida que llegan: el total es 122;
+- `len(p) for p in [...]` produce las longitudes 3, 4 y 6; `max` se queda con la mayor.
+
 ### any y all
 
 - `any(...)` vale `True` si **al menos un** valor es verdadero;
@@ -314,6 +421,23 @@ print(sum(cuadrados))
 14
 0
 ```
+
+**Te toca:** escribe un programa que parta de `temperaturas = [18, 22, 25, 19]` y
+muestre si al menos una temperatura pasa de 24 (con `any`), y si todas valen al menos
+15 (con `all`).
+
+> **Solución**
+>
+> ```python
+> temperaturas = [18, 22, 25, 19]
+> print(any(t > 24 for t in temperaturas))
+> print(all(t >= 15 for t in temperaturas))
+> ```
+>
+> ```sortie
+> True
+> True
+> ```
 
 ## Saber cuándo parar
 

@@ -12,6 +12,9 @@ Esta página presenta las variables, los tipos básicos, cómo mostrar con `prin
 
 ## Las variables con let
 
+Un programa necesita a menudo recordar un valor para volver a usarlo más adelante: un
+nombre, una puntuación, un precio. Para eso sirven las variables.
+
 Una [variable](../debuter/glossaire.md#variable) es una etiqueta puesta sobre un
 valor. Se crea con `let`. Por defecto, **no** puede cambiar: es
 [inmutable](../debuter/glossaire.md#inmutable).
@@ -30,6 +33,9 @@ Si intentas modificarla, el compilador se niega (ver
 
 ## Las variables modificables con mut
 
+Algunos valores tienen que cambiar durante el programa: una puntuación que sube con
+cada punto, el dinero de un monedero. Para ellos, Rust pide una palabra más.
+
 Añade `mut` para hacer la variable [mutable](../debuter/glossaire.md#mutable),
 es decir, modificable:
 
@@ -44,13 +50,38 @@ println!("{contador}");
 2
 ```
 
+Línea por línea:
+
+- `let mut contador = 0;` crea una variable modificable que vale 0;
+- `contador = contador + 1;` lee el valor actual (0), le suma 1, y guarda el
+  resultado, 1, en `contador`;
+- `contador += 1;` hace lo mismo, más corto: `contador` vale ahora 2;
+- `println!` muestra el valor final, 2.
+
 `contador += 1` es un atajo de `contador = contador + 1`. También existen `-=`,
 `*=` y `/=`.
 
 > **Recuerda:** en Rust, todo es constante por defecto. Escribe `mut` solo cuando
 > el valor tenga que cambiar.
 
+**Te toca:** escribe un programa que cree una variable modificable `dinero` que valga
+10, le sume 5 con `+=` y luego muestre su valor.
+
+> **Solución**
+>
+> ```rust
+> let mut dinero = 10;
+> dinero += 5;
+> println!("{dinero}");
+> ```
+>
+> ```sortie
+> 15
+> ```
+
 ## El sombreado
+
+> **Nota:** esta parte puede esperar. Léela cuando las bases estén firmes.
 
 Puedes declarar una variable nueva con el mismo nombre. La anterior queda **sombreada**
 (en inglés: *shadowing*): todavía existe, pero el nombre designa ahora la
@@ -74,6 +105,10 @@ Aquí, `texto` es primero un texto y luego un número. `parse` lee un número en
 > variable; con `mut`, cambias el valor de la misma variable.
 
 ## Los tipos simples
+
+Un número y un texto no se guardan de la misma manera, y no se hacen las mismas cosas
+con ellos: se suman precios, no nombres. El tipo le permite a Rust saber qué tiene
+entre manos, y avisarte si lo mezclas todo.
 
 Un [tipo](../debuter/glossaire.md#tipo) dice qué clase de valor contiene una
 variable. Rust suele adivinar el tipo solo. También puedes escribirlo después de `:`.
@@ -104,6 +139,14 @@ println!("{}", 7 % 2);
 3.5
 1
 ```
+
+Línea por línea:
+
+- los cinco `let` crean una variable de cada tipo; el tipo se escribe después de `:`;
+- `7 / 2` divide dos enteros: el resultado también es un entero, `3`. Lo que va
+  detrás de la coma se pierde;
+- `7.0 / 2.0` divide dos números decimales: el resultado es `3.5`;
+- `7 % 2` da el resto de dividir 7 entre 2: `1`.
 
 > **Atención:** una división entre enteros da un entero: `7 / 2` vale `3`. El
 > `%` da el resto de la división: `7 % 2` vale `1`.
@@ -136,6 +179,8 @@ println!("{}", i32::MAX);
 > número decimal. Son las opciones por defecto de Rust.
 
 ### El desbordamiento
+
+> **Nota:** esta parte puede esperar. Léela cuando las bases estén firmes.
 
 ¿Qué pasa si un cálculo se sale de los límites? Es un **desbordamiento** (en
 inglés: *overflow*). Durante el desarrollo, el programa se detiene con un error.
@@ -180,7 +225,26 @@ println!("{}", grande as u8);
 > (`3.99` se convierte en `3`, sin redondear). Hacia un tipo demasiado pequeño, el resultado es
 > sorprendente: `300` convertido a `u8` vale `44`.
 
+**Te toca:** una bolsa contiene `caramelos: i32 = 9`. Escribe un programa que reparta
+esos caramelos entre 2 niños y muestre la parte de cada uno, con decimales.
+
+> **Solución**
+>
+> ```rust
+> let caramelos: i32 = 9;
+> let parte = caramelos as f64 / 2.0;
+> println!("{parte}");
+> ```
+>
+> ```sortie
+> 4.5
+> ```
+
 ## Las tuplas
+
+Algunos valores van siempre juntos: las dos coordenadas de un punto en un mapa, o el
+nombre y la edad de una persona. Una tupla los guarda en un solo paquete, como una
+ficha.
 
 Una **tupla** agrupa unos pocos valores, cuyos tipos pueden ser diferentes, entre
 paréntesis. Cada valor se lee con `.0`, `.1`, `.2`…:
@@ -200,10 +264,21 @@ println!("{nombre} tiene {edad} años");
 Lucía tiene 17 años
 ```
 
+Línea por línea:
+
+- `punto` agrupa dos números; `alumna` agrupa un texto, un número y un booleano;
+- `punto.0` lee el primer valor (3) y `punto.1` el segundo (4): se cuenta desde 0;
+- `{:?}` muestra la tupla entera, con sus paréntesis;
+- el último `println!` usa `nombre` y `edad`, sacados de la tupla como se explica
+  justo debajo.
+
 La línea `let (nombre, edad, _) = alumna;` **descompone** la tupla: cada valor va a
 su variable. El `_` ignora el tercero.
 
 ## Los textos: String y &str
+
+Un programa maneja mucho texto: nombres, mensajes, respuestas que mostrar. Rust guarda
+ese texto de dos maneras, según si tiene que poder cambiar o no.
 
 Rust tiene dos tipos de texto (de [cadena de
 caracteres](../debuter/glossaire.md#cadena-de-caracteres)):
@@ -225,9 +300,21 @@ Hola, mundo!
 12
 ```
 
+Línea por línea:
+
+- `saludo` es un `&str`: un texto fijo, escrito directamente en el código;
+- `String::from(saludo)` lo convierte en un `String`, guardado en `mensaje`. El `mut`
+  permite modificarlo después;
+- `push_str` añade un trozo de texto al final; `push` añade un solo carácter, escrito
+  entre comillas simples;
+- `mensaje.len()` da la longitud del texto: 12.
+
 El texto tiene su propia página: [Trabajar con texto](texte.md).
 
 ## Mostrar con println! y format!
+
+Mostrar es la manera en que tu programa te habla: enseña un resultado, un mensaje, un
+valor que comprobar. A menudo quieres meter valores en medio de una frase.
 
 `println!` muestra, `format!` fabrica un `String` sin mostrarlo. Las `{}` son
 huecos, que se reemplazan por los valores:
@@ -253,6 +340,16 @@ Lucía sacó 17.5
 ¡Lucía!
 ```
 
+Línea por línea:
+
+- el primer `println!` rellena las dos `{}` en orden: primero `nombre`, luego `nota`;
+- el segundo escribe el nombre de las variables entre las llaves, y `:.1` redondea
+  `nota` a una cifra decimal;
+- `{:>5}` y `{:<5}` reservan 5 sitios y pegan `42` a la derecha o a la izquierda; los
+  corchetes muestran los espacios;
+- `format!` fabrica el texto `"¡Lucía!"` y lo guarda en `frase`, sin mostrar nada: es
+  el último `println!` el que lo muestra.
+
 | Hueco | Efecto |
 |-------------|-------|
 | `{}` | se muestra normal |
@@ -263,7 +360,25 @@ Lucía sacó 17.5
 
 `print!` (sin `ln`) muestra sin pasar a la línea siguiente.
 
+**Te toca:** escribe un programa que guarde `"pan"` en `producto` y `1.456` en
+`precio`, y luego muestre «El pan cuesta 1.46 euros», con dos cifras decimales.
+
+> **Solución**
+>
+> ```rust
+> let producto = "pan";
+> let precio = 1.456;
+> println!("El {producto} cuesta {precio:.2} euros");
+> ```
+>
+> ```sortie
+> El pan cuesta 1.46 euros
+> ```
+
 ## Los comentarios
+
+Un programa se vuelve a leer a menudo: tú dentro de un mes, u otra persona. Un
+comentario explica lo que hace el código, como una nota en el margen de una receta.
 
 Un [comentario](../debuter/glossaire.md#comentario) es una nota para las personas:
 el compilador lo ignora.
@@ -286,7 +401,18 @@ fn main() {
 8
 ```
 
+Línea por línea:
+
+- las líneas que empiezan por `//`, y todo lo que está entre `/*` y `*/`, se ignoran;
+- `///` describe la función `doble` que viene después: algunas herramientas lo usan
+  para fabricar la documentación;
+- en `main`, el comentario `// muestra 8` está al final de la línea: el código que va
+  antes se ejecuta con normalidad.
+
 ## Las constantes
+
+Algunos valores no cambian nunca y se usan en varios sitios, como la tasa del IVA.
+Con un nombre, el código se lee mejor, y solo lo corriges en un sitio.
 
 Una [constante](../debuter/glossaire.md#constante) es un valor fijado de una vez por
 todas. Se escribe con `const`, en MAYÚSCULAS, y su tipo es obligatorio:
@@ -305,6 +431,30 @@ fn main() {
 20
 28
 ```
+
+Línea por línea:
+
+- las dos `const` se escriben arriba del todo, fuera de `main`: todo el programa puede
+  usarlas;
+- `100.0 * TASA_IVA` calcula 100 × 0,2, es decir, `20`;
+- `DIAS_POR_SEMANA * 4` da el número de días en 4 semanas: `28`.
+
+**Te toca:** escribe un programa con una constante `PRECIO_BILLETE`, de tipo `f64`, que
+valga `2.5`. Muestra el precio de 4 billetes.
+
+> **Solución**
+>
+> ```rust
+> const PRECIO_BILLETE: f64 = 2.5;
+>
+> fn main() {
+>     println!("{}", PRECIO_BILLETE * 4.0);
+> }
+> ```
+>
+> ```sortie
+> 10
+> ```
 
 ## Errores frecuentes
 

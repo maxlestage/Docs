@@ -12,6 +12,9 @@ Cette page montre comment choisir entre plusieurs cas avec `if`, `unless` et `ma
 
 ## Vrai ou faux : les comparaisons
 
+Un programme doit souvent décider : faut-il un parapluie ? la personne est-elle
+majeure ? Pour décider, il pose d'abord une question, et la réponse est oui ou non.
+
 Une [condition](../debuter/glossaire.md#condition) est une question dont la
 réponse est `true` (vrai) ou `false` (faux), un
 [booléen](../debuter/glossaire.md#booleen). On la pose avec un opérateur de
@@ -44,6 +47,9 @@ true true false
 
 ## if donne une valeur
 
+Dans la vie, vous choisissez sans cesse selon la situation : s'il pleut, vous prenez
+un manteau, sinon une veste. `if` permet au programme de faire le même genre de choix.
+
 `if` choisit entre deux valeurs selon une condition. En Rythme, `if` n'est
 pas un ordre : c'est une **expression**. Il donne une valeur, comme un
 calcul. On peut donc la ranger dans un nom :
@@ -57,6 +63,14 @@ print(statut)
 ```sortie
 majeur
 ```
+
+Ligne par ligne :
+
+- `age = 20` donne le nom `age` à la valeur 20 ;
+- à droite du `=`, `if` pose la question « 20 est-il au moins 18 ? ». La réponse est
+  `true`, donc le `if` donne la valeur qui suit `then` : `"majeur"` ;
+- cette valeur reçoit le nom `statut` ;
+- `print(statut)` affiche `majeur`.
 
 La forme est toujours `if condition then valeur else autre_valeur`. Lisez :
 « si l'âge est au moins 18, alors "majeur", sinon "mineur" ».
@@ -99,6 +113,9 @@ grand petit
 
 ## Enchaîner les conditions
 
+Souvent, il n'y a pas que deux cas. Un nombre peut être négatif, nul ou positif, et
+vous voulez un mot différent pour chacun, comme sur un bulletin de notes.
+
 `else if` enchaîne plusieurs conditions. `then` et `else` peuvent commencer
 une nouvelle ligne :
 
@@ -115,12 +132,43 @@ print(signe(-3), signe(0), signe(8))
 négatif zéro positif
 ```
 
+Ligne par ligne :
+
+- `fn signe(n) =` définit une fonction : elle reçoit un nombre, nommé `n` ;
+- pour `signe(-3)`, la première question `-3 < 0` est vraie : la fonction donne
+  `"négatif"` et ne lit pas la suite ;
+- pour `signe(0)`, `0 < 0` est faux, on passe au `else if` : `0 == 0` est vrai, donc
+  `"zéro"` ;
+- pour `signe(8)`, les deux questions sont fausses : on arrive au dernier `else`, qui
+  donne `"positif"`.
+
 Les conditions sont essayées de haut en bas, et la première vraie gagne.
 
 La condition doit être `true` ou `false`. `if 1 then ...` est une erreur :
 rien n'est « vrai » par défaut, ni un nombre, ni un texte, ni une liste.
 
+**À vous :** écrivez une fonction `salut(heure)` qui donne « Bonjour » si l'heure est
+avant 12, « Bon après-midi » si elle est avant 18, et « Bonsoir » sinon. Affichez
+`salut(15)`.
+
+> **Solution**
+>
+> ```rythme
+> fn salut(heure) =
+>   if heure < 12 then "Bonjour"
+>   else if heure < 18 then "Bon après-midi"
+>   else "Bonsoir"
+>
+> print(salut(15))
+> ```
+>
+> ```sortie
+> Bon après-midi
+> ```
+
 ## unless, le contraire de if
+
+> **Note :** cette partie peut attendre. Lisez-la quand les bases seront solides.
 
 Comme en Ruby, `unless` (« à moins que ») est le contraire de `if` : il
 donne la première valeur quand la condition est **fausse**. Lui aussi a
@@ -157,6 +205,14 @@ print(jour(6), jour(2))
 ```sortie
 samedi un jour de semaine
 ```
+
+Ligne par ligne :
+
+- `fn jour(n) = match n` : la fonction compare le nombre `n` aux motifs qui suivent ;
+- pour `jour(6)`, le premier motif `6` correspond : le résultat est `"samedi"` ;
+- pour `jour(2)`, ni `6` ni `7` ne correspondent. `_` accepte tout : le résultat est
+  `"un jour de semaine"` ;
+- `print` affiche les deux résultats, séparés par une espace.
 
 Chaque ligne s'écrit `motif -> résultat`, et `end` ferme le `match`.
 Pensez à un tri de courrier : chaque lettre va dans la première case qui
@@ -195,6 +251,27 @@ Bonjour docteur Grace / Bonjour Ada
 
 `match` sait faire beaucoup plus : voir [vos propres types et match](types.md).
 
+**À vous :** écrivez une fonction `saison(mois)` qui donne « hiver » pour les mois 12,
+1 et 2, « printemps » de 3 à 5, « été » de 6 à 8, et « automne » sinon. Affichez
+`saison(1)`, `saison(7)` et `saison(10)`.
+
+> **Solution**
+>
+> ```rythme
+> fn saison(mois) = match mois
+>   12 | 1 | 2 -> "hiver"
+>   3..5 -> "printemps"
+>   6..8 -> "été"
+>   _ -> "automne"
+> end
+>
+> print(saison(1), saison(7), saison(10))
+> ```
+>
+> ```sortie
+> hiver été automne
+> ```
+
 ## Pas de boucles
 
 Rythme n'a ni `for` ni `while`. Si vous en écrivez une, Rythme vous explique
@@ -205,6 +282,9 @@ toute la liste ». C'est comme dire « lavez toutes les assiettes » au lieu de
 « prenez l'assiette 1, lavez-la, prenez l'assiette 2... ». Voici les outils.
 
 ## Faire quelque chose pour chaque élément avec each
+
+Imaginez qu'on vous demande d'afficher chaque article d'une liste de courses. Écrire
+un `print` par article serait long et pénible. `each` fait ce travail à votre place.
 
 `each` appelle une fonction pour chaque élément. C'est le remplaçant de la
 boucle qui affiche. Ici, `1..3` est l'**intervalle** des nombres de 1 à 3,
@@ -235,7 +315,24 @@ Bonjour, Ada !
 Bonjour, Alan !
 ```
 
+**À vous :** écrivez un programme qui affiche « À acheter : … » pour chaque article de
+la liste `["pain", "lait", "riz"]`, avec `each`.
+
+> **Solution**
+>
+> ```rythme
+> ["pain", "lait", "riz"] |> each(fn(article) = print("À acheter : {article}"))
+> ```
+>
+> ```sortie
+> À acheter : pain
+> À acheter : lait
+> À acheter : riz
+> ```
+
 ## Compter de 2 en 2, ou à l'envers
+
+> **Note :** cette partie peut attendre. Lisez-la quand les bases seront solides.
 
 `a..b` compte de 1 en 1, en montant. `step_by(n)` garde un élément sur `n`,
 et `reverse` retourne la liste :
@@ -257,6 +354,9 @@ print(5..1)
 
 ## Connaître la position avec each_with_index
 
+Vous voulez parfois numéroter ce que vous parcourez, comme les étapes d'une recette
+ou une liste de courses numérotée.
+
 `each_with_index` donne à la fonction l'élément **et** sa position, à
 partir de 0 :
 
@@ -272,7 +372,18 @@ end
 3. œufs
 ```
 
+Ligne par ligne :
+
+- la liste contient trois articles ; `each_with_index` les prend un par un ;
+- au premier tour, `article` vaut `"pain"` et `i` vaut 0 ; au deuxième, `"lait"` et
+  1 ; au troisième, `"œufs"` et 2 ;
+- `print` affiche `i + 1` pour que la liste commence à 1, comme on compte d'habitude.
+
 ## Transformer chaque élément avec map
+
+Parfois, vous voulez changer toute une liste d'un coup : doubler chaque prix, mettre
+chaque nombre au carré. C'est comme une machine où chaque objet entre d'un côté et
+ressort transformé de l'autre.
 
 `map` fabrique une **nouvelle** liste, avec le résultat de la fonction pour
 chaque élément. C'est le remplaçant de la boucle qui remplit une liste :
@@ -290,6 +401,9 @@ print(carres)
 **calculer** une nouvelle liste.
 
 ## Répéter avec la récursion
+
+Certaines répétitions n'ont pas de liste toute prête : on répète « tant que » ce n'est
+pas fini, comme un compte à rebours qui descend jusqu'à zéro.
 
 Pour une boucle « tant que », écrivez une fonction qui s'appelle
 elle-même : c'est la [récursion](../debuter/glossaire.md#recursion). Il faut
@@ -312,10 +426,41 @@ compte_a_rebours(3)
 Décollage !
 ```
 
+Ligne par ligne :
+
+- `fn compte_a_rebours(0) = ...` : si le nombre reçu est 0, la fonction affiche
+  « Décollage ! » et s'arrête là ;
+- `fn compte_a_rebours(n)` : pour tout autre nombre, elle affiche `n`, puis s'appelle
+  elle-même avec `n - 1` ;
+- `compte_a_rebours(3)` lance tout : 3 est affiché, puis l'appel continue avec 2,
+  puis 1, puis 0, qui affiche « Décollage ! ».
+
 Ici, la fonction a deux définitions : une pour `0` (le cas d'arrêt), une
 pour les autres nombres. `compte_a_rebours(3)` affiche 3 puis appelle
 `compte_a_rebours(2)`, et ainsi de suite jusqu'à 0. Voir
 [les fonctions](fonctions.md#definir-par-cas).
+
+**À vous :** écrivez une fonction récursive `applaudir(n)` qui affiche « clap » `n`
+fois, puis « Bravo ! ». Appelez `applaudir(3)`.
+
+> **Solution**
+>
+> ```rythme
+> fn applaudir(0) = print("Bravo !")
+> fn applaudir(n)
+>   print("clap")
+>   applaudir(n - 1)
+> end
+>
+> applaudir(3)
+> ```
+>
+> ```sortie
+> clap
+> clap
+> clap
+> Bravo !
+> ```
 
 ## Erreurs fréquentes
 

@@ -12,6 +12,9 @@ This page explains how to make choices with `if`, `switch` and the ternary opera
 
 ## if and else
 
+A program doesn't always do the same thing. You take an umbrella if it rains and
+sunglasses if it's sunny. A condition lets a program make this kind of choice.
+
 A [condition](../debuter/glossaire.md#condition) chooses which code to run. `if`
 runs its block `{ ... }` only if the test in parentheses is true. `else` gives the
 block to run otherwise.
@@ -29,6 +32,14 @@ if (temperature > 25) {
 ```sortie
 It's hot.
 ```
+
+Line by line:
+
+- `const temperature: number = 28;` stores 28 in the variable `temperature`;
+- `if (temperature > 25)` asks a question: "is 28 greater than 25?". The answer is
+  yes;
+- so the first block runs and prints "It's hot.";
+- the `else` block is skipped: it is only used when the answer is no.
 
 For more than two cases, chain them with `else if`. The tests are read in order; the
 first true one wins, the others are ignored.
@@ -51,7 +62,32 @@ if (grade >= 16) {
 Good
 ```
 
+**Your turn:** write a program that stores `15` in a constant `hour`, then prints
+"Good morning" if the hour is before 12, "Good afternoon" if it is before 18, and
+"Good evening" otherwise.
+
+> **Solution**
+>
+> ```typescript
+> const hour: number = 15;
+> if (hour < 12) {
+>   console.log("Good morning");
+> } else if (hour < 18) {
+>   console.log("Good afternoon");
+> } else {
+>   console.log("Good evening");
+> }
+> ```
+>
+> ```sortie
+> Good afternoon
+> ```
+
 ## Comparing with ===
+
+To decide, a program first asks a question: "is the age 20?", "is the temperature
+above 25?". Comparison operators are how you write these questions. The answer is
+always yes (`true`) or no (`false`).
 
 Comparison operators give a `boolean` (`true` or `false`):
 
@@ -81,6 +117,13 @@ false
 false
 ```
 
+Line by line:
+
+- `age === 20` is true and `age !== 20` is false: the first line prints `true false`;
+- `age >= 18 && hasTicket`: both tests are true, so `&&` gives `true`;
+- `age < 12 || age > 65`: neither test is true, so `||` gives `false`;
+- `!hasTicket` flips `true`: you get `false`.
+
 > **Warning:** always write `===` (three signs), never `==` (two). `==` converts
 > the values before comparing: `0 == ""` is `true` in JavaScript!
 > And a single `=` doesn't compare: it stores a value in a variable.
@@ -89,7 +132,29 @@ TypeScript keeps an eye on your comparisons. Comparing a number with a piece of 
 is always false: it is surely a mistake, and it tells you so (see the
 [common mistakes](#common-mistakes)).
 
+**Your turn:** write a program that stores `70` in a constant `age`, then prints
+"Reduced price" if the age is under 18 or 65 and over, and "Full price" otherwise.
+
+> **Solution**
+>
+> ```typescript
+> const age: number = 70;
+> if (age < 18 || age >= 65) {
+>   console.log("Reduced price");
+> } else {
+>   console.log("Full price");
+> }
+> ```
+>
+> ```sortie
+> Reduced price
+> ```
+
 ## "Truthy" and "falsy" values
+
+Often you just want to know whether a box is filled in: a name typed, a message
+that isn't empty. An `if` lets you ask that very quickly, as long as you know its
+rules.
 
 An `if` accepts any value, not just a `boolean`. Six values count as false
 (*falsy*):
@@ -117,12 +182,21 @@ false false false
 true true true
 ```
 
+Line by line:
+
+- `text` holds `""`, the empty text;
+- `if (text)`: empty text counts as false, so the `else` block is the one that runs;
+- the last two lines show how an `if` sees six values: the first three count as
+  false, the next three as true.
+
 `Boolean(x)` shows how `x` is seen by an `if`.
 
 > **Tip:** when you can, write the full test: `text !== ""` or `count !== 0`. The
 > reader understands right away what you are testing.
 
 ## The ternary operator
+
+> **Note:** this part can wait. Read it once the basics feel solid.
 
 The ternary `test ? ifTrue : ifFalse` is an `if/else` that **gives a value**. It fits
 on one line.
@@ -148,6 +222,10 @@ Read it like a question: "age ≥ 18? then "adult", otherwise "minor"".
 
 ## switch: choosing among several values
 
+When one variable can take many values, a long chain of `else if` becomes tiring to
+read. `switch` lines the cases up one under the other, like the labeled drawers of a
+chest.
+
 `switch` compares a value to a list of cases (`case`). It runs the code of the
 matching case. `break` leaves the `switch`; `default` handles all other cases.
 
@@ -171,6 +249,14 @@ switch (day) {
 Weekend!
 ```
 
+Line by line:
+
+- `day` holds `"saturday"`;
+- `switch (day)` compares this value to each `case`, from top to bottom;
+- `case "saturday":` matches: execution starts there, goes down to the `console.log`
+  and prints "Weekend!";
+- `break` leaves the `switch`: the other cases are ignored.
+
 Two `case` lines in a row share the same code: `saturday` and `sunday` both print
 "Weekend!".
 
@@ -178,6 +264,9 @@ Two `case` lines in a row share the same code: `saturday` and `sunday` both prin
 > `break` is a classic trap.
 
 ## Loops
+
+Imagine you are asked to print the numbers from 1 to 100. Writing 100 `console.log`
+lines would be long and tedious. A loop does this repetitive work for you.
 
 A [loop](../debuter/glossaire.md#loop) repeats a block of code.
 
@@ -202,6 +291,25 @@ Round 3
 - `i <= 3`: we keep going as long as `i` is at most 3;
 - `i++`: after each round, we add 1 to `i`.
 
+**Your turn:** write a program that prints the 7 times table, from "7 x 1 = 7" to
+"7 x 5 = 35", one line per calculation.
+
+> **Solution**
+>
+> ```typescript
+> for (let i = 1; i <= 5; i++) {
+>   console.log(`7 x ${i} = ${7 * i}`);
+> }
+> ```
+>
+> ```sortie
+> 7 x 1 = 7
+> 7 x 2 = 14
+> 7 x 3 = 21
+> 7 x 4 = 28
+> 7 x 5 = 35
+> ```
+
 ### while: as long as
 
 `while` repeats as long as its condition is true. Use it when you don't know in
@@ -222,6 +330,16 @@ console.log(`${years} years, ${money.toFixed(2)} euros`);
 ```sortie
 5 years, 161.05 euros
 ```
+
+Line by line:
+
+- at the start, `money` is 100 and `years` is 0;
+- before each round, `while` checks `money < 150`. 100 is smaller: it enters the
+  block;
+- in each round, `money` grows by 10% (110, then 121, 133.1, 146.41, 161.051) and
+  `years` goes up by 1;
+- after 5 rounds, `money < 150` is false: the loop stops, and the last `console.log`
+  prints the result, rounded to two digits by `toFixed(2)`.
 
 > **Warning:** if the condition stays true forever, the loop never stops. Make sure
 > something changes in each round. To stop a stuck program, press `Ctrl+C` in the
@@ -248,6 +366,25 @@ KIWI
 
 TypeScript knows that `fruits` holds `string`s: so `fruit` is a `string`, and
 `toUpperCase()` is allowed. A `const` is enough: each round creates a new `fruit`.
+
+**Your turn:** write a program that stores the shopping list `["bread", "milk",
+"eggs"]` in a constant, then prints each item on its own line, after a dash.
+
+> **Solution**
+>
+> ```typescript
+> const shopping = ["bread", "milk", "eggs"];
+>
+> for (const item of shopping) {
+>   console.log(`- ${item}`);
+> }
+> ```
+>
+> ```sortie
+> - bread
+> - milk
+> - eggs
+> ```
 
 ### break and continue
 
@@ -276,6 +413,8 @@ for (let i = 1; i <= 10; i++) {
 Even numbers are skipped (`continue`), and the loop stops at 9 (`break`).
 
 ## Narrowing: types follow your tests
+
+> **Note:** this part can wait. Read it once the basics feel solid.
 
 Here is what types bring to conditions. When a variable can have several types, a
 test **narrows** its type inside the block (*narrowing*). It's like a guard at the
@@ -306,6 +445,9 @@ In the first block, TypeScript knows that `answer` is a `string`: it allows
 
 ## Missing values: ?? and ?.
 
+Some information is sometimes missing: a form field left empty, a setting never
+chosen. These two operators keep your program from crashing in that case.
+
 A value of type `string | undefined` may be missing. Two operators help you handle it
 safely.
 
@@ -326,6 +468,14 @@ for (const volume of volumes) {
 0 5
 5 5
 ```
+
+Line by line:
+
+- `volumes` holds three settings: 7, 0 and `null` (no setting);
+- the loop takes them one by one and prints two columns: `volume ?? 5`, then
+  `volume || 5`;
+- for 7, both keep 7; for `null`, both give 5;
+- for 0, they disagree: that is the whole difference.
 
 Compare the two columns: `||` replaces **all** falsy values, including `0`. `??` only
 replaces `null` and `undefined`. A volume of `0` is a real setting: `??` keeps it.
@@ -391,6 +541,15 @@ Go
 Slow down
 Stop
 ```
+
+Line by line:
+
+- `type Light = ...` creates a type that only accepts three strings;
+- `lights` is a list of `Light`: TypeScript would refuse `"blue"` in it;
+- the loop takes each light, and the `switch` prints the message of the matching
+  `case`;
+- the `default` is never reached here: it is used for the check explained just
+  below.
 
 The `never` type means "no possible value". In the `default`, every case has been
 handled: `light` can no longer be anything, so its type is `never`, and the line is

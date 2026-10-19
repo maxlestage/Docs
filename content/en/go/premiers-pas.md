@@ -15,6 +15,9 @@ This page shows how to store values in variables, what Go's basic types are, and
 A [variable](../debuter/glossaire.md#variable) is a box with a label. You store a value
 in it, and you find it again by its name.
 
+A program needs to remember things: a first name, an age, a score. Like a sticky
+note on the fridge, a variable keeps the information for later.
+
 In Go, the most complete way to create a variable uses the word `var`:
 
 ```go
@@ -32,6 +35,16 @@ func main() {
 ```sortie
 Alice is 12 years old
 ```
+
+Line by line:
+
+- `package main`, `import "fmt"` and `func main()` are the frame seen in the
+  introduction: the program starts in `main`;
+- `var firstName string = "Alice"` creates the box `firstName` and stores the text
+  `"Alice"` in it;
+- `var age int = 12` creates the box `age` and stores the number 12 in it;
+- `fmt.Println` prints its values in order, separated by spaces: the content of
+  `firstName`, the word "is", the content of `age`, then the words "years old".
 
 Read `var age int = 12` like this: "create a variable `age`, of type `int` (an
 integer), whose value is 12".
@@ -67,6 +80,29 @@ func main() {
 `score = score + 5` reads from right to left: Go computes `score + 5` (25 + 5), then
 stores the result in `score`.
 
+**Your turn:** write a program that creates a variable `apples` of type `int` whose
+value is 3, and prints it. Then add 4 to it, and print it again.
+
+> **Solution**
+>
+> ```go
+> package main
+>
+> import "fmt"
+>
+> func main() {
+> 	var apples int = 3
+> 	fmt.Println(apples)
+> 	apples = apples + 4
+> 	fmt.Println(apples)
+> }
+> ```
+>
+> ```sortie
+> 3
+> 7
+> ```
+
 ## The short declaration :=
 
 Writing the type every time is long. If you give a value, Go **guesses** the type by
@@ -98,7 +134,31 @@ Bob 9 1.32
 
 `:=` only works inside a function. Outside, at the file level, use `var`.
 
+**Your turn:** with `:=`, create a variable `city` whose value is `"Nice"` and a
+variable `inhabitants` whose value is `340000`. With a single
+`fmt.Println`, print `Nice has 340000 inhabitants`.
+
+> **Solution**
+>
+> ```go
+> package main
+>
+> import "fmt"
+>
+> func main() {
+> 	city := "Nice"
+> 	inhabitants := 340000
+> 	fmt.Println(city, "has", inhabitants, "inhabitants")
+> }
+> ```
+>
+> ```sortie
+> Nice has 340000 inhabitants
+> ```
+
 ### Several variables at once
+
+> **Note:** this part can wait. Read it once the basics feel solid.
 
 ```go
 package main
@@ -121,6 +181,9 @@ func main() {
 The line `x, y = y, x` swaps the two values, without a temporary variable.
 
 ## Zero values
+
+Sometimes you create a variable before you know its value: a counter that will start
+at zero, a name you will fill in later. Go then fills it for you.
 
 If you create a variable with `var` without giving it a value, it is not empty: it
 gets the **zero value** of its type.
@@ -145,6 +208,14 @@ func main() {
 []
 ```
 
+Line by line:
+
+- the four `var` lines create four variables without a value: Go stores the zero
+  value of its type in each one;
+- `fmt.Println` prints `n`, `price` and `active`: `0`, `0` and `false`;
+- an empty text cannot be seen on screen. So `Printf` (explained below) wraps it in
+  brackets: `[]` shows that there is nothing between them.
+
 | Type | Zero value |
 |------|-------------|
 | `int`, `float64` | `0` |
@@ -155,6 +226,10 @@ func main() {
 > variable that could hold anything.
 
 ## Basic types
+
+Go needs to know what kind of value it stores, to know what it can do with it: you
+can divide a price by 2, but not a first name. It is like a tidy kitchen, with the
+cutlery in one drawer and the plates in another.
 
 | Type | What it holds | Example |
 |------|-------------------|---------|
@@ -184,6 +259,15 @@ func main() {
 15 13.5 Lyon true 76
 ```
 
+Line by line:
+
+- `grade := 15` creates an `int`. `average := 13.5` creates a `float64`, because of
+  the decimal point;
+- `city := "Lyon"` creates a `string`: the text is between double quotes;
+- `passed := grade >= 10` asks a question: "is 15 greater than or equal to 10?". The
+  answer, `true`, is stored in `passed`, which is therefore a `bool`;
+- `initial := 'L'` creates a `rune`: a single character, between single quotes.
+
 Surprise: `initial` prints as `76`. A `rune` is actually a number, the
 [Unicode](../debuter/glossaire.md#unicode) code of the character. To see the letter,
 you need `Printf` and `%c`, as we will see.
@@ -192,6 +276,8 @@ you need `Printf` and `%c`, as we will see.
 
 A [constant](../debuter/glossaire.md#constant) is a value that never changes. You
 create it with `const`.
+It is meant for the fixed values of your program: a VAT rate, the number of days in a
+week. It is a price engraved on a plaque, not written in pencil.
 
 ```go
 package main
@@ -213,8 +299,37 @@ func main() {
 6.28318
 ```
 
+Line by line:
+
+- `const VatRate = 0.2` is written outside `main`, at the file level;
+- `const pi = 3.14159` creates a constant inside `main`;
+- `price := 50.0` is an ordinary variable;
+- `price * (1 + VatRate)` computes 50 × 1.2. Go prints `60`, without useless zeros.
+
 A constant can be declared outside `main`, at the file level: it is then visible
 everywhere. Trying to change it (`pi = 3`) is a compile error.
+
+**Your turn:** create a constant `DaysPerWeek` whose value is 7, then a variable
+`weeks` whose value is 3. Print the number of days in these 3 weeks.
+
+> **Solution**
+>
+> ```go
+> package main
+>
+> import "fmt"
+>
+> const DaysPerWeek = 7
+>
+> func main() {
+> 	weeks := 3
+> 	fmt.Println(weeks * DaysPerWeek)
+> }
+> ```
+>
+> ```sortie
+> 21
+> ```
 
 ### Series of constants with iota
 
@@ -267,6 +382,9 @@ func main() {
 
 ## Printing with fmt
 
+Printing is how your program talks to you: it shows a result or a message. `fmt`
+helps you present it neatly, like a well-aligned receipt.
+
 ### Println
 
 `fmt.Println` prints its values separated by spaces, then moves to the next line.
@@ -293,6 +411,14 @@ func main() {
 ```sortie
 Alice is 12 years old.
 ```
+
+Line by line:
+
+- `name` holds `"Alice"` and `age` holds `12`;
+- in the template `"%s is %d years old.\n"`, Go replaces the first verb, `%s`, with
+  the first value after the template: `name`;
+- then it replaces the second verb, `%d`, with the second value: `age`;
+- `\n` is not printed: it moves to the next line.
 
 The most useful verbs:
 
@@ -349,10 +475,37 @@ Discount: 20%
 `Student` is a **struct**: a value that groups several fields together. Structs are
 explained in [types](types.md).
 
+**Your turn:** create a variable `book` whose value is `"The Little Prince"` and a
+variable `pages` whose value is 96. With `Printf`, print `The Little
+Prince has 96 pages.`, then, on another line, the type of `pages` with `%T`.
+
+> **Solution**
+>
+> ```go
+> package main
+>
+> import "fmt"
+>
+> func main() {
+> 	book := "The Little Prince"
+> 	pages := 96
+> 	fmt.Printf("%s has %d pages.\n", book, pages)
+> 	fmt.Printf("%T\n", pages)
+> }
+> ```
+>
+> ```sortie
+> The Little Prince has 96 pages.
+> int
+> ```
+
 ## Comments
 
 A [comment](../debuter/glossaire.md#comment) is a note for humans: Go ignores
 it.
+It explains **why** the code is written this way, to the person who will read it
+again. Often, that person is you, a month later. It is like a note in the margin of
+a recipe.
 
 ```go
 package main
@@ -378,6 +531,9 @@ visible
 > `// main is...`. Go's documentation tools use it.
 
 ## Choosing good names
+
+A good name says what the variable holds. `totalPrice` is clear right away; `x` or
+`tp` make you search. You write code once, but you read it again many times.
 
 A variable name starts with a letter, followed by letters, digits or `_`. In Go, you
 join words with capital letters: `totalPrice`, `numberOfStudents`. This is

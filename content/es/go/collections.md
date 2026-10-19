@@ -12,6 +12,10 @@ Esta página presenta las dos maneras de guardar varios valores seguidos en Go: 
 
 ## Los arrays
 
+Imagina que quieres guardar las notas de un alumno. Crear una variable por nota
+(`nota1`, `nota2`, `nota3`…) se vuelve pesado enseguida. Un array guarda todos esos
+valores bajo un solo nombre, como una caja con compartimentos numerados.
+
 Un array (*arreglo*) guarda un número **fijo** de valores del mismo tipo. El tamaño
 forma parte del tipo: `[3]int` es «un array de 3 enteros».
 
@@ -36,6 +40,16 @@ func main() {
 mar 3
 ```
 
+Línea por línea:
+
+- `var notas [3]int` crea un array de 3 casillas, todas a 0: `[0 0 0]`;
+- `notas[0] = 12` guarda 12 en la primera casilla, `notas[2] = 18` en la tercera. La
+  casilla del medio conserva su 0;
+- `dias := [3]string{...}` crea el array y lo rellena en una sola línea;
+- `dias[1]` es la segunda casilla, «mar», y `len(dias)` vale 3.
+
+Tres reglas que conocer:
+
 - Las casillas se numeran a partir de **0**: es el [índice](../debuter/glossaire.md#indice).
 - Una casilla sin rellenar tiene el valor cero de su tipo (`0` aquí).
 - `len` da el número de casillas.
@@ -44,6 +58,9 @@ Un array no puede ni crecer ni encogerse. Por eso se usa poco: casi siempre se
 prefiere la slice.
 
 ## Las slices
+
+A menudo no sabes de antemano cuántos valores tendrás: una lista de la compra se
+alarga a lo largo de la semana. La slice está hecha para eso.
 
 Una slice es una [lista](../debuter/glossaire.md#lista) de valores del mismo tipo, cuyo
 tamaño puede cambiar. Su tipo se escribe sin tamaño: `[]int`.
@@ -71,8 +88,35 @@ manzana 3
 pera
 ```
 
+Línea por línea:
+
+- `frutas := []string{...}` crea una slice que contiene tres textos;
+- `frutas[0]` es el primer elemento, «manzana», y `len(frutas)` vale 3;
+- `frutas[1] = "mango"` sustituye «kiwi» por «mango». Las demás casillas no cambian.
+
 `frutas[len(frutas)-1]` es el último elemento: con 3 elementos, los índices van de 0
 a 2.
+
+**Te toca:** escribe un programa que cree una slice `colores` con «rojo», «verde» y
+«azul», sustituya «verde» por «amarillo», y luego muestre la slice y su longitud.
+
+> **Solución**
+>
+> ```go
+> package main
+>
+> import "fmt"
+>
+> func main() {
+> 	colores := []string{"rojo", "verde", "azul"}
+> 	colores[1] = "amarillo"
+> 	fmt.Println(colores, len(colores))
+> }
+> ```
+>
+> ```sortie
+> [rojo amarillo azul] 3
+> ```
 
 ### Crear una slice con make
 
@@ -103,6 +147,9 @@ añadirle elementos.
 
 ## Añadir con append
 
+Una lista de la compra se llena poco a poco: añades un artículo en cuanto te acuerdas.
+`append` hace lo mismo con una slice.
+
 `append` añade elementos al final de una slice y **devuelve** la nueva slice. Siempre
 hay que recoger ese resultado.
 
@@ -128,9 +175,41 @@ func main() {
 [pan leche huevos arroz té]
 ```
 
+Línea por línea:
+
+- `var compras []string` crea una slice vacía;
+- el primer `append` devuelve una slice que contiene «pan». Se vuelve a guardar en
+  `compras`;
+- el segundo `append` añade dos elementos de golpe: `compras` tiene ahora 3;
+- el último `append` añade al final todos los elementos de `otras`.
+
 `otras...` despliega la slice `otras` en varios argumentos.
 
+**Te toca:** escribe un programa que parta de una slice vacía `invitados`, le añada
+«Lea», luego «Tom» y «Sami» en un solo `append`, y muestre la slice y su longitud.
+
+> **Solución**
+>
+> ```go
+> package main
+>
+> import "fmt"
+>
+> func main() {
+> 	var invitados []string
+> 	invitados = append(invitados, "Lea")
+> 	invitados = append(invitados, "Tom", "Sami")
+> 	fmt.Println(invitados, len(invitados))
+> }
+> ```
+>
+> ```sortie
+> [Lea Tom Sami] 3
+> ```
+
 ### La capacidad
+
+> **Nota:** esta parte puede esperar. Léela cuando las bases estén firmes.
 
 Detrás de cada slice se esconde un array, que tiene cierto espacio: la **capacidad**
 (`cap`). Cuando falta espacio, `append` crea un array más grande y lo copia todo en él.
@@ -169,6 +248,9 @@ huevera está llena, Go toma una más grande.
 
 ## Recortar una slice
 
+A veces solo necesitas una parte de una lista: los tres primeros de una clasificación,
+o todo salvo el primer elemento. Para eso sirve el recorte.
+
 `s[inicio:fin]` toma los elementos desde el índice `inicio` **incluido** hasta el
 índice `fin` **excluido**.
 
@@ -199,7 +281,32 @@ func main() {
 
 > **Recuerda:** `s[1:3]` contiene `3 - 1 = 2` elementos. El final siempre se excluye.
 
+**Te toca:** escribe un programa que guarde los meses `"ene"` a `"jun"` en una slice
+`meses`, y luego muestre los tres primeros y, por último, los tres últimos.
+
+> **Solución**
+>
+> ```go
+> package main
+>
+> import "fmt"
+>
+> func main() {
+> 	meses := []string{"ene", "feb", "mar", "abr", "may", "jun"}
+> 	fmt.Println(meses[:3])
+> 	fmt.Println(meses[3:])
+> }
+> ```
+>
+> ```sortie
+> [ene feb mar]
+> [abr may jun]
+> ```
+
 ## La trampa del array compartido
+
+Este punto sorprende a casi todos los principiantes, y causa errores difíciles de
+encontrar. Más vale entenderlo desde ahora.
 
 Un recorte no copia **nada**: mira el mismo array escondido, por otra ventana.
 Modificar uno modifica el otro.
@@ -222,6 +329,14 @@ func main() {
 [99 2 3 4]
 [99 2]
 ```
+
+Línea por línea:
+
+- `numeros` contiene 1, 2, 3 y 4;
+- `inicio := numeros[:2]` no crea ninguna casilla: `inicio` muestra las dos primeras
+  casillas de `numeros`;
+- `inicio[0] = 99` escribe por tanto 99 en la primera casilla, común a las dos;
+- los dos `Println` leen las mismas casillas: el 99 aparece dos veces.
 
 `inicio` y `numeros` comparten las mismas casillas: cambiar `inicio[0]` ha cambiado
 `numeros[0]`.
@@ -285,6 +400,8 @@ func main() {
 
 ## Las slices de dos dimensiones
 
+> **Nota:** esta parte puede esperar. Léela cuando las bases estén firmes.
+
 Una slice puede contener slices: es una cuadrícula, como una hoja de cálculo o un
 tablero de juego.
 
@@ -325,6 +442,9 @@ una por una. El verbo `%q` muestra los textos entre comillas: así se ven las ca
 vacías `""`.
 
 ## Ordenar y buscar
+
+Buscar un nombre en una lista, ordenar notas de la más baja a la más alta: son tareas
+muy habituales. Go te las da ya hechas, no tienes que escribirlas tú.
 
 ### El paquete slices
 
@@ -370,6 +490,32 @@ true
 | `slices.Reverse(s)` | invierte el orden de `s` |
 
 > **Nota:** `slices.Sort` modifica la propia slice, y no devuelve nada.
+
+**Te toca:** escribe un programa que guarde las temperaturas 18, 25, 12 y 21 en una
+slice, muestre la más alta, y luego muestre la slice ordenada.
+
+> **Solución**
+>
+> ```go
+> package main
+>
+> import (
+> 	"fmt"
+> 	"slices"
+> )
+>
+> func main() {
+> 	temperaturas := []int{18, 25, 12, 21}
+> 	fmt.Println(slices.Max(temperaturas))
+> 	slices.Sort(temperaturas)
+> 	fmt.Println(temperaturas)
+> }
+> ```
+>
+> ```sortie
+> 25
+> [12 18 21 25]
+> ```
 
 ### Ordenar según una regla: sort.Slice
 

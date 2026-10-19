@@ -12,6 +12,9 @@ Cette page montre comment Ruby calcule avec les entiers et les nombres à virgul
 
 ## Deux sortes de nombres
 
+Un programme compte sans arrêt : un âge, un prix, un score, une température. Parfois il
+faut un nombre entier (3 enfants), parfois un nombre à virgule (1,5 litre de lait).
+
 Ruby a deux sortes principales de nombres :
 
 - les [entiers](../debuter/glossaire.md#entier) (`Integer`) : `3`, `-12`, `1_000_000` ;
@@ -32,10 +35,21 @@ Float
 1267650600228229401496703205376
 ```
 
+Ligne par ligne :
+
+- `42.class` demande à Ruby la sorte du nombre 42 : c'est un `Integer` ;
+- `3.14` contient un point, c'est donc un `Float` ;
+- `1_000_000` s'affiche sans les `_` : ils ne servent qu'à vous, pour lire ;
+- `2**100` multiplie 2 par lui-même 100 fois : le résultat est énorme, et Ruby le donne
+  en entier, chiffre par chiffre.
+
 Le `_` sert seulement à rendre le nombre lisible, comme l'espace dans « 1 000 000 ».
 Un entier Ruby n'a pas de limite de taille : `2**100` marche sans problème.
 
 ## Les opérateurs
+
+Un ordinateur est d'abord une machine à calculer. Comme sur une calculatrice, vous
+écrivez le calcul, et Ruby donne le résultat.
 
 Les [opérateurs](../debuter/glossaire.md#operateur) font les calculs de base.
 
@@ -56,6 +70,13 @@ puts 7**2
 1
 49
 ```
+
+Ligne par ligne :
+
+- les trois premières lignes font une addition, une soustraction et une multiplication,
+  comme à l'école ;
+- `7 / 2` donne `3`, et pas `3.5` : la section suivante explique pourquoi ;
+- `7 % 2` donne ce qui reste de la division, et `7**2` multiplie 7 par lui-même.
 
 - `%` donne le **reste** de la division : 7 = 2 × 3 + **1**.
 - `**` est la puissance : `7**2` vaut 7 × 7.
@@ -84,6 +105,21 @@ puts -2**2
 Le dernier résultat surprend : `-2**2` se lit `-(2**2)`. Écrivez `(-2)**2` pour obtenir
 `4`. Dans le doute, mettez des parenthèses : elles ne coûtent rien.
 
+**À vous :** vous avez 25 jours de vacances. Écrivez un programme qui affiche le nombre
+de semaines complètes (7 jours), puis le nombre de jours qui restent en plus.
+
+> **Solution**
+>
+> ```ruby
+> puts 25 / 7
+> puts 25 % 7
+> ```
+>
+> ```sortie
+> 3
+> 4
+> ```
+
 ## Division entière et division à virgule
 
 Si les deux nombres sont des entiers, `/` donne un entier : la partie après la virgule
@@ -106,12 +142,23 @@ p 7.divmod(2)
 [3, 1]
 ```
 
+Ligne par ligne :
+
+- `7 / 2` : les deux nombres sont des entiers, donc la virgule est jetée : `3` ;
+- `7.0 / 2` et `7 / 2.0` : un des deux nombres est un `Float`, le résultat garde sa
+  virgule : `3.5` ;
+- `7.fdiv(2)` demande une division à virgule, même entre deux entiers ;
+- `7.divmod(2)` donne deux nombres d'un coup : le quotient `3` et le reste `1`.
+
 Dès qu'un des deux nombres est un `Float`, le résultat est un `Float`. `fdiv` force une
 division à virgule, et `divmod` donne le quotient et le reste d'un coup.
 
 > **Attention :** `-7 / 2` vaut `-4`, pas `-3` : Ruby arrondit toujours vers le bas.
 
 ## Arrondir
+
+Un calcul donne souvent trop de chiffres après la virgule. Un prix de 3,756 €, personne
+ne peut le payer : arrondir garde seulement les chiffres utiles.
 
 ```ruby
 x = 3.756
@@ -132,12 +179,40 @@ puts 1234.round(-2)
 1200
 ```
 
+Ligne par ligne :
+
+- `x = 3.756` range le nombre dans la variable `x` ;
+- `x.round` donne l'entier le plus proche : 3,756 est plus près de 4 que de 3 ;
+- `x.round(1)` garde un seul chiffre après la virgule : `3.8` ;
+- `floor`, `ceil` et `truncate` donnent `3`, `4` et `3` (voir la liste ci-dessous) ;
+- `1234.round(-2)` arrondit à la centaine la plus proche : `1200`.
+
 - `round` arrondit au plus proche ; `round(1)` garde un chiffre après la virgule.
 - `floor` arrondit vers le bas (le « plancher »), `ceil` vers le haut (le « plafond »).
 - `truncate` coupe la partie après la virgule.
 - Un nombre négatif dans `round` arrondit aux dizaines, centaines…
 
+**À vous :** un trajet coûte `12.456` €. Écrivez un programme qui range ce prix dans une
+variable, puis affiche le prix arrondi à 2 chiffres après la virgule, puis l'entier
+supérieur.
+
+> **Solution**
+>
+> ```ruby
+> prix = 12.456
+> puts prix.round(2)
+> puts prix.ceil
+> ```
+>
+> ```sortie
+> 12.46
+> 13
+> ```
+
 ## Le piège des flottants
+
+Cette partie explique pourquoi un calcul tout simple peut donner un résultat un tout
+petit peu faux, et comment l'éviter, surtout quand il s'agit d'argent.
 
 Un `Float` est rangé en binaire dans l'ordinateur. Certains nombres simples pour nous,
 comme `0.1`, ne tombent pas juste en binaire, comme `1/3` ne tombe pas juste en décimal
@@ -154,6 +229,14 @@ puts (0.1 + 0.2 - 0.3).abs < 1e-9
 false
 true
 ```
+
+Ligne par ligne :
+
+- `0.1 + 0.2` donne `0.30000000000000004` : un tout petit peu plus que `0.3` ;
+- `0.1 + 0.2 == 0.3` compare les deux nombres : ils ne sont pas exactement égaux, donc
+  `false` ;
+- la dernière ligne calcule l'écart entre les deux, sans son signe (`abs`), et vérifie
+  qu'il est plus petit que `1e-9`, c'est-à-dire 0,000000001 : c'est vrai.
 
 Pour comparer deux flottants, regardez si leur écart est minuscule plutôt que d'utiliser
 `==`.
@@ -205,6 +288,11 @@ Une autre solution simple : compter en centimes, avec des entiers (`1999` au lie
 
 ## Le module Math
 
+> **Note :** cette partie peut attendre. Lisez-la quand les bases seront solides.
+
+Pour des calculs plus savants, comme une racine carrée, inutile de tout écrire
+vous-même : Ruby les fournit déjà, rangés dans une même boîte à outils.
+
 `Math` regroupe les fonctions mathématiques.
 
 ```ruby
@@ -230,6 +318,9 @@ rectangle. `abs` donne la valeur sans le signe.
 
 ## Le hasard avec rand
 
+Un jeu de dés, un quiz qui mélange ses questions, un tirage au sort : tous ont besoin
+de hasard.
+
 `rand(1..6)` tire un nombre entre 1 et 6, comme un dé. Le résultat change à chaque
 lancement. Pour obtenir toujours la même suite (utile pour tester), donnez une
 **graine** avec `srand` ou créez un générateur `Random`.
@@ -247,10 +338,21 @@ p 5.times.map { de.rand(1..6) }
 [4, 5, 3, 5, 5]
 ```
 
+Ligne par ligne :
+
+- `Random.new(42)` crée un générateur de hasard avec la graine 42, rangé dans `de` ;
+- `5.times.map { de.rand(1..6) }` lance le dé 5 fois et rassemble les 5 résultats dans
+  une liste, que `p` affiche ;
+- les deux dernières lignes recommencent avec la même graine 42 : la liste est identique.
+
 Même graine, même suite. `srand(42)` fait la même chose pour `rand` tout court. Sans
 graine, chaque lancement donne d'autres nombres.
 
 ## Convertir
+
+Ce qu'une personne tape au clavier, ou ce qu'on lit dans un fichier, arrive toujours
+sous forme de texte. Or `"42"` n'est pas un nombre : il faut le convertir avant de
+calculer avec.
 
 ```ruby
 puts "42".to_i + 1
@@ -272,6 +374,13 @@ puts Integer("42")
 42
 ```
 
+Ligne par ligne :
+
+- `"42".to_i` transforme le texte `"42"` en nombre 42, puis `+ 1` donne `43` ;
+- `"3.5".to_f` donne le flottant 3.5, et `* 2` donne `7.0` ;
+- `"12abc".to_i` lit `12` puis s'arrête ; `"abc".to_i` ne trouve aucun chiffre : `0` ;
+- `7.to_f` donne `7.0`, et `7.9.to_i` coupe la virgule sans arrondir : `7`.
+
 `to_i` est tolérant : il lit le début du texte et renvoie `0` s'il ne trouve rien.
 `Integer("...")` est strict : il lève une erreur si le texte n'est pas un nombre. C'est
 mieux pour vérifier une saisie.
@@ -288,7 +397,24 @@ end
 Saisie invalide : invalid value for Integer(): "12abc"
 ```
 
+**À vous :** écrivez un programme qui range les textes `"12"` et `"30"` dans deux
+variables, puis affiche leur somme, calculée comme des nombres.
+
+> **Solution**
+>
+> ```ruby
+> a = "12"
+> b = "30"
+> puts a.to_i + b.to_i
+> ```
+>
+> ```sortie
+> 42
+> ```
+
 ### Les chiffres d'un nombre
+
+> **Note :** cette partie peut attendre. Lisez-la quand les bases seront solides.
 
 `digits` donne les chiffres, **en commençant par la fin**.
 
@@ -310,6 +436,9 @@ puts "ff".to_i(16)
 
 ## Formater un nombre
 
+Un résultat comme `3.14159` est trop long pour un ticket de caisse ou un tableau.
+Formater, c'est choisir comment le nombre s'affiche, sans changer sa valeur.
+
 `format` construit un texte à partir d'un modèle. `%.2f` veut dire « un flottant avec
 2 chiffres après la virgule », `%05d` « un entier sur 5 chiffres, complété par des 0 ».
 
@@ -326,6 +455,29 @@ puts format("%d %% de réussite", 87)
 ab    |
 87 % de réussite
 ```
+
+Ligne par ligne :
+
+- `%.2f` garde 2 chiffres après la virgule : `3.14` ;
+- `%05d` écrit 42 sur 5 chiffres, avec des 0 devant ;
+- `%-6s` écrit le texte `"ab"` sur 6 caractères, collé à gauche : les espaces se voient
+  avant le `|` ;
+- `%%` affiche un vrai signe `%`.
+
+**À vous :** écrivez un programme qui affiche le prix `7.5` avec 2 chiffres après la
+virgule, puis le numéro `7` sur 3 chiffres, complété par des 0.
+
+> **Solution**
+>
+> ```ruby
+> puts format("%.2f", 7.5)
+> puts format("%03d", 7)
+> ```
+>
+> ```sortie
+> 7.50
+> 007
+> ```
 
 ### Séparer les milliers
 

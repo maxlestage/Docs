@@ -37,6 +37,9 @@ saludar();
 
 ## Los parámetros
 
+Una función que siempre hace exactamente lo mismo sirve de poco. Los parámetros la
+hacen flexible: es como una receta «para N personas», donde eliges N cada vez.
+
 Los [parámetros](../debuter/glossaire.md#parametro) son los valores que la función
 recibe. Son casillas vacías que se rellenan en el momento de la llamada. Los valores que se dan
 en la llamada se llaman [argumentos](../debuter/glossaire.md#argumento).
@@ -55,11 +58,39 @@ saludar("Bob");
 ¡Hola, Bob!
 ```
 
+Línea por línea:
+
+- `function saludar(nombre)` guarda la función. Todavía no se muestra nada;
+- `saludar("Alice")` llama a la función: `nombre` recibe `"Alice"` y luego
+  `console.log` muestra la frase con ese nombre;
+- `saludar("Bob")` vuelve a empezar, esta vez con `nombre` igual a `"Bob"`.
+
 Aquí, `nombre` es el parámetro; `"Alice"` y `"Bob"` son los argumentos. Varios
 parámetros se separan con comas, y los argumentos se dan en el mismo
 orden.
 
+**Te toca:** escribe una función `presentar(nombre, edad)` que muestre «Me llamo … y
+tengo … años.», y luego llámala con `"Lea"` y `12`.
+
+> **Solución**
+>
+> ```javascript
+> function presentar(nombre, edad) {
+>   console.log(`Me llamo ${nombre} y tengo ${edad} años.`);
+> }
+>
+> presentar("Lea", 12);
+> ```
+>
+> ```sortie
+> Me llamo Lea y tengo 12 años.
+> ```
+
 ## Devolver un valor con return
+
+A menudo no quieres solo mostrar un resultado: quieres guardarlo para usarlo después.
+Una calculadora te da un número, que puedes apuntar, reutilizar o sumar a otro.
+`return` hace lo mismo.
 
 `return` detiene la función y **devuelve** un valor al código que la llamó. El valor
 devuelto sustituye a la llamada.
@@ -78,6 +109,14 @@ console.log(total);
 12
 11
 ```
+
+Línea por línea:
+
+- `function area(ancho, alto)` guarda la función, sin calcular nada;
+- `area(3, 4)` ejecuta la función: `ancho` vale 3, `alto` vale 4, y `return` devuelve
+  12. `console.log` muestra ese 12;
+- `area(2, 5)` devuelve 10, luego `+ 1` da 11, que se guarda en `total`;
+- el último `console.log` muestra `total`, es decir, 11.
 
 `area(2, 5) + 1` se convierte en `10 + 1`. Una función sin `return` devuelve `undefined`.
 
@@ -127,7 +166,30 @@ undefined 10
 > **Recuerda:** prefiere las funciones que devuelven un valor. Después decidirás
 > qué hacer con él.
 
+**Te toca:** escribe una función `perimetro(lado)` que devuelva el perímetro de un
+cuadrado (cuatro veces el lado). Muestra `perimetro(5)` y luego
+`perimetro(5) + perimetro(2)`.
+
+> **Solución**
+>
+> ```javascript
+> function perimetro(lado) {
+>   return lado * 4;
+> }
+>
+> console.log(perimetro(5));
+> console.log(perimetro(5) + perimetro(2));
+> ```
+>
+> ```sortie
+> 20
+> 28
+> ```
+
 ## Los parámetros por defecto
+
+En un restaurante, el plato viene con patatas fritas, salvo si pides otra cosa. Un
+valor por defecto funciona igual: te evita repetir el valor habitual en cada llamada.
 
 Si falta un argumento, su parámetro vale `undefined`. Un **valor por defecto**, escrito
 con `=`, lo sustituye.
@@ -146,7 +208,17 @@ console.log(saludar("Bob", "Buenas"));
 ¡Buenas, Bob!
 ```
 
+Línea por línea:
+
+- `saludo = "Hola"` prevé un valor de reserva para `saludo`;
+- `saludar("Alice")` da un solo argumento: `nombre` vale `"Alice"` y `saludo` toma su
+  valor por defecto, `"Hola"`;
+- `saludar("Bob", "Buenas")` da los dos: `"Buenas"` sustituye al valor por defecto.
+
 ## Los parámetros rest
+
+A veces no sabes de antemano cuántos valores recibirá la función: quieres sumar dos
+números, o diez. Los parámetros rest aceptan cualquier cantidad de argumentos.
 
 Con tres puntos `...` delante del último parámetro, la función recibe **todos los
 argumentos restantes**, guardados en un array.
@@ -171,10 +243,22 @@ console.log(suma());
 0
 ```
 
+Línea por línea:
+
+- `...numeros` guarda todos los argumentos en un array: con `suma(1, 2)`, `numeros`
+  vale `[1, 2]`;
+- `total` empieza en 0;
+- el bucle `for` toma cada número del array, uno a uno, y lo suma a `total`;
+- `return total` devuelve la suma. Con `suma()`, el array está vacío: el bucle no da
+  ninguna vuelta, y la función devuelve 0.
+
 Es un poco como una bolsa: metes en ella tantos argumentos como quieras. Los arrays se
 explican en [los arrays](collections.md).
 
 ## Las funciones flecha
+
+Muchas funciones solo hacen un pequeño cálculo. Escribir `function`, llaves y `return`
+para una sola línea es largo. La flecha dice lo mismo con menos palabras.
 
 Una **función flecha** (*arrow function*) es una forma más corta de escribir una
 función. Se guarda en una constante.
@@ -221,10 +305,33 @@ console.log(precioConIva(50, 0.055));
 > las flechas para las funciones pequeñas que se pasan a otras (mira más abajo). Las dos
 > son correctas.
 
+**Te toca:** escribe una función flecha `triple` que devuelva el triple de un número, y
+una función flecha `bienvenida` que devuelva «¡Bienvenida, …!» con un nombre. Muestra
+`triple(7)` y `bienvenida("Ana")`.
+
+> **Solución**
+>
+> ```javascript
+> const triple = (x) => x * 3;
+> const bienvenida = (nombre) => `¡Bienvenida, ${nombre}!`;
+>
+> console.log(triple(7));
+> console.log(bienvenida("Ana"));
+> ```
+>
+> ```sortie
+> 21
+> ¡Bienvenida, Ana!
+> ```
+
 ## Las funciones son valores
 
 En JavaScript, una función es un valor, como un número o un texto. Se puede
 guardar en una variable, meter en un array o dar a otra función.
+
+¿Para qué sirve? Así puedes dar a una función no solo datos, sino también una acción
+que hacer con esos datos. Es como dar a alguien una cesta de manzanas con la consigna
+«pélalas».
 
 ```javascript
 function doble(x) {
@@ -240,6 +347,14 @@ console.log(typeof doble);
 42
 function
 ```
+
+Línea por línea:
+
+- `function doble(x)` guarda una función llamada `doble`;
+- `const operacion = doble;` guarda la función misma en `operacion`, sin llamarla (sin
+  paréntesis). `operacion` y `doble` nombran la misma receta;
+- `operacion(21)` llama entonces a `doble` con 21, que devuelve 42;
+- `typeof doble` da el tipo del valor: aquí, `function`.
 
 Cuidado con la diferencia: `doble` es la función misma (la receta);
 `doble(21)` es su resultado (el plato).
@@ -263,6 +378,14 @@ console.log(aplicarDosVeces((x) => x * x, 3));
 81
 ```
 
+Línea por línea:
+
+- `aplicarDosVeces` recibe dos cosas: una función `f` y un valor;
+- `f(valor)` aplica `f` una primera vez, y luego el `f( )` de fuera la aplica al
+  resultado;
+- primera llamada: `f` suma 10. 1 se convierte en 11, y luego en 21;
+- segunda llamada: `f` eleva al cuadrado. 3 se convierte en 9, y luego en 81.
+
 Los arrays usan mucho los callbacks. `map` aplica una función a cada
 elemento:
 
@@ -278,7 +401,24 @@ console.log(preciosConIva);
 
 Volverás a ver `map`, `filter` y sus amigos en [los arrays](collections.md).
 
+**Te toca:** parte del array `const notas = [8, 12, 15];` y usa `map` para crear un
+nuevo array donde cada nota gana 2 puntos. Muéstralo.
+
+> **Solución**
+>
+> ```javascript
+> const notas = [8, 12, 15];
+> const notasExtra = notas.map((n) => n + 2);
+> console.log(notasExtra);
+> ```
+>
+> ```sortie
+> [ 10, 14, 17 ]
+> ```
+
 ## El hoisting
+
+> **Nota:** esta parte puede esperar. Léela cuando las bases estén firmes.
 
 Una función declarada con `function` se puede llamar **antes** del lugar donde está
 escrita. JavaScript la «eleva» (*hoisting*) al principio del archivo antes de empezar.
@@ -299,6 +439,8 @@ function triple(x) {
 solo existe a partir de su línea. Mira los errores frecuentes más abajo.
 
 ## Una función que se llama a sí misma
+
+> **Nota:** esta parte puede esperar. Léela cuando las bases estén firmes.
 
 Una función puede llamarse a sí misma: es la
 [recursión](../debuter/glossaire.md#recursion). Hace falta un **caso base**, si no,

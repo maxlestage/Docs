@@ -12,6 +12,9 @@ This page shows how to handle text in JavaScript: read its characters, cut it up
 
 ## Strings
 
+Almost every program handles text: a first name, a message, an email address, a line
+read from a file. Before you can transform text, you need to know how to write it.
+
 A piece of text is called a [string](../debuter/glossaire.md#string): a
 sequence of letters, digits, spaces and symbols, like beads on a string. You write it
 between double quotes, single quotes or backticks.
@@ -32,6 +35,14 @@ Hello Hi Hey
 He said: 'yes'
 It's summer
 ```
+
+Line by line:
+
+- the first three lines store a text in `a`, `b` and `c`, with three kinds of quotes;
+- `quote` contains single quotes, so it is wrapped in double quotes;
+- `console.log(a, b, c)` prints the three texts on one line, separated by a space;
+- the quotes around a text are never printed: they only mark where it starts and
+  ends.
 
 Pick the quotes that are not in the text: `"It's summer"` contains an apostrophe, so you
 wrap it in double quotes.
@@ -54,6 +65,10 @@ She said "hello".
 
 ## Length and position
 
+Checking that a password is long enough, taking the first letter of a name: for that,
+you need to know the size of a text and how to point at one precise letter, the way you
+point at a house by its number on a street.
+
 `length` gives the number of characters. Each character has a position, its
 [index](../debuter/glossaire.md#index), which **starts at 0**.
 
@@ -74,6 +89,14 @@ c
 e
 undefined
 ```
+
+Line by line:
+
+- `word.length` is 7: "Welcome" has seven letters;
+- `word[0]` is the first letter, `"W"`, because counting starts at 0;
+- `word[3]` is therefore the fourth letter, `"c"`;
+- `word.length - 1` is 6: `word[6]` is the last letter, `"e"`;
+- `word[10]` points at a box that does not exist: the result is `undefined`.
 
 | Character | W | e | l | c | o | m | e |
 | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -100,7 +123,28 @@ e
 m
 ```
 
+**Your turn:** write a program that stores `"Olivia"` in a variable `name`, then
+prints its length, its first letter and its last letter.
+
+> **Solution**
+>
+> ```javascript
+> const name = "Olivia";
+> console.log(name.length);
+> console.log(name[0]);
+> console.log(name.at(-1));
+> ```
+>
+> ```sortie
+> 6
+> O
+> a
+> ```
+
 ## Texts never change
+
+Learn this rule early, because it causes many beginner mistakes: you think you changed
+a text, when you actually made a new one and then forgot it.
 
 A string is [immutable](../debuter/glossaire.md#immutable): you cannot change one of its
 characters. All the methods on this page **return a new text** and leave the original
@@ -124,6 +168,10 @@ To keep the result, store it in a variable (with `let`, you can reuse the same o
 
 ## Upper case, lower case and spaces
 
+What a user types is rarely clean: extra spaces, random capitals. These methods tidy
+the text up before you use it, the way you tidy a drawer before looking for something
+in it.
+
 ```javascript
 const input = "   Marie Curie   ";
 
@@ -142,6 +190,14 @@ console.log(`[${input.trimEnd()}]`);
 [   Marie Curie]
 ```
 
+Line by line:
+
+- `input` contains "Marie Curie" with three spaces on each side;
+- the brackets `[` and `]` are only there to show where the spaces start and end;
+- each line calls a method on `input` and prints the new text it gets back;
+- `input` never changes: each line starts again from the original text, spaces
+  included.
+
 - `toUpperCase()` and `toLowerCase()` change the case, accents included
   (`"café"` becomes `"CAFÉ"`).
 - `trim()` removes the spaces at the start and at the end; `trimStart()` and `trimEnd()`
@@ -151,6 +207,9 @@ console.log(`[${input.trimEnd()}]`);
 > password or an email address is a classic source of bugs.
 
 ## Extracting a piece
+
+Often you only care about part of a text: the year in a date, the first letters of a
+word. `slice` cuts that piece out, like a pair of scissors.
 
 `slice(start, end)` returns the piece that goes from `start` (included) to `end` (not
 included). Without `end`, it goes all the way to the end. Negative numbers count from the
@@ -172,13 +231,40 @@ come
 elcom
 ```
 
+Line by line:
+
+- `slice(0, 3)` takes indexes 0, 1 and 2: `"Wel"`;
+- `slice(3)` starts at index 3 and goes to the end: `"come"`;
+- `slice(-4)` takes the last four characters: `"come"` again;
+- `slice(1, -1)` removes the first and the last letter: `"elcom"`.
+
 Think of the indexes as **cuts between the letters**: `slice(0, 3)` cuts before letter 0
 and before letter 3.
 
 `substring(start, end)` does almost the same thing, but does not understand negative
 numbers. Remember `slice`, which also works on arrays.
 
+**Your turn:** write a program that stores `"2026-10-19"` in a variable `date`, then
+prints the year (the first four characters) and the day (the last two).
+
+> **Solution**
+>
+> ```javascript
+> const date = "2026-10-19";
+> console.log(date.slice(0, 4));
+> console.log(date.slice(-2));
+> ```
+>
+> ```sortie
+> 2026
+> 19
+> ```
+
 ## Splitting and joining
+
+A text often holds a hidden list: fruits separated by commas, words separated by
+spaces. `split` takes that list out of the text, so you can handle the pieces one by
+one.
 
 `split(separator)` cuts a text into an array of pieces. `join(separator)` does the
 opposite: it glues the pieces of an array back together.
@@ -202,10 +288,35 @@ apple - pear - kiwi
 [ 'a', 'b', 'c' ]
 ```
 
+Line by line:
+
+- `line.split(",")` cuts the text at each comma: `fruits` is an array of three texts;
+- `fruits.length` is 3: the array has three boxes;
+- `fruits.join(" - ")` glues the three pieces back together with `" - "` between them;
+- `split(" ")` cuts at each space: you get the words of the sentence.
+
 `split("")` cuts into characters. Arrays are explained on
 [the next page](collections.md).
 
+**Your turn:** write a program that counts the words of the sentence
+`"The cat sleeps on the sofa"` and prints that number.
+
+> **Solution**
+>
+> ```javascript
+> const sentence = "The cat sleeps on the sofa";
+> const words = sentence.split(" ");
+> console.log(words.length);
+> ```
+>
+> ```sortie
+> 6
+> ```
+
 ## Searching in a text
+
+A program often needs to check a text: does an address contain an `@`? Does a file name
+end with `.jpg`? These methods answer with `true` or `false`, or give a position.
 
 ```javascript
 const sentence = "The cat sleeps on the sofa";
@@ -227,6 +338,15 @@ true
 -1
 ```
 
+Line by line:
+
+- `includes("cat")` gives `true`, but `includes("Cat")` gives `false`: the capital
+  letter matters;
+- `startsWith("The")` and `endsWith("sofa")` give `true`: the sentence does start and
+  end that way;
+- `indexOf("sleeps")` gives 8: "sleeps" starts at index 8, spaces included;
+- `indexOf("dog")` gives `-1`: "dog" is not in the sentence.
+
 - `includes(x)`: does the text contain `x`?
 - `startsWith(x)` and `endsWith(x)`: does it start or end with `x`?
 - `indexOf(x)`: the position of the first occurrence of `x`, or `-1` if it is not there.
@@ -245,6 +365,9 @@ true
 
 ## Replacing
 
+Fixing a word everywhere in a text, removing the spaces from a phone number: this is
+the "find and replace" of a word processor.
+
 `replace(old, new)` replaces the **first** occurrence. `replaceAll` replaces **all** of
 them.
 
@@ -262,10 +385,32 @@ a cat and a dog
 5551234567
 ```
 
+Line by line:
+
+- `replace("the", "a")` only changes the first "the";
+- `replaceAll("the", "a")` changes both;
+- the last line replaces each space with an empty text `""`: the spaces disappear.
+
 For finer searches ("all the digits", "a word in capitals"), there are
 [regular expressions](regex.md).
 
+**Your turn:** write a program that stores `"10/19/2026"` in a variable, then prints
+it with dashes instead of slashes.
+
+> **Solution**
+>
+> ```javascript
+> const date = "10/19/2026";
+> console.log(date.replaceAll("/", "-"));
+> ```
+>
+> ```sortie
+> 10-19-2026
+> ```
+
 ## Aligning and repeating
+
+> **Note:** this part can wait. Read it once the basics feel solid.
 
 `padStart(length, filler)` fills a text at the start up to the length you want;
 `padEnd` fills at the end. `repeat(n)` repeats a text `n` times.
@@ -295,6 +440,8 @@ These methods are perfect for drawing aligned tables in the terminal.
 
 ## Multi-line templates
 
+> **Note:** this part can wait. Read it once the basics feel solid.
+
 A template between backticks can span several lines: the line breaks are part of the
 text.
 
@@ -320,6 +467,9 @@ Thank you for your visit!
 
 ## Sorting words alphabetically
 
+Putting names in alphabetical order, like in a phone book, looks simple. But the
+computer does not know the alphabet: it orders letters by numbers.
+
 Comparing two texts with `<` or sorting with `sort()` follows the order of the
 **character codes** (the [Unicode](../debuter/glossaire.md#unicode) standard). Capital
 letters come before lower-case letters, and accented letters go at the end.
@@ -335,6 +485,14 @@ console.log([...words].sort((a, b) => a.localeCompare(b, "en")));
 [ 'Banana', 'apple', 'résumé', 'zebra', 'Éclair' ]
 [ 'apple', 'Banana', 'Éclair', 'résumé', 'zebra' ]
 ```
+
+Line by line:
+
+- `words` contains five words, with capitals and accents;
+- `[...words].sort()` sorts a copy by character codes: `"Banana"` comes before
+  `"apple"`, and `"Éclair"`, which starts with `É`, ends up last;
+- the next line sorts another copy with `localeCompare`: the order is the dictionary
+  order.
 
 `a.localeCompare(b, "en")` compares two texts using the rules of English: it returns a
 negative number if `a` comes before `b`, a positive one if after, `0` if they are equal.
