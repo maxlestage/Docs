@@ -280,28 +280,10 @@ n'en a pas, et TypeScript le sait (c'est un
 `addInitializer` enregistre une fonction qui s'exécute **à la création de chaque
 objet**. Un exemple utile : « lier » une méthode à son objet.
 
-D'abord, le problème. Quand on sort une méthode de son objet (pour la passer à
-quelqu'un d'autre), elle perd son `this` :
-
-```typescript
-class Sonnette {
-  constructor(public son: string) {}
-
-  sonner() {
-    return this?.son ?? "(this a été perdu)";
-  }
-}
-
-const s = new Sonnette("Ding dong");
-const appuyer = s.sonner;
-console.log(s.sonner());
-console.log(appuyer());
-```
-
-```sortie
-Ding dong
-(this a été perdu)
-```
+D'abord, le problème. Quand on sort une méthode de son objet (`const appuyer =
+s.sonner;`, pour la passer à quelqu'un d'autre), elle **perd son `this`** : appeler
+`appuyer()` ne sait plus de quelle sonnette il s'agit. C'est comme décrocher le bouton
+d'une sonnette : il n'est plus relié à aucune porte.
 
 Le décorateur `lier` répare cela : pour chaque nouvel objet, il range dans l'objet une
 copie de la méthode attachée pour toujours à cet objet (`bind`).
@@ -346,11 +328,6 @@ une fonction qui **transforme la valeur de départ**.
 C'est comme un tampon à l'entrée d'un bureau : chaque dossier qui arrive reçoit le tampon,
 une fois, avant d'être rangé.
 
-> **Attention :** le décorateur ne voit **que la valeur de départ**, celle écrite après
-> `=`. Un champ sans valeur de départ (rempli plus tard dans le constructeur) arrive avec
-> `undefined`, et `undefined.toUpperCase()` fait planter le programme. Décorez donc un
-> champ qui a une valeur après `=`.
-
 ```typescript
 function enMajuscules(_valeur: undefined, contexte: ClassFieldDecoratorContext<unknown, string>) {
   return function (valeurDeDepart: string): string {
@@ -390,6 +367,11 @@ italie
 
 La dernière ligne montre la limite : `"italie"` n'est **pas** mis en majuscules. Pour
 surveiller chaque modification, il faut un accesseur (section suivante).
+
+> **Attention :** le décorateur ne voit **que la valeur de départ**, celle écrite après
+> `=`. Un champ sans valeur de départ (rempli plus tard dans le constructeur) arrive avec
+> `undefined`, et `undefined.toUpperCase()` fait planter le programme. Décorez donc un
+> champ qui a une valeur après `=`.
 
 > **À retenir :** un décorateur de champ transforme seulement la valeur de départ, une
 > fois par objet.
@@ -517,56 +499,6 @@ console.log(magasin.ranger("savon"));
 Remarquez les **parenthèses** : `@prefixer("[caisse]")` appelle d'abord `prefixer`, qui
 renvoie le vrai décorateur. Sans parenthèses, TypeScript croirait que `prefixer`
 lui-même est le décorateur (voir les [erreurs fréquentes](#erreurs-frequentes)).
-
-### Plusieurs décorateurs
-
-On peut empiler les décorateurs, comme plusieurs couches de papier. La couche la plus
-**proche** de la méthode est posée en premier ; la plus haute est donc à l'extérieur.
-
-```typescript
-function prefixer(etiquette: string) {
-  return function <This, Args extends unknown[]>(
-    methode: (this: This, ...args: Args) => string,
-    _contexte: ClassMethodDecoratorContext<This, (this: This, ...args: Args) => string>,
-  ) {
-    console.log(`pose de ${etiquette}`);
-    return function (this: This, ...args: Args): string {
-      return `${etiquette} ${methode.call(this, ...args)}`;
-    };
-  };
-}
-
-class Colis {
-  @prefixer("(dessus)")
-  @prefixer("(dessous)")
-  decrire(): string {
-    return "un colis";
-  }
-}
-
-console.log(new Colis().decrire());
-```
-
-```sortie
-pose de (dessous)
-pose de (dessus)
-(dessus) (dessous) un colis
-```
-
-| Étape | Ce qui se passe | Méthode obtenue |
-|-------|-----------------|-----------------|
-| 1 | `(dessous)`, le plus proche, emballe `decrire` | `(dessous) un colis` |
-| 2 | `(dessus)` emballe le résultat de l'étape 1 | `(dessus) (dessous) un colis` |
-
-À l'appel, on traverse les couches de l'extérieur vers l'intérieur :
-
-```text
-   ┌─ (dessus) ─────────────────────┐
-   │   ┌─ (dessous) ──────────────┐ │
-   │   │   decrire() : "un colis" │ │
-   │   └──────────────────────────┘ │
-   └────────────────────────────────┘
-```
 
 > **À retenir :** une fabrique est une fonction qui renvoie un décorateur. On l'écrit
 > avec des parenthèses : `@borne(0, 100)`.
