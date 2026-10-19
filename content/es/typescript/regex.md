@@ -579,4 +579,4 @@ hacer antes de leer `[0]`?
   tipos solo comprueban al compilar.
 - Escapa toda entrada antes de `new RegExp` con tu propia función `escapar`.
 
-Siguiente: [TypeScript para la web](web.md).
+Siguiente: [fechas y horas](dates.md).

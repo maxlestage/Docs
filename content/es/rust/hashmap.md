@@ -523,4 +523,4 @@ ordena el resultado.
 - `HashSet` guarda valores únicos y ofrece `union`, `intersection`, `difference`.
 - `VecDeque` es una cola: `push_back` por detrás, `pop_front` por delante.
 
-Siguiente: [Las trampas del principiante en Rust](pieges.md)
+Siguiente: [seguir un programa paso a paso](pas-a-pas.md).

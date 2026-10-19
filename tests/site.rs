@@ -179,7 +179,15 @@ async fn search_index_and_sitemap() {
 #[test]
 fn every_chapter_ends_with_a_summary() {
     for doc in library::all() {
-        if ["aide-memoire", "exercices", "exercices-faciles", "glossaire"].contains(&doc.slug) {
+        if [
+            "aide-memoire",
+            "exercices",
+            "exercices-faciles",
+            "exercices-2",
+            "glossaire",
+        ]
+        .contains(&doc.slug)
+        {
             continue;
         }
         let last = doc.toc.iter().rfind(|h| h.level == 2).map(|h| h.text.as_str());
@@ -201,7 +209,15 @@ fn exercises_have_folded_solutions() {
 fn every_chapter_follows_the_plan() {
     let mut problems = Vec::new();
     for doc in library::all() {
-        if ["aide-memoire", "exercices", "exercices-faciles", "glossaire"].contains(&doc.slug) {
+        if [
+            "aide-memoire",
+            "exercices",
+            "exercices-faciles",
+            "exercices-2",
+            "glossaire",
+        ]
+        .contains(&doc.slug)
+        {
             continue;
         }
         let at = at(doc);

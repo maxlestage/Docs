@@ -370,4 +370,4 @@ with `first(n)` or `take(n)`.
 - `array[1..3]` or `text[2..]` slice out a piece.
 - `5..` has no end, `..5` has no start: use `first(n)` to read them.
 
-Next: [common beginner traps in Ruby](pieges.md)
+Next: [following a program step by step in Ruby](pas-a-pas.md).

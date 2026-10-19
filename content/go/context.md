@@ -590,4 +590,4 @@ fonction ?
   raison (`Canceled` ou `DeadlineExceeded`).
 - `ctx` se passe en premier paramètre ; `WithValue` reste pour de petites informations.
 
-Suite : [lire et écrire des fichiers](fichiers.md).
+Suite : [sync : Once, RWMutex, atomic et errgroup](sync.md)

@@ -567,5 +567,4 @@ milieu ?
 - Toujours `?` pour les valeurs, jamais de f-string : c'est ce qui protège des
   injections SQL.
 
-Suite : [Les expressions régulières](regex.md). Comparez avec
-[la base de données en Ruby](../ruby/base-de-donnees.md).
+Suite : [Analyser des données](donnees.md)

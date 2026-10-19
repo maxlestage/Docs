@@ -370,4 +370,4 @@ avec `first(n)` ou `take(n)`.
 - `tableau[1..3]` ou `texte[2..]` découpent un morceau.
 - `5..` n'a pas de fin, `..5` pas de début : utilisez `first(n)` pour les lire.
 
-Suite : [Les pièges du débutant en Ruby](pieges.md)
+Suite : [Suivre un programme pas à pas en Ruby](pas-a-pas.md)

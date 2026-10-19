@@ -529,4 +529,4 @@ Object, `Map` or `Set`?
   displays it readably.
 - `Map` for keys added as the program runs, `Set` for unique values.
 
-Next: [common JavaScript pitfalls for beginners](pieges.md)
+Next: [following a program step by step in JavaScript](pas-a-pas.md).
