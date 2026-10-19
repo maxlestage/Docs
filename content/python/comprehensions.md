@@ -493,4 +493,4 @@ mineure, sans construire de nouvelle liste ?
   utilisable une seule fois.
 - Si la compréhension devient difficile à lire, revenez à une boucle `for`.
 
-Suite : [classes et objets](types.md)
+Suite : [Les pièges du débutant en Python](pieges.md)

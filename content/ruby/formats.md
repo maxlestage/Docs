@@ -405,4 +405,4 @@ indenté, puis relisez-le pour afficher les habitants.
 - `require "yaml"` : `YAML.dump` pour écrire, `YAML.safe_load` pour relire sans risque.
 - JSON pour échanger, CSV pour des tableaux, YAML pour la configuration.
 
-Suite : [les expressions régulières](regex.md)
+Suite : [Une base de données en Ruby](base-de-donnees.md)

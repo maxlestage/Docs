@@ -525,4 +525,4 @@ pas ?
 - `HashSet` garde des valeurs uniques et offre `union`, `intersection`, `difference`.
 - `VecDeque` est une file : `push_back` derrière, `pop_front` devant.
 
-Suite : [Possession et emprunt](possession.md)
+Suite : [Les pièges du débutant en Rust](pieges.md)

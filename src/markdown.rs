@@ -184,7 +184,7 @@ pub fn render(source: &str, track: &str, l: Lang, translated: bool) -> Rendered 
             }
         }
         match &event {
-            Event::Text(t) | Event::Code(t) => {
+            Event::Text(t) | Event::Code(t) | Event::InlineHtml(t) => {
                 words += t.split_whitespace().count();
                 text.push_str(t);
                 text.push(' ');
