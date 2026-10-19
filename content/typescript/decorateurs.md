@@ -346,39 +346,10 @@ une fonction qui **transforme la valeur de départ**.
 C'est comme un tampon à l'entrée d'un bureau : chaque dossier qui arrive reçoit le tampon,
 une fois, avant d'être rangé.
 
-```typescript norun
-function enMajuscules(_valeur: undefined, contexte: ClassFieldDecoratorContext<unknown, string>) {
-  return function (valeurDeDepart: string): string {
-    console.log(`  ${String(contexte.name)} : "${valeurDeDepart}" devient "${valeurDeDepart.toUpperCase()}"`);
-    return valeurDeDepart.toUpperCase();
-  };
-}
-
-class Ville {
-  @enMajuscules nom: string;
-  @enMajuscules pays = "france";
-
-  constructor(nom: string) {
-    this.nom = nom;
-  }
-}
-
-console.log("Création de Lyon");
-const lyon = new Ville("lyon");
-console.log(lyon.nom, lyon.pays);
-```
-
-```text
-Création de Lyon
-TypeError: Cannot read properties of undefined (reading 'toUpperCase')
-```
-
-Cet exemple **plante**. Le champ `nom` n'a pas de valeur de départ (il est rempli plus
-tard, dans le constructeur). Le décorateur reçoit donc `undefined`… et `toUpperCase`
-échoue. TypeScript ne l'a pas vu venir : il compile sans rien dire.
-
-Retenez cette règle : un décorateur de champ ne voit **que la valeur de départ**, pas
-les valeurs données ensuite. Décorez donc un champ qui a une valeur écrite après `=` :
+> **Attention :** le décorateur ne voit **que la valeur de départ**, celle écrite après
+> `=`. Un champ sans valeur de départ (rempli plus tard dans le constructeur) arrive avec
+> `undefined`, et `undefined.toUpperCase()` fait planter le programme. Décorez donc un
+> champ qui a une valeur après `=`.
 
 ```typescript
 function enMajuscules(_valeur: undefined, contexte: ClassFieldDecoratorContext<unknown, string>) {
@@ -547,43 +518,6 @@ Remarquez les **parenthèses** : `@prefixer("[caisse]")` appelle d'abord `prefix
 renvoie le vrai décorateur. Sans parenthèses, TypeScript croirait que `prefixer`
 lui-même est le décorateur (voir les [erreurs fréquentes](#erreurs-frequentes)).
 
-### Une fabrique pour un accesseur
-
-La même idée rend le guichet réglable :
-
-```typescript
-function borne(min: number, max: number) {
-  return function <This>(
-    cible: ClassAccessorDecoratorTarget<This, number>,
-    _contexte: ClassAccessorDecoratorContext<This, number>,
-  ): ClassAccessorDecoratorResult<This, number> {
-    const ramener = (v: number) => Math.min(max, Math.max(min, v));
-    return {
-      init: ramener,
-      set(this: This, v: number) {
-        cible.set.call(this, ramener(v));
-      },
-    };
-  };
-}
-
-class Reglages {
-  @borne(0, 100) accessor volume = 50;
-  @borne(1, 5) accessor etoiles = 9;
-}
-
-const r = new Reglages();
-r.volume = 120;
-console.log(r.volume, r.etoiles);
-```
-
-```sortie
-100 5
-```
-
-Essayez : remplacez `@borne(1, 5)` par `@borne(1, 10)`. La note de départ 9 est
-gardée telle quelle, et le programme affiche `100 9`.
-
 ### Plusieurs décorateurs
 
 On peut empiler les décorateurs, comme plusieurs couches de papier. La couche la plus
@@ -734,26 +668,6 @@ main.ts(9,4): error TS1270: Decorator function return type 'ClassAccessorDecorat
 
 Sans `accessor`, `vie` est un champ simple : le décorateur reçoit `undefined`, pas une
 cible. Écrivez `@borne accessor vie = 100;`.
-
-### Décorer une fonction hors d'une classe
-
-```typescript norun
-function journaliser(methode: Function, contexte: ClassMethodDecoratorContext) {
-  return methode;
-}
-
-@journaliser
-function saluer() {
-  console.log("Bonjour");
-}
-```
-
-```text
-main.ts(5,1): error TS1206: Decorators are not valid here.
-```
-
-Les décorateurs ne marchent que sur une classe et ses membres. Pour une fonction seule,
-emballez-la à la main : `const saluerJournalise = emballer(saluer);`.
 
 ## Testez-vous
 
