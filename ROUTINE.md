@@ -21,11 +21,23 @@ jour la liste ci-dessous, puis publie.
    - `ruby tools/suite.rb --check` ;
    - l'export et ses liens : `BASE_PATH=/Docs cargo run --release -- export /tmp/dist`
      puis `ruby tools/liens.rb /tmp/dist /Docs`.
-6. Publier : un commit clair sur la branche `claude/routine`, poussé, puis `master`
-   avancé sur ce commit (`git push origin HEAD:master`, en avance rapide seulement ;
-   si master a bougé, d'abord `git pull --rebase origin master` et tout revérifier).
-   Si une vérification échoue et ne peut pas être corrigée, ne rien publier : noter le
-   problème dans le journal ci-dessous.
+6. Publier par une pull request, jamais directement sur `master` :
+   - le travail s'accumule sur la branche `claude/routine` et dans **une seule PR**
+     ouverte vers `master` (titre « Routine : compléter la documentation ») ;
+   - au début d'un passage : s'il y a déjà une PR ouverte depuis `claude/routine`,
+     repartir de cette branche et y fusionner `origin/master` (`git merge`, sans
+     réécrire l'historique) ; sinon, créer `claude/routine` depuis `origin/master` ;
+   - à la fin : un commit clair, poussé sur `claude/routine` ; si la PR n'existe pas,
+     la créer (`gh api -X POST repos/maxlestage/Docs/pulls …`) ;
+   - **fusion, avec l'autorisation du propriétaire** : quand la PR contient
+     **au moins 3 commits** et que toutes les vérifications de son dernier commit
+     (`gh api repos/maxlestage/Docs/commits/<sha>/check-runs`) sont terminées et
+     réussies, la fusionner (`gh api -X PUT repos/maxlestage/Docs/pulls/<n>/merge
+     -f merge_method=merge`) puis supprimer la branche `claude/routine`. Une CI rouge
+     se corrige d'abord ; une PR rouge ne se fusionne jamais ;
+   - si une vérification échoue et ne peut pas être corrigée, ne rien pousser : noter le
+     problème dans le journal ci-dessous.
+   `gh` ne parle qu'à l'API REST (`gh api …`) : pas de `gh pr …`, qui utilise GraphQL.
 7. Cocher les éléments faits dans la liste, en ajouter si une idée manque, et écrire
    une ligne dans le journal.
 
@@ -90,3 +102,4 @@ jour la liste ci-dessous, puis publie.
 ## Journal
 
 - 2026-10-19 — Mise en place de la routine (7 langages, 223 chapitres).
+- 2026-10-19 — La routine publie par une PR, fusionnée à partir de 3 commits quand la CI est verte.
