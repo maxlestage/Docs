@@ -1,14 +1,13 @@
-# Conditions et boucles
+# Les conditions
 
-Cette page montre comment choisir entre plusieurs chemins avec `if` et `match`, et comment répéter du code avec `loop`, `while` et `for`.
+Cette page montre comment choisir entre plusieurs chemins avec `if` et `match`, et comment lire une valeur facultative avec `if let`.
 
 > **Objectifs :**
 >
 > - écrire une [condition](../debuter/glossaire.md#condition) avec `if`, `else if` et
 >   `else` ;
+> - comparer des valeurs avec `==`, `<`, `&&`, `||` et `!` ;
 > - choisir parmi plusieurs cas avec `match` et `matches!` ;
-> - répéter du code avec `loop`, `while` et `for` ;
-> - sortir d'une boucle, même imbriquée, avec `break` et `continue` ;
 > - lire une valeur facultative avec `if let` et `while let`.
 
 ## La condition if
@@ -224,229 +223,6 @@ false
 `match` devient encore plus utile avec les énumérations : voir
 [Structures, énumérations et traits](types.md#match-sur-une-enumeration).
 
-## La boucle loop
-
-Imaginez qu'on vous demande d'afficher les nombres de 1 à 100. Écrire 100 `println!`
-serait long et pénible. Une boucle fait ce travail répétitif à votre place.
-
-Une [boucle](../debuter/glossaire.md#boucle) répète un bloc de code. `loop` répète
-sans fin, jusqu'à un `break`. Le `break` peut renvoyer une valeur :
-
-```rust
-let mut n = 1;
-let resultat = loop {
-    n = n * 2;
-    if n > 100 {
-        break n;
-    }
-};
-println!("{resultat}");
-```
-
-```sortie
-128
-```
-
-Ligne par ligne :
-
-- `n` vaut 1 au départ ; `mut` permet de le modifier ensuite ;
-- à chaque tour, `n` est multiplié par 2 : il vaut 2, puis 4, 8, 16, 32, 64, 128 ;
-- tant que `n` ne dépasse pas 100, le `if` ne fait rien et la boucle recommence ;
-- quand `n` vaut 128, `break n;` arrête la boucle et donne 128, rangé dans
-  `resultat`.
-
-## La boucle while
-
-Parfois, vous ne savez pas à l'avance combien de tours il faudra. Vous répétez tant
-qu'une situation dure, comme on remue une soupe tant qu'elle n'est pas chaude.
-
-`while` répète tant que la condition est vraie. Elle est testée avant chaque tour :
-
-```rust
-let mut compte = 3;
-while compte > 0 {
-    println!("{compte}...");
-    compte -= 1;
-}
-println!("Partez !");
-```
-
-```sortie
-3...
-2...
-1...
-Partez !
-```
-
-Ligne par ligne :
-
-- `compte` vaut 3 au départ ;
-- avant chaque tour, Rust pose la question `compte > 0`. `3 > 0` est vrai : il entre
-  dans le bloc ;
-- le bloc affiche `compte`, puis lui retire 1 (`-= 1`) : il vaut 2, puis 1, puis 0 ;
-- quand `compte` vaut 0, `0 > 0` est faux : Rust sort de la boucle et affiche
-  « Partez ! ».
-
-**À vous :** écrivez un programme qui affiche les nombres de 1 à 5 avec une boucle
-`while`, puis « Fini ! ».
-
-> **Solution**
->
-> ```rust
-> let mut n = 1;
-> while n <= 5 {
->     println!("{n}");
->     n += 1;
-> }
-> println!("Fini !");
-> ```
->
-> ```sortie
-> 1
-> 2
-> 3
-> 4
-> 5
-> Fini !
-> ```
-
-## La boucle for
-
-Très souvent, vous avez une suite de choses à traiter une par une : chaque article
-d'une liste de courses, chaque nombre de 1 à 10. `for` est fait pour cela.
-
-`for` parcourt un intervalle ou une collection, élément par élément. C'est la boucle
-la plus utilisée.
-
-### Sur un intervalle
-
-`1..4` va de 1 à 3 (le 4 est exclu). `1..=4` va de 1 à 4 inclus. `rev()` parcourt à
-l'envers.
-
-```rust
-for i in 1..4 {
-    print!("{i} ");
-}
-println!();
-for i in (1..=4).rev() {
-    print!("{i} ");
-}
-println!();
-```
-
-```sortie
-1 2 3 
-4 3 2 1 
-```
-
-Ligne par ligne :
-
-- `for i in 1..4` donne à `i` la valeur 1, puis 2, puis 3 ;
-- `print!` affiche sans aller à la ligne : les nombres restent côte à côte ;
-- `println!()`, vide, sert seulement à passer à la ligne ;
-- la deuxième boucle fait pareil de 1 à 4, mais à l'envers grâce à `rev()`.
-
-### Sur une collection
-
-```rust
-let fruits = ["pomme", "poire", "kiwi"];
-for fruit in fruits {
-    println!("J'aime la {fruit}");
-}
-for (i, fruit) in fruits.iter().enumerate() {
-    println!("{i} : {fruit}");
-}
-```
-
-```sortie
-J'aime la pomme
-J'aime la poire
-J'aime la kiwi
-0 : pomme
-1 : poire
-2 : kiwi
-```
-
-`enumerate()` donne, en plus de chaque élément, sa position (à partir de 0).
-
-**À vous :** écrivez un programme qui affiche la table de 7, de « 7 x 1 = 7 » à
-« 7 x 5 = 35 », une ligne par calcul.
-
-> **Solution**
->
-> ```rust
-> for i in 1..=5 {
->     let resultat = 7 * i;
->     println!("7 x {i} = {resultat}");
-> }
-> ```
->
-> ```sortie
-> 7 x 1 = 7
-> 7 x 2 = 14
-> 7 x 3 = 21
-> 7 x 4 = 28
-> 7 x 5 = 35
-> ```
-
-## continue et break
-
-Parfois, vous voulez changer le cours d'une boucle en route : arrêter de chercher dès
-que vous avez trouvé, ou ignorer certains éléments. C'est le rôle de ces deux mots.
-
-`continue` passe au tour suivant, `break` arrête la boucle :
-
-```rust
-for n in 1..10 {
-    if n % 2 == 0 {
-        continue;
-    }
-    if n > 7 {
-        break;
-    }
-    print!("{n} ");
-}
-println!();
-```
-
-```sortie
-1 3 5 7 
-```
-
-Ligne par ligne :
-
-- `n` prend les valeurs 1, 2, 3… jusqu'à 9 ;
-- si `n` est pair (le reste de la division par 2 vaut 0), `continue` passe tout de
-  suite au tour suivant : le `print!` n'est pas atteint ;
-- si `n` dépasse 7, `break` arrête toute la boucle : 9 n'est jamais affiché ;
-- sinon, `print!` affiche le nombre.
-
-### Sortir de deux boucles : les étiquettes
-
-Dans deux boucles imbriquées, `break` n'arrête que la boucle intérieure. Pour arrêter
-celle du dehors, donnez-lui une **étiquette** : un nom qui commence par une apostrophe,
-comme `'grille`.
-
-```rust
-'grille: for ligne in 1..=3 {
-    for colonne in 1..=3 {
-        if ligne * colonne == 4 {
-            println!("Trouvé en ({ligne}, {colonne})");
-            break 'grille;
-        }
-    }
-}
-println!("Fin");
-```
-
-```sortie
-Trouvé en (2, 2)
-Fin
-```
-
-`continue 'grille` marche de la même façon : il passe au tour suivant de la boucle
-étiquetée.
-
 ## if let et while let
 
 Pensez à une boîte aux lettres : parfois il y a une lettre, parfois rien. Avant de
@@ -487,7 +263,6 @@ println!();
 ```
 
 > **Astuce :** `if let` est un `match` raccourci, quand un seul cas vous intéresse.
-
 ## Erreurs fréquentes
 
 ### Une condition qui n'est pas un booléen
@@ -580,11 +355,23 @@ Une variable n'a qu'un type : les deux branches doivent donner du texte, par exe
 
 ## Testez-vous
 
-**1.** Combien de fois ce code affiche-t-il `bip` : `for _ in 0..3 { println!("bip"); }` ?
+**1.** Qu'affiche ce code ?
+
+```rust norun
+let x = 7;
+if x > 10 {
+    println!("grand");
+} else if x > 5 {
+    println!("moyen");
+} else {
+    println!("petit");
+}
+```
 
 > **Réponse**
 >
-> Trois fois : `0..3` donne 0, 1 et 2 (le 3 est exclu).
+> `moyen` : 7 n'est pas plus grand que 10, mais il est plus grand que 5. Rust
+> s'arrête à la première condition vraie.
 
 **2.** Écrivez un `match` qui affiche `petit` pour 0 à 9, `moyen` pour 10 à 99 et
 `grand` sinon, pour `n = 42`.
@@ -604,25 +391,23 @@ Une variable n'a qu'un type : les deux branches doivent donner du texte, par exe
 > moyen
 > ```
 
-**3.** Dans deux boucles imbriquées, comment arrêter les deux d'un coup ?
+**3.** Que fait `if let Some(haut) = pile.pop() { … }` quand la pile est vide ?
 
 > **Réponse**
 >
-> Donnez une étiquette à la boucle du dehors (`'dehors: for …`) et écrivez
-> `break 'dehors;` dans la boucle intérieure.
+> `pop()` renvoie `None`, qui ne correspond pas au motif `Some(haut)` : le bloc
+> n'est pas exécuté, et le programme continue après.
 
 ## En résumé
 
 - `if … else` choisit un chemin, et peut renvoyer une valeur.
+- `==`, `<`, `&&`, `||` et `!` construisent des conditions ; une condition est
+  toujours un `bool`.
 - `match` compare une valeur à des motifs ; `_` attrape le reste ; `matches!` teste un
   seul motif.
-- `loop` répète jusqu'à `break`, `while` tant qu'une condition est vraie.
-- `for x in 1..=5` ou `for x in liste` : la boucle la plus courante.
-- `continue` passe au tour suivant, `break` arrête la boucle ; une étiquette `'nom`
-  vise une boucle précise.
 - `if let Some(x) = …` et `while let` lisent une valeur facultative.
 
 Comparez avec [Ruby](../ruby/conditions-boucles.md) et
 [Rythme](../rythme/conditions-boucles.md).
 
-Suite : [Les fonctions](fonctions.md).
+Suite : [Les boucles](boucles.md).
