@@ -1,14 +1,12 @@
-# Conditions and loops
+# Conditions
 
-This page shows how to make choices with `if`, `switch` and the ternary operator, then how to repeat actions with `while`, `for` and `for...of`.
+This page shows how to make choices with `if`, `switch` and the ternary operator, and how to combine comparisons.
 
 > **Goals:**
 >
 > - you will be able to write a condition with `if`, `else if` and `else`;
 > - you will be able to combine comparisons with `&&`, `||` and `!`;
-> - you will know what "truthy" and "falsy" values are, and use `??` and `?.`;
-> - you will be able to repeat code with `while`, `for` and `for...of`;
-> - you will be able to leave a loop with `break` or skip a round with `continue`.
+> - you will know what "truthy" and "falsy" values are, and use `??` and `?.`.
 
 ## The if condition
 
@@ -243,7 +241,8 @@ Line by line:
 
 - `values` is a list of nine values of all kinds;
 - `for (const v of values)` takes these values one by one and stores each one in `v`.
-  This loop is explained further down this page;
+  This loop is explained in
+  [the chapter on loops](boucles.md#for-of-going-through-the-values);
 - `Boolean(v)` turns the value into `true` or `false`, and `console.log` displays both
   side by side;
 - the third line of the output starts with a space: that is the empty text `""`, which
@@ -380,241 +379,7 @@ Work
 - Two `case` lines in a row share the same code (here saturday and sunday).
 - `default` is used when no `case` matches.
 
-## The while loop
-
-Imagine you are asked to display the numbers from 1 to 100. Writing 100 `console.log`
-would be long and tedious. A loop does this repetitive work for you.
-
-A [loop](../debuter/glossaire.md#loop) repeats a block of code. `while` repeats it as
-long as the condition is true.
-
-```javascript
-let counter = 3;
-
-while (counter > 0) {
-  console.log(counter);
-  counter--;
-}
-console.log("Liftoff!");
-```
-
-```sortie
-3
-2
-1
-Liftoff!
-```
-
-Line by line:
-
-- `let counter = 3;`: the variable starts at 3. It is a `let`, because it will change;
-- `while (counter > 0)`: before each round, JavaScript asks the question. `3 > 0` is
-  true: it enters the block;
-- the block displays `counter`, then `counter--` takes 1 away: it becomes 2, then 1,
-  then 0;
-- when `counter` is 0, `0 > 0` is false: JavaScript leaves the loop and moves on to
-  the last `console.log`.
-
-> **Warning:** if the condition always stays true, the loop never stops. Here,
-> `counter--` brings the counter closer to 0 on each round. To stop a stuck program,
-> press **Ctrl + C** in the terminal.
-
-**Your turn:** write a program that displays the numbers from 1 to 5 with a `while`
-loop, then "Done!".
-
-> **Solution**
->
-> ```javascript
-> let n = 1;
->
-> while (n <= 5) {
->   console.log(n);
->   n++;
-> }
-> console.log("Done!");
-> ```
->
-> ```sortie
-> 1
-> 2
-> 3
-> 4
-> 5
-> Done!
-> ```
-
-## The for loop
-
-Many loops count: from 1 to 5, from 1 to 10… With `while`, the start, the question and
-the step are scattered over several lines, and it is easy to forget one. `for` brings
-them together.
-
-`for` groups on one line the three parts of a counting loop:
-`for (start; condition; step)`.
-
-```javascript
-for (let i = 1; i <= 5; i++) {
-  console.log(`${i} x 3 = ${i * 3}`);
-}
-```
-
-```sortie
-1 x 3 = 3
-2 x 3 = 6
-3 x 3 = 9
-4 x 3 = 12
-5 x 3 = 15
-```
-
-1. **Start**: `let i = 1`, run once at the beginning.
-2. **Condition**: `i <= 5`, checked before each round.
-3. **Step**: `i++`, run after each round.
-
-**Your turn:** write a program that displays the 7 times table, from "7 x 1 = 7" to
-"7 x 5 = 35", one line per calculation.
-
-> **Solution**
->
-> ```javascript
-> for (let i = 1; i <= 5; i++) {
->   console.log(`7 x ${i} = ${7 * i}`);
-> }
-> ```
->
-> ```sortie
-> 7 x 1 = 7
-> 7 x 2 = 14
-> 7 x 3 = 21
-> 7 x 4 = 28
-> 7 x 5 = 35
-> ```
-
-## for...of and for...in
-
-Very often, you have a list of things to handle one by one: each item on a shopping
-list, each student in a class. These two loops are made for that.
-
-### for...of: going through the values
-
-To go through the elements of an array (or the letters of a text), use `for...of`. No
-counter to manage: you receive each value, one by one.
-
-```javascript
-const fruits = ["apple", "pear", "kiwi"];
-
-for (const fruit of fruits) {
-  console.log(`I like this ${fruit}.`);
-}
-
-for (const letter of "abc") {
-  console.log(letter);
-}
-```
-
-```sortie
-I like this apple.
-I like this pear.
-I like this kiwi.
-a
-b
-c
-```
-
-Line by line:
-
-- `fruits` holds an array of three texts;
-- `for (const fruit of fruits)` takes the first element, `"apple"`, and stores it in
-  `fruit`;
-- the block displays the sentence with `"apple"`. Then JavaScript goes back to the
-  `for`, which stores `"pear"` in `fruit`, and so on;
-- after `"kiwi"`, there are no more elements: the loop stops. The second loop does the
-  same with the letters of `"abc"`.
-
-Here `const` is fine: on each round, a **new** variable `fruit` is created.
-
-### for...in: going through the keys
-
-`for...in` goes through the **property names** of an object, not the values.
-
-```javascript
-const scores = { alice: 12, bob: 8 };
-
-for (const name in scores) {
-  console.log(name, scores[name]);
-}
-```
-
-```sortie
-alice 12
-bob 8
-```
-
-> **Remember:** `for...of` for the **values** of an array or a text; `for...in` for
-> the **keys** of an object. Do not mix them up.
-
-## break and continue
-
-Sometimes you want to change the course of a loop on the way: stop searching as soon
-as you have found something, or ignore some elements. That is the job of these two
-words.
-
-- `break` leaves the loop right away.
-- `continue` skips the rest of the current round and moves on to the next one.
-
-```javascript
-const numbers = [4, 7, -1, 12, 0, 5];
-
-for (const n of numbers) {
-  if (n < 0) {
-    continue;
-  }
-  if (n === 0) {
-    break;
-  }
-  console.log(n);
-}
-```
-
-```sortie
-4
-7
-12
-```
-
-Line by line:
-
-- `for (const n of numbers)` gives `n` the values 4, 7, -1, 12… one by one;
-- if `n` is negative, `continue` moves straight on to the next round: the
-  `console.log` is not reached;
-- if `n` is 0, `break` stops the whole loop;
-- otherwise, `console.log(n)` displays the number.
-
-`-1` is skipped by `continue`. At `0`, `break` stops everything: `5` is never displayed.
-
 ## Common mistakes
-
-### Using const in a counting for
-
-```javascript norun
-for (const i = 0; i < 3; i++) {
-  console.log(i);
-}
-```
-
-```text
-0
-file:///home/alice/js/main.mjs:1
-for (const i = 0; i < 3; i++) {
-                          ^
-
-TypeError: Assignment to constant variable.
-    at file:///home/alice/js/main.mjs:1:27
-
-Node.js v22.22.0
-```
-
-The first round works, then `i++` tries to change a constant. In a classic `for`, the
-counter changes: write `let i = 0`. (In a `for...of`, `const` is correct.)
 
 ### Writing = instead of ===
 
@@ -661,23 +426,6 @@ Node.js v22.22.0
 The file ends (*end of input*) while a `{` block is still open. Every `{` must have its
 `}`. A good editor colors pairs of curly braces to help you.
 
-### Using for...in on an array
-
-```javascript norun
-const fruits = ["apple", "pear"];
-for (const i in fruits) {
-  console.log(i + 1);
-}
-```
-
-```text
-01
-11
-```
-
-`for...in` gives the **keys** of the array, as the texts `"0"` and `"1"`. And `"0" + 1`
-glues the two together: `"01"`. For the values, use `for...of`.
-
 ## Test yourself
 
 **Question 1:** what does this code display?
@@ -714,25 +462,20 @@ if (x > 10) {
 > `??` only replaces `null` and `undefined`. `||` replaces any falsy value, including
 > `0`.
 
-**Question 3:** write a loop that displays the even numbers from 2 to 10.
+**Question 3:** among `0`, `"0"`, `[]` and `""`, which values are falsy?
 
 > **Answer**
 >
 > ```javascript
-> for (let i = 2; i <= 10; i += 2) {
->   console.log(i);
-> }
+> console.log(Boolean(0), Boolean("0"), Boolean([]), Boolean(""));
 > ```
 >
 > ```sortie
-> 2
-> 4
-> 6
-> 8
-> 10
+> false true true false
 > ```
 >
-> The step `i += 2` skips the odd numbers.
+> Only `0` and `""` are falsy. `"0"` is a non-empty text, and an empty array `[]` is
+> truthy.
 
 ## Summary
 
@@ -743,8 +486,5 @@ if (x > 10) {
   truthy.
 - `cond ? a : b` chooses a value; `??` gives a fallback value; `?.` reads without
   crashing.
-- `while` repeats as long as a condition is true, `for` counts, `for...of` goes through
-  the values, `for...in` the keys of an object.
-- `break` leaves the loop, `continue` moves on to the next round.
 
-Next: [functions](fonctions.md).
+Next: [loops](boucles.md).
