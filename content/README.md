@@ -35,6 +35,19 @@ Une citation qui commence par un de ces mots devient un encadré coloré :
 > **Objectifs :** …
 ```
 
+## Aider les grands débutants
+
+Dans les chapitres de base, trois aides s'ajoutent au texte (sans nouveau titre `##`) :
+
+- **Ligne par ligne :** juste après le bloc ```sortie d'un exemple de 3 lignes ou plus,
+  une courte liste qui dit ce que fait chaque ligne importante, dans l'ordre.
+- **À vous :** un mini-exercice d'une ou deux minutes, avec seulement ce qui a déjà été
+  vu, suivi de sa solution repliée (`> **Solution**`, code exécuté et sa sortie).
+  En anglais `**Your turn:**`, en espagnol `**Te toca:**`.
+- Une notion que l'on peut sauter en première lecture commence par
+  `> **Note :** cette partie peut attendre. Lisez-la quand les bases seront solides.`
+  Jamais pour une notion citée dans les objectifs.
+
 ## Exercices
 
 Un exercice est une section `### Exercice 1 : Le titre`, avec son énoncé, un indice
