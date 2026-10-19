@@ -23,9 +23,11 @@ ce que vous attendez  →  ce qui se passe  →  pourquoi  →  la correction
 > **À retenir :** un message d'erreur de Rust n'est pas une punition. C'est une
 > explication, souvent avec la correction en bas, après `help:`.
 
-## Piège 1 : les variables ne changent pas
+## Variables et texte
 
-### Ce que vous attendez
+### Piège 1 : les variables ne changent pas
+
+**Ce que vous attendez**
 
 Vous créez un score à 0, puis vous ajoutez 10. Vous pensez voir `10`.
 
@@ -37,7 +39,7 @@ fn main() {
 }
 ```
 
-### Ce qui se passe
+**Ce qui se passe**
 
 ```text
 error[E0384]: cannot assign twice to immutable variable `score`
@@ -54,12 +56,12 @@ help: consider making this binding mutable
   |         +++
 ```
 
-### Pourquoi
+**Pourquoi**
 
 En Rust, une variable est [immuable](../debuter/glossaire.md#immuable) par défaut. Elle
 ne change plus une fois créée. C'est une étiquette collée sur une boîte fermée.
 
-### La correction
+**La correction**
 
 Ajoutez `mut` (pour *mutable*, « modifiable ») :
 
@@ -78,9 +80,9 @@ fn main() {
 Essayez : retirez `mut`. Le compilateur vous propose lui-même de le remettre, avec des
 `+++` sous l'endroit à compléter.
 
-## Piège 2 : String et &str, deux sortes de texte
+### Piège 2 : String et &str, deux sortes de texte
 
-### Ce que vous attendez
+**Ce que vous attendez**
 
 Vous écrivez un texte entre guillemets dans une variable de type `String`.
 
@@ -91,7 +93,7 @@ fn main() {
 }
 ```
 
-### Ce qui se passe
+**Ce qui se passe**
 
 ```text
 error[E0308]: mismatched types
@@ -108,7 +110,7 @@ help: try using a conversion method
   |                            ++++++++++++
 ```
 
-### Pourquoi
+**Pourquoi**
 
 Un texte entre guillemets est un `&str` : un texte **écrit dans le programme**, qu'on
 lit seulement. Une `String` est un texte **à vous**, qui peut grandir. C'est la
@@ -119,7 +121,7 @@ différence entre une affiche collée au mur et une feuille dans votre cahier.
 | `&str` | une affiche qu'on regarde | non |
 | `String` | une feuille à vous | oui |
 
-### La correction
+**La correction**
 
 Transformez l'affiche en feuille avec `String::from` ou `.to_string()` :
 
@@ -137,9 +139,9 @@ Zoé habite à Lyon
 
 Tout est expliqué dans [Travailler avec du texte](texte.md).
 
-## Piège 3 : utiliser une valeur après l'avoir donnée
+### Piège 3 : utiliser une valeur après l'avoir donnée
 
-### Ce que vous attendez
+**Ce que vous attendez**
 
 Vous copiez un texte dans une autre variable, puis vous affichez les deux.
 
@@ -151,7 +153,7 @@ fn main() {
 }
 ```
 
-### Ce qui se passe
+**Ce qui se passe**
 
 ```text
 error[E0382]: borrow of moved value: `a`
@@ -170,7 +172,7 @@ help: consider cloning the value if the performance cost is acceptable
   |              ++++++++
 ```
 
-### Pourquoi
+**Pourquoi**
 
 `let b = a;` ne copie pas la `String`. Il la **donne** à `b`. C'est comme donner un
 livre : vous ne l'avez plus. On dit que la valeur est « déplacée » (*moved*).
@@ -185,7 +187,7 @@ C'est la règle de [possession](../debuter/glossaire.md#possession). Pas de pani
 elle a son propre chapitre, [Possession et emprunt](possession.md). Pour l'instant,
 retenez seulement la correction.
 
-### La correction
+**La correction**
 
 Si vous voulez vraiment deux textes, faites une copie avec `.clone()` :
 
@@ -204,9 +206,11 @@ bonjour bonjour
 > **Note :** les nombres (`i32`, `f64`…) et `bool` ne sont pas concernés. Ils sont
 > petits, Rust les copie tout seul. `let y = x;` garde `x` utilisable.
 
-## Piège 4 : un nombre qui déborde
+## Nombres et fonctions
 
-### Ce que vous attendez
+### Piège 4 : un nombre qui déborde
+
+**Ce que vous attendez**
 
 Un `u8` va de 0 à 255. Vous partez de 250 et ajoutez 1, dix fois. Vous pensez voir
 `260`.
@@ -221,7 +225,7 @@ fn main() {
 }
 ```
 
-### Ce qui se passe
+**Ce qui se passe**
 
 Le programme compile, puis s'arrête net pendant l'exécution :
 
@@ -231,7 +235,7 @@ attempt to add with overflow
 note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
 ```
 
-### Pourquoi
+**Pourquoi**
 
 Une variable `u8` est une boîte qui ne peut pas contenir plus que 255. Arrivé à 256,
 le nombre « déborde » (*overflow*). En mode développement, Rust préfère s'arrêter : on
@@ -244,7 +248,7 @@ appelle cela une [panique](../debuter/glossaire.md#panique).
 | 5 | 254 | 255 |
 | 6 | 255 | débordement : panique |
 
-### La correction
+**La correction**
 
 Choisissez un type assez grand. `i32` va jusqu'à plus de deux milliards :
 
@@ -264,9 +268,9 @@ fn main() {
 
 Pour plus de détails, voyez [Le dépassement de capacité](nombres.md#le-depassement-de-capacite).
 
-## Piège 5 : 7 divisé par 2 donne 3
+### Piège 5 : 7 divisé par 2 donne 3
 
-### Ce que vous attendez
+**Ce que vous attendez**
 
 Vous partagez 7 bonbons entre 2 enfants. Vous pensez voir `3.5`.
 
@@ -284,13 +288,13 @@ fn main() {
 1
 ```
 
-### Pourquoi
+**Pourquoi**
 
 `7` et `2` sont des [entiers](../debuter/glossaire.md#entier). Entre deux entiers, `/`
 fait une division **entière** : il garde la partie avant la virgule. `%` donne le
 reste. C'est exactement le partage de bonbons : 3 chacun, il en reste 1.
 
-### La correction
+**La correction**
 
 Pour un résultat à virgule, travaillez avec des `f64`, en écrivant `7.0` et `2.0` :
 
@@ -309,9 +313,9 @@ fn main() {
 Essayez : écrivez `7.0 / 2`. Rust refuse de mélanger un `f64` et un entier. Écrivez
 `7.0 / 2.0`.
 
-## Piège 6 : le point-virgule de trop
+### Piège 6 : le point-virgule de trop
 
-### Ce que vous attendez
+**Ce que vous attendez**
 
 Votre fonction calcule le double d'un nombre. Vous pensez voir `8`.
 
@@ -325,7 +329,7 @@ fn main() {
 }
 ```
 
-### Ce qui se passe
+**Ce qui se passe**
 
 ```text
 error[E0308]: mismatched types
@@ -339,7 +343,7 @@ error[E0308]: mismatched types
   |          - help: remove this semicolon to return this value
 ```
 
-### Pourquoi
+**Pourquoi**
 
 En Rust, la dernière ligne **sans** point-virgule est la valeur renvoyée. Avec un
 point-virgule, la ligne devient une simple instruction : elle calcule, puis jette le
@@ -350,7 +354,7 @@ x * 2     →  une valeur : 8        (renvoyée)
 x * 2;    →  une instruction       (le 8 est jeté, il reste ())
 ```
 
-### La correction
+**La correction**
 
 Retirez le point-virgule de la dernière ligne :
 
@@ -370,9 +374,11 @@ fn main() {
 
 Voir aussi [Expressions et instructions](fonctions.md#expressions-et-instructions).
 
-## Piège 7 : lire une lettre avec [0]
+## Texte et types
 
-### Ce que vous attendez
+### Piège 7 : lire une lettre avec [0]
+
+**Ce que vous attendez**
 
 Vous voulez la première lettre de « chat ». Vous pensez voir `c`.
 
@@ -384,7 +390,7 @@ fn main() {
 }
 ```
 
-### Ce qui se passe
+**Ce qui se passe**
 
 ```text
 error[E0277]: the type `str` cannot be indexed by `{integer}`
@@ -397,13 +403,13 @@ error[E0277]: the type `str` cannot be indexed by `{integer}`
   = note: you can use `.chars().nth()` or `.bytes().nth()`
 ```
 
-### Pourquoi
+**Pourquoi**
 
 Rust range le texte en [Unicode](../debuter/glossaire.md#unicode). Une lettre comme `é`
 prend 2 cases en mémoire, `a` n'en prend qu'une. La case 0 n'est donc pas toujours une
 lettre entière. Rust préfère refuser plutôt que de vous donner une demi-lettre.
 
-### La correction
+**La correction**
 
 Parcourez les lettres avec `.chars()`, puis prenez celle qui vous intéresse :
 
@@ -423,9 +429,9 @@ Some('é') Some('é')
 Le résultat est une [Option](../debuter/glossaire.md#option) : le mot pourrait être
 trop court. Voir [Parcourir les caractères](texte.md#parcourir-les-caracteres).
 
-## Piège 8 : comparer deux sortes d'entiers
+### Piège 8 : comparer deux sortes d'entiers
 
-### Ce que vous attendez
+**Ce que vous attendez**
 
 Vous comparez la longueur d'une liste avec un nombre. Vous pensez voir `grand`.
 
@@ -439,7 +445,7 @@ fn main() {
 }
 ```
 
-### Ce qui se passe
+**Ce qui se passe**
 
 ```text
 error[E0308]: mismatched types
@@ -451,14 +457,14 @@ error[E0308]: mismatched types
   |        expected because this is `usize`
 ```
 
-### Pourquoi
+**Pourquoi**
 
 `len()` renvoie un `usize` : le type des tailles et des positions. `limite` est un
 `i32`. Pour Rust, ce sont deux [types](../debuter/glossaire.md#type) différents, même
 s'ils contiennent tous les deux des nombres entiers. Il ne les mélange jamais tout
 seul.
 
-### La correction
+**La correction**
 
 Le plus simple : donnez le bon type à `limite` dès le départ.
 
@@ -479,9 +485,11 @@ grand
 > **Astuce :** une variable qui sert de position ou de taille dans une liste doit être
 > un `usize`.
 
-## Piège 9 : unwrap sur une boîte vide
+## Boucles, listes et Option
 
-### Ce que vous attendez
+### Piège 9 : unwrap sur une boîte vide
+
+**Ce que vous attendez**
 
 Vous demandez le premier élément d'une liste, et vous l'ouvrez avec `unwrap()`.
 
@@ -493,7 +501,7 @@ fn main() {
 }
 ```
 
-### Ce qui se passe
+**Ce qui se passe**
 
 ```text
 thread 'main' (2158) panicked at src/main.rs:3:29:
@@ -501,13 +509,13 @@ called `Option::unwrap()` on a `None` value
 note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
 ```
 
-### Pourquoi
+**Pourquoi**
 
 `first()` renvoie une `Option` : une boîte qui contient soit `Some(valeur)`, soit
 `None` (rien). La liste est vide, donc la boîte aussi. `unwrap()` veut dire « ouvre la
 boîte, et s'il n'y a rien, arrête tout ».
 
-### La correction
+**La correction**
 
 Prévoyez le cas vide, avec `match` ou avec `unwrap_or` :
 
@@ -531,9 +539,9 @@ la liste est vide
 > **À retenir :** `unwrap()` est pratique pour essayer. Dans un vrai programme, chaque
 > `unwrap()` est une question : « suis-je **sûr** que la boîte n'est pas vide ? »
 
-## Piège 10 : masquer au lieu de modifier
+### Piège 10 : masquer au lieu de modifier
 
-### Ce que vous attendez
+**Ce que vous attendez**
 
 Vous ajoutez 1, 2 puis 3 au total dans une boucle. Vous pensez voir `6` à la fin.
 
@@ -555,7 +563,7 @@ dans la boucle : 3
 à la fin : 0
 ```
 
-### Pourquoi
+**Pourquoi**
 
 `let total = …` dans la boucle crée une **nouvelle** variable, qui porte le même nom.
 On appelle cela le **masquage** (*shadowing*). Elle cache l'ancienne, puis disparaît à
@@ -567,7 +575,7 @@ la fin du tour. L'ancien `total` n'a jamais bougé.
 | 2 | 2 | 0 + 2 = 2 | 0 |
 | 3 | 3 | 0 + 3 = 3 | 0 |
 
-### La correction
+**La correction**
 
 Pour modifier la même variable : `let mut` une seule fois, puis **pas** de `let`
 dans la boucle.
@@ -589,9 +597,9 @@ fn main() {
 > **À retenir :** `let` crée une nouvelle variable. `x = …` (sans `let`) modifie
 > celle qui existe.
 
-## Piège 11 : une case qui n'existe pas
+### Piège 11 : une case qui n'existe pas
 
-### Ce que vous attendez
+**Ce que vous attendez**
 
 Une liste a 3 notes. Vous voulez la troisième, alors vous écrivez `notes[3]`.
 
@@ -602,7 +610,7 @@ fn main() {
 }
 ```
 
-### Ce qui se passe
+**Ce qui se passe**
 
 ```text
 thread 'main' (2246) panicked at src/main.rs:3:25:
@@ -610,7 +618,7 @@ index out of bounds: the len is 3 but the index is 3
 note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
 ```
 
-### Pourquoi
+**Pourquoi**
 
 Les positions (les [indices](../debuter/glossaire.md#indice)) commencent à **0**. Trois
 cases ont les numéros 0, 1 et 2. La case 3 n'existe pas.
@@ -620,7 +628,7 @@ position :   0    1    2
 notes    : [ 12 | 15 |  9 ]
 ```
 
-### La correction
+**La correction**
 
 La troisième note est `notes[2]`. Si vous n'êtes pas sûr, utilisez `get`, qui renvoie
 une `Option` au lieu de s'arrêter :
@@ -638,9 +646,9 @@ fn main() {
 None
 ```
 
-## Piège 12 : l'intervalle qui s'arrête trop tôt
+### Piège 12 : l'intervalle qui s'arrête trop tôt
 
-### Ce que vous attendez
+**Ce que vous attendez**
 
 Vous comptez de 1 à 5 avec `1..5`. Vous pensez voir 5 nombres.
 
@@ -657,12 +665,12 @@ fn main() {
 1 2 3 4 
 ```
 
-### Pourquoi
+**Pourquoi**
 
 Un [intervalle](../debuter/glossaire.md#intervalle) `1..5` s'arrête **avant** 5. C'est
 pratique pour les positions : `0..v.len()` passe sur toutes les cases, sans déborder.
 
-### La correction
+**La correction**
 
 Pour inclure la fin, ajoutez `=` : `1..=5`.
 

@@ -69,20 +69,8 @@ et Ruby :
 | `<=` | est plus petit **ou égal** | `5 <= 5` |
 | `>=` | est plus grand **ou égal** | `5 >= 5` |
 
-On compare aussi des textes :
-
-```python
-mot_de_passe = "soleil"
-print(mot_de_passe == "soleil")
-print(mot_de_passe == "Soleil")
-```
-
-```sortie
-True
-False
-```
-
-Pour l'ordinateur, `s` et `S` sont deux lettres différentes.
+On compare aussi des textes : `"soleil" == "Soleil"` vaut `False`. Pour
+l'ordinateur, `s` et `S` sont deux lettres différentes.
 
 > **Attention :** `=` range une valeur dans une variable. `==` pose une
 > question : « est-ce égal ? ». Ce sont deux choses très différentes.
@@ -160,7 +148,8 @@ print(not il_pleut)
 True
 ```
 
-Le même calcul en JavaScript et en Ruby :
+Le même calcul en JavaScript (Ruby écrit exactement la même chose, avec
+`puts` au lieu de `console.log`) :
 
 ```javascript
 const beauTemps = true;
@@ -170,18 +159,6 @@ console.log(beauTemps && travailFini, beauTemps || travailFini, !beauTemps);
 
 ```sortie
 false true false
-```
-
-```ruby
-beau_temps = true
-travail_fini = false
-puts beau_temps && travail_fini, beau_temps || travail_fini, !beau_temps
-```
-
-```sortie
-false
-true
-false
 ```
 
 > **À retenir :** « et » demande que tout soit vrai ; « ou » se contente
@@ -236,18 +213,8 @@ ce qui est **dans** le `if`.
 Essayez : mettez `age = 15`. Le programme affiche « Pas encore. » puis
 « Au revoir. ».
 
-Le `else` est facultatif. Sans lui, s'il n'y a rien à faire quand c'est
-faux, on ne fait rien :
-
-```python
-panier = 0
-if panier == 0:
-    print("Votre panier est vide.")
-```
-
-```sortie
-Votre panier est vide.
-```
+Le `else` est facultatif : s'il n'y a rien à faire quand la réponse est
+non, on ne l'écrit pas.
 
 ### En JavaScript et en Ruby
 
@@ -341,22 +308,8 @@ L'ordinateur pose les questions **dans l'ordre**, et s'arrête à la
 13 est aussi plus grand que 10, mais la question n'est jamais posée.
 L'ordre des questions compte donc : mettez la plus exigeante en premier.
 
-En JavaScript, on écrit `else if` ; en Ruby, `elsif` (sans « e ») :
-
-```javascript
-const note = 13;
-if (note >= 16) {
-  console.log("Très bien");
-} else if (note >= 12) {
-  console.log("Bien");
-} else {
-  console.log("Insuffisant");
-}
-```
-
-```sortie
-Bien
-```
+En JavaScript, on écrit `else if` : `} else if (note >= 12) {`. En Ruby,
+on écrit `elsif` (sans « e ») :
 
 ```ruby
 note = 13
@@ -475,19 +428,8 @@ Livraison : 5 €
 
 Il n'y a pas de message d'erreur : c'est une **erreur de logique**. Avec
 50 € pile, le client devrait avoir la livraison offerte. « À partir de 50 »
-inclut 50 : il fallait `>=`.
-
-```python
-panier = 50
-if panier >= 50:
-    print("Livraison offerte")
-else:
-    print("Livraison : 5 €")
-```
-
-```sortie
-Livraison offerte
-```
+inclut 50 : il fallait `>=`. Avec `if panier >= 50:`, le programme
+affiche « Livraison offerte ».
 
 > **Astuce :** testez toujours la valeur **exacte** de la limite (ici 50),
 > plus une juste en dessous et une juste au-dessus.
