@@ -491,4 +491,4 @@ nuestro algoritmo?
 - El mismo algoritmo se escribe en Python, JavaScript, Ruby, Rust o Rythme: solo cambian las palabras.
 - Prueba a mano con una tabla de valores, sin olvidar los casos difíciles.
 
-Siguiente: [Les variables, expliquées simplement](variables.md)
+Siguiente: [las variables, explicadas de forma sencilla](variables.md)
