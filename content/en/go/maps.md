@@ -45,6 +45,9 @@ func main() {
 
 ## Creating an empty map with make
 
+Often, you don't know in advance what the map will hold: you fill it as the program
+runs. It is like opening an empty drawer to put things in later.
+
 `make(map[string]int)` creates an empty map, ready to receive entries.
 
 ```go
@@ -64,11 +67,21 @@ func main() {
 5 2
 ```
 
+Line by line:
+
+- `make(map[string]int)` creates an empty map: it has no entries yet;
+- `stock["apples"] = 5` adds an entry: the key `"apples"`, with the value 5;
+- the next line adds the key `"pears"`, with the value 3;
+- `Println` prints the value of `"apples"` (5), then the number of entries (2).
+
 > **Warning:** a map declared with `var stock map[string]int` is `nil`. You can read
 > it, but writing to it crashes the program. Always create it with `make` or with
 > `{}`.
 
 ## Adding, changing, deleting
+
+A map changes while the program runs, like a bakery's price list: a product
+arrives, a price goes up, another product disappears.
 
 The same syntax `m[key] = value` adds an entry if the key is new, and **replaces** it
 if it already exists. `delete(m, key)` deletes an entry.
@@ -97,9 +110,45 @@ func main() {
 1
 ```
 
+Line by line:
+
+- at the start, `prices` holds a single entry: `"bread"` is 1.2;
+- `prices["milk"] = 0.95` uses a new key: the map now has 2 entries;
+- `prices["bread"] = 1.3` creates nothing: the key already exists, its value goes from
+  1.2 to 1.3;
+- `delete(prices, "milk")` removes the milk: 1 entry is left.
+
 Deleting a missing key (`"chocolate"`) is not an error: nothing happens.
 
+**Your turn:** write a program that creates an empty map `colors` with `make`,
+adds `"red"` (3) and `"blue"` (5), replaces the value of `"red"` with 4, deletes
+`"blue"`, then prints the value of `"red"` and the number of entries.
+
+> **Solution**
+>
+> ```go
+> package main
+>
+> import "fmt"
+>
+> func main() {
+> 	colors := make(map[string]int)
+> 	colors["red"] = 3
+> 	colors["blue"] = 5
+> 	colors["red"] = 4
+> 	delete(colors, "blue")
+> 	fmt.Println(colors["red"], len(colors))
+> }
+> ```
+>
+> ```sortie
+> 4 1
+> ```
+
 ## A missing key
+
+A program often asks for a key that may not be there: a name someone typed, a
+product that is out of stock. You need to know what Go answers then.
 
 Reading a key that doesn't exist causes no error: Go returns the **zero value** of the
 value type.
@@ -120,6 +169,13 @@ func main() {
 0
 0
 ```
+
+Line by line:
+
+- `grades` holds two entries: Alice has 15, Bob has 0;
+- `grades["Chloe"]` looks for a key that doesn't exist: Go returns 0, the zero value
+  of an `int`;
+- `grades["Bob"]` finds the key: its value really is 0.
 
 Problem: `0` for Chloe (missing) and `0` for Bob (who really got 0) look the same. How
 can you tell them apart?
@@ -161,7 +217,36 @@ variable, is very common.
 > **Remember:** `v := m[k]` gives the value (or zero). `v, ok := m[k]` also tells you
 > whether the key exists.
 
+**Your turn:** write a program that creates a phone book
+`map[string]string{"Alice": "555 0134"}`, looks up `"Bob"` with the "comma ok" form,
+then prints his number if it exists, or "Bob is not in the phone book" otherwise.
+
+> **Solution**
+>
+> ```go
+> package main
+>
+> import "fmt"
+>
+> func main() {
+> 	phoneBook := map[string]string{"Alice": "555 0134"}
+> 	number, ok := phoneBook["Bob"]
+> 	if ok {
+> 		fmt.Println("Bob's number:", number)
+> 	} else {
+> 		fmt.Println("Bob is not in the phone book")
+> 	}
+> }
+> ```
+>
+> ```sortie
+> Bob is not in the phone book
+> ```
+
 ## Going through a map
+
+You often need to look at everything: print the whole stock, add up all the grades.
+You don't want to write every key by hand: that is what `range` is for.
 
 `range` goes through all the entries of a map, giving the key and the value.
 
@@ -208,6 +293,14 @@ Marc 10
 Zoé 8
 ```
 
+Line by line:
+
+- `keys` is an empty slice of texts, with enough room for all the keys;
+- the first loop goes over each name in the map and adds it to `keys`, in any order;
+- `slices.Sort(keys)` puts the names in alphabetical order: Alice, Marc, Zoé;
+- the second loop goes through `keys` in that order and reads each person's age from
+  the map.
+
 ### Shorter: maps.Keys and slices.Sorted
 
 Since Go 1.23, the `maps` package provides `maps.Keys`, which gives the keys one by
@@ -240,7 +333,38 @@ Zoé 8
 > **Tip:** make it a habit: as soon as you **print** a map, sort its keys. Your
 > results and your tests will always be the same.
 
+**Your turn:** write a program that stores a fruit seller's stock in
+`map[string]int{"pears": 3, "kiwis": 7, "apples": 5}`, then prints each fruit and its
+quantity, in alphabetical order.
+
+> **Solution**
+>
+> ```go
+> package main
+>
+> import (
+> 	"fmt"
+> 	"maps"
+> 	"slices"
+> )
+>
+> func main() {
+> 	stock := map[string]int{"pears": 3, "kiwis": 7, "apples": 5}
+> 	for _, fruit := range slices.Sorted(maps.Keys(stock)) {
+> 		fmt.Println(fruit, stock[fruit])
+> 	}
+> }
+> ```
+>
+> ```sortie
+> apples 5
+> kiwis 7
+> pears 3
+> ```
+
 ## Counting words
+
+> **Note:** this part can wait. Read it once the basics feel solid.
 
 Counting is the most classic use of a map. Since a missing key is worth 0,
 `count[word]++` works even the first time.
@@ -276,7 +400,18 @@ fish     1
 the      3
 ```
 
+Line by line:
+
+- `strings.Fields(text)` cuts the text into words, at each space;
+- for each word, `count[word]++` adds 1. The first time "the" shows up, its value goes
+  from 0 to 1; at the end, it is 3;
+- the second loop prints the sorted words. `%-8s` pads each word with spaces, to line
+  up the numbers.
+
 ## Richer values
+
+Sometimes one value per key is not enough: a class has several students, a product
+has a price **and** a stock.
 
 A map value can be of any type: a slice, another map, a struct…
 
@@ -313,6 +448,13 @@ func main() {
 6A [Alice Chloe Emma]
 6B [Bob David]
 ```
+
+Line by line:
+
+- `students` and `classes` go together: Alice is in 6A, Bob in 6B, Chloe in 6A…;
+- `byClass` is an empty map: for each class, it will hold a slice of names;
+- the loop takes each student and adds them (`append`) to the slice of their class;
+- at the end, `"6A"` holds three names and `"6B"` holds two.
 
 ### A map of structs
 
