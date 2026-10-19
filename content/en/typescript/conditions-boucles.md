@@ -1,14 +1,13 @@
-# Conditions and loops
+# Conditions
 
-This page explains how to make choices with `if`, `switch` and the ternary operator, how to repeat actions with loops, and what types add each time.
+This page explains how to make choices with `if`, `switch` and the ternary operator, and what types add to each decision.
 
 > **Goals:**
 >
 > - you will know how to write a condition with `if`, `else if` and `else`;
 > - you will know how to compare with `===` and recognize "falsy" values;
 > - you will know how to handle a missing value with `??` and `?.`;
-> - you will know how to write a `switch` that never forgets a case, thanks to `never`;
-> - you will know how to repeat with `for`, `while` and `for...of`.
+> - you will know how to write a `switch` that never forgets a case, thanks to `never`.
 
 ## if and else
 
@@ -263,155 +262,6 @@ Two `case` lines in a row share the same code: `saturday` and `sunday` both prin
 > **Warning:** without `break`, execution goes on into the next case. Forgetting
 > `break` is a classic trap.
 
-## Loops
-
-Imagine you are asked to print the numbers from 1 to 100. Writing 100 `console.log`
-lines would be long and tedious. A loop does this repetitive work for you.
-
-A [loop](../debuter/glossaire.md#loop) repeats a block of code.
-
-### for: counting
-
-The `for` loop has three parts, separated by semicolons: the start, the condition to
-keep going, and the step.
-
-```typescript
-for (let i = 1; i <= 3; i++) {
-  console.log(`Round ${i}`);
-}
-```
-
-```sortie
-Round 1
-Round 2
-Round 3
-```
-
-- `let i = 1`: the counter starts at 1;
-- `i <= 3`: we keep going as long as `i` is at most 3;
-- `i++`: after each round, we add 1 to `i`.
-
-**Your turn:** write a program that prints the 7 times table, from "7 x 1 = 7" to
-"7 x 5 = 35", one line per calculation.
-
-> **Solution**
->
-> ```typescript
-> for (let i = 1; i <= 5; i++) {
->   console.log(`7 x ${i} = ${7 * i}`);
-> }
-> ```
->
-> ```sortie
-> 7 x 1 = 7
-> 7 x 2 = 14
-> 7 x 3 = 21
-> 7 x 4 = 28
-> 7 x 5 = 35
-> ```
-
-### while: as long as
-
-`while` repeats as long as its condition is true. Use it when you don't know in
-advance how many rounds you need.
-
-```typescript
-let money = 100;
-let years = 0;
-
-while (money < 150) {
-  money = money * 1.1;
-  years++;
-}
-
-console.log(`${years} years, ${money.toFixed(2)} euros`);
-```
-
-```sortie
-5 years, 161.05 euros
-```
-
-Line by line:
-
-- at the start, `money` is 100 and `years` is 0;
-- before each round, `while` checks `money < 150`. 100 is smaller: it enters the
-  block;
-- in each round, `money` grows by 10% (110, then 121, 133.1, 146.41, 161.051) and
-  `years` goes up by 1;
-- after 5 rounds, `money < 150` is false: the loop stops, and the last `console.log`
-  prints the result, rounded to two digits by `toFixed(2)`.
-
-> **Warning:** if the condition stays true forever, the loop never stops. Make sure
-> something changes in each round. To stop a stuck program, press `Ctrl+C` in the
-> terminal.
-
-### for...of: going through a list
-
-`for...of` takes the items of a list one by one. The list is written between square
-brackets; [arrays](collections.md) are explained later.
-
-```typescript
-const fruits = ["apple", "pear", "kiwi"];
-
-for (const fruit of fruits) {
-  console.log(fruit.toUpperCase());
-}
-```
-
-```sortie
-APPLE
-PEAR
-KIWI
-```
-
-TypeScript knows that `fruits` holds `string`s: so `fruit` is a `string`, and
-`toUpperCase()` is allowed. A `const` is enough: each round creates a new `fruit`.
-
-**Your turn:** write a program that stores the shopping list `["bread", "milk",
-"eggs"]` in a constant, then prints each item on its own line, after a dash.
-
-> **Solution**
->
-> ```typescript
-> const shopping = ["bread", "milk", "eggs"];
->
-> for (const item of shopping) {
->   console.log(`- ${item}`);
-> }
-> ```
->
-> ```sortie
-> - bread
-> - milk
-> - eggs
-> ```
-
-### break and continue
-
-- `break` leaves the loop right away;
-- `continue` jumps straight to the next round.
-
-```typescript
-for (let i = 1; i <= 10; i++) {
-  if (i % 2 === 0) {
-    continue;
-  }
-  if (i > 7) {
-    break;
-  }
-  console.log(i);
-}
-```
-
-```sortie
-1
-3
-5
-7
-```
-
-Even numbers are skipped (`continue`), and the loop stops at 9 (`break`).
-
 ## Narrowing: types follow your tests
 
 > **Note:** this part can wait. Read it once the basics feel solid.
@@ -419,6 +269,10 @@ Even numbers are skipped (`continue`), and the loop stops at 9 (`break`).
 Here is what types bring to conditions. When a variable can have several types, a
 test **narrows** its type inside the block (*narrowing*). It's like a guard at the
 door of a room: once you're past, we know who is inside.
+
+Some examples on this page go through a list with `for...of`: you only need to know
+that the block runs once for each element. This loop is explained in
+[loops](boucles.md#for-of-going-through-a-list).
 
 ```typescript
 const answers: (string | number)[] = ["yes", 3.14159];
@@ -618,29 +472,6 @@ Found 1 error in main.ts:3
 [arrays](collections.md)). TypeScript forces you to plan for that case. Write
 `found?.toUpperCase()`, or test first: `if (found !== undefined) { ... }`.
 
-### Using the counter after the loop
-
-```typescript norun
-for (let i = 0; i < 3; i++) {
-  console.log(i);
-}
-console.log(i);
-```
-
-```text
-main.ts:4:13 - error TS2304: Cannot find name 'i'.
-
-4 console.log(i);
-              ~
-
-
-Found 1 error in main.ts:4
-```
-
-A variable created with `let` only exists inside its block: that is its
-[scope](../debuter/glossaire.md#scope). If you need the value after the loop,
-create the variable before it: `let i = 0; for (; i < 3; i++) { ... }`.
-
 ### Forgetting a case in an exhaustive switch
 
 You added `"flashing"` to the `Light` type, but not to the `switch`:
@@ -693,26 +524,21 @@ console.log(stock ?? 10, stock || 10);
 > `0 10`. `??` only replaces `null` and `undefined`: it keeps `0`. `||` replaces
 > all falsy values, including `0`.
 
-**Question 2:** write a loop that prints the numbers from 10 down to 0, in steps of 2.
+**Question 2:** what does this code print?
+
+```typescript norun
+const name = "";
+if (name) {
+  console.log(`Hello ${name}`);
+} else {
+  console.log("Anonymous");
+}
+```
 
 > **Answer**
 >
-> ```typescript
-> for (let i = 10; i >= 0; i -= 2) {
->   console.log(i);
-> }
-> ```
->
-> ```sortie
-> 10
-> 8
-> 6
-> 4
-> 2
-> 0
-> ```
->
-> `i -= 2` is a shortcut for `i = i - 2`.
+> `Anonymous`. The empty string `""` counts as false: the `else` block is the one
+> that runs.
 
 **Question 3:** what is `const impossible: never = light;` for, in the `default` of a
 `switch`?
@@ -731,7 +557,7 @@ console.log(stock ?? 10, stock || 10);
 - `false`, `0`, `NaN`, `""`, `null` and `undefined` count as false in an `if`.
 - A test like `typeof x === "string"` narrows the type of `x` inside the block.
 - `??` gives a default value, `?.` calls an action only if the value exists.
-- `for` counts, `while` repeats as long as, `for...of` goes through a list; a `switch`
-  with `never` in `default` never forgets a case.
+- `switch` chooses among several values; with `never` in `default`, it never forgets
+  a case.
 
-Next: [functions](fonctions.md).
+Next: [Loops](boucles.md).

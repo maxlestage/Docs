@@ -219,7 +219,7 @@ Voici ce que fait `map`, élément par élément :
 | 3 | 3 | 6 | `[2, 4, 6]` |
 
 Pour une boucle « tant que », écrivez une fonction qui s'appelle elle-même
-(voir [conditions et répétition](conditions-boucles.md#repeter-avec-la-recursion)).
+(voir [les boucles](boucles.md#repeter-avec-la-recursion)).
 
 Essayez : remplacez `x * 2` par `x * x`. Vous obtenez `[1, 4, 9]`.
 

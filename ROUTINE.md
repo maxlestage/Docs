@@ -138,7 +138,9 @@ l'ordre des parcours (une ligne par lot de 3 à 5 pages, dans les deux langues) 
 - [x] `exercices-2` — Une deuxième série de 12 exercices corrigés, par langage
 - [x] Les chapitres de base de chaque langage enrichis pour les grands débutants (FR, EN,
   ES) : « ligne par ligne », « À vous », « peut attendre » (voir `content/README.md`)
-- [ ] Étape 2 : découper les chapitres de base encore trop longs (plus de 650 lignes,
+- [x] Étape 2, premier lot : `conditions-boucles` coupé en « Les conditions »
+  (`conditions-boucles`, même adresse) et « Les boucles » (`boucles`), 7 langages, FR/EN/ES
+- [ ] Étape 2, suite : découper les chapitres de base encore trop longs (plus de 650 lignes,
   ou plus de 12 notions) en deux pages, et mettre à jour leurs traductions
 - [ ] Un outil qui signale les blocs `norun` d'erreur (tracebacks) dont le code ne
   correspond plus à la page traduite (ils ne sont pas vérifiés aujourd'hui)
@@ -157,3 +159,4 @@ l'ordre des parcours (une ligne par lot de 3 à 5 pages, dans les deux langues) 
 - 2026-10-19 — Session principale : toute la liste « À faire » (16 chapitres), une page « pas à pas » et une deuxième série d'exercices dans chaque langage, 5 idées de plus sur Comparer (31 pages, 674 exemples exécutés).
 - 2026-10-19 — Traductions EN et ES : `erreurs`, `tests`, `exercices`, `aide-memoire` des sept langages (56 pages, 596 exemples vérifiés). Trois sorties de tests corrigées dans les pages françaises (python, ruby et go `tests`).
 - 2026-10-19 — Les 50 chapitres de « Les bases » des sept langages enrichis pour les grands débutants, en FR, EN et ES (148 pages, 2942 exemples vérifiés).
+- 2026-10-19 — `conditions-boucles` découpé en deux chapitres (conditions, puis `boucles`) dans les sept langages, en FR, EN et ES (42 pages, 460 exemples vérifiés).

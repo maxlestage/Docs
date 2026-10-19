@@ -95,6 +95,7 @@ pub static TRACKS: [Track; 8] = [
             "premiers-pas",
             "nombres",
             "conditions-boucles",
+            "boucles",
             "fonctions",
             "texte",
             "collections",
@@ -134,9 +135,9 @@ pub static TRACKS: [Track; 8] = [
         ),
         parts: &[
             (0, "Les bases"),
-            (12, "Aller plus loin"),
-            (21, "Le monde réel"),
-            (31, "Bien programmer"),
+            (13, "Aller plus loin"),
+            (22, "Le monde réel"),
+            (32, "Bien programmer"),
         ],
     },
     Track {
@@ -156,6 +157,7 @@ pub static TRACKS: [Track; 8] = [
             "premiers-pas",
             "nombres",
             "conditions-boucles",
+            "boucles",
             "fonctions",
             "texte",
             "collections",
@@ -192,9 +194,9 @@ pub static TRACKS: [Track; 8] = [
         ),
         parts: &[
             (0, "Les bases"),
-            (11, "Aller plus loin"),
-            (19, "Le monde réel"),
-            (29, "Bien programmer"),
+            (12, "Aller plus loin"),
+            (20, "Le monde réel"),
+            (30, "Bien programmer"),
         ],
     },
     Track {
@@ -211,6 +213,7 @@ pub static TRACKS: [Track; 8] = [
             "premiers-pas",
             "nombres",
             "conditions-boucles",
+            "boucles",
             "fonctions",
             "texte",
             "collections",
@@ -246,9 +249,9 @@ pub static TRACKS: [Track; 8] = [
         ),
         parts: &[
             (0, "Les bases"),
-            (11, "Les types en profondeur"),
-            (19, "Le monde réel"),
-            (28, "Bien programmer"),
+            (12, "Les types en profondeur"),
+            (20, "Le monde réel"),
+            (29, "Bien programmer"),
         ],
     },
     Track {
@@ -265,6 +268,7 @@ pub static TRACKS: [Track; 8] = [
             "premiers-pas",
             "nombres",
             "conditions-boucles",
+            "boucles",
             "fonctions",
             "texte",
             "collections",
@@ -302,9 +306,9 @@ pub static TRACKS: [Track; 8] = [
         ),
         parts: &[
             (0, "Les bases"),
-            (11, "Aller plus loin"),
-            (17, "Le monde réel"),
-            (30, "Bien programmer"),
+            (12, "Aller plus loin"),
+            (18, "Le monde réel"),
+            (31, "Bien programmer"),
         ],
     },
     Track {
@@ -321,6 +325,7 @@ pub static TRACKS: [Track; 8] = [
             "premiers-pas",
             "nombres",
             "conditions-boucles",
+            "boucles",
             "fonctions",
             "texte",
             "collections",
@@ -360,9 +365,9 @@ pub static TRACKS: [Track; 8] = [
         ),
         parts: &[
             (0, "Les bases"),
-            (11, "Aller plus loin"),
-            (21, "Le monde réel"),
-            (30, "Bien programmer"),
+            (12, "Aller plus loin"),
+            (22, "Le monde réel"),
+            (31, "Bien programmer"),
         ],
     },
     Track {
@@ -379,6 +384,7 @@ pub static TRACKS: [Track; 8] = [
             "premiers-pas",
             "nombres",
             "conditions-boucles",
+            "boucles",
             "fonctions",
             "texte",
             "collections",
@@ -420,10 +426,10 @@ pub static TRACKS: [Track; 8] = [
         ),
         parts: &[
             (0, "Les bases"),
-            (11, "Le cœur de Rust"),
-            (21, "Aller plus loin"),
-            (28, "Le monde réel"),
-            (34, "Bien programmer"),
+            (12, "Le cœur de Rust"),
+            (22, "Aller plus loin"),
+            (29, "Le monde réel"),
+            (35, "Bien programmer"),
         ],
     },
     Track {
@@ -440,6 +446,7 @@ pub static TRACKS: [Track; 8] = [
             "premiers-pas",
             "nombres",
             "conditions-boucles",
+            "boucles",
             "fonctions",
             "texte",
             "collections",
@@ -473,9 +480,9 @@ pub static TRACKS: [Track; 8] = [
         ),
         parts: &[
             (0, "Les bases"),
-            (11, "Aller plus loin"),
-            (18, "Le monde réel"),
-            (24, "Bien programmer"),
+            (12, "Aller plus loin"),
+            (19, "Le monde réel"),
+            (25, "Bien programmer"),
         ],
     },
 ];
@@ -526,7 +533,7 @@ mod tests {
             assert_eq!(track.pages[0].slug, "introduction");
             assert!(track.pages.iter().all(|p| !p.markdown.trim().is_empty()));
         }
-        assert_eq!(find("rust", "possession").map(|(t, i)| (t.name, i)), Some(("Rust", 11)));
+        assert_eq!(find("rust", "possession").map(|(t, i)| (t.name, i)), Some(("Rust", 12)));
         assert!(find("rust", "blocs").is_none());
         for track in &TRACKS {
             assert_eq!(track.parts.first().map(|p| p.0), Some(0), "{}", track.slug);
