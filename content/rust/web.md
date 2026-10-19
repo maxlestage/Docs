@@ -435,4 +435,4 @@ Avec `chars().count()`, le navigateur lit 10 octets et coupe la fin de la page
 Pour revoir les bases du web, lisez [le web pour débuter](../debuter/web.md). Suite :
 [Écrire du code rapide](performance.md)
 
-Suite : [Écrire du code rapide](performance.md)
+Suite : [Rust dans le navigateur avec WebAssembly](wasm.md)

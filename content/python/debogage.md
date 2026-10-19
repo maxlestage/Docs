@@ -450,4 +450,4 @@ fin ?
 - `logging` remplace les `print` de débogage : un niveau par message, un seul réglage.
 - Reproduire, observer, faire une hypothèse, corriger, protéger avec un test.
 
-Suite : [Bien écrire du Python](style.md)
+Suite : [Journaliser avec logging](logging.md)

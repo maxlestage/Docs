@@ -419,5 +419,4 @@ valeur totale du stock.
 - Les exercices 10 à 12 combinent tout, avec les classes, les erreurs, les dataclasses
   et JSON.
 
-Suite : gardez [l'aide-mémoire](aide-memoire.md) sous la main. Comparez avec
-[les exercices en Ruby](../ruby/exercices.md).
+Suite : [Exercices corrigés : deuxième série](exercices-2.md)

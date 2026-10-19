@@ -363,4 +363,4 @@ directement la valeur ?
   `{..defauts, ..choix}` complète une configuration.
 - Une erreur de JSON indique sa ligne et sa colonne.
 
-Suite : [les expressions régulières](regex.md).
+Suite : [Textes avancés : nombres, colonnes et rapports](textes-avances.md)

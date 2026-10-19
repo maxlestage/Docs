@@ -561,4 +561,4 @@ liste sans la tâche numéro `index`.
 - `addEventListener` réagit aux clics, saisies et envois ; `preventDefault` évite le rechargement.
 - `localStorage` garde des textes : passez par `JSON.stringify` et `JSON.parse`.
 
-Suite : [lire et écrire des fichiers avec Node](fichiers.md)
+Suite : [Dessiner dans le navigateur avec canvas](canvas.md)
