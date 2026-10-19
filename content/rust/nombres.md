@@ -12,6 +12,10 @@ Rust propose plusieurs types de nombres, entiers et à virgule : ce chapitre mon
 
 ## Les entiers
 
+Un programme compte sans arrêt : un âge, un score, des articles dans un panier. Rust
+veut savoir à l'avance quelle place réserver pour chaque nombre, comme on choisit une
+boîte de la bonne taille pour ranger un objet.
+
 Un [entier](../debuter/glossaire.md#entier) est un nombre sans virgule : `3`, `-12`,
 `2026`. Rust a plusieurs types d'entiers. Leur nom dit deux choses :
 
@@ -44,6 +48,16 @@ println!("{annee} {age} {population}");
 2026 12 8100000000
 ```
 
+Ligne par ligne :
+
+- `let annee = 2026;` crée la variable `annee`, qui vaut 2026. Aucun type n'est écrit :
+  Rust choisit `i32` ;
+- `let age: u8 = 12;` : le `: u8` après le nom impose le type. 12 tient sans peine
+  entre 0 et 255 ;
+- `population` est un `u64` : 8 milliards ne tiendrait pas dans un `i32`, qui s'arrête
+  vers 2,1 milliards ;
+- `println!` remplace chaque `{nom}` par la valeur de la variable et affiche le tout.
+
 > **Astuce :** le tiret bas `_` sépare les chiffres pour la lecture : `8_100_000_000`
 > est le même nombre que `8100000000`.
 
@@ -65,6 +79,10 @@ println!("{n} fruits, le deuxième est {}", fruits[i]);
 ```
 
 ## Les nombres à virgule
+
+Les entiers ne suffisent pas pour un prix de 19,99 €, une taille de 1,75 m ou une
+moyenne de 13,5. Pour ces valeurs qui ont une partie après la virgule, il faut un autre
+type.
 
 Un [flottant](../debuter/glossaire.md#flottant) est un nombre à virgule. En Rust, on
 écrit un **point** : `3.14`. Il en existe deux types :
@@ -104,7 +122,26 @@ true
 > **À retenir :** ne comparez jamais deux flottants avec `==`. Vérifiez plutôt que leur
 > écart est très petit. Pour de l'argent, comptez en centimes avec un entier.
 
+**À vous :** écrivez un programme qui range un nombre de jours, `7`, et une
+température, `21.5`, dans deux variables, puis affiche « 7 jours à 21.5 degrés ».
+
+> **Solution**
+>
+> ```rust
+> let jours = 7;
+> let temperature = 21.5;
+> println!("{jours} jours à {temperature} degrés");
+> ```
+>
+> ```sortie
+> 7 jours à 21.5 degrés
+> ```
+
 ## Les opérateurs
+
+Calculer est le premier travail d'un ordinateur : le total d'un panier, une moyenne,
+le temps qui reste avant la fin d'un film. Les opérateurs sont les signes qui écrivent
+ces calculs.
 
 Les [opérateurs](../debuter/glossaire.md#operateur) habituels fonctionnent comme en
 mathématiques :
@@ -130,6 +167,13 @@ println!("{score}");
 30
 ```
 
+Ligne par ligne :
+
+- `let mut score = 10;` crée `score`, qui vaut 10. `mut` lui donne le droit de changer ;
+- `score += 5;` est une forme courte de `score = score + 5` : `score` vaut maintenant 15 ;
+- `score *= 2;` multiplie par 2 : 15 × 2 donne 30 ;
+- `println!` affiche la valeur actuelle de `score` : 30.
+
 ### La division entière et le reste
 
 Entre deux entiers, `/` donne une **division entière** : la partie après la virgule
@@ -153,7 +197,25 @@ println!("{} h {} min", minutes / 60, minutes % 60);
 
 > **Astuce :** `n % 2 == 0` est la façon classique de tester qu'un nombre est pair.
 
+**À vous :** écrivez un programme qui range `200` secondes dans une variable, puis
+affiche cette durée en minutes et secondes : « 3 min 20 s ».
+
+> **Solution**
+>
+> ```rust
+> let secondes = 200;
+> println!("{} min {} s", secondes / 60, secondes % 60);
+> ```
+>
+> ```sortie
+> 3 min 20 s
+> ```
+
 ## Le dépassement de capacité
+
+Un type de nombre ressemble à une boîte de taille fixe : si vous y mettez trop, elle
+déborde. Cette section montre comment éviter qu'un calcul donne un résultat faux ou
+arrête votre programme.
 
 Un `u8` ne dépasse pas 255. Que se passe-t-il si un calcul va plus loin ? Cela
 s'appelle un **dépassement** (en anglais : *overflow*).
@@ -190,9 +252,37 @@ Some(253)
 0
 ```
 
+Ligne par ligne :
+
+- `x` vaut 250, et un `u8` ne dépasse pas 255 ;
+- `checked_add(10)` : 260 ne tient pas, la méthode renvoie `None` (« rien »).
+  `checked_add(3)` : 253 tient, elle renvoie `Some(253)`. `{:?}` sert à afficher ces
+  valeurs ;
+- `wrapping_add(10)` fait le tour : après 255, on repart de 0, et 260 - 256 donne 4 ;
+- `saturating_add(10)` reste bloqué au maximum, 255 ;
+- `vies` vaut 1. Enlever 5 donnerait -4, impossible pour un `u8` : `saturating_sub`
+  s'arrête à 0.
+
 Les mêmes méthodes existent pour `sub`, `mul` et `div` : `checked_mul`,
 `saturating_sub`… `checked_` est la plus sûre : elle renvoie une
 [Option](types.md#le-type-option) que vous devez traiter.
+
+**À vous :** écrivez un programme qui range `3` dans une variable `vies` de type `u8`.
+Affichez ce qu'il reste après une perte de 5 vies, sans passer sous zéro, puis le
+résultat de `vies.checked_sub(5)`.
+
+> **Solution**
+>
+> ```rust
+> let vies: u8 = 3;
+> println!("{}", vies.saturating_sub(5));
+> println!("{:?}", vies.checked_sub(5));
+> ```
+>
+> ```sortie
+> 0
+> None
+> ```
 
 ## Convertir un nombre
 
@@ -219,6 +309,15 @@ println!("{}", 'A' as u32);
 44
 65
 ```
+
+Ligne par ligne :
+
+- `n as f64` transforme 7 en 7.0 : la division se fait entre deux flottants et donne
+  3.5 ;
+- `3.99_f64` est le nombre 3.99 de type `f64` (le suffixe colle le type au nombre).
+  `as i32` coupe la partie décimale, sans arrondir : 3 ;
+- `300_i32 as u8` : 300 ne tient pas dans un `u8`, et `as` le déforme en 44 ;
+- `'A' as u32` donne le numéro de la lettre A dans la table des caractères : 65.
 
 `300 as u8` donne `44` (300 - 256) sans prévenir : utilisez `as` seulement quand vous
 êtes sûr que le nombre tient.
@@ -268,6 +367,9 @@ erreur : invalid digit found in string
 
 ## Les méthodes mathématiques
 
+Arrondir un prix, calculer une puissance, garder une note entre 0 et 20 : ces calculs
+reviennent souvent. Rust vous les donne tout prêts, inutile de les écrire vous-même.
+
 Les nombres ont des méthodes. On les appelle avec un point :
 
 ```rust
@@ -304,6 +406,11 @@ println!("{}", 2.1_f64.ceil());
 
 ## Les constantes utiles
 
+> **Note :** cette partie peut attendre. Lisez-la quand les bases seront solides.
+
+Plutôt que de retenir 2147483647 ou 3,14159…, vous pouvez les demander à Rust. Le
+nom est plus clair, et il n'y a pas de risque de faute de frappe.
+
 Chaque type connaît ses limites, et `std::f64::consts` contient les constantes
 mathématiques :
 
@@ -324,7 +431,17 @@ println!("{}", PI * rayon * rayon);
 12.566370614359172
 ```
 
+Ligne par ligne :
+
+- `use std::f64::consts::PI;` rend la constante `PI` disponible sous ce nom court ;
+- `i32::MAX`, `u8::MAX` et `i64::MIN` donnent la plus grande ou la plus petite valeur
+  de chaque type ;
+- la dernière ligne calcule l'aire d'un disque de rayon 2 : π × 2 × 2.
+
 ## Afficher un nombre joliment
+
+Un résultat comme `12.666666666666666` est difficile à lire. Sur un ticket de caisse,
+on veut `12.67`, et des prix bien alignés en colonne. Les formats servent à cela.
 
 Entre les accolades de `println!`, après deux-points `:`, vous pouvez régler
 l'affichage :
@@ -356,6 +473,15 @@ println!("[{pi:>10.1}]");
 [       3.1]
 ```
 
+Ligne par ligne :
+
+- `{:.2}` garde 2 chiffres après la virgule, en arrondissant : 3.14 ;
+- `{:>8}` réserve 8 cases et pousse 42 à droite ; `{:<8}` le pousse à gauche. Les
+  crochets `[ ]` sont là pour voir les espaces ;
+- `{:08.3}` : 3 décimales, 8 caractères en tout, complétés par des zéros devant ;
+- dans la dernière ligne, le nom de la variable se place avant les deux-points :
+  `{pi:>10.1}`.
+
 Ce réglage est pratique pour aligner un tableau de prix :
 
 ```rust
@@ -370,6 +496,23 @@ pain         1.20 €
 fromage      4.75 €
 pommes      12.00 €
 ```
+
+**À vous :** écrivez un programme qui range un total de points, `38`, et un nombre de
+notes, `3`, dans deux entiers. Affichez la moyenne avec deux décimales :
+« Moyenne : 12.67 ».
+
+> **Solution**
+>
+> ```rust
+> let total = 38;
+> let nombre = 3;
+> let moyenne = total as f64 / nombre as f64;
+> println!("Moyenne : {moyenne:.2}");
+> ```
+>
+> ```sortie
+> Moyenne : 12.67
+> ```
 
 ## Erreurs fréquentes
 

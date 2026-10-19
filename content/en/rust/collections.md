@@ -15,6 +15,10 @@ box.
 
 ## Fixed-size arrays
 
+To keep the seven days of the week, creating seven variables would be tedious. An
+array stores them all under one name, like an egg box: a fixed number of slots, one
+slot per element.
+
 An array `[T; N]` always contains the same number `N` of elements, all of the same type
 `T`. Positions (the **indices**) start at 0:
 
@@ -31,6 +35,13 @@ mon
 ["mon", "tue", "wed"]
 ```
 
+Line by line:
+
+- `let days = [...]` creates an array of three texts, stored in `days`;
+- `days[0]` reads slot number 0, so the **first** one: `"mon"`;
+- `days.len()` gives the number of slots: 3;
+- `{:?}` displays the whole array at once, with the brackets.
+
 An array can also be filled with the same value: `[0; 5]` gives five zeros.
 
 ```rust
@@ -43,6 +54,10 @@ println!("{:?}", zeros);
 ```
 
 ## Vectors: Vec
+
+Often, you do not know in advance how many elements you will have. A shopping list
+grows when you think of an item, and shrinks when you buy it. That is what a `Vec` is
+for.
 
 A `Vec` (a "vector") is a [list](../debuter/glossaire.md#list) that can grow or
 shrink. It is the most common collection. The `vec![…]` macro creates one; `push`
@@ -64,6 +79,15 @@ First: 12
 Size: 4
 Some(18) [12, 15, 9]
 ```
+
+Line by line:
+
+- `let mut grades = vec![12, 15, 9];` creates a `Vec` of three grades. `mut` allows
+  you to change it afterwards;
+- `grades.push(18)` adds 18 at the end: there are now four grades;
+- `grades[0]` reads the first grade (12) and `grades.len()` counts the elements (4);
+- `grades.pop()` removes the last grade and stores it in `last`: the list is back to
+  three elements.
 
 `pop` returns `Some(18)`: the removed value, inside an `Option`, because the list could
 have been empty.
@@ -116,11 +140,33 @@ println!("{:?}", prices);
 > **Note:** the `&` in front of `prices` borrows the vector instead of consuming it.
 > Everything is explained in [Ownership and borrowing](possession.md).
 
+**Your turn:** write a program that creates a `Vec` with `"bread"` and `"milk"`, adds
+`"eggs"` with `push`, then displays each item on its own line with `for`.
+
+> **Solution**
+>
+> ```rust
+> let mut groceries = vec!["bread", "milk"];
+> groceries.push("eggs");
+> for item in &groceries {
+>     println!("{item}");
+> }
+> ```
+>
+> ```sortie
+> bread
+> milk
+> eggs
+> ```
+
 ## Tables: HashMap
 
 A `HashMap` is a [dictionary](../debuter/glossaire.md#dictionary): it maps
 **keys** to **values**, like a phone book maps a name to a number. It is not one of
 the types loaded automatically: you must import it with `use`.
+
+With a `Vec`, you find an element by its position. But to know Alice's age, looking
+up "Alice" is much simpler than remembering "slot 0".
 
 ```rust
 use std::collections::HashMap;
@@ -142,7 +188,37 @@ Some(31)
 false
 ```
 
+Line by line:
+
+- `HashMap::new()` creates an empty table, stored in `ages`;
+- the first two `insert` calls map 30 to `"Alice"` and 25 to `"Bob"`;
+- the third `insert` reuses the key `"Alice"`: the value 31 **replaces** 30;
+- `get("Alice")` gives `Some(31)`, `len()` counts 2 keys, and `contains_key("Zoe")`
+  answers `false`: Zoe is not in the table.
+
+**Your turn:** write a program that maps `"France"` to `"Paris"` and `"Italy"` to
+`"Rome"` in a `HashMap`, then displays the capital of Italy with `get`.
+
+> **Solution**
+>
+> ```rust
+> use std::collections::HashMap;
+>
+> fn main() {
+>     let mut capitals = HashMap::new();
+>     capitals.insert("France", "Paris");
+>     capitals.insert("Italy", "Rome");
+>     println!("{:?}", capitals.get("Italy"));
+> }
+> ```
+>
+> ```sortie
+> Some("Rome")
+> ```
+
 ### Counting with entry
+
+> **Note:** this part can wait. Read it once the basics feel solid.
 
 `entry(...).or_insert(...)` creates the value if it is missing, then gives access to
 the value. The star `*` lets you change what it points to:
@@ -195,6 +271,10 @@ pears: 4
 
 ## Iterators
 
+Doubling every grade, keeping only the even numbers, computing a total: these tasks
+come up all the time. Iterators let you write them in one line, without writing a
+`for` loop yourself.
+
 `iter()` creates an **iterator**: an object that gives the elements one by one, like a
 checkout conveyor belt. You then chain operations with
 [closures](fonctions.md#closures). Iterators have their own chapter:
@@ -225,6 +305,17 @@ println!("{total} {big}");
 21 3
 ```
 
+Line by line:
+
+- `map(|n| n * 2)` takes each number `n` and multiplies it by 2; `collect()` stores
+  the results in the new `Vec` `doubles`;
+- `filter(|n| *n % 2 == 0)` keeps only the numbers whose remainder when divided by 2
+  is 0: the even ones;
+- `sum()` adds everything up: 1 + 2 + 3 + 4 + 5 + 6 = 21;
+- the last line keeps the numbers greater than 3 (4, 5 and 6) and counts them: 3.
+
+The vector `numbers` is not changed: each line builds a new result.
+
 You can chain as many steps as you want:
 
 ```rust
@@ -244,7 +335,26 @@ println!("{:?}", result);
 > **Tip:** an iterator does nothing until you consume it (with `collect`, `sum`,
 > `for`…). We say it is **lazy**.
 
+**Your turn:** write a program that starts from `vec![5, 12, 8, 20]` (some prices) and
+stores the prices greater than 10 in a new `Vec`, then displays it.
+
+> **Solution**
+>
+> ```rust
+> let prices = vec![5, 12, 8, 20];
+> let expensive: Vec<&i32> = prices.iter().filter(|p| **p > 10).collect();
+> println!("{:?}", expensive);
+> ```
+>
+> ```sortie
+> [12, 20]
+> ```
+
 ## Slices
+
+Sometimes you only want to work on a piece of a list: the top three of a ranking, or
+the grades of the second term. A slice shows that piece, like a window placed over
+the list.
 
 A **slice** (`&[T]`) is a view on part of an array or a vector, without any
 copy:
@@ -259,6 +369,14 @@ println!("{:?} {:?}", middle, start);
 ```sortie
 ['b', 'c', 'd'] ['a', 'b']
 ```
+
+Line by line:
+
+- `letters` holds five letters, at positions 0 to 4;
+- `&letters[1..4]` takes positions 1, 2 and 3: position 4 is **not** included;
+- `&letters[..2]` starts at the beginning and stops before position 2: `'a'` and
+  `'b'`;
+- nothing is copied: `middle` and `start` look directly into `letters`.
 
 A function that accepts `&[i32]` works with an array as well as with a `Vec`:
 
