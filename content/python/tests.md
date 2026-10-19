@@ -364,10 +364,11 @@ _______________________________ test_double_de_4 _______________________________
 E       assert 6 == 8
 E        +  where 6 = double(4)
 
-test_calcul.py:9: AssertionError
+test_calcul.py:10: AssertionError
 =========================== short test summary info ============================
 FAILED test_calcul.py::test_double_de_4 - assert 6 == 8
-========================= 1 failed, 2 passed in 0.04s ==========================
+FAILED test_calcul.py::test_double_de_zero - assert 2 == 0
+========================= 2 failed, 1 passed in 0.04s ==========================
 ```
 
 > **Astuce :** pytest lance aussi les tests écrits avec `unittest`. Vous pouvez
