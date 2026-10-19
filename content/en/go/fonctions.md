@@ -36,6 +36,14 @@ Hello!
 Hello!
 ```
 
+Line by line:
+
+- `func greet() { ... }` records the recipe under the name `greet`. Nothing is shown
+  yet;
+- the program always starts with `main`;
+- the first `greet()` runs the recipe: "Hello!" is shown;
+- the second `greet()` runs it a second time.
+
 Writing `func greet()` doesn't run anything: it records the recipe. Writing `greet()`
 **calls** the function, that is, runs it.
 
@@ -43,6 +51,9 @@ Writing `func greet()` doesn't run anything: it records the recipe. Writing `gre
 > doesn't matter: `main` can call a function written further down.
 
 ## Parameters
+
+A pancake recipe can serve 4 or 8 people: it's the same recipe, with a different
+quantity. Parameters let a function work with different values at each call.
 
 [Parameters](../debuter/glossaire.md#parameter) are the values the function receives.
 They are empty slots, filled in at call time. The values given in the call are
@@ -69,6 +80,13 @@ func main() {
 Hello, Alice
 Hello, Bob
 ```
+
+Line by line:
+
+- `func greet(firstName string)` announces an empty slot named `firstName`, which will
+  receive text;
+- `greet("Alice")` fills the slot: inside the function, `firstName` is `"Alice"`;
+- `greet("Bob")` runs the function again, and this time `firstName` is `"Bob"`.
 
 Several parameters are separated by commas. If they have the same type, you can write
 it only once, at the end.
@@ -99,7 +117,36 @@ Area: 12
 
 `width, height int` means: `width` and `height` are two `int`s.
 
+**Your turn:** write a function `announce(dish string, price int)` that prints
+"Today's special: soup, 6 euros.". Call it twice from `main`, with two different
+dishes.
+
+> **Solution**
+>
+> ```go
+> package main
+>
+> import "fmt"
+>
+> func announce(dish string, price int) {
+> 	fmt.Printf("Today's special: %s, %d euros.\n", dish, price)
+> }
+>
+> func main() {
+> 	announce("soup", 6)
+> 	announce("lasagna", 12)
+> }
+> ```
+>
+> ```sortie
+> Today's special: soup, 6 euros.
+> Today's special: lasagna, 12 euros.
+> ```
+
 ## Returning a value
+
+Showing a result is not always enough. Often, you want to **keep** it to use it
+later, like the number you read on a calculator before going on with your sum.
 
 For a function to **give** a result, write its type after the parentheses, and use
 `return`.
@@ -124,6 +171,14 @@ func main() {
 16
 10
 ```
+
+Line by line:
+
+- `func square(x int) int`: the function receives an `int` and promises to give back
+  an `int`;
+- `return x * x` computes the result and gives it back to the caller;
+- so `square(4)` is 16, and `fmt.Println` prints it;
+- `square(3) + 1` gives `9 + 1`: the variable `result` holds 10.
 
 The returned value replaces the call: `square(3) + 1` becomes `9 + 1`.
 
@@ -160,7 +215,35 @@ failed
 > **Remember:** a function that announces a return type must **always** end with a
 > `return`, whatever path is taken. Otherwise, the compiler refuses.
 
+**Your turn:** write a function `perimeter(side int) int` that returns the perimeter of
+a square (4 times the side). In `main`, print `perimeter(5)`, then `perimeter(2) + 1`.
+
+> **Solution**
+>
+> ```go
+> package main
+>
+> import "fmt"
+>
+> func perimeter(side int) int {
+> 	return 4 * side
+> }
+>
+> func main() {
+> 	fmt.Println(perimeter(5))
+> 	fmt.Println(perimeter(2) + 1)
+> }
+> ```
+>
+> ```sortie
+> 20
+> 9
+> ```
+
 ## Several return values
+
+Some questions have two answers. Sharing 17 sweets between 5 children gives a number
+of sweets per child, and a remainder. Go can give back both at once.
 
 A Go function can return **several** values. Write their types in parentheses.
 
@@ -186,6 +269,14 @@ func main() {
 3 2
 6
 ```
+
+Line by line:
+
+- `(int, int)` announces that `divide` gives back two integers;
+- `return a / b, a % b` gives back the quotient then the remainder, separated by a
+  comma;
+- `quotient, remainder := divide(17, 5)` stores 3 in `quotient` and 2 in `remainder`;
+- `q, _ := divide(20, 3)` keeps the quotient, 6, and throws away the remainder.
 
 The `_` throws away the value you don't need.
 
@@ -228,6 +319,8 @@ Errors have their own chapter: [error handling](erreurs.md).
 
 ### Named results
 
+> **Note:** this part can wait. Read it once the basics feel solid.
+
 You can give names to the return values. They are then variables, created with their
 zero value. A bare `return` returns their current values.
 
@@ -259,6 +352,10 @@ func main() {
 > long function quickly becomes hard to read: keep it for short functions.
 
 ## A variable number of arguments
+
+You don't always know how many values you will receive: two grades today, ten
+tomorrow. Instead of writing one function per case, you write a single one that
+accepts any quantity.
 
 With `...` in front of the type, the last parameter accepts as many arguments as you
 like. Inside the function, it becomes a slice. This is called a **variadic**
@@ -294,10 +391,47 @@ func main() {
 36
 ```
 
+Line by line:
+
+- `numbers ...int`: all the numbers given in the call arrive in the slice `numbers`;
+- `total` starts at 0, then the loop adds each number to it, one by one;
+- `sum(1, 2)` gives back 3, `sum(1, 2, 3, 4)` gives back 10;
+- `sum()` receives nothing: the loop doesn't run, and `total` stays at 0.
+
 To pass an existing slice, add `...` after it: `sum(grades...)`. `fmt.Println` is
 variadic too: that's why it accepts any number of values.
 
+**Your turn:** write a function `greetAll(names ...string)` that prints "Hello, …!"
+for each name it receives. Call it with three names.
+
+> **Solution**
+>
+> ```go
+> package main
+>
+> import "fmt"
+>
+> func greetAll(names ...string) {
+> 	for _, name := range names {
+> 		fmt.Println("Hello,", name+"!")
+> 	}
+> }
+>
+> func main() {
+> 	greetAll("Alice", "Bob", "Chloe")
+> }
+> ```
+>
+> ```sortie
+> Hello, Alice!
+> Hello, Bob!
+> Hello, Chloe!
+> ```
+
 ## Functions are values
+
+Sometimes you want to write a general function, then tell it **what to do**. It's like
+a drill: the same machine drills or screws, depending on the bit you put in.
 
 In Go, a function is a value like any other. You can store it in a variable, or pass
 it as an argument to another function.
@@ -330,6 +464,15 @@ func main() {
 10
 [2 4 6]
 ```
+
+Line by line:
+
+- `operation := double` stores the function itself in a variable, without calling it
+  (no parentheses);
+- so `operation(5)` calls `double(5)`, which gives back 10;
+- `apply` receives a slice and a function `f`. It calls `f` on each number and stores
+  the results in a new slice;
+- with `double`, `[1 2 3]` becomes `[2 4 6]`.
 
 The type `func(int) int` reads: "a function that takes an `int` and returns an
 `int`".
@@ -364,6 +507,9 @@ Run right away!
 The parentheses `()` at the end of the second function call it immediately.
 
 ## Closures
+
+A function may need to **remember** something between two calls, like the counter at
+the entrance of a museum, which adds 1 for each visitor.
 
 An anonymous function can use the variables around it. It **takes them along**, even
 when it leaves the place where it was born. It is then called a
@@ -400,10 +546,23 @@ func main() {
 1
 ```
 
+Line by line:
+
+- `counter()` creates a variable `n` set to 0, then gives back an anonymous function;
+- `next` receives that function. It keeps access to `n`, even after `counter` has
+  ended;
+- each call to `next()` adds 1 to `n` and gives it back: 1, then 2, then 3;
+- `other := counter()` runs `counter` again, which creates a **new** `n` at 0: the
+  first call gives back 1.
+
 Picture a backpack: the returned function keeps `n` in its backpack. Each call to
 `next` increases **its** `n`. `other` has its own backpack, with its own `n`.
 
 ## defer: pushing back to the end
+
+When you open something, you have to remember to close it. It's like a "turn off the
+light" note stuck on the door: you write it when you arrive, and it serves when you
+leave.
 
 `defer` pushes a function call back to the moment the current function ends.
 
@@ -431,6 +590,13 @@ Task 2
 Closing
 ```
 
+Line by line:
+
+- `main` calls `work`, which first prints "Opening";
+- the `defer` line prints nothing right away: it notes "print Closing" for later;
+- "Task 1" then "Task 2" are printed;
+- `work` reaches its end: the call put aside runs, and "Closing" is printed last.
+
 This is very useful for "tidying up": you write the closing of a file right next to
 its opening, and you are sure it will happen, even if the function leaves early.
 
@@ -457,7 +623,35 @@ defer 1
 defer 0
 ```
 
+**Your turn:** write a `main` that prints "Goodbye" last, even though you write that
+line first. Then add two prints: "Hello" and "How are you?".
+
+> **Solution**
+>
+> ```go
+> package main
+>
+> import "fmt"
+>
+> func main() {
+> 	defer fmt.Println("Goodbye")
+> 	fmt.Println("Hello")
+> 	fmt.Println("How are you?")
+> }
+> ```
+>
+> ```sortie
+> Hello
+> How are you?
+> Goodbye
+> ```
+
 ## A function that calls itself
+
+> **Note:** this part can wait. Read it once the basics feel solid.
+
+Some problems contain a smaller version of themselves, like Russian dolls: when you
+open one doll, you find another, smaller one inside, down to the last.
 
 A function can call itself: this is
 [recursion](../debuter/glossaire.md#recursion). It needs a **stopping case**,

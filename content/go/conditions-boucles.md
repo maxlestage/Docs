@@ -12,6 +12,10 @@ Cette page montre comment faire des choix avec `if` et `switch`, et comment rép
 
 ## Comparer des valeurs
 
+Un programme doit souvent décider : ouvrir la porte ou non, afficher « gagné » ou
+« perdu ». Pour décider, il pose d'abord une question, comme vous vous demandez
+« ai-je assez d'argent pour ce gâteau ? ».
+
 Une [condition](../debuter/glossaire.md#condition) est une question à laquelle on
 répond par vrai (`true`) ou faux (`false`). On la construit avec des opérateurs de
 comparaison.
@@ -51,9 +55,23 @@ true
 false
 ```
 
+Ligne par ligne :
+
+- `age := 15` range 15 dans `age`, et `avecParent := true` range « vrai » dans
+  `avecParent` ;
+- `age >= 18` demande « 15 est-il plus grand que 18, ou égal ? ». Non : `false` ;
+- avec `||`, une seule réponse vraie suffit : `avecParent` vaut `true`, donc `true` ;
+- avec `&&`, il faut les deux : 15 est plus grand que 12 **et** plus petit que 18,
+  donc `true` ;
+- `!avecParent` inverse `true` : on obtient `false`.
+
 > **Attention :** `=` range une valeur, `==` compare deux valeurs. Ne les confondez pas.
 
 ## if et else
+
+Dans la vie, vous faites des choix tout le temps : s'il pleut, vous prenez un
+parapluie ; sinon, vous le laissez. `if` donne ce pouvoir à votre programme : faire
+une chose ou une autre selon la situation.
 
 `if` (« si ») exécute un bloc seulement si la condition est vraie. `else` (« sinon »)
 donne le bloc à exécuter dans le cas contraire.
@@ -76,6 +94,14 @@ func main() {
 ```sortie
 Il fait chaud.
 ```
+
+Ligne par ligne :
+
+- `temperature := 28` range 28 dans la variable `temperature` ;
+- `if temperature > 25 {` pose la question « 28 est-il plus grand que 25 ? ». La
+  réponse est oui ;
+- Go exécute donc le premier bloc et affiche « Il fait chaud. » ;
+- le bloc du `else` est sauté : il ne sert que si la réponse est non.
 
 En Go :
 
@@ -114,7 +140,36 @@ Bien
 `note >= 10` est vraie aussi, mais Go ne la teste même pas : il a déjà trouvé
 `note >= 12`.
 
+**À vous :** écrivez un programme qui range `10` dans une variable `age`, puis
+affiche « Enfant » si l'âge est inférieur à 13, « Adolescent » s'il est inférieur
+à 18, et « Adulte » sinon.
+
+> **Solution**
+>
+> ```go
+> package main
+>
+> import "fmt"
+>
+> func main() {
+> 	age := 10
+> 	if age < 13 {
+> 		fmt.Println("Enfant")
+> 	} else if age < 18 {
+> 		fmt.Println("Adolescent")
+> 	} else {
+> 		fmt.Println("Adulte")
+> 	}
+> }
+> ```
+>
+> ```sortie
+> Enfant
+> ```
+
 ### if avec une instruction d'initialisation
+
+> **Note :** cette partie peut attendre. Lisez-la quand les bases seront solides.
 
 Go permet de placer une petite instruction **avant** la condition, séparée par un `;`.
 La variable créée là n'existe que dans le `if` et ses `else`.
@@ -145,6 +200,9 @@ variables temporaires là où elles servent.
 
 ## switch
 
+Pensez à un distributeur de boissons : selon le bouton choisi, il sert une boisson
+différente. `switch` fonctionne pareil : selon la valeur, il choisit un bloc.
+
 Quand une même valeur peut prendre plusieurs formes, `switch` est plus lisible qu'une
 longue suite de `else if`.
 
@@ -170,6 +228,16 @@ func main() {
 C'est le week-end !
 ```
 
+Ligne par ligne :
+
+- `jour` contient le texte `"samedi"` ;
+- `switch jour {` compare la valeur de `jour` à chaque `case`, de haut en bas ;
+- le premier `case` liste `"samedi"` et `"dimanche"` : `"samedi"` correspond,
+  donc Go affiche « C'est le week-end ! » ;
+- les autres cas, et `default`, sont ignorés.
+
+Retenez trois choses sur `switch` :
+
 - Chaque `case` donne une ou plusieurs valeurs, séparées par des virgules.
 - `default` (« par défaut ») s'exécute si aucun cas ne correspond.
 - Go s'arrête au **premier** cas qui correspond, puis sort du `switch`.
@@ -177,6 +245,34 @@ C'est le week-end !
 > **Note :** contrairement au C ou à Java, pas besoin de `break` à la fin de chaque
 > cas : Go ne « tombe » pas dans le cas suivant. Pour le forcer, il existe le mot
 > `fallthrough`, mais on ne s'en sert presque jamais.
+
+**À vous :** écrivez un programme qui range `"citron"` dans une variable `fruit`,
+puis, avec un `switch`, affiche « Fruit du verger » pour une pomme ou une poire,
+« Agrume » pour un citron ou une orange, et « Fruit inconnu » sinon.
+
+> **Solution**
+>
+> ```go
+> package main
+>
+> import "fmt"
+>
+> func main() {
+> 	fruit := "citron"
+> 	switch fruit {
+> 	case "pomme", "poire":
+> 		fmt.Println("Fruit du verger")
+> 	case "citron", "orange":
+> 		fmt.Println("Agrume")
+> 	default:
+> 		fmt.Println("Fruit inconnu")
+> 	}
+> }
+> ```
+>
+> ```sortie
+> Agrume
+> ```
 
 ### switch sans valeur
 
@@ -206,6 +302,10 @@ Bon après-midi
 ```
 
 ## La boucle for
+
+Imaginez qu'on vous demande d'afficher les nombres de 1 à 100. Écrire 100
+`fmt.Println` serait long et pénible. Une boucle fait ce travail répétitif à votre
+place, comme le refrain d'une chanson qu'on reprend plusieurs fois.
 
 Une [boucle](../debuter/glossaire.md#boucle) répète un bloc de code. Go n'a **qu'une
 seule** boucle : `for`. Pas de `while`, pas de `do`. Mais `for` s'écrit de trois façons.
@@ -262,8 +362,48 @@ func main() {
 5 ans, il y a 160 euros
 ```
 
+Ligne par ligne :
+
+- au départ, `argent` vaut 100 et `annees` vaut 0 ;
+- `for argent < 150 {` pose la question avant chaque tour. 100 est plus petit que
+  150 : Go entre dans le bloc ;
+- `argent * 110 / 100` ajoute 10 % : 100 devient 110, puis 121, 133, 146 et 160 (Go
+  calcule avec des nombres entiers et laisse tomber les décimales) ;
+- `annees++` ajoute 1 à `annees` à chaque tour : il compte les tours ;
+- quand `argent` vaut 160, la réponse est non : la boucle s'arrête et la dernière
+  ligne affiche le résultat.
+
 On ne sait pas d'avance combien de tours il faudra : la boucle tourne tant que
 `argent < 150`.
+
+**À vous :** écrivez un programme qui part de `n := 1` et qui, tant que `n` est plus
+petit que 100, affiche `n` puis le double.
+
+> **Solution**
+>
+> ```go
+> package main
+>
+> import "fmt"
+>
+> func main() {
+> 	n := 1
+> 	for n < 100 {
+> 		fmt.Println(n)
+> 		n = n * 2
+> 	}
+> }
+> ```
+>
+> ```sortie
+> 1
+> 2
+> 4
+> 8
+> 16
+> 32
+> 64
+> ```
 
 ### Forme 3 : la boucle infinie
 
@@ -296,6 +436,10 @@ func main() {
 
 ## Parcourir avec range
 
+Très souvent, vous avez une liste de choses à traiter une par une : chaque article
+d'une liste de courses, chaque note d'un bulletin. `range` vous les donne dans
+l'ordre, sans que vous ayez à compter vous-même.
+
 `range` parcourt les éléments d'une collection, un par un. À chaque tour, il donne
 l'**indice** (la position) et la valeur.
 
@@ -320,6 +464,14 @@ func main() {
 2 poire
 ```
 
+Ligne par ligne :
+
+- `fruits` contient une liste de trois textes ;
+- au premier tour, `range` range la position 0 dans `i` et `"pomme"` dans `fruit` ;
+- le bloc affiche les deux. Puis Go revient au `for`, qui donne 1 et `"kiwi"`, puis
+  2 et `"poire"` ;
+- après `"poire"`, il n'y a plus d'élément : la boucle s'arrête.
+
 `[]string{...}` est une **slice**, une liste de valeurs : vous la découvrirez dans
 [tableaux et slices](collections.md). Les positions commencent à 0.
 
@@ -343,6 +495,30 @@ func main() {
 ```sortie
 Total : 36
 ```
+
+**À vous :** écrivez un programme qui parcourt la liste de courses
+`[]string{"pain", "lait", "œufs"}` et affiche chaque article précédé d'un tiret.
+
+> **Solution**
+>
+> ```go
+> package main
+>
+> import "fmt"
+>
+> func main() {
+> 	courses := []string{"pain", "lait", "œufs"}
+> 	for _, article := range courses {
+> 		fmt.Println("-", article)
+> 	}
+> }
+> ```
+>
+> ```sortie
+> - pain
+> - lait
+> - œufs
+> ```
 
 ### Un texte
 
@@ -396,6 +572,10 @@ Hourra !
 
 ## break et continue
 
+Parfois, vous voulez changer le cours d'une boucle en route : arrêter de chercher dès
+que vous avez trouvé vos clés, ou ignorer certains éléments. C'est le rôle de ces
+deux mots.
+
 - `break` sort de la boucle tout de suite ;
 - `continue` saute la fin du tour et passe au suivant.
 
@@ -424,9 +604,19 @@ func main() {
 7
 ```
 
+Ligne par ligne :
+
+- `for i := range 10 {` donne à `i` les valeurs 0, 1, 2… jusqu'à 9 ;
+- si `i` est pair (le reste de la division par 2, `i%2`, vaut 0), `continue` passe
+  tout de suite au tour suivant : le `fmt.Println` n'est pas atteint ;
+- si `i` dépasse 7, `break` arrête toute la boucle ;
+- sinon, `fmt.Println(i)` affiche le nombre.
+
 Les nombres pairs sont sautés par `continue`. Quand `i` vaut 9, `break` arrête tout.
 
 ### Les étiquettes
+
+> **Note :** cette partie peut attendre. Lisez-la quand les bases seront solides.
 
 Dans deux boucles l'une dans l'autre, `break` ne sort que de la boucle intérieure. Pour
 sortir des deux, donnez un nom (une **étiquette**) à la boucle extérieure.

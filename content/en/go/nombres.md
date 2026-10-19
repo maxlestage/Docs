@@ -12,6 +12,9 @@ Go offers whole numbers and decimal numbers: this chapter shows how to calculate
 
 ## Integers
 
+Integers are for counting: students, years, points in a game. Whenever a quantity
+can't be cut into pieces, it's an integer.
+
 An [integer](../debuter/glossaire.md#integer) is a number without a decimal point: `3`,
 `-12`, `2026`. The most common type is `int`.
 
@@ -31,7 +34,16 @@ func main() {
 26 56
 ```
 
+Line by line:
+
+- `year := 2026` creates a variable `year` and stores 2026 in it;
+- `students := 28` does the same with 28;
+- `fmt.Println` first calculates `year-2000` (26) and `students*2` (56), then displays
+  both results, separated by a space.
+
 ### Integer sizes
+
+> **Note:** this part can wait. Read it once the basics feel solid.
 
 Go has several integer types. Their name tells you two things:
 
@@ -72,6 +84,9 @@ func main() {
 
 ## Decimal numbers
 
+Not everything is counted in whole numbers: a price (19.99 €), a height (1.75 m), a
+temperature (36.6 °C). For these values, you need decimal numbers.
+
 A number with a decimal point is called a [float](../debuter/glossaire.md#float).
 In Go, you use `float64`. The decimal separator is written with a **dot**.
 
@@ -96,6 +111,14 @@ func main() {
 0.30000000000000004
 ```
 
+Line by line:
+
+- `price := 19.99` stores a decimal number in `price`: Go gives it the type `float64`;
+- `quantity := 3.0` is also a `float64`, thanks to the `.0`;
+- the first `Println` displays the product of the two: 59.97;
+- `a` and `b` are 0.1 and 0.2, and their sum gives a little surprise, explained just
+  below.
+
 The result of `a + b` is not quite `0.3`. The computer stores decimal numbers in
 binary, and some numbers don't fit exactly, like 1/3 in decimal (0.3333…). This isn't
 a bug in Go: every language does the same.
@@ -108,6 +131,9 @@ a bug in Go: every language does the same.
 > `19.99` euros. The calculations stay exact.
 
 ## Operators
+
+A program calculates all the time: a total to pay, a score, the time left. Operators
+are the keys of its calculator.
 
 | Operator | Role | Example | Result |
 |----------|------|---------|--------|
@@ -147,10 +173,37 @@ func main() {
 2 h 15 min
 ```
 
+Line by line:
+
+- `7 / 2`: two integers, so an integer division. The result is 3;
+- `7 % 2`: the remainder of that division, 1;
+- `7.0 / 2`: `7.0` is a decimal number, so the division is a normal one: 3.5;
+- `minutes/60` gives the whole hours (2), and `minutes%60` the minutes left over (15).
+
 Imagine 7 sweets shared between 2 children: each one gets 3 (`7 / 2`), and 1 is left
 over (`7 % 2`).
 
 > **Tip:** `n % 2 == 0` tests whether `n` is even. The remainder is very useful!
+
+**Your turn:** write a program that stores `200` seconds in a variable, then displays
+this time in minutes and seconds: "3 min 20 s".
+
+> **Solution**
+>
+> ```go
+> package main
+>
+> import "fmt"
+>
+> func main() {
+> 	seconds := 200
+> 	fmt.Println(seconds/60, "min", seconds%60, "s")
+> }
+> ```
+>
+> ```sortie
+> 3 min 20 s
+> ```
 
 ### Shortcuts
 
@@ -179,6 +232,8 @@ func main() {
 > `x := points++`.
 
 ## Overflow
+
+> **Note:** this part can wait. Read it once the basics feel solid.
 
 An integer has a limited size. If a calculation goes past the largest value, the
 number "wraps around", like a car's odometer going back to zero.
@@ -211,6 +266,9 @@ so large that the problem is rare, but it exists.
 > `var n int8 = 200` is rejected. Wrapping around only happens while the program runs.
 
 ## Conversions are explicit
+
+A program often mixes whole quantities (3 items) and decimal prices (2.50 €). Go wants
+you to say clearly how to combine them: that way, no calculation goes wrong silently.
 
 Go never mixes two number types on its own. To multiply an `int` by a `float64`, you
 must **convert** one of them, by writing the type like a function: `float64(x)`.
@@ -261,6 +319,26 @@ func main() {
 11.75
 ```
 
+**Your turn:** write a program that calculates the exact average of four whole-number
+grades: 12, 15, 16 and 18.
+
+> **Solution**
+>
+> ```go
+> package main
+>
+> import "fmt"
+>
+> func main() {
+> 	sum := 12 + 15 + 16 + 18
+> 	fmt.Println(float64(sum) / 4)
+> }
+> ```
+>
+> ```sortie
+> 15.25
+> ```
+
 ## From text to a number: strconv
 
 A number typed by the user or read from a file arrives as **text**. The `strconv`
@@ -296,6 +374,15 @@ Year 2026
 7.5 <nil>
 ```
 
+Line by line:
+
+- `strconv.Atoi("42")` turns the text `"42"` into a number: `n` gets 42, and `err` gets
+  `nil`;
+- so `n+1` is a real calculation, which gives 43;
+- `strconv.Itoa(2026)` goes the other way: `text` holds the text `"2026"`, which `+`
+  sticks onto `"Year "`;
+- `ParseFloat` reads `"3.75"` as the number 3.75, and `f*2` gives 7.5.
+
 `Atoi` and `ParseFloat` return **two** values: the number, and an error. When all goes
 well, the error is `nil` ("nothing"). The `64` in `ParseFloat` asks for a `float64`.
 
@@ -326,7 +413,38 @@ Error: strconv.Atoi: parsing "twelve": invalid syntax
 > **Remember:** always test `err != nil` after a conversion. Errors are covered in
 > detail in [error handling](erreurs.md).
 
+**Your turn:** write a program that converts the text `"17"` into a number, then
+displays next year's age: "Next year: 18 years old". Don't forget to test `err`.
+
+> **Solution**
+>
+> ```go
+> package main
+>
+> import (
+> 	"fmt"
+> 	"strconv"
+> )
+>
+> func main() {
+> 	age, err := strconv.Atoi("17")
+> 	if err != nil {
+> 		fmt.Println("Error:", err)
+> 		return
+> 	}
+> 	fmt.Println("Next year:", age+1, "years old")
+> }
+> ```
+>
+> ```sortie
+> Next year: 18 years old
+> ```
+
 ## The math package
+
+Some calculations take a long time to write yourself: a square root, a power, a
+rounding. The `math` package is a toolbox that is already full: you pick up the tool,
+without having to build it.
 
 The `math` package contains the common mathematical functions.
 
@@ -385,6 +503,9 @@ func main() {
 
 ## Random numbers
 
+A game often needs surprises: rolling a die, shuffling cards, placing an enemy
+anywhere. For that, you need numbers drawn at random.
+
 The `math/rand` package draws random numbers. `rand.Intn(6)` gives an integer between
 0 and 5: you add 1 to simulate a die.
 
@@ -424,6 +545,10 @@ func main() {
 
 ## Displaying a number
 
+A calculation sometimes gives too many decimal places: `3.14159` euros makes no sense
+on a receipt, where a price always has two decimal places. So you choose how the number
+is displayed.
+
 `fmt.Printf` controls the display with its verbs:
 
 ```go
@@ -462,6 +587,28 @@ func main() {
 
 To get the text without displaying it, use `fmt.Sprintf` with the same verbs:
 `s := fmt.Sprintf("%.2f", price)`.
+
+**Your turn:** write a program that calculates the price of 3 notebooks at 4.5 euros
+each, then displays "Total: 13.50 euros", with two decimal places.
+
+> **Solution**
+>
+> ```go
+> package main
+>
+> import "fmt"
+>
+> func main() {
+> 	quantity := 3
+> 	price := 4.5
+> 	total := float64(quantity) * price
+> 	fmt.Printf("Total: %.2f euros\n", total)
+> }
+> ```
+>
+> ```sortie
+> Total: 13.50 euros
+> ```
 
 ## Common mistakes
 
