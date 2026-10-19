@@ -496,4 +496,4 @@ la somme des nombres.
 - `node:http` écrit un serveur minimal ; Express l'organise en routes.
 - React, Vue et Svelte construisent des interfaces qui se mettent à jour toutes seules.
 
-Suite : [tester son code](tests.md)
+Suite : [Un serveur web avec node:http](node-http.md)

@@ -502,4 +502,4 @@ premiers multiples de 7.
 - Les générateurs s'enchaînent en pipelines et peuvent être infinis : ils sont paresseux.
 - `itertools` fournit `count`, `islice`, `chain`, `groupby`, `product`, `accumulate`.
 
-Suite : [fonctions avancées et décorateurs](decorateurs.md)
+Suite : [Les collections avancées](collections-avancees.md)

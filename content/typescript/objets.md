@@ -556,4 +556,4 @@ et `type Eleve = Personne & { classe: string }` ?
 - Le typage est structurel : un objet convient s'il a la bonne forme, même avec des
   propriétés en plus, sauf s'il est écrit directement à cet endroit.
 
-Suite : [Les pièges du débutant en TypeScript](pieges.md)
+Suite : [Suivre un programme pas à pas](pas-a-pas.md)

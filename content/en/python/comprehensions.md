@@ -492,4 +492,4 @@ contain?
   only once.
 - If the comprehension gets hard to read, go back to a `for` loop.
 
-Next: [beginner pitfalls in Python](pieges.md)
+Next: [Suivre un programme pas à pas](pas-a-pas.md)

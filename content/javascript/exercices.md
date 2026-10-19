@@ -472,5 +472,4 @@ function chargerNote(eleve) {
 - Les exercices 9 à 12 combinent tout : closures, classes, erreurs, générateurs et
   promesses.
 
-Suite : gardez [l'aide-mémoire](aide-memoire.md) sous la main. Comparez avec
-[les exercices en Ruby](../ruby/exercices.md).
+Suite : [Exercices corrigés : deuxième série](exercices-2.md)

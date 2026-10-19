@@ -445,4 +445,4 @@ danse = set(["Léa", "Sam", "Tom"])
 - Champs connus d'avance : enregistrement ; clés venues des données :
   dictionnaire ; simple présence : ensemble.
 
-Suite : [Les pièges du débutant en Rythme](pieges.md)
+Suite : [Suivre un programme pas à pas](pas-a-pas.md)

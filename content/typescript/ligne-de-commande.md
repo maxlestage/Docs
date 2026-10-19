@@ -628,26 +628,6 @@ TypeScript ne peut rien voir : l'erreur dépend de ce que l'utilisateur tape. En
 `parseArgs` d'un `try` / `catch`, affichez l'aide et renvoyez le code 2, comme dans
 `analyser`.
 
-### Oublier allowPositionals
-
-```typescript norun
-import { parseArgs } from "node:util";
-
-const { values } = parseArgs({ options: { mots: { type: "boolean" } } });
-console.log(values);
-```
-
-```sh
-node compter.ts texte.txt
-```
-
-```text
-TypeError [ERR_PARSE_ARGS_UNEXPECTED_POSITIONAL]: Unexpected argument 'texte.txt'. This command does not take positional arguments
-```
-
-Par défaut, `parseArgs` refuse les arguments sans tiret. Ajoutez
-`allowPositionals: true` et lisez-les dans `positionals`.
-
 ### Lire la mauvaise case de process.argv
 
 ```typescript norun

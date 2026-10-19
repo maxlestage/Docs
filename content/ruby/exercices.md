@@ -388,5 +388,4 @@ Testez-la avec `"25"`, `"abc"` et `"-3"`, sans que le programme ne s'arrête.
 - Les exercices 5 à 9 travaillent le texte, les tableaux, les hashs et les blocs.
 - Les exercices 10 à 12 combinent tout, avec les classes et les erreurs.
 
-Suite : gardez [l'aide-mémoire](aide-memoire.md) sous la main. Comparez avec
-[les exercices en Rust](../rust/exercices.md).
+Suite : [Exercices corrigés : deuxième série](exercices-2.md)
