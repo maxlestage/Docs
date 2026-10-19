@@ -13,11 +13,9 @@ Un programme doit protéger les données qu'on lui confie : cette page vous appr
 ## Pourquoi c'est votre affaire
 
 Vous fermez votre porte à clé, même si personne ne veut vous cambrioler.
-En programmation, c'est pareil. Des robots essaient chaque jour des
-millions de mots de passe sur tous les sites, même les tout petits.
-
-La bonne nouvelle : quelques réflexes simples évitent presque tous les
-problèmes. Vous allez les voir un par un.
+En programmation, c'est pareil : des robots essaient chaque jour des
+millions de mots de passe, sur tous les sites. Quelques réflexes simples
+évitent presque tous les problèmes.
 
 ## Un bon mot de passe
 
@@ -39,10 +37,8 @@ print(f"La phrase est {phrase // lettres:,} fois plus dure à deviner.")
 La phrase est 153,236 fois plus dure à deviner.
 ```
 
-`**` veut dire « puissance » : `26 ** 8` est 26 multiplié 8 fois par
-lui-même. Et `:,` sépare les milliers pour lire plus facilement.
-
-Retenez donc :
+`**` veut dire « puissance » (`26 ** 8` : 26 multiplié 8 fois par
+lui-même) et `:,` sépare les milliers. Retenez donc :
 
 - une **phrase** de plusieurs mots (`cheval-lampe-orage-tulipe-violon`)
   est plus solide et plus facile à retenir que `Xk7$p2!a` ;
@@ -54,14 +50,12 @@ Retenez donc :
 Essayez : remplacez `2000 ** 5` par `2000 ** 3` (3 mots). La phrase reste
 plus solide que 8 lettres, mais beaucoup moins qu'avec 5 mots.
 
-> **À retenir :** longueur > complication. Une longue phrase bat un mot
-> court et bizarre.
+> **À retenir :** une longue phrase bat un mot court et bizarre.
 
 ## Ne jamais garder un mot de passe en clair
 
 Votre programme gère des comptes ? Il ne doit **jamais** enregistrer le
-mot de passe lui-même. Si la base de données est volée, tous les mots de
-passe seraient lisibles.
+mot de passe lui-même : si la base est volée, tout serait lisible.
 
 On garde à la place une **empreinte** (en anglais *hash*). C'est comme une
 empreinte digitale : elle reconnaît une personne, mais on ne peut pas
@@ -69,8 +63,7 @@ refabriquer la personne à partir de l'empreinte.
 
 ### Une empreinte avec hashlib
 
-Python sait calculer une empreinte avec le [module](glossaire.md#module)
-`hashlib` :
+Le [module](glossaire.md#module) `hashlib` calcule une empreinte :
 
 ```python
 import hashlib
@@ -81,32 +74,27 @@ for mot in ["soleil", "soleil", "Soleil"]:
 ```
 
 ```sortie
-soleil  → 1ca8dbc7f6e4a26d…
-soleil  → 1ca8dbc7f6e4a26d…
-Soleil  → 18b9aec0c0d8c6e4…
+soleil  → e93e24c1b877a15d…
+soleil  → e93e24c1b877a15d…
+Soleil  → 9b8268cb550e2834…
 ```
-
-Trois choses à voir :
 
 | Mot      | Empreinte (début)  | Ce qu'on remarque                         |
 |----------|--------------------|-------------------------------------------|
-| `soleil` | `1ca8dbc7f6e4a26d` | toujours la même pour le même mot         |
-| `soleil` | `1ca8dbc7f6e4a26d` | identique : on peut donc **comparer**     |
-| `Soleil` | `18b9aec0c0d8c6e4` | une seule lettre change, tout change      |
+| `soleil` | `e93e24c1b877a15d` | toujours la même pour le même mot         |
+| `soleil` | `e93e24c1b877a15d` | identique : on peut donc **comparer**     |
+| `Soleil` | `9b8268cb550e2834` | une seule lettre change, tout change      |
 
-`.encode()` transforme le texte en [octets](glossaire.md#octet) : `hashlib`
-ne travaille que sur des octets. Et `[:16]` ne montre que le début, pour
-que ça tienne sur la ligne.
+`.encode()` transforme le texte en [octets](glossaire.md#octet), seule
+chose que `hashlib` accepte. `[:16]` ne montre que le début.
 
 ### Ajouter un sel
 
-Un problème demeure : deux personnes qui ont `soleil` ont la même
-empreinte. Et les pirates ont des listes d'empreintes toutes prêtes.
-
-La solution : un **sel**. C'est un petit texte ajouté au mot de passe,
-différent pour chaque personne. On le garde à côté de l'empreinte. Et on
-utilise une fonction faite exprès, lente à calculer pour décourager les
-pirates : `pbkdf2_hmac`.
+Un problème demeure : les pirates ont des listes d'empreintes toutes
+prêtes (`soleil` → `e93e24c1…`). La solution : un **sel**, un petit texte
+ajouté au mot de passe, différent pour chaque personne et gardé à côté de
+l'empreinte. On utilise aussi `pbkdf2_hmac`, une fonction exprès lente,
+pour décourager les pirates.
 
 ```python
 import hashlib
@@ -129,7 +117,7 @@ print("cheval-lampe       :", verifier("cheval-lampe"))
 ```
 
 ```sortie
-Gardé dans la base : 37a1b9a5a2a72e2a …
+Gardé dans la base : 94dddcf714d43850 …
 cheval-lampe-orage : True
 cheval-lampe       : False
 ```
@@ -143,23 +131,19 @@ Suivons la vérification pas à pas :
 | 3     | on la compare à l'empreinte gardée                 | `True`/`False` |
 
 Le mot de passe en clair n'est **jamais** enregistré. `hmac.compare_digest`
-compare deux empreintes d'une manière qu'un pirate ne peut pas mesurer au
-chronomètre : utilisez-le plutôt que `==`.
+compare sans qu'un pirate puisse mesurer le temps pris : préférez-le à `==`.
 
-Essayez : changez le sel en `b"sel-de-bob"`. L'empreinte gardée change
-complètement, mais la vérification marche toujours.
+Essayez : changez le sel en `b"sel-de-bob"`. L'empreinte change, la vérification marche.
 
 > **À retenir :** on garde une empreinte salée, jamais le mot de passe.
 
 ## Les secrets hors du code
 
-Un **secret**, c'est un mot de passe de base de données, une clé
-d'[API](glossaire.md#api)… Ne l'écrivez jamais dans votre code : le code
-finit sur [GitHub](git.md), chez un collègue, dans une capture d'écran.
+Un **secret** (mot de passe de base, clé d'[API](glossaire.md#api)…) ne
+s'écrit jamais dans le code : le code finit sur [GitHub](git.md).
 
 On le met dans une **variable d'environnement** : une étiquette que le
-[système](glossaire.md#systeme-d-exploitation) donne au programme quand il
-démarre. Le code lit l'étiquette, sans connaître la valeur à l'avance.
+[système](glossaire.md#systeme-d-exploitation) donne au programme au démarrage.
 
 ```python
 import os
@@ -175,8 +159,7 @@ else:
 Erreur : la variable CLE_METEO n'est pas définie.
 ```
 
-Ici, la variable n'existe pas : le programme le dit clairement. Pour la
-définir, dans le [terminal](terminal.md), avant de lancer le programme :
+Pour définir la variable, dans le [terminal](terminal.md), avant de lancer :
 
 ```sh
 export CLE_METEO="ma-cle-secrete"      # macOS et Linux
@@ -197,9 +180,8 @@ fichier ne doit **jamais** aller dans Git : écrivez `.env` dans votre
 
 ## L'injection SQL
 
-Vous avez vu, dans [les bases de données](bases-de-donnees.md), qu'il ne
-faut pas fabriquer un ordre SQL en collant du texte. Voici pourquoi, avec
-une vraie attaque.
+Dans [les bases de données](bases-de-donnees.md), vous avez vu qu'il ne
+faut pas coller du texte dans un ordre SQL. Voici pourquoi.
 
 ### Le code vulnérable
 
@@ -263,8 +245,7 @@ n'y en a pas. Liste vide, attaque ratée.
 Essayez : remplacez `saisie` par `"alice"`. Vous obtenez
 `[('alice', 'code 1234')]`.
 
-> **À retenir :** jamais de `+` ni de f-string pour fabriquer du SQL.
-> Toujours des `?`.
+> **À retenir :** jamais de `+` ni de f-string pour fabriquer du SQL : des `?`.
 
 ## Ne jamais faire confiance à ce qu'on vous envoie
 
@@ -296,14 +277,12 @@ for saisie in ["42", " 7 ", "-3", "douze", "999", "'; DROP TABLE"]:
 ```
 
 `strip()` enlève les espaces autour, `isdigit()` vérifie qu'il n'y a que
-des chiffres. `!r` affiche le texte avec ses guillemets, pour voir les
-espaces.
+des chiffres, `!r` affiche les guillemets pour voir les espaces.
 
 Essayez : ajoutez `"130"` à la liste. Il est accepté : la limite est
 « plus de 130 ».
 
-> **À retenir :** on vérifie que la donnée a la bonne **forme** (un
-> nombre ?) et une valeur **raisonnable** (entre 0 et 130 ?).
+> **À retenir :** on vérifie la **forme** (un nombre ?) et la **valeur** (pas plus de 130 ?).
 
 ## HTTPS en deux phrases
 
@@ -314,10 +293,9 @@ personnelles vers une adresse en `http://` sans **s**.
 
 ## Les mises à jour
 
-Des failles sont trouvées chaque semaine dans les logiciels. Les mises à
-jour les corrigent. Mettez donc à jour votre système, votre navigateur,
-votre langage et les [paquets](glossaire.md#paquet) de vos projets. Un
-paquet abandonné depuis des années est un risque : préférez-en un qui vit.
+Des failles sont trouvées chaque semaine ; les mises à jour les corrigent.
+Mettez à jour votre système, votre navigateur, votre langage et les
+[paquets](glossaire.md#paquet) de vos projets.
 
 ## Les 5 règles à retenir
 
@@ -344,11 +322,10 @@ git show HEAD~1:config.py
 CLE_API = "sk-secret-123456"
 ```
 
-`git show HEAD~1:config.py` veut dire « montre `config.py` tel qu'il était
-au commit d'avant ». La clé est toujours là, pour tous ceux qui ont accès
-au dépôt. La correction : considérez la clé comme **volée**. Allez sur le
-site qui l'a fournie, **révoquez-la** (annulez-la) et créez-en une nouvelle,
-rangée cette fois dans une variable d'environnement.
+Cette commande montre `config.py` tel qu'il était au commit d'avant : la
+clé est toujours là. La correction : considérez la clé comme **volée**,
+**révoquez-la** (annulez-la) sur le site qui l'a fournie, et rangez la
+nouvelle dans une variable d'environnement.
 
 ### Comparer le mot de passe tapé à l'empreinte
 
@@ -370,9 +347,8 @@ else:
 Mot de passe incorrect.
 ```
 
-Pas d'erreur, mais le bon mot de passe est refusé : on compare `soleil` à
-`1ca8dbc7…`. Il faut d'abord calculer l'empreinte de l'essai, avec le même
-sel, puis comparer les deux empreintes, comme dans `verifier` plus haut.
+Le bon mot de passe est refusé : on compare `soleil` à `e93e24c1…`. Il faut
+calculer l'empreinte de l'essai, puis comparer deux empreintes (`verifier`).
 
 ### Oublier .encode()
 
@@ -398,25 +374,20 @@ TypeError: Strings must be encoded before hashing
 
 > **Réponse**
 >
-> Si la base est volée, le pirate n'a que des empreintes : il ne peut pas
-> retrouver les mots de passe à partir d'elles.
+> Si la base est volée, le pirate n'a que des empreintes, inutilisables.
 
-**2.** Une clé d'API est dans votre code, déjà envoyée sur GitHub. Suffit-il
-de l'effacer et de refaire un commit ?
+**2.** Une clé est déjà envoyée sur GitHub. Suffit-il de l'effacer et de refaire un commit ?
 
 > **Réponse**
 >
-> Non : elle reste dans l'historique. Il faut la révoquer, en créer une
-> nouvelle et la ranger dans une variable d'environnement.
+> Non, elle reste dans l'historique : révoquez-la et créez-en une nouvelle.
 
-**3.** Quel est le danger de
-`"SELECT * FROM comptes WHERE nom = '" + saisie + "'"` ?
+**3.** Quel est le danger de `"… WHERE nom = '" + saisie + "'"` ?
 
 > **Réponse**
 >
-> L'injection SQL : la saisie peut contenir du SQL (`x' OR '1'='1`) qui
-> change le sens de l'ordre. Il faut écrire `WHERE nom = ?` et passer
-> `(saisie,)` à part.
+> L'injection SQL : la saisie peut contenir du SQL (`x' OR '1'='1`). Écrivez
+> `WHERE nom = ?` et passez `(saisie,)` à part.
 
 ## En résumé
 
