@@ -20,6 +20,9 @@ principales:
 
 ## Los arrays
 
+Imagina una lista de la compra de veinte artículos. Crear veinte variables `articulo1`,
+`articulo2`… sería pesado. Un array guarda todos esos valores bajo un solo nombre.
+
 Un array es una lista ordenada de valores, entre corchetes `[ ]`, separados por
 comas. Cada valor se llama **elemento**.
 
@@ -33,6 +36,12 @@ puts frutas.length
 ["manzana", "plátano", "cereza"]
 3
 ```
+
+Línea por línea:
+
+- `frutas = [...]` guarda un array de tres textos en la variable `frutas`;
+- `p frutas` muestra el array entero, con sus corchetes y sus comillas;
+- `frutas.length` pide el número de elementos: 3.
 
 Un array puede contener cualquier valor, incluso mezclados, e incluso otros
 arrays. `[]` es un array vacío.
@@ -60,6 +69,8 @@ nil
 > **Nota:** leer un índice que no existe no hace fallar el programa: obtienes `nil`.
 
 ### Leer varios elementos
+
+> **Nota:** esta parte puede esperar. Léela cuando las bases estén firmes.
 
 Un rango, o `first(n)` y `last(n)`, dan un trozo del array.
 
@@ -101,6 +112,13 @@ p numeros
 [2, 3]
 ```
 
+Línea por línea:
+
+- `numeros` empieza con dos elementos: `[1, 2]`;
+- `<< 3` y luego `push(4)` añaden 3 y 4 al final: el array vale `[1, 2, 3, 4]`;
+- `numeros.pop` quita el último elemento, 4, y lo guarda en `ultimo`;
+- `delete(1)` quita el **valor** 1 (no el índice 1): queda `[2, 3]`.
+
 ```ruby
 fila = ["Bob", "Cloe"]
 fila.unshift("Alicia")
@@ -120,6 +138,24 @@ Te toca, Alicia
 ```
 
 `fila[0] = "Zoe"` reemplaza el elemento en el índice 0.
+
+**Te toca:** escribe un programa que cree un array vacío `compras`, le añada «pan» y
+luego «leche» con `<<`, muestre el array y después su número de elementos.
+
+> **Solución**
+>
+> ```ruby
+> compras = []
+> compras << "pan"
+> compras << "leche"
+> p compras
+> puts compras.length
+> ```
+>
+> ```sortie
+> ["pan", "leche"]
+> 2
+> ```
 
 ### Métodos útiles
 
@@ -173,6 +209,10 @@ true
 
 ## Recorrer un array
 
+A menudo quieres hacer lo mismo con cada elemento: mostrar cada artículo de la lista de
+la compra, saludar a cada alumno. En lugar de escribir una línea por elemento, dejas
+que `each` repita el trabajo.
+
 `each` ejecuta un bloque para cada elemento.
 
 ```ruby
@@ -185,6 +225,14 @@ end
 Me gusta la manzana
 Me gusta la pera
 ```
+
+Línea por línea:
+
+- `["manzana", "pera"]` es un array de dos textos; `.each` lo recorre en orden;
+- en la primera vuelta, Ruby guarda `"manzana"` en `fruta` (el nombre entre las barras
+  `| |`) y ejecuta el bloque entre `do` y `end`;
+- en la segunda vuelta, `fruta` vale `"pera"`;
+- ya no quedan elementos: el bucle se detiene.
 
 Con `each_with_index`, obtienes también la posición:
 
@@ -200,7 +248,27 @@ end
 3. bronce
 ```
 
+**Te toca:** escribe un programa que recorra el array `[3, 7, 10]` con `each` y muestre
+el doble de cada número.
+
+> **Solución**
+>
+> ```ruby
+> [3, 7, 10].each do |n|
+>   puts n * 2
+> end
+> ```
+>
+> ```sortie
+> 6
+> 14
+> 20
+> ```
+
 ## Los hashes
+
+En un array, encuentras un valor por su posición: 0, 1, 2… Pero para encontrar la edad
+de Alicia, un número de casilla no dice nada. Un hash te deja buscar por un nombre.
 
 Un hash asocia **claves** a **valores**. Piensa en un guardarropa: das
 el ticket (la clave) y te devuelven el abrigo (el valor). Cada clave es única. Las
@@ -218,6 +286,13 @@ Alicia
 30
 nil
 ```
+
+Línea por línea:
+
+- `persona` contiene dos pares: la clave `:nombre` con `"Alicia"`, la clave `:edad`
+  con 30;
+- `persona[:nombre]` da el valor guardado bajo la clave `:nombre`: `"Alicia"`;
+- `persona[:ciudad]` pide una clave que no existe: obtienes `nil`, sin fallo.
 
 > **Recuerda:** `{ nombre: "Alicia" }` es un atajo para `{ :nombre => "Alicia" }`. Las
 > dos formas dan el mismo hash.
@@ -241,6 +316,29 @@ puts stock.key?("manzanas")
 {"manzanas"=>6}
 true
 ```
+
+Línea por línea:
+
+- `stock` empieza con una sola clave, `"manzanas"`, que vale 5;
+- `stock["peras"] = 3` añade una clave nueva;
+- `stock["manzanas"] += 1` lee 5, suma 1 y guarda 6 en su lugar;
+- `delete("peras")` quita la clave añadida justo antes: solo queda `"manzanas"`.
+
+**Te toca:** escribe un programa que cree un hash `capitales` con la clave `"Francia"`
+y el valor `"París"`, le añada la clave `"Italia"` con el valor `"Roma"` y luego
+muestre la capital de Italia.
+
+> **Solución**
+>
+> ```ruby
+> capitales = { "Francia" => "París" }
+> capitales["Italia"] = "Roma"
+> puts capitales["Italia"]
+> ```
+>
+> ```sortie
+> Roma
+> ```
 
 ### Valor por defecto con fetch
 
@@ -303,6 +401,9 @@ nil
 
 ## Recorrer un hash
 
+Para mostrar toda una lista de precios o toda una agenda, quieres pasar por cada par
+clave-valor, uno a uno. `each` también lo hace con los hashes.
+
 `each` da la clave y el valor en cada vuelta.
 
 ```ruby
@@ -320,6 +421,31 @@ te: 3 €
 [:cafe, :te]
 [2, 3]
 ```
+
+Línea por línea:
+
+- `precios` asocia `:cafe` a 2 y `:te` a 3;
+- en la primera vuelta, `each` guarda la clave `:cafe` en `bebida` y el valor 2 en
+  `importe`; en la segunda vuelta, `:te` y 3;
+- un símbolo mostrado dentro de un texto pierde sus dos puntos: lees `cafe`;
+- `keys` da el array de las claves, `values` el de los valores.
+
+**Te toca:** escribe un programa que recorra el hash `{ "Alicia" => 12, "Bob" => 15 }`
+y muestre, para cada persona, una línea como «Alicia tiene 12».
+
+> **Solución**
+>
+> ```ruby
+> notas = { "Alicia" => 12, "Bob" => 15 }
+> notas.each do |nombre, nota|
+>   puts "#{nombre} tiene #{nota}"
+> end
+> ```
+>
+> ```sortie
+> Alicia tiene 12
+> Bob tiene 15
+> ```
 
 > **Consejo:** para transformar o filtrar una colección, usa `map` y `select`.
 > Se explican en [la página sobre los bloques](blocs.md).

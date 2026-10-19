@@ -39,8 +39,38 @@ Admis
 - `else` (« sinon ») s'exécute si aucune question n'a répondu oui.
 - Ruby s'arrête à la **première** branche vraie.
 
+Ligne par ligne :
+
+- `note = 14` range 14 dans la variable `note` ;
+- `if note >= 16` demande : « 14 est-il supérieur ou égal à 16 ? ». Non : Ruby saute
+  ce bloc ;
+- `elsif note >= 10` demande : « 14 est-il supérieur ou égal à 10 ? ». Oui : Ruby
+  affiche « Admis » ;
+- une branche a répondu oui : Ruby saute le `else` et continue après le `end`.
+
 Les comparaisons (`==`, `!=`, `<`, `>`, `<=`, `>=`) sont présentées dans
 [les premiers pas](premiers-pas.md).
+
+**À vous :** écrivez un programme qui range `heure = 15` dans une variable, puis
+affiche « Bonjour » si l'heure est avant 12, « Bon après-midi » si elle est avant 18,
+et « Bonsoir » sinon.
+
+> **Solution**
+>
+> ```ruby
+> heure = 15
+> if heure < 12
+>   puts "Bonjour"
+> elsif heure < 18
+>   puts "Bon après-midi"
+> else
+>   puts "Bonsoir"
+> end
+> ```
+>
+> ```sortie
+> Bon après-midi
+> ```
 
 ### La forme courte
 
@@ -76,6 +106,9 @@ refusé
 
 ## unless
 
+Parfois, la question se pose plus naturellement à l'envers : « s'il n'est **pas**
+connecté, demandez-lui de se connecter ». `unless` permet de l'écrire comme on le dit.
+
 `unless` (« à moins que ») est le contraire de `if` : le code s'exécute si la condition
 est **fausse**.
 
@@ -91,6 +124,10 @@ Veuillez vous connecter.
 > **Astuce :** évitez `unless` avec `else` : c'est difficile à lire. Utilisez plutôt `if`.
 
 ## Combiner des conditions
+
+Une décision dépend souvent de plusieurs choses à la fois. Pour entrer gratuitement au
+musée, il faut être jeune **et** membre. Ces trois signes relient plusieurs tests en un
+seul.
 
 `&&` veut dire « et », `||` veut dire « ou », `!` veut dire « non ».
 
@@ -112,6 +149,14 @@ Entrée gratuite
 Plein tarif
 ```
 
+Ligne par ligne :
+
+- `age` vaut 20 et `membre` vaut `true` ;
+- ligne 3 : `age < 26` est vrai **et** `membre` est vrai : « Entrée gratuite » s'affiche ;
+- ligne 4 : `!membre` transforme `true` en `false` : rien ne s'affiche ;
+- ligne 5 : 20 n'est ni plus petit que 18, ni plus grand que 65 : le `||` est faux ;
+- ligne 6 : la même condition est fausse, et `unless` agit justement quand c'est faux.
+
 `&&` passe avant `||`, comme `*` passe avant `+`. Ajoutez des parenthèses pour être
 clair :
 
@@ -129,7 +174,28 @@ Réduction
 > **Note :** Ruby connaît aussi `and`, `or` et `not`. Ils n'ont pas la même priorité
 > que `&&` et `||` : pour débuter, utilisez seulement `&&`, `||` et `!`.
 
+**À vous :** écrivez un programme qui range `age = 70` dans une variable, puis
+affiche « Tarif réduit » si l'âge est inférieur à 18 ou supérieur ou égal à 65, et
+« Plein tarif » sinon.
+
+> **Solution**
+>
+> ```ruby
+> age = 70
+> if age < 18 || age >= 65
+>   puts "Tarif réduit"
+> else
+>   puts "Plein tarif"
+> end
+> ```
+>
+> ```sortie
+> Tarif réduit
+> ```
+
 ## Le ternaire
+
+> **Note :** cette partie peut attendre. Lisez-la quand les bases seront solides.
 
 `condition ? valeur_si_vrai : valeur_si_faux` choisit une valeur en une ligne.
 
@@ -146,6 +212,10 @@ mineur
 Lisez-le comme une question : « âge ≥ 18 ? si oui majeur, sinon mineur ».
 
 ## case et when
+
+Pensez à un distributeur de boissons : selon le bouton choisi, il sert une boisson
+différente. Quand une même valeur peut prendre beaucoup de formes (un jour, un choix
+dans un menu), vous voulez une réaction pour chacune.
 
 `case` compare une valeur à plusieurs possibilités. C'est plus lisible qu'une longue
 suite de `elsif`.
@@ -169,6 +239,14 @@ Week-end !
 - Une virgule dans `when` veut dire « ou ».
 - `else` sert si aucun `when` ne correspond.
 
+Ligne par ligne :
+
+- `jour` vaut `"samedi"` ;
+- `case jour` annonce la valeur à comparer ;
+- premier `when` : `jour` vaut-il `"samedi"` ou `"dimanche"` ? Oui : Ruby affiche
+  « Week-end ! » ;
+- les autres `when` et le `else` sont sautés, comme avec `elsif`.
+
 `when` accepte aussi des intervalles :
 
 ```ruby
@@ -188,6 +266,9 @@ passable
 `then` permet d'écrire la réponse sur la même ligne que `when`.
 
 ## Les intervalles
+
+Les notes de 10 à 14, les jours de 1 à 31, les lettres de a à e : on parle souvent de
+valeurs qui se suivent. Un intervalle les désigne d'un coup, sans les écrire une par une.
 
 Un intervalle (`Range`) va d'une valeur à une autre. `1..5` inclut 5, `1...5` l'exclut.
 
@@ -209,6 +290,9 @@ true
 
 ## La boucle while
 
+Imaginez qu'on vous demande d'afficher les nombres de 1 à 100. Écrire 100 `puts` serait
+long et pénible. Une boucle fait ce travail répétitif à votre place.
+
 Une [boucle](../debuter/glossaire.md#boucle) répète du code. Chaque passage s'appelle un
 **tour** (ou une [itération](../debuter/glossaire.md#iteration)).
 
@@ -228,11 +312,45 @@ Tour 2
 Tour 3
 ```
 
+Ligne par ligne :
+
+- `compteur = 1` : la variable vaut 1 au départ ;
+- `while compteur <= 3` : avant chaque tour, Ruby pose la question. `1 <= 3` est vrai :
+  il entre dans la boucle ;
+- le bloc affiche « Tour 1 », puis `compteur += 1` ajoute 1 : `compteur` vaut 2 ;
+- Ruby remonte au `while` et repose la question, avec 2, puis avec 3 ;
+- quand `compteur` vaut 4, `4 <= 3` est faux : Ruby sort de la boucle, après le `end`.
+
 > **Attention :** si la condition reste toujours vraie, la boucle ne s'arrête jamais
 > (une **boucle infinie**). Ici, oublier `compteur += 1` ferait tourner le programme
 > sans fin. Arrêtez-le avec Ctrl+C.
 
+**À vous :** écrivez un programme qui affiche les nombres de 1 à 5 avec une boucle
+`while`, puis « Fini ! ».
+
+> **Solution**
+>
+> ```ruby
+> n = 1
+> while n <= 5
+>   puts n
+>   n += 1
+> end
+> puts "Fini !"
+> ```
+>
+> ```sortie
+> 1
+> 2
+> 3
+> 4
+> 5
+> Fini !
+> ```
+
 ## La boucle until
+
+> **Note :** cette partie peut attendre. Lisez-la quand les bases seront solides.
 
 `until` répète **jusqu'à** ce que la condition devienne vraie.
 
@@ -273,6 +391,16 @@ Total : 14
 Fini : 21
 ```
 
+Ligne par ligne :
+
+- `total` vaut 0 au départ ;
+- premier tour : `total += 7` donne 7. `7 > 20` est faux : pas de `break`, et le `puts`
+  affiche 7 ;
+- deuxième tour : `total` vaut 14, même chemin ;
+- troisième tour : `total` vaut 21. `21 > 20` est vrai : `break` sort de la boucle
+  avant le `puts` ;
+- Ruby continue après le `end` et affiche « Fini : 21 ».
+
 ## times et each
 
 En Ruby, on préfère souvent `times` et `each` aux boucles classiques. Vous n'avez pas
@@ -292,11 +420,34 @@ i vaut 2
 30
 ```
 
+Ligne par ligne :
+
+- `3.times` exécute le bloc trois fois : `i` vaut 0, puis 1, puis 2 ;
+- `(1..3).each` prend chaque nombre de l'intervalle, un par un, et le range dans `n` ;
+- le bloc affiche `n * 10` : 10, puis 20, puis 30.
+
 Le code entre `{ }` est un **bloc**. Entre les barres `|i|`, vous nommez la valeur que
 le bloc reçoit à chaque tour.
 
 > **À retenir :** `times` compte à partir de `0`. `each` parcourt chaque élément d'une
 > collection. Pour en savoir plus, lisez [les blocs](blocs.md).
+
+**À vous :** écrivez un programme qui affiche la table de 7, de « 7 x 1 = 7 » à
+« 7 x 5 = 35 », une ligne par calcul, avec `each` sur un intervalle.
+
+> **Solution**
+>
+> ```ruby
+> (1..5).each { |i| puts "7 x #{i} = #{7 * i}" }
+> ```
+>
+> ```sortie
+> 7 x 1 = 7
+> 7 x 2 = 14
+> 7 x 3 = 21
+> 7 x 4 = 28
+> 7 x 5 = 35
+> ```
 
 ### Compter avec upto, downto et step
 
@@ -343,6 +494,9 @@ end
 
 ## break et next
 
+Parfois, vous voulez changer le cours d'une boucle en route : arrêter de chercher dès
+que vous avez trouvé, ou ignorer certains éléments. C'est le rôle de ces deux mots.
+
 `break` arrête la boucle. `next` passe directement au tour suivant.
 
 ```ruby
@@ -362,6 +516,15 @@ end
 
 - Pour `2`, `4`, `6` : `next` saute le reste du tour.
 - Pour `9` : `break` arrête tout.
+
+Ligne par ligne :
+
+- `(1..10).each` donne à `n` les valeurs 1, 2, 3… jusqu'à 10 ;
+- `n.even?` demande « `n` est-il pair ? ». Si oui, `next` passe au tour suivant : le
+  `puts` n'est pas atteint ;
+- `break if n > 7` : dès que `n` dépasse 7 (ici, à 9), la boucle s'arrête : 9 et 10 ne
+  sont jamais affichés ;
+- sinon, `puts n` affiche le nombre.
 
 ## Erreurs fréquentes
 
