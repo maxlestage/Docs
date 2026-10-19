@@ -214,15 +214,6 @@ print(total)
 20
 ```
 
-Une fois à l'aise, vous pouvez faire un tableau plus court : **une ligne par tour**.
-
-| Tour | `n` | `total` avant | `total` après |
-|---|---|---|---|
-| 1 | 1 | 0 | 2 |
-| 2 | 2 | 2 | 6 |
-| 3 | 3 | 6 | 12 |
-| 4 | 4 | 12 | 20 |
-
 Essayez : décalez `print(total)` de 4 espaces, pour le mettre **dans** la boucle. Il
 s'exécute alors à chaque tour : le programme affiche `2`, `6`, `12` puis `20`.
 
@@ -596,26 +587,15 @@ print(resultat + 1)
 7
 ```
 
-### Reprendre une ancienne valeur
-
-Cette erreur ne fait pas planter Python : elle se passe dans **votre** tête. Au
-programme 1, beaucoup calculent `b = a - b` avec `a = 5` et trouvent `2`. Mais à cette
-étape, `a` vaut déjà 8. Règle simple : pour chaque calcul, lisez la valeur dans la
-**dernière** case remplie de la colonne, jamais dans la première.
-
 ## Testez-vous
 
 **Question 1 :** que vaut `x` à la fin ?
 
-```python
+```python norun
 x = 2
 x = x * 3
 x = x - 1
 print(x)
-```
-
-```sortie
-5
 ```
 
 > **Réponse**
@@ -631,19 +611,12 @@ print(x)
 **Question 2 :** combien de fois le mot `tour` s'affiche-t-il, et que vaut `n` à la
 fin ?
 
-```python
+```python norun
 n = 1
 while n < 20:
     print("tour")
     n = n * 3
 print(n)
-```
-
-```sortie
-tour
-tour
-tour
-27
 ```
 
 > **Réponse**
@@ -659,17 +632,13 @@ tour
 
 **Question 3 :** qu'affiche ce programme ?
 
-```python
+```python norun
 def plus_un(n):
     return n + 1
 
 a = plus_un(1)
 b = plus_un(plus_un(a))
 print(a, b)
-```
-
-```sortie
-2 4
 ```
 
 > **Réponse**

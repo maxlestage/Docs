@@ -758,4 +758,4 @@ print(heapq.heappop(tas), heapq.heappop(tas))
 - `Counter` compte, `defaultdict(list)` regroupe, `defaultdict(int)` additionne.
 - En cas de doute, commencez par une liste ou un dictionnaire.
 
-Suite : [Les décorateurs](decorateurs.md)
+Suite : [Fonctions avancées et décorateurs](decorateurs.md)

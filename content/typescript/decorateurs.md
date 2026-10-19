@@ -262,14 +262,15 @@ console.log(new Compte().solde);
 
 ```sortie
 method deposer static=false private=false
-field solde static=false private=false
 field banque static=true private=false
+field solde static=false private=false
 field #code static=false private=true
 class Compte
 0
 ```
 
-Remarquez l'ordre : les méthodes d'abord, puis les champs, et la classe en dernier.
+Remarquez l'ordre : les méthodes d'abord, puis les champs `static`, puis les autres
+champs, et la classe en dernier.
 `"static" in contexte` vérifie que la fiche a un champ `static` : une fiche de classe
 n'en a pas, et TypeScript le sait (c'est un
 [rétrécissement](../debuter/glossaire.md#retrecissement)).
@@ -306,13 +307,12 @@ Le décorateur `lier` répare cela : pour chaque nouvel objet, il range dans l'o
 copie de la méthode attachée pour toujours à cet objet (`bind`).
 
 ```typescript
-function lier<This, F extends (this: This, ...args: never[]) => unknown>(
-  methode: F,
-  contexte: ClassMethodDecoratorContext<This, F>,
+function lier<This extends object, Args extends unknown[], R>(
+  methode: (this: This, ...args: Args) => R,
+  contexte: ClassMethodDecoratorContext<This, (this: This, ...args: Args) => R>,
 ) {
   contexte.addInitializer(function (this: This) {
-    const nom = contexte.name as keyof This;
-    this[nom] = methode.bind(this) as This[keyof This];
+    Reflect.set(this, contexte.name, methode.bind(this));
   });
 }
 
@@ -346,7 +346,7 @@ une fonction qui **transforme la valeur de départ**.
 C'est comme un tampon à l'entrée d'un bureau : chaque dossier qui arrive reçoit le tampon,
 une fois, avant d'être rangé.
 
-```typescript
+```typescript norun
 function enMajuscules(_valeur: undefined, contexte: ClassFieldDecoratorContext<unknown, string>) {
   return function (valeurDeDepart: string): string {
     console.log(`  ${String(contexte.name)} : "${valeurDeDepart}" devient "${valeurDeDepart.toUpperCase()}"`);
@@ -368,14 +368,14 @@ const lyon = new Ville("lyon");
 console.log(lyon.nom, lyon.pays);
 ```
 
-```sortie
+```text
 Création de Lyon
-  nom : "undefined" devient "UNDEFINED"
+TypeError: Cannot read properties of undefined (reading 'toUpperCase')
 ```
 
-Attention, cet exemple **plante** à moitié : regardez la sortie. Le champ `nom` n'a pas
-de valeur de départ (il est rempli plus tard, dans le constructeur). Le décorateur reçoit
-donc `undefined`… et `toUpperCase` échoue.
+Cet exemple **plante**. Le champ `nom` n'a pas de valeur de départ (il est rempli plus
+tard, dans le constructeur). Le décorateur reçoit donc `undefined`… et `toUpperCase`
+échoue. TypeScript ne l'a pas vu venir : il compile sans rien dire.
 
 Retenez cette règle : un décorateur de champ ne voit **que la valeur de départ**, pas
 les valeurs données ensuite. Décorez donc un champ qui a une valeur écrite après `=` :
@@ -614,14 +614,17 @@ console.log(new Colis().decrire());
 ```
 
 ```sortie
-pose de (dessus)
 pose de (dessous)
+pose de (dessus)
 (dessus) (dessous) un colis
 ```
 
-Les fabriques sont appelées de haut en bas (d'où l'ordre des messages `pose de`), puis
-les couches sont posées de bas en haut. À l'appel, on traverse les couches de
-l'extérieur vers l'intérieur :
+| Étape | Ce qui se passe | Méthode obtenue |
+|-------|-----------------|-----------------|
+| 1 | `(dessous)`, le plus proche, emballe `decrire` | `(dessous) un colis` |
+| 2 | `(dessus)` emballe le résultat de l'étape 1 | `(dessus) (dessous) un colis` |
+
+À l'appel, on traverse les couches de l'extérieur vers l'intérieur :
 
 ```text
    ┌─ (dessus) ─────────────────────┐
