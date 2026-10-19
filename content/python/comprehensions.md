@@ -12,6 +12,10 @@ Cette page montre comment construire une liste, un dictionnaire ou un ensemble e
 
 ## De la boucle à la compréhension
 
+Transformer chaque élément d'une liste est un besoin très courant : des prix à
+convertir, des prénoms à mettre en majuscules, des notes à doubler. C'est comme une
+recette qui dit « pour chaque pomme, épluchez-la » : la même action, sur chaque élément.
+
 Vous savez déjà construire une nouvelle [liste](../debuter/glossaire.md#liste) avec une
 boucle `for` : on part d'une liste vide, puis on ajoute un élément à chaque tour.
 
@@ -26,6 +30,13 @@ print(carres)
 ```sortie
 [1, 4, 9, 16]
 ```
+
+Ligne par ligne :
+
+- `carres = []` crée une liste vide : c'est le bol où l'on va ranger les résultats ;
+- `for n in nombres:` donne à `n` les valeurs 1, puis 2, puis 3, puis 4 ;
+- à chaque tour, `carres.append(n * n)` ajoute le carré de `n` à la fin de `carres` ;
+- après le dernier tour, `print(carres)` affiche la liste remplie.
 
 Ce motif est si courant que Python a une écriture plus courte : la **compréhension de
 liste**. On la construit en trois étapes, à partir de la boucle :
@@ -69,6 +80,21 @@ print([f"Bonjour {p} !" for p in prenoms])
 ['Bonjour alice !', 'Bonjour bob !', 'Bonjour chloé !']
 ```
 
+**À vous :** écrivez un programme qui part de `prix = [2, 5, 8]` (des prix en euros) et
+construit, avec une compréhension, la liste des mêmes prix en centimes, puis l'affiche.
+
+> **Solution**
+>
+> ```python
+> prix = [2, 5, 8]
+> centimes = [p * 100 for p in prix]
+> print(centimes)
+> ```
+>
+> ```sortie
+> [200, 500, 800]
+> ```
+
 ## Filtrer avec if
 
 Souvent, on ne garde que certains éléments. Avec une boucle, on écrit un `if` dans le
@@ -87,6 +113,13 @@ print(reussites)
 [12, 15, 18]
 ```
 
+Ligne par ligne :
+
+- `reussites = []` part d'une liste vide ;
+- `for note in notes:` prend les notes une par une : 12, 7, 15, 9, puis 18 ;
+- `if note >= 10:` ne laisse passer que les notes de 10 ou plus ;
+- 12, 15 et 18 sont donc ajoutées avec `append` ; 7 et 9 sont ignorées.
+
 Dans une compréhension, le `if` se place **à la fin**, après le `for` :
 
 ```python
@@ -100,6 +133,21 @@ print(reussites)
 ```
 
 C'est un tamis : seuls les éléments qui passent le test arrivent dans la nouvelle liste.
+
+**À vous :** écrivez un programme qui part de `ages = [12, 25, 17, 40]` et construit,
+avec une compréhension, la liste des âges de 18 ans ou plus, puis l'affiche.
+
+> **Solution**
+>
+> ```python
+> ages = [12, 25, 17, 40]
+> majeurs = [age for age in ages if age >= 18]
+> print(majeurs)
+> ```
+>
+> ```sortie
+> [25, 40]
+> ```
 
 ### Transformer selon une condition
 
@@ -122,6 +170,9 @@ print(mentions)
 
 ## Compréhensions de dictionnaire
 
+Un dictionnaire ressemble à un carnet d'adresses : à chaque nom correspond une
+information. Une compréhension de dictionnaire remplit ce carnet en une seule ligne.
+
 Le même principe fonctionne pour un
 [dictionnaire](../debuter/glossaire.md#dictionnaire). On utilise des accolades `{ }` et
 on écrit `clé: valeur` avant le `for`.
@@ -135,6 +186,14 @@ print(longueurs)
 ```sortie
 {'alice': 5, 'bob': 3, 'chloé': 5}
 ```
+
+Ligne par ligne :
+
+- `prenoms` contient trois prénoms ;
+- pour chaque prénom `p`, la compréhension crée une paire : la clé `p` et la valeur
+  `len(p)`, le nombre de lettres ;
+- `"alice"` donne la paire `'alice': 5`, puis `"bob"` donne `'bob': 3`, et ainsi de
+  suite.
 
 Pour parcourir un dictionnaire existant, utilisez `.items()`, qui donne les paires
 `(clé, valeur)` :
@@ -156,6 +215,22 @@ print(pas_chers)
 > des nombres à virgule (voir [les nombres](nombres.md)). Utilisez `round(p * 0.8, 2)`
 > pour un affichage propre.
 
+**À vous :** écrivez un programme qui part de `prix = {"pain": 1, "lait": 2}` et
+construit, avec une compréhension, un dictionnaire des mêmes prix en centimes, puis
+l'affiche.
+
+> **Solution**
+>
+> ```python
+> prix = {"pain": 1, "lait": 2}
+> centimes = {nom: p * 100 for nom, p in prix.items()}
+> print(centimes)
+> ```
+>
+> ```sortie
+> {'pain': 100, 'lait': 200}
+> ```
+
 ### Inverser un dictionnaire
 
 Un usage classique : échanger les clés et les valeurs.
@@ -172,6 +247,9 @@ print(pays_vers_code)
 
 ## Compréhensions d'ensemble
 
+Pensez à une liste d'invités où certains noms ont été écrits deux fois. Vous voulez
+chaque personne une seule fois : c'est exactement ce que fait un ensemble.
+
 Avec des accolades mais **sans** deux-points, on obtient un
 [ensemble](../debuter/glossaire.md#ensemble) (`set`) : chaque valeur n'y apparaît
 qu'une fois.
@@ -186,6 +264,15 @@ print(sorted(uniques))
 ['chat', 'chien', 'poisson']
 ```
 
+Ligne par ligne :
+
+- `mots` contient cinq mots, avec des doublons écrits de façons différentes ;
+- `m.lower()` met chaque mot en minuscules : `"Chat"` et `"CHAT"` deviennent tous deux
+  `"chat"` ;
+- les accolades rangent ces mots dans un ensemble, qui ne garde chaque valeur qu'une
+  fois ;
+- `sorted(uniques)` donne une liste triée par ordre alphabétique, pour l'affichage.
+
 Un ensemble n'a pas d'ordre : on le trie avec `sorted` pour un affichage stable.
 
 | Écriture | Résultat |
@@ -196,6 +283,11 @@ Un ensemble n'a pas d'ordre : on le trie avec `sorted` pour un affichage stable.
 | `(x for x in ...)` | une expression génératrice (voir plus bas) |
 
 ## Compréhensions imbriquées
+
+> **Note :** cette partie peut attendre. Lisez-la quand les bases seront solides.
+
+Parfois, il faut combiner deux listes : chaque couleur avec chaque taille, comme dans
+un magasin de vêtements.
 
 Une compréhension peut contenir **plusieurs `for`**. Ils se lisent dans le même ordre
 que des boucles imbriquées : le premier `for` est la boucle extérieure.
@@ -210,6 +302,14 @@ print(articles)
 ```sortie
 ['rouge-S', 'rouge-M', 'bleu-S', 'bleu-M']
 ```
+
+Ligne par ligne :
+
+- le premier `for` prend `"rouge"` ;
+- le second `for` parcourt alors toutes les tailles : on obtient `"rouge-S"`, puis
+  `"rouge-M"` ;
+- le premier `for` passe ensuite à `"bleu"`, et le second recommence : `"bleu-S"`,
+  puis `"bleu-M"`.
 
 C'est l'équivalent de :
 
@@ -279,6 +379,12 @@ print(max(len(m) for m in ["un", "trois", "quatre"]))
 6
 ```
 
+Ligne par ligne :
+
+- `n * 2 for n in notes` produit les doubles des notes, un par un : 24, 14, 30, 18, 36 ;
+- `sum` les additionne au fur et à mesure : le total vaut 122 ;
+- `len(m) for m in [...]` produit les longueurs 2, 5 et 6 ; `max` garde la plus grande.
+
 ### any et all
 
 - `any(...)` vaut `True` si **au moins une** valeur est vraie ;
@@ -314,6 +420,23 @@ print(sum(carres))
 14
 0
 ```
+
+**À vous :** écrivez un programme qui part de `temperatures = [18, 22, 25, 19]`, puis
+affiche si au moins une température dépasse 24 (avec `any`), et si toutes valent au
+moins 15 (avec `all`).
+
+> **Solution**
+>
+> ```python
+> temperatures = [18, 22, 25, 19]
+> print(any(t > 24 for t in temperatures))
+> print(all(t >= 15 for t in temperatures))
+> ```
+>
+> ```sortie
+> True
+> True
+> ```
 
 ## Savoir s'arrêter
 
