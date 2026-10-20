@@ -187,7 +187,7 @@ browser.
 ## Creating a project with npm
 
 **npm** (*Node Package Manager*) is installed with Node. It manages your project and its
-[packages](../debuter/glossaire.md#paquet): code written by other people, ready to
+[packages](../debuter/glossaire.md#package): code written by other people, ready to
 reuse. It is a huge public library: more than two million packages.
 
 `npm init -y` creates the `package.json` file, the project's ID card (`-y` accepts all

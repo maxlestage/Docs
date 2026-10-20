@@ -13,7 +13,7 @@ Esta página muestra cómo una clase puede heredar de otra, cómo objetos distin
 ## Crear una subclase
 
 El capítulo [clases y objetos](types.md#la-herencia) presentó la herencia. Recordatorio: una
-[clase](../debuter/glossaire.md#classe) puede **heredar** de otra con `<`. Recibe todos
+[clase](../debuter/glossaire.md#clase) puede **heredar** de otra con `<`. Recibe todos
 sus métodos, como un hijo hereda los rasgos de sus padres.
 
 ```ruby
@@ -140,7 +140,7 @@ false
 ```
 
 Toda clase hereda al final de `Object`. `Kernel` es un
-[módulo](../debuter/glossaire.md#module) incluido en `Object`: es él quien proporciona
+[módulo](../debuter/glossaire.md#modulo) incluido en `Object`: es él quien proporciona
 `puts`. `is_a?` mira toda la cadena, `instance_of?` solo la clase exacta.
 
 ## El polimorfismo

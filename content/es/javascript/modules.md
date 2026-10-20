@@ -13,7 +13,7 @@ Esta página muestra cómo dividir un programa en varios archivos con `import` y
 ## ¿Por qué dividir en módulos?
 
 Un programa de 50 líneas cabe en un archivo. Uno de 5000 líneas, no: te pierdes en él.
-Entonces se divide en [módulos](../debuter/glossaire.md#module): archivos que tienen
+Entonces se divide en [módulos](../debuter/glossaire.md#modulo): archivos que tienen
 cada uno un papel preciso.
 
 Piensa en una cocina: las especias en un armario, la vajilla en otro. Cada armario tiene
@@ -189,7 +189,7 @@ navegador.
 ## Crear un proyecto con npm
 
 **npm** (*Node Package Manager*, «gestor de paquetes de Node») se instala con Node.
-Gestiona tu proyecto y sus [paquetes](../debuter/glossaire.md#paquet): código escrito
+Gestiona tu proyecto y sus [paquetes](../debuter/glossaire.md#paquete): código escrito
 por otras personas, listo para reutilizar. Es una inmensa biblioteca pública: más de dos
 millones de paquetes.
 

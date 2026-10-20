@@ -40,7 +40,7 @@ pasar por `Object.entries` (mira [los objetos](objets.md)).
 ## El protocolo de iteración
 
 ¿Cómo lo hace `for...of`? Le pide al valor un
-[iterador](../debuter/glossaire.md#iterateur): un objeto que da los elementos **uno a
+[iterador](../debuter/glossaire.md#iterador): un objeto que da los elementos **uno a
 uno**, cuando se le piden. Piensa en un dispensador de turnos: cada vez que pulsas el
 botón, sale el siguiente número; cuando el rollo se acaba, te lo dice.
 

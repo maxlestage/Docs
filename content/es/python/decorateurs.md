@@ -12,7 +12,7 @@ Esta página muestra que las funciones de Python son valores como los demás, lo
 
 ## Las funciones son objetos
 
-En Python, una [función](../debuter/glossaire.md#fonction) es un valor, como un número
+En Python, una [función](../debuter/glossaire.md#funcion) es un valor, como un número
 o una cadena. Sin paréntesis, `saludar` designa **la función misma**; con paréntesis,
 `saludar()` **la ejecuta**.
 

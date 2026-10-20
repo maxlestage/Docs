@@ -13,7 +13,7 @@ Esta página muestra cómo lanzar varias tareas a la vez con las goroutines, esp
 ## Hacer varias cosas a la vez
 
 Hasta ahora, tus programas hacían una cosa detrás de otra. La
-[concurrencia](../debuter/glossaire.md#concurrence) permite avanzar en varias tareas a
+[concurrencia](../debuter/glossaire.md#concurrencia) permite avanzar en varias tareas a
 la vez: descargar diez archivos sin esperar a que termine cada uno, responder a varios
 visitantes de un sitio web…
 
@@ -27,7 +27,7 @@ misma cazuela.
 Una **goroutine** es una función que se ejecuta en paralelo con el resto del programa.
 Para lanzar una, escribe `go` delante de una llamada a función. Eso es todo. Una
 goroutine cuesta muy poco: un programa puede lanzar miles. Se parece a un
-[hilo](../debuter/glossaire.md#thread) (*thread*), pero mucho más ligero.
+[hilo](../debuter/glossaire.md#hilo) (*thread*), pero mucho más ligero.
 
 ```go norun
 go preparar("arroz")

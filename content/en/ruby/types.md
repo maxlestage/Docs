@@ -12,9 +12,9 @@ This page shows how to create your own objects with classes, inheritance, module
 
 ## Defining a class
 
-A [class](../debuter/glossaire.md#classe) is a template for making objects.
+A [class](../debuter/glossaire.md#class) is a template for making objects.
 Think of a cake mold: the mold is the class, each cake is an
-[object](../debuter/glossaire.md#objet). All the cakes have the same shape, but each one
+[object](../debuter/glossaire.md#object). All the cakes have the same shape, but each one
 can have its own flavor. The name of a class starts with a capital letter.
 
 ```ruby

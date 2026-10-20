@@ -34,7 +34,7 @@ Un módulo se parece a una clase, con una gran diferencia: **no se crea ningún 
 a partir de un módulo**. Nada de `Saludos.new`.
 
 > **Nota:** la palabra «módulo» existe en otros lenguajes, con un sentido parecido
-> (consulta [el glosario](../debuter/glossaire.md#module)).
+> (consulta [el glosario](../debuter/glossaire.md#modulo)).
 
 ## Un módulo como espacio de nombres
 
