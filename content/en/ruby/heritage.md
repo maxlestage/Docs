@@ -13,7 +13,7 @@ This page shows how a class can inherit from another one, how different objects 
 ## Creating a subclass
 
 The [classes and objects](types.md#inheritance) chapter introduced inheritance. Reminder: a
-[class](../debuter/glossaire.md#classe) can **inherit** from another one with `<`. It
+[class](../debuter/glossaire.md#class) can **inherit** from another one with `<`. It
 receives all of its methods, just as a child inherits traits from their parents.
 
 ```ruby

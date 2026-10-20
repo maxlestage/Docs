@@ -16,7 +16,7 @@ These two words look alike, but they do not mean the same thing:
 
 - an **iterable** is anything you can go through with `for`: a list, a string, a
   dictionary, a `range`, a file…;
-- an [iterator](../debuter/glossaire.md#iterateur) is the object that does the walking.
+- an [iterator](../debuter/glossaire.md#iterator) is the object that does the walking.
   It remembers **where it is** and gives you the next element when you ask for it.
 
 Think of a book: the book is the iterable; the **bookmark** is the iterator. Several

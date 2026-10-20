@@ -197,7 +197,7 @@ The program starts
 
 ## Packages
 
-A [package](../debuter/glossaire.md#paquet) is a **folder of modules**. It contains an
+A [package](../debuter/glossaire.md#package) is a **folder of modules**. It contains an
 `__init__.py` file, run the first time the package is imported. This file can be
 empty.
 

@@ -339,7 +339,7 @@ for errors, with `?` (see [Handling errors](erreurs.md)).
 
 ## Iterator: a handmade iterator
 
-A type becomes an [iterator](../debuter/glossaire.md#iterateur) by implementing a
+A type becomes an [iterator](../debuter/glossaire.md#iterator) by implementing a
 single method: `next`, which returns `Some(value)`, or `None` when it is over. All the
 other methods (`map`, `filter`, `sum`…) come with it.
 

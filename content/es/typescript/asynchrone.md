@@ -13,7 +13,7 @@ Esta página explica cómo TypeScript describe las operaciones que tardan con el
 ## ¿Por qué esperar?
 
 Algunas operaciones no responden enseguida: leer un archivo, consultar un
-[servidor](../debuter/glossaire.md#serveur), esperar un segundo. Si el programa se
+[servidor](../debuter/glossaire.md#servidor), esperar un segundo. Si el programa se
 quedara bloqueado durante ese tiempo, no podría hacer nada más.
 
 JavaScript, y por tanto TypeScript, funciona de otra manera: **lanza** la operación,
@@ -177,7 +177,7 @@ segundo lugar.
 resultados, en el orden en que las diste (no en el orden en que terminan).
 
 Si las promesas tienen tipos distintos, TypeScript da una
-[tupla](../debuter/glossaire.md#tuple): un array en el que cada casilla tiene su propio
+[tupla](../debuter/glossaire.md#tupla): un array en el que cada casilla tiene su propio
 tipo. Aquí, el resultado es de tipo `[string, number]`.
 
 ```typescript
@@ -233,7 +233,7 @@ console.log(longitudes);
 ## Gestionar los errores
 
 Una promesa puede **fallar**: se dice que es **rechazada**. Con `await`, un rechazo se
-convierte en una [excepción](../debuter/glossaire.md#exception) normal, que capturas
+convierte en una [excepción](../debuter/glossaire.md#excepcion) normal, que capturas
 con `try` y `catch`.
 
 En modo estricto, la variable del `catch` es de tipo `unknown`: TypeScript no sabe qué

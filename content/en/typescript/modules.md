@@ -198,7 +198,7 @@ the error shows up at that moment.
 
 ## npm packages
 
-npm is the [package](../debuter/glossaire.md#paquet) manager of JavaScript. It
+npm is the [package](../debuter/glossaire.md#package) manager of JavaScript. It
 downloads libraries written by other people into the `node_modules/` folder and
 records them in `package.json`.
 

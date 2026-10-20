@@ -167,7 +167,7 @@ Total: 21 h
 { manzanas: 12, peras: 3 }
 ```
 
-`Record<string, number>` sirve de [diccionario](../debuter/glossaire.md#dictionnaire)
+`Record<string, number>` sirve de [diccionario](../debuter/glossaire.md#diccionario)
 sencillo: cualquier clave de texto, valores numéricos.
 
 > **Nota:** `Object.keys` siempre devuelve un `string[]`. El `as Dia[]` le dice a

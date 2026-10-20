@@ -16,7 +16,7 @@ Estas dos palabras se parecen, pero no quieren decir lo mismo:
 
 - un **iterable** es todo lo que se puede recorrer con `for`: una lista, una cadena, un
   diccionario, un `range`, un archivo…;
-- un [iterador](../debuter/glossaire.md#iterateur) es el objeto que hace el recorrido.
+- un [iterador](../debuter/glossaire.md#iterador) es el objeto que hace el recorrido.
   Recuerda **por dónde va** y te da el elemento siguiente cuando se lo pides.
 
 Piensa en un libro: el libro es el iterable; el **marcapáginas** es el iterador. Varios

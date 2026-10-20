@@ -13,7 +13,7 @@ This page shows how to run several tasks at the same time with goroutines, wait 
 ## Doing several things at once
 
 Until now, your programs did one thing after another.
-[Concurrency](../debuter/glossaire.md#concurrence) lets you make progress on several
+[Concurrency](../debuter/glossaire.md#concurrency) lets you make progress on several
 tasks at the same time: download ten files without waiting for each one to finish,
 answer several visitors of a website…
 
