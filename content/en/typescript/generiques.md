@@ -32,7 +32,7 @@ Then again for booleans… With `any`, a single function would be enough, but
 TypeScript would no longer know anything about the result: it could no longer protect
 you.
 
-[Generics](../debuter/glossaire.md#generique) solve this problem: a single function,
+[Generics](../debuter/glossaire.md#generics) solve this problem: a single function,
 and types that stay precise.
 
 ## A generic function

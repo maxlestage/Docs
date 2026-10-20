@@ -14,7 +14,7 @@ respond to the same call, and how to make `==`, `<` or `len` work on your own cl
 
 ## A subclass
 
-[Inheritance](../debuter/glossaire.md#heritage) lets you create a class from another
+[Inheritance](../debuter/glossaire.md#inheritance) lets you create a class from another
 one. The new class, the **subclass** (or child class), receives everything the
 **parent class** has: its attributes and its methods. You write it by putting the
 parent in parentheses.

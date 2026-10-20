@@ -12,7 +12,7 @@ Esta página muestra cómo crear tus propios tipos con `type`, y cómo examinarl
 
 ## Crear un tipo
 
-Un [tipo](../debuter/glossaire.md#type) es una clase de valor. Rythme ya
+Un [tipo](../debuter/glossaire.md#tipo) es una clase de valor. Rythme ya
 tiene algunos (`Int`, `Text`...), y puedes crear los tuyos.
 
 `type` crea un tipo nuevo, con la lista de sus **variantes**, las formas

@@ -12,7 +12,7 @@ This page explains blocks, iterators such as `map` and `select`, and gives a qui
 
 ## Blocks
 
-A [block](../debuter/glossaire.md#bloc) is a piece of code that you give to a method.
+A [block](../debuter/glossaire.md#block) is a piece of code that you give to a method.
 The method decides when to run it, and how many times. It is like giving an instruction
 to a waiter: "for each plate, add salt". The waiter (the method) goes from plate to
 plate; you just wrote the instruction (the block).

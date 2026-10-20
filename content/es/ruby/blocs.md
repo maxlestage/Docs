@@ -12,7 +12,7 @@ Esta página explica los bloques, los iteradores como `map` y `select`, y presen
 
 ## Los bloques
 
-Un [bloque](../debuter/glossaire.md#bloc) es un trozo de código que le das a un
+Un [bloque](../debuter/glossaire.md#bloque) es un trozo de código que le das a un
 método. El método decide cuándo ejecutarlo, y cuántas veces. Es como darle una
 instrucción a un camarero: «a cada plato, échale sal». El camarero (el método) va de
 plato en plato; tú solo has escrito la instrucción (el bloque).
@@ -29,7 +29,7 @@ plato en plato; tú solo has escrito la instrucción (el bloque).
 
 Entre las barras `|n|`, nombras el valor que recibe el bloque. Ese nombre es un
 **parámetro del bloque**: cambia en cada pasada (cada
-[iteración](../debuter/glossaire.md#iteration)). Elige un nombre claro: `|fruta|`,
+[iteración](../debuter/glossaire.md#iteracion)). Elige un nombre claro: `|fruta|`,
 `|nota|`…
 
 Un método que recorre una colección llamando a un bloque se llama un

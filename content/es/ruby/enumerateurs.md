@@ -28,9 +28,9 @@ Enumerator
 
 Un enumerador es un recorrido **en espera**. Piensa en un marcapáginas en un libro: sabe
 por dónde vas y puede darte la página siguiente cuando se la pides. Es un
-[iterador](../debuter/glossaire.md#iterateur) que puedes guardar en una variable.
+[iterador](../debuter/glossaire.md#iterador) que puedes guardar en una variable.
 
-Conoce todos los métodos de [Enumerable](blocs.md):
+Conoce todos los métodos de [Enumerable](blocs.md#los-metodos-de-enumerable):
 
 ```ruby
 e = [10, 20, 30].each

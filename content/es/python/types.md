@@ -28,9 +28,9 @@ print(cuenta)
 Funciona, pero nada impide una errata (`"sado"`), y las acciones (depositar, retirar)
 están dispersas en otras partes del código.
 
-Una [clase](../debuter/glossaire.md#classe) agrupa **los datos y las acciones** en el
+Una [clase](../debuter/glossaire.md#clase) agrupa **los datos y las acciones** en el
 mismo lugar. Es un plano de construcción: la clase `Casa` describe las casas; cada casa
-construida a partir del plano es un [objeto](../debuter/glossaire.md#objet), también
+construida a partir del plano es un [objeto](../debuter/glossaire.md#objeto), también
 llamado **instancia**.
 
 > **Nota:** en Python, usas objetos desde el principio: `"abc"` es un objeto de la clase
@@ -97,7 +97,7 @@ local, perdida al final de `__init__`.
 
 ## Los métodos
 
-Un [método](../debuter/glossaire.md#methode) es una función escrita dentro de la clase.
+Un [método](../debuter/glossaire.md#metodo) es una función escrita dentro de la clase.
 Recibe `self` y por eso puede leer y modificar los atributos del objeto.
 
 ```python

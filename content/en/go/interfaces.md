@@ -60,7 +60,7 @@ and the same types.
 
 This is very handy: you can create an interface for types written by someone else,
 without changing them. In Rust, on the other hand, you have to write
-`impl Trait for Type` (see [traits in Rust](../rust/types.md)).
+`impl Trait for Type` (see [traits in Rust](../rust/types.md#traits)).
 
 ## Polymorphism
 
@@ -419,7 +419,7 @@ exit status 2
 ```
 
 `x` contains a `string`, not an `int`: the program
-[panics](../debuter/glossaire.md#panique). Use `n, ok := x.(int)` and check `ok`.
+[panics](../debuter/glossaire.md#panic). Use `n, ok := x.(int)` and check `ok`.
 
 ## Test yourself
 

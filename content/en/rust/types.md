@@ -56,7 +56,7 @@ fn main() {
 ## Methods with impl
 
 An `impl` block (for *implementation*) adds functions to a struct. A
-[method](../debuter/glossaire.md#methode) is a function attached to a type, that
+[method](../debuter/glossaire.md#method) is a function attached to a type, that
 you call with a dot: `r.area()`. Its first parameter, `self`, refers to
 the object itself:
 

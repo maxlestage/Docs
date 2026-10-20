@@ -12,7 +12,7 @@ Esta página muestra cómo una clase puede reutilizar otra clase con `extends` y
 
 ## Crear una subclase con extends
 
-La [herencia](../debuter/glossaire.md#heritage) permite crear una clase a partir de otra.
+La [herencia](../debuter/glossaire.md#herencia) permite crear una clase a partir de otra.
 La nueva clase, la **subclase** (o clase hija), recibe todo lo que tiene la clase
 **padre**: sus propiedades y sus métodos.
 

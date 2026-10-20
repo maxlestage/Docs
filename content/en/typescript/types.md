@@ -12,7 +12,7 @@ This page explains how to create your own kinds of objects with `class`, protect
 
 ## A first class
 
-A [class](../debuter/glossaire.md#classe) is a mold for objects. The mold describes the
+A [class](../debuter/glossaire.md#class) is a mold for objects. The mold describes the
 shape; each object made with this mold is an **instance**. It's like a cookie cutter:
 a single tool, as many cookies as you want.
 
@@ -48,7 +48,7 @@ Let's break it down:
   type;
 - `constructor` is the function called by `new`. It fills in the fields;
 - `this` means the object being built (or the one the method is called on);
-- `introduce()` is a [method](../debuter/glossaire.md#methode): a function attached to
+- `introduce()` is a [method](../debuter/glossaire.md#method): a function attached to
   the object.
 
 A class is also a type: you can write `const c: Cat = ...`.
@@ -232,7 +232,7 @@ The array has the type `Animal[]`: it accepts any object that has the right shap
 ## Inheriting from a class
 
 `extends` creates a **child** class from a **parent** class: it gets all its fields and
-methods (see [inheritance](../debuter/glossaire.md#heritage)). In the constructor,
+methods (see [inheritance](../debuter/glossaire.md#inheritance)). In the constructor,
 `super(...)` first calls the constructor of the parent.
 
 ```typescript
