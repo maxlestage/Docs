@@ -56,7 +56,7 @@ fn main() {
 ## Los métodos con impl
 
 Un bloque `impl` (de *implementación*) añade funciones a una estructura. Un
-[método](../debuter/glossaire.md#methode) es una función unida a un tipo, que
+[método](../debuter/glossaire.md#metodo) es una función unida a un tipo, que
 se llama con un punto: `r.area()`. Su primer parámetro, `self`, designa
 al propio objeto:
 

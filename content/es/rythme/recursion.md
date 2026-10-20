@@ -13,7 +13,7 @@ Rythme no tiene bucles: para repetir, una función se llama a sí misma, y esta 
 ## ¿Por qué no hay bucles?
 
 En muchos lenguajes, se repite con un
-[bucle](../debuter/glossaire.md#boucle) `for` o `while`. Un bucle
+[bucle](../debuter/glossaire.md#bucle) `for` o `while`. Un bucle
 modifica un contador en cada vuelta: `i` vale 0, luego 1, luego 2...
 
 En Rythme, un valor nunca cambia. Así que un contador que cambia no
@@ -195,7 +195,7 @@ print(factorial(3))
 
 Se ven las multiplicaciones **en espera** apilarse hacia la derecha, y
 luego calcularse una vez alcanzado el caso base. Cada llamada espera la
-respuesta de la siguiente: es la [pila](../debuter/glossaire.md#pile-et-tas)
+respuesta de la siguiente: es la [pila](../debuter/glossaire.md#pila-y-monton)
 de llamadas.
 
 ## Los acumuladores

@@ -13,8 +13,8 @@ This page explains what a pointer is, how to use it with `&` and `*`, and when i
 ## An address instead of a copy
 
 Every variable is stored somewhere in
-[memory (RAM)](../debuter/glossaire.md#memoire-vive), at an **address**. A
-[pointer](../debuter/glossaire.md#pointeur) is a variable that holds this address.
+[memory (RAM)](../debuter/glossaire.md#ram), at an **address**. A
+[pointer](../debuter/glossaire.md#pointer) is a variable that holds this address.
 
 Think of a house. You can give a friend **a photo** of your house: they can color it in,
 and your house doesn't change. Or you can give them **your address**: then they can come

@@ -13,8 +13,8 @@ Esta página explica qué es un puntero, cómo usarlo con `&` y `*`, y cuándo c
 ## Una dirección en lugar de una copia
 
 Cada variable está guardada en algún lugar de la
-[memoria RAM](../debuter/glossaire.md#memoire-vive), en una **dirección**. Un
-[puntero](../debuter/glossaire.md#pointeur) es una variable que contiene esa dirección.
+[memoria RAM](../debuter/glossaire.md#memoria-ram), en una **dirección**. Un
+[puntero](../debuter/glossaire.md#puntero) es una variable que contiene esa dirección.
 
 Piensa en una casa. Puedes darle a un amigo **una foto** de tu casa: puede colorearla, y
 tu casa no cambia. O puedes darle **tu dirección**: entonces puede venir a pintar la
@@ -64,7 +64,7 @@ cambia.
 ## Pasar por valor o por puntero
 
 En Go, una función siempre recibe una **copia** de sus
-[argumentos](../debuter/glossaire.md#argument). Es el paso **por valor**. Por eso la
+[argumentos](../debuter/glossaire.md#argumento). Es el paso **por valor**. Por eso la
 función no puede modificar la variable de quien la llama.
 
 Para que pueda, pasa la dirección: la función recibe una copia de la dirección, pero

@@ -31,7 +31,7 @@ console.log(primerNumero([10, 20, 30]));
 Y otra vez para los booleanos… Con `any` bastaría una sola función, pero TypeScript
 ya no sabría nada del resultado: ya no podría protegerte.
 
-Los [genéricos](../debuter/glossaire.md#generique) resuelven este problema: una sola
+Los [genéricos](../debuter/glossaire.md#generico) resuelven este problema: una sola
 función, y tipos que siguen siendo precisos.
 
 ## Una función genérica

@@ -121,7 +121,7 @@ Es el mismo principio que el campo `kind` de las
 
 ## Los enums
 
-Un `enum` (una [enumeración](../debuter/glossaire.md#enumeration)) da un nombre a cada
+Un `enum` (una [enumeración](../debuter/glossaire.md#enumeracion)) da un nombre a cada
 opción de una lista. Existe en muchos lenguajes, y TypeScript también lo tiene.
 
 ```typescript
@@ -171,7 +171,7 @@ Nivel elegido: medio
 ```
 
 > **Nota:** un `enum` no es solo un tipo: crea un objeto JavaScript real en el momento
-> de la [compilación](../debuter/glossaire.md#compilation). Aquí no hay problema,
+> de la [compilación](../debuter/glossaire.md#compilacion). Aquí no hay problema,
 > porque compilamos con `tsc`. Pero algunas herramientas que simplemente «borran» los
 > tipos (como la ejecución directa de archivos `.ts` con Node) rechazan los enums.
 

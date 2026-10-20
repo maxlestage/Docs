@@ -12,13 +12,13 @@ Esta página muestra cómo crear tus propios tipos en Go con `struct`, darles m�
 
 ## Definir una estructura
 
-Una [estructura](../debuter/glossaire.md#structure) agrupa varios valores bajo un solo
+Una [estructura](../debuter/glossaire.md#estructura) agrupa varios valores bajo un solo
 nombre. Piensa en una ficha de inscripción: tiene casillas (nombre, edad, ciudad), y
 cada persona rellena su propia ficha. La ficha en blanco es el **tipo**, cada ficha
 rellenada es un **valor** de ese tipo.
 
 En Go, se escribe `type`, el nombre, luego `struct` y la lista de **campos** entre
-llaves. Cada campo tiene un nombre y un [tipo](../debuter/glossaire.md#type).
+llaves. Cada campo tiene un nombre y un [tipo](../debuter/glossaire.md#tipo).
 
 ```go
 package main
@@ -175,7 +175,7 @@ false
 
 ## Los métodos
 
-Un [método](../debuter/glossaire.md#methode) es una función unida a un tipo. Se
+Un [método](../debuter/glossaire.md#metodo) es una función unida a un tipo. Se
 escribe como una función, con además un **receptor** entre paréntesis antes del
 nombre: `func (r Rectangulo) Area()`. El receptor es el valor sobre el que se llama al
 método. Por costumbre, se le da un nombre corto: la primera letra del tipo.
@@ -218,7 +218,7 @@ Con `func (r Rectangulo)`, el método recibe una **copia** del valor. Puede leer
 campos, pero una modificación se pierde al terminar el método.
 
 Para modificar el valor original, escribe un asterisco: `func (c *Contador)`. El método
-recibe entonces la **dirección** del valor, un [puntero](../debuter/glossaire.md#pointeur),
+recibe entonces la **dirección** del valor, un [puntero](../debuter/glossaire.md#puntero),
 y trabaja sobre el original. El capítulo [los punteros](pointeurs.md) lo explica en
 detalle.
 
@@ -305,7 +305,7 @@ líneas, Go la exige.
 
 ## La incrustación
 
-Go no tiene [herencia](../debuter/glossaire.md#heritage). En su lugar, una estructura
+Go no tiene [herencia](../debuter/glossaire.md#herencia). En su lugar, una estructura
 puede **incrustar** otra: se escribe el tipo solo, sin nombre de campo. Los campos y
 los métodos del tipo incrustado pasan a ser accesibles directamente.
 

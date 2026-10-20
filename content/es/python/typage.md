@@ -12,7 +12,7 @@ Esta página muestra cómo indicar los tipos esperados en tu código, cómo las 
 
 ## ¿Por qué anotar?
 
-Python nunca pide el [tipo](../debuter/glossaire.md#type) de una variable: lo descubre
+Python nunca pide el [tipo](../debuter/glossaire.md#tipo) de una variable: lo descubre
 durante la ejecución. Es flexible, pero un error de tipo solo aparece en el momento en
 que la línea se ejecuta, a veces semanas después.
 

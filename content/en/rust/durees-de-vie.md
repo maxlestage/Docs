@@ -15,7 +15,7 @@ the words "borrow" and "reference" are not familiar to you yet.
 
 ## The problem: the dangling reference
 
-A [reference](../debuter/glossaire.md#emprunt) `&x` points to a value that belongs to
+A [reference](../debuter/glossaire.md#borrowing) `&x` points to a value that belongs to
 someone else. What happens if that value disappears while the reference still exists?
 
 Picture a cloakroom ticket. The ticket (the reference) tells where your coat (the value)
@@ -66,7 +66,7 @@ println!("{r}");
 ## The borrow checker
 
 The **borrow checker** is the part of the
-[compiler](../debuter/glossaire.md#compilateur) that does this check. Think of a very
+[compiler](../debuter/glossaire.md#compiler) that does this check. Think of a very
 strict librarian: they write down the return date of every book they lend, and they
 refuse any loan that would last longer than the book itself.
 

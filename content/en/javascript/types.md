@@ -27,9 +27,9 @@ Tom Felix
 That's handy for one or two objects. But if you have a hundred cats, you copy the same
 shape a hundred times, and a typo (`nmae` instead of `name`) goes unnoticed.
 
-A [class](../debuter/glossaire.md#classe) is a **template** for building objects that
+A [class](../debuter/glossaire.md#class) is a **template** for building objects that
 all have the same shape. Think of a cake mould: the mould is the class, each cake is an
-[object](../debuter/glossaire.md#objet). They all have the same shape, but each one has
+[object](../debuter/glossaire.md#object). They all have the same shape, but each one has
 its own flavour.
 
 ## Defining a class
@@ -52,7 +52,7 @@ tom.meow();
 Meow!
 ```
 
-`meow` is a [method](../debuter/glossaire.md#methode): a function that belongs to the
+`meow` is a [method](../debuter/glossaire.md#method): a function that belongs to the
 objects of the class. Notice how it is written: no `function` keyword, and no comma
 between methods.
 
@@ -312,7 +312,7 @@ The point is at (2, 5)
 ## Checking the class with instanceof
 
 `instanceof` answers the question: "was this object built with this class?". The result
-is a [boolean](../debuter/glossaire.md#booleen).
+is a [boolean](../debuter/glossaire.md#boolean).
 
 ```javascript
 class Cat {}
@@ -401,7 +401,7 @@ console.log(c.#balance);
 SyntaxError: Private field '#balance' must be declared in an enclosing class
 ```
 
-The program doesn't even start: it's a [syntax](../debuter/glossaire.md#syntaxe) error.
+The program doesn't even start: it's a [syntax](../debuter/glossaire.md#syntax) error.
 Add a method or a getter in the class (`get balance() { return this.#balance; }`), then
 read `c.balance`.
 

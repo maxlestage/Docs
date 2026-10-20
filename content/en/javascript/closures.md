@@ -12,7 +12,7 @@ This page explains where a variable is visible, how a function remembers its var
 
 ## The scope of a variable
 
-The [scope](../debuter/glossaire.md#portee) of a variable is the part of the program where
+The [scope](../debuter/glossaire.md#scope) of a variable is the part of the program where
 it exists. With `let` and `const`, that part is the **block**: everything between the
 curly braces `{ }` where the variable is declared.
 
@@ -161,7 +161,7 @@ change the other.
 
 Nobody except the function can touch `count`: there is no way to write
 `counterA.count`. The closure gives a **private state**, like the `#` fields of a
-[class](types.md).
+[class](types.md#private-fields).
 
 You can return several functions in an object; they share the same backpack.
 

@@ -34,7 +34,7 @@ A variable that **owns** it is its owner. You can give the book away
 > 3. When the owner goes away (end of its `{ }` block), the value is freed.
 
 A variable only exists in the block where it is created: this is its
-[scope](../debuter/glossaire.md#portee).
+[scope](../debuter/glossaire.md#scope).
 
 ```rust
 {
