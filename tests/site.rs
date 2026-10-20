@@ -67,7 +67,7 @@ async fn every_page_answers() {
     assert!(home.contains("Learn to program, "), "{home}");
     assert!(home.contains(r#"href="/en/compare/""#));
     assert!(home.contains(r#"hreflang="es" lang="es""#), "{home}");
-    let untranslated = client.get("/en/rust/possession/").await.text();
+    let untranslated = client.get("/en/rust/unsafe/").await.text();
     assert!(untranslated.contains("not translated into English yet"));
     let missing = client.get("/ruby/nulle-part/").await;
     assert_eq!(missing.status(), 404);
