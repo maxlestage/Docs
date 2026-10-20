@@ -40,7 +40,7 @@ true
 A lambda is a kind of proc (its class is also `Proc`), a bit stricter.
 
 > **Remember:** when you start, use lambdas. They behave like
-> [methods](../debuter/glossaire.md#methode), so there are no surprises.
+> [methods](../debuter/glossaire.md#method), so there are no surprises.
 
 ## Writing and calling a lambda
 
@@ -175,7 +175,7 @@ The rule is a Proc
 ```
 
 You already know `map(&:upcase)`: `&` turns the
-[symbol](../debuter/glossaire.md#symbole) `:upcase` into a proc that calls `upcase`.
+[symbol](../debuter/glossaire.md#symbol) `:upcase` into a proc that calls `upcase`.
 
 ## Turning a method into an object
 

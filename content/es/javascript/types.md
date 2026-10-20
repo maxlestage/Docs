@@ -27,9 +27,9 @@ Michi Félix
 Es práctico para uno o dos objetos. Pero si tienes cien gatos, copias cien veces la
 misma forma, y una errata (`nombr` en lugar de `nombre`) pasa desapercibida.
 
-Una [clase](../debuter/glossaire.md#classe) es un **modelo** para fabricar objetos que
+Una [clase](../debuter/glossaire.md#clase) es un **modelo** para fabricar objetos que
 tienen todos la misma forma. Piensa en un molde de pasteles: el molde es la clase, cada
-pastel es un [objeto](../debuter/glossaire.md#objet). Todos tienen la misma forma, pero
+pastel es un [objeto](../debuter/glossaire.md#objeto). Todos tienen la misma forma, pero
 cada uno tiene su sabor.
 
 ## Definir una clase
@@ -52,7 +52,7 @@ michi.maullar();
 ¡Miau!
 ```
 
-`maullar` es un [método](../debuter/glossaire.md#methode): una función que pertenece a
+`maullar` es un [método](../debuter/glossaire.md#metodo): una función que pertenece a
 los objetos de la clase. Fíjate en cómo se escribe: sin la palabra `function`, y sin
 coma entre los métodos.
 
@@ -312,7 +312,7 @@ El punto está en (2, 5)
 ## Comprobar la clase con instanceof
 
 `instanceof` responde a la pregunta: «¿este objeto se fabricó con esta clase?». El
-resultado es un [booleano](../debuter/glossaire.md#booleen).
+resultado es un [booleano](../debuter/glossaire.md#booleano).
 
 ```javascript
 class Gato {}
@@ -402,7 +402,7 @@ SyntaxError: Private field '#saldo' must be declared in an enclosing class
 ```
 
 El programa ni siquiera arranca: es un error de
-[sintaxis](../debuter/glossaire.md#syntaxe). Añade un método o un getter en la clase
+[sintaxis](../debuter/glossaire.md#sintaxis). Añade un método o un getter en la clase
 (`get saldo() { return this.#saldo; }`) y luego lee `c.saldo`.
 
 ## Ponte a prueba

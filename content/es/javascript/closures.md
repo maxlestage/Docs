@@ -12,7 +12,7 @@ Esta página explica dónde es visible una variable, cómo una función recuerda
 
 ## El ámbito de una variable
 
-El [ámbito](../debuter/glossaire.md#portee) de una variable es la zona del programa donde
+El [ámbito](../debuter/glossaire.md#ambito) de una variable es la zona del programa donde
 existe. Con `let` y `const`, esa zona es el **bloque**: todo lo que está entre las llaves
 `{ }` donde se declara la variable.
 
@@ -161,7 +161,7 @@ cambia el otro.
 
 Nadie, aparte de la función, puede tocar `cuenta`: no hay ninguna forma de escribir
 `contadorA.cuenta`. La closure da un **estado privado**, como los campos `#` de una
-[clase](types.md).
+[clase](types.md#los-campos-privados).
 
 Puedes devolver varias funciones en un objeto; comparten la misma mochila.
 

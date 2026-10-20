@@ -15,7 +15,7 @@ palabras «tomar prestado» y «referencia» todavía no te resultan familiares.
 
 ## El problema: la referencia colgante
 
-Una [referencia](../debuter/glossaire.md#emprunt) `&x` señala un valor que pertenece a
+Una [referencia](../debuter/glossaire.md#prestamo) `&x` señala un valor que pertenece a
 otra persona. ¿Qué pasa si ese valor desaparece mientras la referencia todavía existe?
 
 Imagina un ticket de guardarropa. El ticket (la referencia) dice dónde está tu abrigo
@@ -67,7 +67,7 @@ println!("{r}");
 ## El comprobador de préstamos
 
 El **comprobador de préstamos** (*borrow checker*) es la parte del
-[compilador](../debuter/glossaire.md#compilateur) que hace esta comprobación. Piensa en
+[compilador](../debuter/glossaire.md#compilador) que hace esta comprobación. Piensa en
 un bibliotecario muy estricto: anota la fecha de devolución de cada libro prestado, y
 rechaza cualquier préstamo que durara más que el propio libro.
 

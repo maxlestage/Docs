@@ -12,7 +12,7 @@ This page shows how a class can reuse another class with `extends` and `super`, 
 
 ## Creating a subclass with extends
 
-[Inheritance](../debuter/glossaire.md#heritage) lets you create a class from another
+[Inheritance](../debuter/glossaire.md#inheritance) lets you create a class from another
 one. The new class, the **subclass** (or child class), receives everything the
 **parent** class has: its properties and its methods.
 

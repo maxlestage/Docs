@@ -61,7 +61,7 @@ mismos nombres y los mismos tipos.
 
 Es muy práctico: puedes crear una interfaz para tipos escritos por otra persona, sin
 modificarlos. En Rust, en cambio, hay que escribir `impl Trait for Type` (mira
-[los traits en Rust](../rust/types.md)).
+[los traits en Rust](../rust/types.md#los-traits)).
 
 ## El polimorfismo
 
@@ -421,7 +421,7 @@ exit status 2
 ```
 
 `x` contiene un `string`, no un `int`: el programa
-[entra en pánico](../debuter/glossaire.md#panique). Usa `n, ok := x.(int)` y comprueba
+[entra en pánico](../debuter/glossaire.md#panico). Usa `n, ok := x.(int)` y comprueba
 `ok`.
 
 ## Ponte a prueba

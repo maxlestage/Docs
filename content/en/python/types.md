@@ -28,9 +28,9 @@ print(account)
 It works, but nothing prevents a typo (`"balanse"`), and the actions (depositing,
 withdrawing) are scattered elsewhere in the code.
 
-A [class](../debuter/glossaire.md#classe) groups **the data and the actions** in the
+A [class](../debuter/glossaire.md#class) groups **the data and the actions** in the
 same place. It is a blueprint: the `House` class describes houses; each house built from
-the blueprint is an [object](../debuter/glossaire.md#objet), also called an
+the blueprint is an [object](../debuter/glossaire.md#object), also called an
 **instance**.
 
 > **Note:** in Python, you have been using objects from the start: `"abc"` is an object
@@ -99,7 +99,7 @@ of `__init__`.
 
 ## Methods
 
-A [method](../debuter/glossaire.md#methode) is a function written inside the class. It
+A [method](../debuter/glossaire.md#method) is a function written inside the class. It
 receives `self`, so it can read and change the object's attributes.
 
 ```python

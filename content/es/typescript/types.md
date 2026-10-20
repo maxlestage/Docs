@@ -12,7 +12,7 @@ Esta página explica cómo crear tus propios tipos de objetos con `class`, prote
 
 ## Una primera clase
 
-Una [clase](../debuter/glossaire.md#classe) es un molde de objetos. El molde describe la
+Una [clase](../debuter/glossaire.md#clase) es un molde de objetos. El molde describe la
 forma; cada objeto fabricado con ese molde es una **instancia**. Es como un cortador de
 galletas: una sola herramienta, tantas galletas como quieras.
 
@@ -48,7 +48,7 @@ Vamos por partes:
 - `constructor` es la función a la que llama `new`. Rellena los campos;
 - `this` designa el objeto que se está construyendo (o aquel sobre el que se llama al
   método);
-- `presentarse()` es un [método](../debuter/glossaire.md#methode): una función unida
+- `presentarse()` es un [método](../debuter/glossaire.md#metodo): una función unida
   al objeto.
 
 Una clase también es un tipo: puedes escribir `const g: Gato = ...`.
@@ -233,7 +233,7 @@ El array tiene el tipo `Animal[]`: acepta cualquier objeto que tenga la forma co
 ## Heredar de una clase
 
 `extends` crea una clase **hija** a partir de una clase **madre**: recibe todos sus
-campos y métodos (mira la [herencia](../debuter/glossaire.md#heritage)). En el
+campos y métodos (mira la [herencia](../debuter/glossaire.md#herencia)). En el
 constructor, `super(...)` llama primero al constructor de la madre.
 
 ```typescript

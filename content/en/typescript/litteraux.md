@@ -120,7 +120,7 @@ It's the same idea as the `kind` field of
 
 ## Enums
 
-An `enum` (an [enumeration](../debuter/glossaire.md#enumeration)) gives a name to each
+An `enum` (an [enumeration](../debuter/glossaire.md#enum)) gives a name to each
 choice in a list. It exists in many languages, and TypeScript has it too.
 
 ```typescript

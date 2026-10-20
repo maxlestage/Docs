@@ -34,7 +34,7 @@ Una variable que lo **posee** es su propietaria. Puedes regalar el libro
 > 3. Cuando el propietario desaparece (fin de su bloque `{ }`), el valor se libera.
 
 Una variable solo existe en el bloque donde se crea: es su
-[ámbito](../debuter/glossaire.md#portee).
+[ámbito](../debuter/glossaire.md#ambito).
 
 ```rust
 {

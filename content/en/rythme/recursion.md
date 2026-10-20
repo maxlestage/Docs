@@ -13,7 +13,7 @@ Rythme has no loops: to repeat something, a function calls itself, and this page
 ## Why no loops?
 
 In many languages, you repeat with a `for` or `while`
-[loop](../debuter/glossaire.md#boucle). A loop changes a counter on each
+[loop](../debuter/glossaire.md#loop). A loop changes a counter on each
 turn: `i` is 0, then 1, then 2...
 
 In Rythme, a value never changes. So a counter that changes does not
@@ -196,7 +196,7 @@ print(factorial(3))
 You can see the **waiting** multiplications pile up towards the right,
 then get computed once the base case is reached. Each call waits for the
 answer of the next one: this is the call
-[stack](../debuter/glossaire.md#pile-et-tas).
+[stack](../debuter/glossaire.md#stack-and-heap).
 
 ## Accumulators
 

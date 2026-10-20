@@ -12,7 +12,7 @@ This page shows how to create your own types in Go with `struct`, give them meth
 
 ## Defining a struct
 
-A [struct](../debuter/glossaire.md#structure) groups several values under a single
+A [struct](../debuter/glossaire.md#struct) groups several values under a single
 name. Think of a sign-up form: it has boxes (name, age, city), and each person fills
 in their own form. The blank form is the **type**, each filled-in form is a **value**
 of that type.
@@ -176,7 +176,7 @@ false
 
 ## Methods
 
-A [method](../debuter/glossaire.md#methode) is a function attached to a type. You
+A [method](../debuter/glossaire.md#method) is a function attached to a type. You
 write it like a function, with an extra **receiver** in parentheses before the name:
 `func (r Rectangle) Area()`. The receiver is the value the method is called on. By
 habit, it gets a short name: the first letter of the type.
@@ -219,7 +219,7 @@ With `func (r Rectangle)`, the method receives a **copy** of the value. It can r
 the fields, but a change is lost at the end of the method.
 
 To change the original value, write a star: `func (c *Counter)`. The method then
-receives the **address** of the value, a [pointer](../debuter/glossaire.md#pointeur),
+receives the **address** of the value, a [pointer](../debuter/glossaire.md#pointer),
 and works on the original. The chapter [pointers](pointeurs.md) explains this in
 detail.
 
@@ -306,7 +306,7 @@ requires it.
 
 ## Embedding
 
-Go has no [inheritance](../debuter/glossaire.md#heritage). Instead, a struct can
+Go has no [inheritance](../debuter/glossaire.md#inheritance). Instead, a struct can
 **embed** another one: you write the type alone, without a field name. The fields and
 methods of the embedded type become directly accessible.
 
