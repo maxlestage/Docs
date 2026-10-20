@@ -134,6 +134,10 @@ l'ordre des parcours (une ligne par lot de 3 à 5 pages, dans les deux langues) 
   TypeScript `types`, `generiques`, `litteraux` ; Go `types`, `interfaces`, `pointeurs` ; Ruby `blocs`,
   `procs-lambdas`, `enumerateurs` ; Rust `possession`, `durees-de-vie`, `types` ; Rythme `fonctionnel`,
   `recursion`, `types`
+- [x] Suite (2) : Python `iterateurs`, `decorateurs`, `modules` ; JavaScript `iterateurs`, `modules`,
+  `asynchrone` ; TypeScript `types-avances`, `modules`, `asynchrone` ; Go `generiques`, `modules`,
+  `concurrence` ; Ruby `types`, `heritage`, `modules` ; Rust `pattern-matching`, `generiques`,
+  `traits-standard` ; Rythme `pattern-matching`, `modules`, `fichiers`
 - [ ] Puis le reste de chaque parcours, dans l'ordre de `src/catalog.rs` (3 pages par langage et par passage)
 
 ### Pour tous
@@ -172,3 +176,4 @@ l'ordre des parcours (une ligne par lot de 3 à 5 pages, dans les deux langues) 
 - 2026-10-19 — Site sur téléphone : les lignes de code trop longues passent à la ligne (en retrait), les tableaux de 4 colonnes ou plus deviennent des fiches, marges et cartes de chapitres resserrées. À 375 px : plus aucun bloc de code (14 090 avant) ni tableau (1 230 avant) qui défile de côté ; le test navigateur le vérifie.
 - 2026-10-19 — Traductions EN et ES : `pas-a-pas` et `exercices-2` des sept langages, et les 24 chapitres écrits par la session principale (Python `sqlite`, `collections-avancees`, `logging`, `donnees` ; JavaScript `tableaux-avances`, `node-http`, `canvas`, `stockage` ; TypeScript `nombres`, `dates`, `ligne-de-commande`, `decorateurs` ; Go `templates`, `context`, `sync`, `base-de-donnees` ; Ruby `base-de-donnees`, `rails`, `gems` ; Rust `traits-objets`, `base-de-donnees`, `wasm` ; Rythme `symboles`, `textes-avances`) : 76 pages, 824 exemples vérifiés.
 - 2026-10-20 — Traductions EN et ES, suite (1) : 3 chapitres de plus par langage (21 pages, 42 fichiers, 456 exemples vérifiés). Le test `tests/site.rs` prend `rust/unsafe` comme page pas encore traduite.
+- 2026-10-20 — Traductions EN et ES, suite (2) : 3 chapitres de plus par langage (21 pages, 42 fichiers, 406 exemples vérifiés).
