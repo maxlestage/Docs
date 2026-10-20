@@ -12,7 +12,7 @@ Esta página explica cómo importar código, dividir tu programa en varios archi
 
 ## ¿Qué es un módulo?
 
-Un [módulo](../debuter/glossaire.md#module) es simplemente **un archivo `.py`** cuyo
+Un [módulo](../debuter/glossaire.md#modulo) es simplemente **un archivo `.py`** cuyo
 contenido se reutiliza: sus funciones, sus clases, sus variables. Python viene con
 cientos de módulos listos para usar: es la **biblioteca estándar**.
 
@@ -198,7 +198,7 @@ El programa arranca
 
 ## Los paquetes
 
-Un [paquete](../debuter/glossaire.md#paquet) (*package*) es una **carpeta de módulos**.
+Un [paquete](../debuter/glossaire.md#paquete) (*package*) es una **carpeta de módulos**.
 Contiene un archivo `__init__.py`, que se ejecuta la primera vez que se importa el
 paquete. Este archivo puede estar vacío.
 

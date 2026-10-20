@@ -14,7 +14,7 @@ This page explains how Go organizes code into packages, how to create a module w
 
 A **package** is a folder of Go files that work together. Each file starts with
 `package name`. The `main` package is special: it's the package of a
-[program](../debuter/glossaire.md#programme), and it contains the `main` function.
+[program](../debuter/glossaire.md#program), and it contains the `main` function.
 
 Think of a public library: each shelf (package) gathers books on the same subject. You
 don't take the whole building home, you borrow from the shelf you need.

@@ -13,7 +13,7 @@ This page explains how TypeScript describes operations that take time with the `
 ## Why wait?
 
 Some operations don't answer right away: reading a file, querying a
-[server](../debuter/glossaire.md#serveur), waiting one second. If the program stayed
+[server](../debuter/glossaire.md#server), waiting one second. If the program stayed
 stuck during that time, it couldn't do anything else.
 
 JavaScript, and so TypeScript, works differently: it **starts** the operation, carries

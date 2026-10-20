@@ -12,7 +12,7 @@ This page shows that Python functions are values like any other, which lets you 
 
 ## Functions are objects
 
-In Python, a [function](../debuter/glossaire.md#fonction) is a value, like a number or
+In Python, a [function](../debuter/glossaire.md#function) is a value, like a number or
 a string. Without parentheses, `greet` means **the function itself**; with
 parentheses, `greet()` **runs it**.
 

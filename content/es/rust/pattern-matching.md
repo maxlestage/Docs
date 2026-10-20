@@ -44,13 +44,13 @@ Dos reglas que recordar:
 > **Recuerda:** la exhaustividad es una seguridad. Si añades una variante a una
 > enumeración, el compilador te muestra cada `match` que hay que completar.
 
-`match` es una [expresión](../debuter/glossaire.md#expression): produce un valor, aquí
+`match` es una [expresión](../debuter/glossaire.md#expresion): produce un valor, aquí
 guardado en `texto`. Por eso todos los brazos deben producir el mismo tipo.
 
 ## Varios valores: | y los rangos
 
 La barra `|` significa «o». Un rango `a..=b` cubre todos los valores de `a` a `b`
-incluido (mira los [rangos](../debuter/glossaire.md#intervalle)).
+incluido (mira los [rangos](../debuter/glossaire.md#rango)).
 
 ```rust
 fn valoracion(nota: u32) -> &'static str {

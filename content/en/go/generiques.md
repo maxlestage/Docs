@@ -22,7 +22,7 @@ func MaxFloat(a, b float64) float64 { ... }
 func MaxString(a, b string) string { ... }
 ```
 
-A [generic](../debuter/glossaire.md#generique) solves this problem: you write the code
+A [generic](../debuter/glossaire.md#generics) solves this problem: you write the code
 once, with a **type parameter** in place of the real type. It's like a cake mold: the
 shape is the same, whether you pour in chocolate or vanilla.
 

@@ -39,7 +39,7 @@ use `Object.entries` (see [objects](objets.md)).
 ## The iteration protocol
 
 How does `for...of` do it? It asks the value for an
-[iterator](../debuter/glossaire.md#iterateur): an object that gives the elements **one
+[iterator](../debuter/glossaire.md#iterator): an object that gives the elements **one
 by one**, on demand. Think of a ticket dispenser: each time you press the button, it
 gives out the next ticket; when the roll is empty, it tells you.
 

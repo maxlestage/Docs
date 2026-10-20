@@ -12,9 +12,9 @@ Esta página muestra cómo crear tus propios objetos con las clases, la herencia
 
 ## Definir una clase
 
-Una [clase](../debuter/glossaire.md#classe) es un modelo para fabricar objetos.
+Una [clase](../debuter/glossaire.md#clase) es un modelo para fabricar objetos.
 Piensa en un molde de pasteles: el molde es la clase, cada pastel es un
-[objeto](../debuter/glossaire.md#objet). Todos los pasteles tienen la misma forma, pero
+[objeto](../debuter/glossaire.md#objeto). Todos los pasteles tienen la misma forma, pero
 cada uno puede tener su sabor. El nombre de una clase empieza por mayúscula.
 
 ```ruby
@@ -284,7 +284,7 @@ Un `Perro` **es un** `Animal`: `is_a?(Animal)` responde `true`.
 
 ## Los módulos y los mixins
 
-Un [módulo](../debuter/glossaire.md#module) agrupa métodos. Con `include`, una
+Un [módulo](../debuter/glossaire.md#modulo) agrupa métodos. Con `include`, una
 clase los recibe: es un **mixin**. El capítulo [los módulos](modules.md) los
 presenta en detalle.
 

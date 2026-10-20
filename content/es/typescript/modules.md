@@ -13,7 +13,7 @@ Esta página explica cómo dividir un programa TypeScript en varios archivos, c�
 ## ¿Por qué módulos?
 
 Un programa que crece se vuelve difícil de leer en un solo archivo. Se divide en
-[módulos](../debuter/glossaire.md#module): un archivo por tema. Es como ordenar una
+[módulos](../debuter/glossaire.md#modulo): un archivo por tema. Es como ordenar una
 cocina: las especias en un cajón, las cacerolas en otro.
 
 En TypeScript, **cada archivo que contiene `import` o `export` es un módulo**. Lo que
@@ -110,7 +110,7 @@ tu proyecto, no un paquete.
 ## import type
 
 Un tipo no existe en tiempo de ejecución: la
-[compilación](../debuter/glossaire.md#compilation) borra todos los tipos. `import type`
+[compilación](../debuter/glossaire.md#compilacion) borra todos los tipos. `import type`
 dice claramente: «solo importo un tipo». Este import desaparece por completo del
 JavaScript generado.
 
@@ -199,7 +199,7 @@ el error aparece en ese momento.
 
 ## Los paquetes npm
 
-npm es el gestor de [paquetes](../debuter/glossaire.md#paquet) de JavaScript.
+npm es el gestor de [paquetes](../debuter/glossaire.md#paquete) de JavaScript.
 Descarga bibliotecas escritas por otras personas en la carpeta `node_modules/` y las
 anota en `package.json`.
 

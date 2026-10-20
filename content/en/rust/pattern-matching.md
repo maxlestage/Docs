@@ -50,7 +50,7 @@ stored here in `text`. All the arms must then produce the same type.
 ## Several values: | and ranges
 
 The bar `|` means "or". A range `a..=b` covers every value from `a` to `b` included
-(see [ranges](../debuter/glossaire.md#intervalle)).
+(see [ranges](../debuter/glossaire.md#range)).
 
 ```rust
 fn assessment(grade: u32) -> &'static str {

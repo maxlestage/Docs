@@ -14,7 +14,7 @@ Esta página explica cómo Go organiza el código en paquetes, cómo crear un m�
 
 Un **paquete** (*package*) es una carpeta de archivos Go que trabajan juntos. Cada
 archivo empieza con `package nombre`. El paquete `main` es especial: es el de un
-[programa](../debuter/glossaire.md#programme), y contiene la función `main`.
+[programa](../debuter/glossaire.md#programa), y contiene la función `main`.
 
 Piensa en una biblioteca municipal: cada estantería (paquete) reúne libros sobre un
 mismo tema. No te llevas todo el edificio a casa, tomas prestada la estantería que

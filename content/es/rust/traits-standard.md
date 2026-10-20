@@ -339,7 +339,7 @@ los errores, con `?` (ver [Gestionar los errores](erreurs.md)).
 
 ## Iterator: un iterador hecho a mano
 
-Un tipo se convierte en un [iterador](../debuter/glossaire.md#iterateur) al
+Un tipo se convierte en un [iterador](../debuter/glossaire.md#iterador) al
 implementar un solo método: `next`, que devuelve `Some(valor)`, o `None` cuando se
 acaba. Todos los demás métodos (`map`, `filter`, `sum`…) vienen con él.
 

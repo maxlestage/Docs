@@ -167,7 +167,7 @@ Total: 21 h
 { apples: 12, pears: 3 }
 ```
 
-`Record<string, number>` works as a simple [dictionary](../debuter/glossaire.md#dictionnaire):
+`Record<string, number>` works as a simple [dictionary](../debuter/glossaire.md#dictionary):
 any string key, numeric values.
 
 > **Note:** `Object.keys` always returns a `string[]`. The `as Day[]` tells
